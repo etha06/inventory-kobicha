@@ -183,6 +183,7 @@
         <table class="w-full text-xs text-left">
           <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
             <tr>
+              <th class="py-2.5 px-3 w-10 text-center">#</th>
               <th class="py-2.5 px-3">Nama Fragrance Oil</th>
               <th class="py-2.5 px-3 text-center">Pyramid</th>
               <th class="py-2.5 px-3 text-center w-28">Jumlah Tetes</th>
@@ -194,12 +195,16 @@
           </thead>
           <tbody class="divide-y text-stone-800">
             <tr v-if="rows.length === 0">
-              <td colspan="7" class="py-8 text-center text-stone-400 italic">
+              <td colspan="8" class="py-8 text-center text-stone-400 italic">
                 Belum ada bahan Fragrance Oil. Klik "+ Tambah Baris FO" untuk menambahkan bibit parfum.
               </td>
             </tr>
 
             <tr v-for="(row, idx) in calculatedRows" :key="row.id" class="hover:bg-stone-50">
+              <td class="py-2 px-3 text-center text-stone-400 font-mono text-[11px]">
+                {{ idx + 1 }}
+              </td>
+
               <!-- Select Fragrance Oil -->
               <td class="py-2 px-3">
                 <select
@@ -267,7 +272,7 @@
           </tbody>
           <tfoot class="bg-stone-50 border-t font-bold text-stone-900">
             <tr>
-              <td class="py-2.5 px-3">Total Komposisi FO:</td>
+              <td colspan="2" class="py-2.5 px-3">Total Komposisi FO:</td>
               <td></td>
               <td class="py-2.5 px-3 text-center font-mono text-amber-950">{{ totalDrops }} Tetes</td>
               <td class="py-2.5 px-3 text-center font-mono text-amber-950">100%</td>

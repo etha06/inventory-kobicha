@@ -89,9 +89,9 @@
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-4 w-10 text-center">#</th>
+              <th class="py-3.5 px-4">Nama Barang</th>
               <th class="py-3.5 px-4 text-center">Tipe</th>
               <th class="py-3.5 px-4">Jenis Barang</th>
-              <th class="py-3.5 px-4">Nama Barang</th>
               <th class="py-3.5 px-4 text-center">Volume Kemasan</th>
               <th class="py-3.5 px-4 text-center">Stok</th>
               <th class="py-3.5 px-4">Toko Supplier</th>
@@ -119,29 +119,7 @@
                   {{ idx + 1 }}
                 </td>
 
-                <!-- 1. Kolom Tipe -->
-                <td class="py-3.5 px-4 text-center">
-                  <span
-                    v-if="item.isBahanBaku"
-                    class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300 whitespace-nowrap inline-flex items-center gap-1"
-                  >
-                    🧪 Bahan Baku
-                  </span>
-                  <span
-                    v-else
-                    class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-medium border border-indigo-200 whitespace-nowrap inline-flex items-center gap-1"
-                  >
-                    📦 Kemasan
-                  </span>
-                </td>
-
-                <!-- 2. Kolom Jenis Barang -->
-                <td class="py-3.5 px-4">
-                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium whitespace-nowrap">
-                    {{ item.jenis }}
-                  </span>
-                </td>
-
+                <!-- 1. Kolom Nama Barang (Setelah No) -->
                 <td class="py-3.5 px-4">
                   <div class="flex items-center gap-2">
                     <ChevronRight
@@ -150,6 +128,29 @@
                     />
                     <span class="font-bold text-stone-900 text-xs">{{ item.namaBarang }}</span>
                   </div>
+                </td>
+
+                <!-- 2. Kolom Tipe -->
+                <td class="py-3.5 px-4 text-center">
+                  <span
+                    v-if="item.isBahanBaku"
+                    class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300 whitespace-nowrap inline-flex items-center gap-1"
+                  >
+                    Bahan Baku
+                  </span>
+                  <span
+                    v-else
+                    class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-medium border border-indigo-200 whitespace-nowrap inline-flex items-center gap-1"
+                  >
+                    Kemasan
+                  </span>
+                </td>
+
+                <!-- 3. Kolom Jenis Barang -->
+                <td class="py-3.5 px-4">
+                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium whitespace-nowrap">
+                    {{ item.jenis }}
+                  </span>
                 </td>
 
                 <!-- Volume Kemasan / ml kalkulasi -->

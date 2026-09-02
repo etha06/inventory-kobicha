@@ -138,8 +138,8 @@
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-4 w-10 text-center">#</th>
-              <th class="py-3.5 px-4">Jenis Liquid</th>
               <th class="py-3.5 px-4">Nama FO</th>
+              <th class="py-3.5 px-4">Jenis Liquid</th>
               <th class="py-3.5 px-4">Toko Supplier</th>
               <th class="py-3.5 px-4 text-center">Botol (ml)</th>
               <th class="py-3.5 px-4 text-center">Current Stock</th>
@@ -169,12 +169,7 @@
                   {{ idx + 1 }}
                 </td>
 
-                <td class="py-3.5 px-4">
-                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-medium whitespace-nowrap">
-                    {{ item.jenisLiquid }}
-                  </span>
-                </td>
-
+                <!-- 1. Kolom Nama FO (Setelah No) -->
                 <td class="py-3.5 px-4">
                   <div class="flex items-center gap-2">
                     <ChevronRight
@@ -183,6 +178,13 @@
                     />
                     <span class="font-bold text-stone-900 text-xs">{{ item.nama }}</span>
                   </div>
+                </td>
+
+                <!-- 2. Kolom Jenis Liquid -->
+                <td class="py-3.5 px-4">
+                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-medium whitespace-nowrap">
+                    {{ item.jenisLiquid }}
+                  </span>
                 </td>
 
                 <td class="py-3.5 px-4 text-stone-600">

@@ -97,7 +97,7 @@
 
               <td class="py-3.5 px-4">
                 <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
-                  <span>💧 {{ item.nama }}</span>
+                  <span>{{ item.nama }}</span>
                 </div>
                 <div class="flex flex-wrap gap-1 mt-1">
                   <span

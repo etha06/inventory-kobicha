@@ -140,6 +140,7 @@
           <table class="w-full text-xs text-left">
             <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
               <tr>
+                <th class="py-2.5 px-3 w-10 text-center">#</th>
                 <th class="py-2.5 px-3">Bahan Formula Liquid</th>
                 <th class="py-2.5 px-3 text-center w-24">Tipe</th>
                 <th class="py-2.5 px-3 text-center w-24">Porsi (%)</th>
@@ -151,16 +152,20 @@
             </thead>
             <tbody class="divide-y text-stone-800">
               <tr v-if="liquidIngredients.length === 0">
-                <td colspan="7" class="py-6 text-center text-stone-400 italic">
+                <td colspan="8" class="py-6 text-center text-stone-400 italic">
                   Pilih Formula Base dan Racikan di atas untuk menghitung otomatis komposisi cairan.
                 </td>
               </tr>
 
               <tr v-for="(ing, idx) in liquidIngredients" :key="idx" class="hover:bg-stone-50">
+                <td class="py-2.5 px-3 text-center text-stone-400 font-mono text-[11px]">
+                  {{ idx + 1 }}
+                </td>
+
                 <!-- Nama & Dropdown Selector for Campuran / Solvent -->
                 <td class="py-2.5 px-3">
                   <div v-if="ing.jenis === 'FO'" class="space-y-0.5">
-                    <span class="font-bold text-stone-900 block">💧 {{ ing.nama }}</span>
+                    <span class="font-bold text-stone-900 block">{{ ing.nama }}</span>
                     <span class="text-[10px] text-stone-500">Konsentrat Bibit Fragrance Oil</span>
                   </div>
                   
@@ -180,7 +185,7 @@
                       </option>
                     </select>
                     <span v-if="!ing.stockCampuranId" class="text-[10px] text-amber-800 font-medium block">
-                      💡 Pilih item dari stok bahan baku di atas untuk mengaitkan harga secara otomatis.
+                      Pilih item dari stok bahan baku di atas untuk mengaitkan harga secara otomatis.
                     </span>
                   </div>
                 </td>
@@ -250,7 +255,7 @@
             </tbody>
             <tfoot class="bg-stone-50 border-t font-bold text-stone-900">
               <tr>
-                <td colspan="3" class="py-2.5 px-3">
+                <td colspan="4" class="py-2.5 px-3">
                   <button
                     type="button"
                     @click="addCustomLiquidRow"
@@ -336,6 +341,7 @@
         <table class="w-full text-xs text-left">
           <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
             <tr>
+              <th class="py-2.5 px-3 w-10 text-center">#</th>
               <th class="py-2.5 px-3">Nama Barang / Kemasan / Operasional</th>
               <th class="py-2.5 px-3 text-center w-28">Jumlah (Pcs)</th>
               <th class="py-2.5 px-3 text-right w-36">Harga Satuan (Rp)</th>
@@ -345,12 +351,16 @@
           </thead>
           <tbody class="divide-y text-stone-800">
             <tr v-if="packagingRows.length === 0">
-              <td colspan="5" class="py-6 text-center text-stone-400 italic">
+              <td colspan="6" class="py-6 text-center text-stone-400 italic">
                 Belum ada komponen modal lainnya. Klik "+ Tambah Item Manual" untuk memasukkan botol, box, atau stiker.
               </td>
             </tr>
 
             <tr v-for="(row, idx) in packagingRows" :key="row.id" class="hover:bg-stone-50">
+              <td class="py-2 px-3 text-center text-stone-400 font-mono text-[11px]">
+                {{ idx + 1 }}
+              </td>
+
               <td class="py-2 px-3">
                 <input
                   v-model="row.namaItem"
@@ -393,7 +403,7 @@
           </tbody>
           <tfoot class="bg-stone-50 border-t font-bold text-stone-900">
             <tr>
-              <td colspan="3" class="py-2.5 px-3">Subtotal Modal Lainnya:</td>
+              <td colspan="4" class="py-2.5 px-3">Subtotal Modal Lainnya:</td>
               <td class="py-2.5 px-3 text-right font-mono text-indigo-950 text-sm font-bold">{{ formatRupiah(subtotalPackaging) }}</td>
               <td></td>
             </tr>
