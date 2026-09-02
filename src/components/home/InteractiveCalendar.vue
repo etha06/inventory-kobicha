@@ -1,63 +1,63 @@
-﻿<template>
-  <div class="bg-white rounded-2xl border border-stone-200/80 p-5 sm:p-6 shadow-sm flex flex-col h-full">
+<template>
+  <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm flex flex-col h-full">
     <!-- Calendar Header -->
     <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-rose-100 text-rose-800 flex items-center justify-center text-sm font-bold">
-          📅
+        <div class="w-8 h-8 rounded-xl bg-peach-50 text-peach-600 flex items-center justify-center font-bold border border-peach-200/60">
+          <Calendar class="w-4 h-4" />
         </div>
-        <div>
-          <h3 class="font-bold text-stone-900 text-base">Interactive Calendar & Deadlines</h3>
-          <p class="text-xs text-stone-500">Kelola jadwal maturasi parfum, restock toko, dan deadline pesanan</p>
-        </div>
+        <h3 class="font-extrabold text-forest-900 text-base font-rounded">Cek Deadline!</h3>
       </div>
 
       <button
         @click="openAddDeadlineModal(selectedDateStr)"
-        class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-1"
+        class="w-8 h-8 rounded-full bg-peach-500 hover:bg-peach-600 text-white shadow-pill transition-all transform active:scale-95 flex items-center justify-center flex-shrink-0"
+        title="Tambah Deadline"
       >
-        <span>+</span> Tambah Deadline
+        <Plus class="w-4 h-4" />
       </button>
     </div>
 
     <!-- Month Navigation -->
-    <div class="flex items-center justify-between bg-stone-50/80 px-4 py-2.5 rounded-xl border border-stone-200/60 mb-4">
+    <div class="flex items-center justify-between bg-sage-50/70 px-4 py-2 rounded-2xl border border-sage-200/60 mb-3">
       <button
         @click="prevMonth"
-        class="w-7 h-7 rounded-lg hover:bg-stone-200 flex items-center justify-center text-xs text-stone-600 font-bold transition-colors"
+        class="w-7 h-7 rounded-xl hover:bg-sage-200/60 flex items-center justify-center text-sage-700 font-bold transition-colors"
+        title="Bulan Sebelumnya"
       >
-        ◀
+        <ChevronLeft class="w-4 h-4" />
       </button>
-      <span class="font-serif font-bold text-stone-900 text-sm sm:text-base">
+      <span class="font-extrabold font-rounded text-forest-900 text-sm sm:text-base">
         {{ currentMonthName }} {{ currentYear }}
       </span>
       <button
         @click="nextMonth"
-        class="w-7 h-7 rounded-lg hover:bg-stone-200 flex items-center justify-center text-xs text-stone-600 font-bold transition-colors"
+        class="w-7 h-7 rounded-xl hover:bg-sage-200/60 flex items-center justify-center text-sage-700 font-bold transition-colors"
+        title="Bulan Berikutnya"
       >
-        ▶
+        <ChevronRight class="w-4 h-4" />
       </button>
     </div>
 
     <!-- Calendar Grid -->
-    <div class="grid grid-cols-7 gap-1 text-center mb-4">
-      <div v-for="dayName in ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']" :key="dayName" class="text-[11px] font-bold text-stone-400 py-1 uppercase">
+    <div class="grid grid-cols-7 gap-1 text-center mb-3">
+      <div v-for="dayName in ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab']" :key="dayName" class="text-[10px] font-bold text-sage-400 py-1 uppercase">
         {{ dayName }}
       </div>
 
       <!-- Blank Days before start of month -->
-      <div v-for="b in startDayOfWeek" :key="'blank-' + b" class="h-9 sm:h-10"></div>
+      <div v-for="b in startDayOfWeek" :key="'blank-' + b" class="h-8 sm:h-9"></div>
 
       <!-- Month Days -->
       <div
         v-for="day in daysInMonth"
         :key="'day-' + day"
         @click="selectDay(day)"
-        class="h-9 sm:h-10 rounded-xl flex flex-col items-center justify-center text-xs font-medium relative transition-all cursor-pointer group"
+        class="h-8 sm:h-9 rounded-xl flex flex-col items-center justify-center text-xs font-medium relative transition-all cursor-pointer group"
         :class="[
-          isSelectedDay(day) ? 'bg-amber-600 text-white font-bold shadow-md shadow-amber-900/20' : 
-          isToday(day) ? 'bg-amber-100 text-amber-900 font-bold border border-amber-300' :
-          'hover:bg-stone-100 text-stone-700'
+          isSelectedDay(day) ? 'bg-peach-500 text-white font-bold shadow-pill' : 
+          isToday(day) ? 'bg-sage-100 text-forest-900 font-bold border border-sage-300' :
+          'hover:bg-sage-50 text-forest-800'
         ]"
       >
         <span>{{ day }}</span>
@@ -76,64 +76,55 @@
       </div>
     </div>
 
-    <!-- Selected Date Details & Deadlines List -->
-    <div class="border-t border-stone-200 pt-4 flex-1">
-      <div class="flex items-center justify-between mb-2.5">
-        <h4 class="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-1.5">
-          <span>Agenda Tanggal:</span>
-          <span class="text-amber-700 font-serif normal-case text-sm font-bold">{{ selectedDateFormatted }}</span>
-        </h4>
-        <span class="text-[11px] text-stone-500">
-          {{ selectedDayDeadlines.length }} Agenda
-        </span>
-      </div>
-
+    <!-- Deadlines List for Selected Date (Without the Redundant Agenda Tanggal Bar) -->
+    <div class="border-t border-sage-100 pt-3 flex-1">
       <div class="space-y-2 overflow-y-auto max-h-44 pr-1">
-        <div v-if="selectedDayDeadlines.length === 0" class="p-4 rounded-xl bg-stone-50 text-center text-stone-400 text-xs">
-          Tidak ada deadline atau agenda pada tanggal ini.
-          <button @click="openAddDeadlineModal(selectedDateStr)" class="block mx-auto mt-1.5 text-amber-700 font-semibold hover:underline">
-            + Tambah Agenda
+        <div v-if="selectedDayDeadlines.length === 0" class="p-3.5 rounded-2xl bg-sage-50/50 text-center text-sage-400 text-xs">
+          Tidak ada deadline pada tanggal ini.
+          <button @click="openAddDeadlineModal(selectedDateStr)" class="block mx-auto mt-1 text-peach-600 font-bold hover:underline">
+            + Tambah Deadline
           </button>
         </div>
 
         <div
           v-for="dl in selectedDayDeadlines"
           :key="dl.id"
-          class="p-3 rounded-xl border transition-all flex items-start justify-between gap-2.5"
-          :class="dl.isCompleted ? 'bg-stone-50/70 border-stone-200 text-stone-400' : 'bg-white border-amber-200/80 shadow-sm text-stone-800'"
+          class="p-3 rounded-2xl border transition-all flex items-start justify-between gap-2.5"
+          :class="dl.isCompleted ? 'bg-sage-50/50 border-sage-200 text-sage-400' : 'bg-white border-sage-200 shadow-sm text-forest-900'"
         >
           <div class="flex items-start gap-2.5">
             <input
               type="checkbox"
               :checked="dl.isCompleted"
               @change="store.toggleDeadline(dl.id)"
-              class="mt-1 rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
+              class="mt-1 rounded border-sage-300 text-peach-500 focus:ring-peach-500 cursor-pointer"
             />
             <div>
               <div class="flex items-center gap-1.5">
-                <span class="font-bold text-xs" :class="dl.isCompleted ? 'line-through text-stone-400' : 'text-stone-900'">
+                <span class="font-bold text-xs" :class="dl.isCompleted ? 'line-through text-sage-400' : 'text-forest-900'">
                   {{ dl.title }}
                 </span>
                 <span
-                  class="text-[10px] px-1.5 py-0.5 rounded font-medium"
+                  class="text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider"
                   :class="getCategoryBadgeClass(dl.category)"
                 >
                   {{ getCategoryText(dl.category) }}
                 </span>
               </div>
-              <p v-if="dl.notes" class="text-[11px] text-stone-500 mt-0.5">{{ dl.notes }}</p>
-              <div v-if="dl.reminderTime" class="text-[10px] text-amber-700 font-semibold mt-1 flex items-center gap-1">
-                <span>⏰ Pengingat jam {{ dl.reminderTime }}</span>
+              <p v-if="dl.notes" class="text-[11px] text-sage-600 mt-0.5">{{ dl.notes }}</p>
+              <div v-if="dl.reminderTime" class="text-[10px] text-peach-600 font-semibold mt-1 flex items-center gap-1">
+                <Clock class="w-3 h-3" />
+                <span>Pengingat jam {{ dl.reminderTime }}</span>
               </div>
             </div>
           </div>
 
           <button
             @click="store.deleteDeadline(dl.id)"
-            class="text-stone-400 hover:text-rose-600 p-1 text-xs"
+            class="text-sage-400 hover:text-rose-600 p-1 text-xs transition-colors"
             title="Hapus Agenda"
           >
-            ✕
+            <Trash2 class="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -148,56 +139,56 @@
     >
       <form @submit.prevent="saveDeadline" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-stone-700 mb-1">Judul / Kegiatan</label>
+          <label class="block text-xs font-semibold text-forest-800 mb-1">Judul / Kegiatan</label>
           <input
             v-model="deadlineForm.title"
             type="text"
             required
             placeholder="Misal: Maturasi Batch 1 Selesai / Pesan Alkohol 96%"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+            class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm"
           />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Tanggal</label>
+            <label class="block text-xs font-semibold text-forest-800 mb-1">Tanggal</label>
             <input
               v-model="deadlineForm.date"
               type="date"
               required
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+              class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm bg-white"
             />
           </div>
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Jam Pengingat (Opsional)</label>
+            <label class="block text-xs font-semibold text-forest-800 mb-1">Jam Pengingat (Opsional)</label>
             <input
               v-model="deadlineForm.reminderTime"
               type="time"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+              class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm bg-white"
             />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-stone-700 mb-1">Kategori Kegiatan</label>
+          <label class="block text-xs font-semibold text-forest-800 mb-1">Kategori Kegiatan</label>
           <select
             v-model="deadlineForm.category"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white"
+            class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm bg-white"
           >
-            <option value="maturasi">🧪 Maturasi / Maserasi Parfum</option>
-            <option value="beli_stok">🛒 Beli / Restock Bahan Baku</option>
-            <option value="deadline_order">📦 Deadline Pesanan / Commission</option>
-            <option value="lainnya">📌 Lainnya</option>
+            <option value="maturasi">Maturasi / Maserasi Parfum</option>
+            <option value="beli_stok">Beli / Restock Bahan Baku</option>
+            <option value="deadline_order">Deadline Pesanan / Commission</option>
+            <option value="lainnya">Lainnya</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-stone-700 mb-1">Catatan Tambahan (Opsional)</label>
+          <label class="block text-xs font-semibold text-forest-800 mb-1">Catatan Tambahan (Opsional)</label>
           <textarea
             v-model="deadlineForm.notes"
             rows="2"
             placeholder="Informasi detail batch, jumlah, atau link..."
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+            class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm"
           ></textarea>
         </div>
 
@@ -205,13 +196,13 @@
           <button
             type="button"
             @click="isAddModalOpen = false"
-            class="px-4 py-2 rounded-xl border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+            class="px-4 py-2 rounded-xl border border-sage-200 text-forest-800 text-xs font-semibold hover:bg-sage-50"
           >
             Batal
           </button>
           <button
             type="submit"
-            class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-sm"
+            class="px-5 py-2 rounded-xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-semibold shadow-sm"
           >
             Simpan Deadline
           </button>
@@ -228,6 +219,7 @@ import { storeToRefs } from 'pinia';
 import { format, startOfMonth, getDaysInMonth, getDay } from 'date-fns';
 import { id } from 'date-fns/locale';
 import Modal from '../common/Modal.vue';
+import { Calendar, ChevronLeft, ChevronRight, Plus, Clock, Trash2 } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { deadlines } = storeToRefs(store);

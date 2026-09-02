@@ -121,17 +121,6 @@
             </div>
           </div>
         </div>
-
-        <!-- 3. Quick Links / System Info -->
-        <div class="p-4 rounded-[20px] bg-sage-50/70 border border-sage-200/70 text-xs text-sage-700 space-y-2">
-          <div class="font-bold text-forest-900 flex items-center gap-1.5">
-            <Sparkles class="w-3.5 h-3.5 text-peach-500" />
-            <span>Kobicha Lab Tip</span>
-          </div>
-          <p class="text-[11px] leading-relaxed text-sage-600">
-            Pastikan seluruh konsentrasi fragrance oil dan pelarut telah terdata dengan akurat untuk mendapatkan estimasi HPP per botol yang presisi.
-          </p>
-        </div>
       </div>
     </div>
 
@@ -148,7 +137,6 @@ import StatsOverview from '../components/home/StatsOverview.vue';
 import QuickNotes from '../components/home/QuickNotes.vue';
 import InteractiveCalendar from '../components/home/InteractiveCalendar.vue';
 import QuickAddModals from '../components/home/QuickAddModals.vue';
-import { Sparkles } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { stockFragranceOil, racikanCatalog } = storeToRefs(store);

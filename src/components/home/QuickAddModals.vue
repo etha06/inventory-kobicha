@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div>
     <!-- 1. Quick Add Fragrance Oil Modal -->
     <Modal
@@ -72,9 +72,9 @@
               v-model="foForm.currentStock"
               class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-bold"
             >
-              <option value="Banyak">🟢 Banyak</option>
-              <option value="Dikit">🟡 Dikit</option>
-              <option value="Habis">🔴 Habis</option>
+              <option value="Banyak">Banyak</option>
+              <option value="Dikit">Dikit</option>
+              <option value="Habis">Habis</option>
             </select>
           </div>
         </div>
@@ -89,7 +89,7 @@
           </button>
           <button
             type="submit"
-            class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-sm"
+            class="px-5 py-2 rounded-xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-semibold shadow-sm"
           >
             Simpan FO
           </button>
@@ -174,7 +174,7 @@
           </button>
           <button
             type="submit"
-            class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-sm"
+            class="px-5 py-2 rounded-xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-semibold shadow-sm"
           >
             Simpan Barang
           </button>
