@@ -91,14 +91,14 @@
           />
         </div>
 
-        <div class="flex items-center gap-3 pt-4 sm:pt-6">
+        <div class="flex items-center gap-1.5 pt-4 sm:pt-6">
           <input
             v-model="isCommission"
             type="checkbox"
             id="commCheck"
             class="rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer w-4 h-4"
           />
-          <label for="commCheck" class="text-xs font-semibold text-stone-700 cursor-pointer">
+          <label for="commCheck" class="text-xs font-semibold text-stone-700 cursor-pointer select-none">
             Commission Order
           </label>
         </div>
