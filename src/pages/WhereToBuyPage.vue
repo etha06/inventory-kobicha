@@ -323,32 +323,41 @@
 
     <!-- Cascade Rename Confirmation Modal -->
     <Teleport to="body">
-      <div v-if="showCascadeRenameModal" class="fixed inset-0 z-50 bg-stone-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-stone-200">
-          <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center mx-auto mb-3">
-            <AlertTriangle class="w-6 h-6" />
-          </div>
-          <h3 class="text-base font-bold text-center text-stone-900 mb-2">Kamu yakin ubah jenis barang ini?</h3>
-          <p class="text-xs text-stone-600 text-center mb-4 leading-relaxed">
-            Anda mengubah jenis barang dari <strong>"{{ originalJenisBarang }}"</strong> menjadi <strong>"{{ form.jenisBarang }}"</strong>.
-            Jika diubah, semua toko dan stok barang campuran yang menggunakan jenis barang ini akan otomatis diperbarui ke nama baru.
-          </p>
-          <div class="flex items-center justify-center gap-2.5">
-            <button
-              @click="cancelCascadeRename"
-              class="px-4 py-2 rounded-xl border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
-            >
-              Hanya Ubah Toko Ini
-            </button>
-            <button
-              @click="confirmCascadeRename"
-              class="px-5 py-2 rounded-xl bg-amber-600 text-white text-xs font-semibold hover:bg-amber-700 shadow-sm"
-            >
-              Ya, Ubah Semua Terkait
-            </button>
+      <Transition
+        enter-active-class="transition duration-150 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-100 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div v-if="showCascadeRenameModal" class="fixed inset-0 z-50 bg-stone-950/50 flex items-center justify-center p-4">
+          <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-stone-200 transition-all transform duration-150">
+            <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center mx-auto mb-3">
+              <AlertTriangle class="w-6 h-6" />
+            </div>
+            <h3 class="text-base font-bold text-center text-stone-900 mb-2">Kamu yakin ubah jenis barang ini?</h3>
+            <p class="text-xs text-stone-600 text-center mb-4 leading-relaxed">
+              Anda mengubah jenis barang dari <strong>"{{ originalJenisBarang }}"</strong> menjadi <strong>"{{ form.jenisBarang }}"</strong>.
+              Jika diubah, semua toko dan stok barang campuran yang menggunakan jenis barang ini akan otomatis diperbarui ke nama baru.
+            </p>
+            <div class="flex items-center justify-center gap-2.5">
+              <button
+                @click="cancelCascadeRename"
+                class="px-4 py-2 rounded-xl border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+              >
+                Hanya Ubah Toko Ini
+              </button>
+              <button
+                @click="confirmCascadeRename"
+                class="px-5 py-2 rounded-xl bg-amber-600 text-white text-xs font-semibold hover:bg-amber-700 shadow-sm"
+              >
+                Ya, Ubah Semua Terkait
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </Transition>
     </Teleport>
 
     <!-- Delete Confirm Modal -->
