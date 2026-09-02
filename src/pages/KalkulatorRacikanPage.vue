@@ -394,10 +394,7 @@ interface FormFoRow {
   tetes: number;
 }
 
-const rows = ref<FormFoRow[]>([
-  { id: 'row-1', fragranceOilId: '', fragranceOilName: '', tetes: 10 },
-  { id: 'row-2', fragranceOilId: '', fragranceOilName: '', tetes: 15 }
-]);
+const rows = ref<FormFoRow[]>([]);
 
 const targetTotalFoMl = computed(() => {
   return (targetTotalMl.value * foConcentrationPercentage.value) / 100;
@@ -522,11 +519,7 @@ function resetForm() {
   targetTotalMl.value = 50;
   foConcentrationPercentage.value = 20;
   isCommission.value = false;
-
-  rows.value = [
-    { id: 'row-1', fragranceOilId: stockFragranceOil.value[0]?.id || '', fragranceOilName: stockFragranceOil.value[0]?.nama || '', tetes: 12 },
-    { id: 'row-2', fragranceOilId: stockFragranceOil.value[1]?.id || '', fragranceOilName: stockFragranceOil.value[1]?.nama || '', tetes: 8 }
-  ];
+  rows.value = [];
 }
 
 function saveRacikan() {
@@ -594,13 +587,6 @@ onMounted(() => {
     selectedRacikanCatalogId.value = prefilledRacikanId.value;
     loadRecipeFromCatalog();
     prefilledRacikanId.value = null;
-  } else if (stockFragranceOil.value.length > 0 && rows.value[0].fragranceOilId === '') {
-    rows.value[0].fragranceOilId = stockFragranceOil.value[0].id;
-    rows.value[0].fragranceOilName = stockFragranceOil.value[0].nama;
-    if (stockFragranceOil.value.length > 1) {
-      rows.value[1].fragranceOilId = stockFragranceOil.value[1].id;
-      rows.value[1].fragranceOilName = stockFragranceOil.value[1].nama;
-    }
   }
 });
 </script>
