@@ -129,7 +129,7 @@
         </div>
 
         <!-- Liquid Ingredients Table Breakdown with Interactive Pelarut Dropdown from Bahan Baku -->
-        <div class="overflow-x-auto border rounded-xl">
+        <div class="overflow-x-auto border rounded-xl min-h-[320px] pb-24">
           <table class="w-full text-xs text-left">
             <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
               <tr>

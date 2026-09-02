@@ -182,7 +182,7 @@
       </div>
 
       <!-- Drops & Volume Table -->
-      <div class="overflow-x-auto border rounded-xl">
+      <div class="overflow-x-auto border rounded-xl min-h-[360px] pb-28">
         <table class="w-full text-xs text-left">
           <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
             <tr>
