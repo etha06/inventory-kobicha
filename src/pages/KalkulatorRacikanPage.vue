@@ -104,9 +104,12 @@
         </div>
       </div>
 
-      <!-- Target Formulation Inputs (Nama, Target ml, Konsentrasi %) -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-stone-100">
-        <div>
+      <!-- Target Formulation Inputs -->
+      <div
+        class="grid gap-4 pt-2 border-t border-stone-100"
+        :class="mode === 'manual' ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2'"
+      >
+        <div v-if="mode === 'manual'">
           <label class="block text-xs font-semibold text-stone-700 mb-1">Nama Racikan / Formula</label>
           <input
             v-model="namaRacikan"
