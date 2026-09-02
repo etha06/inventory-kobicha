@@ -56,14 +56,14 @@
             <div class="flex items-center gap-1.5 opacity-90 group-hover:opacity-100">
               <button
                 @click="openEditModal(base)"
-                class="p-1.5 rounded-lg border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-600 hover:text-blue-700 text-xs transition-colors"
+                class="p-1.5 rounded-md border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 text-xs transition-colors"
                 title="Edit Formula Base"
               >
                 <Pencil class="w-3.5 h-3.5" />
               </button>
               <button
                 @click="confirmDelete(base)"
-                class="p-1.5 rounded-lg border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-rose-600 hover:text-rose-700 text-xs transition-colors"
+                class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 text-xs transition-colors"
                 title="Hapus Formula Base"
               >
                 <Trash2 class="w-3.5 h-3.5" />

@@ -262,7 +262,7 @@
                 <button
                   type="button"
                   @click="removeRow(idx)"
-                  class="p-1 rounded-lg hover:bg-rose-50 text-rose-600 hover:text-rose-700 text-xs transition-colors"
+                  class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
                   title="Hapus Baris FO"
                 >
                   <Trash2 class="w-3.5 h-3.5" />

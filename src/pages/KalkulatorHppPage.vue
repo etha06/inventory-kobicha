@@ -245,7 +245,7 @@
                     v-if="ing.jenis === 'Campuran'"
                     type="button"
                     @click="removeLiquidIngredient(idx)"
-                    class="p-1.5 rounded-lg hover:bg-rose-50 text-rose-600 hover:text-rose-700 transition-colors"
+                    class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
                     title="Hapus baris cairan ini"
                   >
                     <Trash2 class="w-3.5 h-3.5" />
@@ -393,7 +393,7 @@
                 <button
                   type="button"
                   @click="removePackagingRow(idx)"
-                  class="p-1 rounded-lg hover:bg-rose-50 text-rose-600 hover:text-rose-700 text-xs transition-colors"
+                  class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
                   title="Hapus Item"
                 >
                   <Trash2 class="w-3.5 h-3.5" />
