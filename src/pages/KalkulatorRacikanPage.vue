@@ -201,7 +201,7 @@
               </td>
             </tr>
 
-            <tr v-for="(row, idx) in calculatedRows" :key="row.id" class="hover:bg-stone-50">
+            <tr v-for="(row, idx) in rows" :key="row.id" class="hover:bg-stone-50">
               <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px]">
                 {{ idx + 1 }}
               </td>
@@ -220,11 +220,11 @@
               <!-- Pyramid Badge (Without "Note" word) -->
               <td class="py-2 px-3 text-left">
                 <span
-                  v-if="row.pyramid"
+                  v-if="getRowPyramid(row)"
                   class="px-2 py-0.5 rounded text-[10px] font-bold border whitespace-nowrap inline-block"
-                  :class="PYRAMID_BADGE_MAP[row.pyramid]?.bg"
+                  :class="PYRAMID_BADGE_MAP[getRowPyramid(row)!]?.bg"
                 >
-                  {{ row.pyramid }}
+                  {{ getRowPyramid(row) }}
                 </span>
                 <span v-else class="text-stone-300 text-xs">-</span>
               </td>
@@ -242,17 +242,17 @@
 
               <!-- % FO -->
               <td class="py-2 px-3 text-left font-mono font-semibold text-amber-950">
-                {{ formatNumber(row.percentage, 1) }}%
+                {{ formatNumber(getRowPercentage(row), 1) }}%
               </td>
 
               <!-- ml FO -->
               <td class="py-2 px-3 text-left font-mono font-bold text-stone-900 bg-amber-50/50">
-                {{ formatNumber(row.mlCalculated, 2) }} ml
+                {{ formatNumber(getRowMl(row), 2) }} ml
               </td>
 
               <!-- Estimasi Biaya FO -->
               <td class="py-2 px-3 text-left font-mono text-stone-700">
-                {{ formatRupiah(row.estimatedCost) }}
+                {{ formatRupiah(getRowCost(row)) }}
               </td>
 
               <!-- Delete Row Action (Positioned Right, Aligned Left, Lucide Trash2) -->
@@ -407,21 +407,41 @@ const totalDrops = computed(() => {
   return rows.value.reduce((acc, r) => acc + (Number(r.tetes) || 0), 0);
 });
 
-const calculatedRows = computed(() => {
-  const dropsTotal = totalDrops.value || 1;
-  const targetFo = targetTotalFoMl.value;
+function getRowPyramid(row: FormFoRow): PyramidEnum | undefined {
+  if (row.pyramid) return row.pyramid;
+  const fo = stockFragranceOil.value.find(f => f.id === row.fragranceOilId);
+  return fo?.pyramid;
+}
 
+function getRowPercentage(row: FormFoRow): number {
+  if (totalDrops.value <= 0) return 0;
+  const drops = Number(row.tetes) || 0;
+  return (drops / totalDrops.value) * 100;
+}
+
+function getRowMl(row: FormFoRow): number {
+  const pct = getRowPercentage(row);
+  return (pct / 100) * targetTotalFoMl.value;
+}
+
+function getRowCost(row: FormFoRow): number {
+  const ml = getRowMl(row);
+  const fo = stockFragranceOil.value.find(f => f.id === row.fragranceOilId);
+  const avgPrice = fo ? store.getFoAveragePricePerMl(fo.id) : 2000;
+  return Math.round(ml * avgPrice);
+}
+
+const calculatedRows = computed(() => {
   return rows.value.map(r => {
     const fo = stockFragranceOil.value.find(f => f.id === r.fragranceOilId);
-    const percentage = ((Number(r.tetes) || 0) / dropsTotal) * 100;
-    const mlCalculated = (percentage / 100) * targetFo;
-    const avgPricePerMl = fo ? store.getFoAveragePricePerMl(fo.id) : 2000;
-    const estimatedCost = Math.round(mlCalculated * avgPricePerMl);
+    const percentage = getRowPercentage(r);
+    const mlCalculated = getRowMl(r);
+    const estimatedCost = getRowCost(r);
 
     return {
       ...r,
       fragranceOilName: fo?.nama || r.fragranceOilName,
-      pyramid: fo?.pyramid,
+      pyramid: fo?.pyramid || r.pyramid,
       percentage,
       mlCalculated,
       estimatedCost
@@ -430,7 +450,7 @@ const calculatedRows = computed(() => {
 });
 
 const totalFoCost = computed(() => {
-  return calculatedRows.value.reduce((acc, r) => acc + r.estimatedCost, 0);
+  return rows.value.reduce((acc, r) => acc + getRowCost(r), 0);
 });
 
 function addRow() {
