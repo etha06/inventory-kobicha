@@ -93,14 +93,14 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-3 w-10 text-center"></th>
-              <th class="py-3.5 px-4">Nama Analisis HPP</th>
-              <th class="py-3.5 px-4 text-center">Ukuran Botol</th>
-              <th class="py-3.5 px-4 text-right">Modal Liquid</th>
-              <th class="py-3.5 px-4 text-right">Modal Lainnya</th>
-              <th class="py-3.5 px-4 text-right">Grand Total HPP</th>
-              <th class="py-3.5 px-4 text-right">HPP</th>
-              <th class="py-3.5 px-4 text-right">Rekomendasi Jual</th>
+              <th class="py-3.5 px-3 w-10 text-left"></th>
+              <th class="py-3.5 px-4 text-left">Nama Analisis HPP</th>
+              <th class="py-3.5 px-4 text-left">Ukuran Botol</th>
+              <th class="py-3.5 px-4 text-left">Modal Liquid</th>
+              <th class="py-3.5 px-4 text-left">Modal Lainnya</th>
+              <th class="py-3.5 px-4 text-left">Grand Total HPP</th>
+              <th class="py-3.5 px-4 text-left">HPP</th>
+              <th class="py-3.5 px-4 text-left">Rekomendasi Jual</th>
               <th class="py-3.5 px-4 text-left w-20">Aksi</th>
             </tr>
           </thead>
@@ -119,7 +119,7 @@
               :class="selectedForCompare.includes(item.id) ? 'bg-amber-50/60 font-medium' : ''"
             >
               <!-- Checkbox Compare -->
-              <td class="py-3.5 px-4 text-center" @click.stop>
+              <td class="py-3.5 px-4 text-left" @click.stop>
                 <input
                   type="checkbox"
                   :value="item.id"
@@ -130,7 +130,7 @@
               </td>
 
               <!-- Nama Analisis & Formula -->
-              <td class="py-3.5 px-4">
+              <td class="py-3.5 px-4 text-left">
                 <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
                   <span>{{ item.nama }}</span>
                 </div>
@@ -141,35 +141,35 @@
               </td>
 
               <!-- Ukuran Botol -->
-              <td class="py-3.5 px-4 text-center font-mono font-bold text-stone-700">
+              <td class="py-3.5 px-4 text-left font-mono font-bold text-stone-700">
                 {{ item.targetBottleMl }} ml
               </td>
 
               <!-- Modal Liquid -->
-              <td class="py-3.5 px-4 text-right font-mono text-stone-700">
+              <td class="py-3.5 px-4 text-left font-mono text-stone-700">
                 {{ formatRupiah(item.subtotalLiquid) }}
               </td>
 
               <!-- Modal Packaging -->
-              <td class="py-3.5 px-4 text-right font-mono text-stone-700">
+              <td class="py-3.5 px-4 text-left font-mono text-stone-700">
                 {{ formatRupiah(item.subtotalPackaging) }}
               </td>
 
               <!-- Grand Total HPP -->
-              <td class="py-3.5 px-4 text-right">
-                <span class="font-mono font-bold text-amber-950 text-xs px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200">
+              <td class="py-3.5 px-4 text-left">
+                <span class="font-mono font-bold text-amber-950 text-xs px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 inline-block">
                   {{ formatRupiah(item.grandTotalHpp) }}
                 </span>
               </td>
 
               <!-- HPP (Tanpa / ml) -->
-              <td class="py-3.5 px-4 text-right font-mono text-stone-600">
+              <td class="py-3.5 px-4 text-left font-mono text-stone-600">
                 {{ formatRupiah(item.hppPerMl) }}
               </td>
 
               <!-- Rekomendasi Jual -->
-              <td class="py-3.5 px-4 text-right">
-                <span class="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              <td class="py-3.5 px-4 text-left">
+                <span class="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-block">
                   {{ formatRupiah(item.recommendedSellingPrice) }}
                 </span>
               </td>
@@ -417,28 +417,28 @@
         <!-- Liquid Ingredients Breakdown -->
         <div class="space-y-2">
           <h5 class="text-xs font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5">
-            <span>🧪 Rincian Modal Cairan Formula Liquid</span>
+            <span>Rincian Modal Cairan Formula Liquid</span>
           </h5>
           <div class="overflow-x-auto border rounded-xl">
             <table class="w-full text-xs text-left">
               <thead class="bg-stone-100 text-[10px] uppercase font-bold text-stone-500">
                 <tr>
-                  <th class="py-2 px-3">Bahan</th>
-                  <th class="py-2 px-3 text-center">Jenis</th>
-                  <th class="py-2 px-3 text-center">Volume (ml)</th>
-                  <th class="py-2 px-3 text-right">Biaya</th>
+                  <th class="py-2 px-3 text-left">Bahan</th>
+                  <th class="py-2 px-3 text-left">Jenis</th>
+                  <th class="py-2 px-3 text-left">Volume (ml)</th>
+                  <th class="py-2 px-3 text-left">Biaya</th>
                 </tr>
               </thead>
               <tbody class="divide-y text-stone-800">
                 <tr v-for="(liq, idx) in detailItem.liquidDetails" :key="idx">
-                  <td class="py-2 px-3 font-medium">{{ liq.nama }}</td>
-                  <td class="py-2 px-3 text-center">
-                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold" :class="liq.jenis === 'FO' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'">
+                  <td class="py-2 px-3 text-left font-medium">{{ liq.nama }}</td>
+                  <td class="py-2 px-3 text-left">
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold inline-block" :class="liq.jenis === 'FO' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'">
                       {{ liq.jenis }}
                     </span>
                   </td>
-                  <td class="py-2 px-3 text-center font-mono">{{ formatNumber(liq.volumeMl, 2) }} ml</td>
-                  <td class="py-2 px-3 text-right font-mono font-bold">{{ formatRupiah(liq.biaya) }}</td>
+                  <td class="py-2 px-3 text-left font-mono">{{ formatNumber(liq.volumeMl, 2) }} ml</td>
+                  <td class="py-2 px-3 text-left font-mono font-bold">{{ formatRupiah(liq.biaya) }}</td>
                 </tr>
               </tbody>
             </table>
@@ -448,24 +448,24 @@
         <!-- Packaging Items Breakdown -->
         <div class="space-y-2">
           <h5 class="text-xs font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5">
-            <span>📦 Rincian Modal Lainnya (Packaging, Botol, Stiker, dll.)</span>
+            <span>Rincian Modal Lainnya (Packaging, Botol, Stiker, dll.)</span>
           </h5>
           <div class="overflow-x-auto border rounded-xl">
             <table class="w-full text-xs text-left">
               <thead class="bg-stone-100 text-[10px] uppercase font-bold text-stone-500">
                 <tr>
-                  <th class="py-2 px-3">Item / Kemasan / Operasional</th>
-                  <th class="py-2 px-3 text-center">Jumlah</th>
-                  <th class="py-2 px-3 text-right">Harga Satuan</th>
-                  <th class="py-2 px-3 text-right">Total</th>
+                  <th class="py-2 px-3 text-left">Item / Kemasan / Operasional</th>
+                  <th class="py-2 px-3 text-left">Jumlah</th>
+                  <th class="py-2 px-3 text-left">Harga Satuan</th>
+                  <th class="py-2 px-3 text-left">Total</th>
                 </tr>
               </thead>
               <tbody class="divide-y text-stone-800">
                 <tr v-for="pkg in detailItem.packagingItems" :key="pkg.id">
-                  <td class="py-2 px-3 font-medium">{{ pkg.namaItem }}</td>
-                  <td class="py-2 px-3 text-center font-mono">{{ pkg.jumlah }} pcs</td>
-                  <td class="py-2 px-3 text-right font-mono">{{ formatRupiah(pkg.hargaSatuan) }}</td>
-                  <td class="py-2 px-3 text-right font-mono font-bold">{{ formatRupiah(pkg.total) }}</td>
+                  <td class="py-2 px-3 text-left font-medium">{{ pkg.namaItem }}</td>
+                  <td class="py-2 px-3 text-left font-mono">{{ pkg.jumlah }} pcs</td>
+                  <td class="py-2 px-3 text-left font-mono">{{ formatRupiah(pkg.hargaSatuan) }}</td>
+                  <td class="py-2 px-3 text-left font-mono font-bold">{{ formatRupiah(pkg.total) }}</td>
                 </tr>
               </tbody>
             </table>

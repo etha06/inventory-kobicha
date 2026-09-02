@@ -73,11 +73,11 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-4 w-10 text-center">#</th>
-              <th class="py-3.5 px-4">Nama Toko</th>
-              <th class="py-3.5 px-4">Jenis Barang</th>
-              <th class="py-3.5 px-4">Link Toko</th>
-              <th class="py-3.5 px-4 text-center">Stok Terkait</th>
+              <th class="py-3.5 px-4 w-10 text-left">#</th>
+              <th class="py-3.5 px-4 text-left">Nama Toko</th>
+              <th class="py-3.5 px-4 text-left">Jenis Barang</th>
+              <th class="py-3.5 px-4 text-left">Link Toko</th>
+              <th class="py-3.5 px-4 text-left">Stok Terkait</th>
               <th class="py-3.5 px-4 text-left w-24">Aksi</th>
             </tr>
           </thead>
@@ -96,11 +96,11 @@
                 class="table-row-hover transition-colors cursor-pointer"
                 :class="expandedStoreId === store.id ? 'bg-amber-50/60 font-medium' : ''"
               >
-                <td class="py-3.5 px-4 text-center text-stone-400 font-mono">
+                <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
                   <span class="text-[11px]">{{ idx + 1 }}</span>
                 </td>
 
-                <td class="py-3.5 px-4">
+                <td class="py-3.5 px-4 text-left">
                   <div class="flex items-center gap-2">
                     <ChevronRight
                       class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150"
@@ -110,13 +110,13 @@
                   </div>
                 </td>
 
-                <td class="py-3.5 px-4 text-stone-600">
+                <td class="py-3.5 px-4 text-left text-stone-600">
                   <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium">
                     {{ store.jenisBarang }}
                   </span>
                 </td>
 
-                <td class="py-3.5 px-4" @click.stop>
+                <td class="py-3.5 px-4 text-left" @click.stop>
                   <a
                     v-if="store.linkToko"
                     :href="store.linkToko"
@@ -130,7 +130,7 @@
                   <span v-else class="text-stone-400 text-xs">-</span>
                 </td>
 
-                <td class="py-3.5 px-4 text-center">
+                <td class="py-3.5 px-4 text-left">
                   <span class="text-xs text-forest-800 font-medium">
                     {{ getLinkedProductsCount(store.id) }} Produk
                   </span>

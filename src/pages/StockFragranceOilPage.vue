@@ -137,16 +137,16 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-4 w-10 text-center">#</th>
-              <th class="py-3.5 px-4">Nama FO</th>
-              <th class="py-3.5 px-4">Jenis Liquid</th>
-              <th class="py-3.5 px-4">Toko Supplier</th>
-              <th class="py-3.5 px-4 text-center">Botol (ml)</th>
-              <th class="py-3.5 px-4 text-center">Current Stock</th>
-              <th class="py-3.5 px-4 text-center">Jumlah Formula</th>
-              <th class="py-3.5 px-4">Notes</th>
-              <th class="py-3.5 px-4 text-center">Pyramid</th>
-              <th class="py-3.5 px-4 text-center">Updated At</th>
+              <th class="py-3.5 px-4 w-10 text-left">#</th>
+              <th class="py-3.5 px-4 text-left">Nama FO</th>
+              <th class="py-3.5 px-4 text-left">Jenis Liquid</th>
+              <th class="py-3.5 px-4 text-left">Toko Supplier</th>
+              <th class="py-3.5 px-4 text-left">Botol (ml)</th>
+              <th class="py-3.5 px-4 text-left">Current Stock</th>
+              <th class="py-3.5 px-4 text-left">Jumlah Formula</th>
+              <th class="py-3.5 px-4 text-left">Notes</th>
+              <th class="py-3.5 px-4 text-left">Pyramid</th>
+              <th class="py-3.5 px-4 text-left">Updated At</th>
               <th class="py-3.5 px-4 text-left w-24">Aksi</th>
             </tr>
           </thead>
@@ -165,12 +165,12 @@
                 class="table-row-hover transition-colors cursor-pointer"
                 :class="expandedItemId === item.id ? 'bg-amber-50/60 font-medium' : ''"
               >
-                <td class="py-3.5 px-4 text-center text-stone-400 font-mono">
+                <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
                   {{ idx + 1 }}
                 </td>
 
                 <!-- 1. Kolom Nama FO (Setelah No) -->
-                <td class="py-3.5 px-4">
+                <td class="py-3.5 px-4 text-left">
                   <div class="flex items-center gap-2">
                     <ChevronRight
                       class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150"
@@ -181,23 +181,23 @@
                 </td>
 
                 <!-- 2. Kolom Jenis Liquid -->
-                <td class="py-3.5 px-4">
+                <td class="py-3.5 px-4 text-left">
                   <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-medium whitespace-nowrap">
                     {{ item.jenisLiquid }}
                   </span>
                 </td>
 
-                <td class="py-3.5 px-4 text-stone-600">
+                <td class="py-3.5 px-4 text-left text-stone-600">
                   <span class="font-medium text-stone-700 truncate max-w-[120px] block" :title="item.storeName">
                     {{ item.storeName }}
                   </span>
                 </td>
 
-                <td class="py-3.5 px-4 text-center font-mono font-semibold">
+                <td class="py-3.5 px-4 text-left font-mono font-semibold">
                   {{ item.botolMl }} ml
                 </td>
 
-                <td class="py-3.5 px-4 text-center">
+                <td class="py-3.5 px-4 text-left">
                   <span
                     class="px-2 py-0.5 rounded-full text-[11px] font-bold border inline-flex items-center gap-1"
                     :class="STOCK_STATUS_MAP[item.currentStock].bg"
@@ -208,11 +208,11 @@
                 </td>
 
                 <!-- Jumlah Formula (Angka saja tanpa label) -->
-                <td class="py-3.5 px-4 text-center font-mono font-bold text-stone-800 text-xs">
+                <td class="py-3.5 px-4 text-left font-mono font-bold text-stone-800 text-xs">
                   {{ store.getFoUsageCount(item.id) }}
                 </td>
 
-                <td class="py-3.5 px-4">
+                <td class="py-3.5 px-4 text-left">
                   <div class="flex flex-wrap gap-1 max-w-[160px]">
                     <span
                       v-for="n in item.notes"
@@ -226,7 +226,7 @@
                 </td>
 
                 <!-- Pyramid (Without "Note" word) -->
-                <td class="py-3.5 px-4 text-center">
+                <td class="py-3.5 px-4 text-left">
                   <span
                     class="px-2 py-0.5 rounded-md text-[10px] font-bold border whitespace-nowrap"
                     :class="PYRAMID_BADGE_MAP[item.pyramid].bg"
@@ -235,7 +235,7 @@
                   </span>
                 </td>
 
-                <td class="py-3.5 px-4 text-center text-[10px] text-stone-500 whitespace-nowrap">
+                <td class="py-3.5 px-4 text-left text-[10px] text-stone-500 whitespace-nowrap">
                   {{ formatDateIndo(item.updatedAt || item.createdAt) }}
                 </td>
 

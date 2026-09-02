@@ -88,15 +88,15 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-4 w-10 text-center">#</th>
-              <th class="py-3.5 px-4">Nama Barang</th>
-              <th class="py-3.5 px-4 text-center">Tipe</th>
-              <th class="py-3.5 px-4">Jenis Barang</th>
-              <th class="py-3.5 px-4 text-center">Volume Kemasan</th>
-              <th class="py-3.5 px-4 text-center">Stok</th>
-              <th class="py-3.5 px-4">Toko Supplier</th>
-              <th class="py-3.5 px-4 text-right">Harga Beli</th>
-              <th class="py-3.5 px-4 text-center">Updated At</th>
+              <th class="py-3.5 px-4 w-10 text-left">#</th>
+              <th class="py-3.5 px-4 text-left">Nama Barang</th>
+              <th class="py-3.5 px-4 text-left">Tipe</th>
+              <th class="py-3.5 px-4 text-left">Jenis Barang</th>
+              <th class="py-3.5 px-4 text-left">Volume Kemasan</th>
+              <th class="py-3.5 px-4 text-left">Stok</th>
+              <th class="py-3.5 px-4 text-left">Toko Supplier</th>
+              <th class="py-3.5 px-4 text-left">Harga Beli</th>
+              <th class="py-3.5 px-4 text-left">Updated At</th>
               <th class="py-3.5 px-4 text-left w-24">Aksi</th>
             </tr>
           </thead>
@@ -115,12 +115,12 @@
                 class="table-row-hover transition-colors cursor-pointer"
                 :class="expandedItemId === item.id ? 'bg-amber-50/60 font-medium' : ''"
               >
-                <td class="py-3.5 px-4 text-center text-stone-400 font-mono">
+                <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
                   {{ idx + 1 }}
                 </td>
 
                 <!-- 1. Kolom Nama Barang (Setelah No) -->
-                <td class="py-3.5 px-4">
+                <td class="py-3.5 px-4 text-left">
                   <div class="flex items-center gap-2">
                     <ChevronRight
                       class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150 flex-shrink-0"
@@ -131,7 +131,7 @@
                 </td>
 
                 <!-- 2. Kolom Tipe -->
-                <td class="py-3.5 px-4 text-center">
+                <td class="py-3.5 px-4 text-left">
                   <span
                     v-if="item.isBahanBaku"
                     class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300 whitespace-nowrap inline-flex items-center gap-1"
@@ -147,24 +147,24 @@
                 </td>
 
                 <!-- 3. Kolom Jenis Barang -->
-                <td class="py-3.5 px-4">
+                <td class="py-3.5 px-4 text-left">
                   <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium whitespace-nowrap">
                     {{ item.jenis }}
                   </span>
                 </td>
 
                 <!-- Volume Kemasan / ml kalkulasi -->
-                <td class="py-3.5 px-4 text-center">
-                  <div v-if="item.isBahanBaku && item.ukuranMl" class="space-y-0.5">
+                <td class="py-3.5 px-4 text-left">
+                  <div v-if="item.isBahanBaku && item.ukuranMl" class="space-y-0.5 text-left">
                     <span class="font-mono font-bold text-stone-800 block text-xs">{{ item.ukuranMl }} ml</span>
-                    <span class="text-[10px] text-amber-800 font-mono font-bold bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                    <span class="text-[10px] text-amber-800 font-mono font-bold bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 inline-block">
                       {{ formatRupiah(store.getCampuranAveragePricePerMl(item.id)) }}/ml
                     </span>
                   </div>
                   <span v-else class="text-stone-400 text-xs">-</span>
                 </td>
 
-                <td class="py-3.5 px-4 text-center">
+                <td class="py-3.5 px-4 text-left">
                   <span
                     class="px-2.5 py-1 rounded-full text-xs font-bold font-mono inline-flex items-center gap-1"
                     :class="item.jumlahStok <= 5 ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-stone-100 text-stone-800'"
@@ -173,17 +173,17 @@
                   </span>
                 </td>
 
-                <td class="py-3.5 px-4 text-stone-600">
+                <td class="py-3.5 px-4 text-left text-stone-600">
                   <span class="font-medium text-stone-700 truncate max-w-[120px] block" :title="item.storeName">
                     {{ item.storeName }}
                   </span>
                 </td>
 
-                <td class="py-3.5 px-4 text-right font-mono font-bold text-stone-900">
+                <td class="py-3.5 px-4 text-left font-mono font-bold text-stone-900">
                   {{ formatRupiah(item.hargaPerPcs) }}
                 </td>
 
-                <td class="py-3.5 px-4 text-center text-[11px] text-stone-500 whitespace-nowrap">
+                <td class="py-3.5 px-4 text-left text-[11px] text-stone-500 whitespace-nowrap">
                   {{ formatDateIndo(item.updatedAt || item.createdAt) }}
                 </td>
 

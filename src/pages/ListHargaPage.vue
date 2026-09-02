@@ -68,13 +68,13 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-4 w-10 text-center">#</th>
-              <th class="py-3.5 px-4">Nama Fragrance Oil</th>
-              <th class="py-3.5 px-4">Jenis Liquid</th>
-              <th class="py-3.5 px-4 text-center">Pyramid</th>
-              <th class="py-3.5 px-4">Toko Supplier</th>
-              <th class="py-3.5 px-4">Varian Beli Terdaftar</th>
-              <th class="py-3.5 px-4 text-right">Rata-rata Harga</th>
+              <th class="py-3.5 px-4 w-10 text-left">#</th>
+              <th class="py-3.5 px-4 text-left">Nama Fragrance Oil</th>
+              <th class="py-3.5 px-4 text-left">Jenis Liquid</th>
+              <th class="py-3.5 px-4 text-left">Pyramid</th>
+              <th class="py-3.5 px-4 text-left">Toko Supplier</th>
+              <th class="py-3.5 px-4 text-left">Varian Beli Terdaftar</th>
+              <th class="py-3.5 px-4 text-left">Rata-rata Harga</th>
               <th class="py-3.5 px-4 text-left w-20">Aksi</th>
             </tr>
           </thead>
@@ -91,11 +91,11 @@
               :key="item.id"
               class="table-row-hover transition-colors"
             >
-              <td class="py-3.5 px-4 text-center text-stone-400 font-mono">
+              <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
                 {{ idx + 1 }}
               </td>
 
-              <td class="py-3.5 px-4">
+              <td class="py-3.5 px-4 text-left">
                 <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
                   <span>{{ item.nama }}</span>
                 </div>
@@ -111,27 +111,27 @@
                 </div>
               </td>
 
-              <td class="py-3.5 px-4">
+              <td class="py-3.5 px-4 text-left">
                 <span class="px-2 py-0.5 rounded bg-stone-100 text-stone-700 border text-[10px]">
                   {{ item.jenisLiquid }}
                 </span>
               </td>
 
               <!-- Pyramid (Without "Note" word) -->
-              <td class="py-3.5 px-4 text-center">
+              <td class="py-3.5 px-4 text-left">
                 <span
-                  class="px-2 py-0.5 rounded-md text-[10px] font-bold border"
+                  class="px-2 py-0.5 rounded-md text-[10px] font-bold border inline-block"
                   :class="PYRAMID_BADGE_MAP[item.pyramid].bg"
                 >
                   {{ item.pyramid }}
                 </span>
               </td>
 
-              <td class="py-3.5 px-4 text-stone-600 font-medium">
+              <td class="py-3.5 px-4 text-left text-stone-600 font-medium">
                 {{ item.storeName }}
               </td>
 
-              <td class="py-3.5 px-4">
+              <td class="py-3.5 px-4 text-left">
                 <div class="space-y-1 max-w-[220px]">
                   <div
                     v-for="tier in item.priceTiers"
@@ -145,8 +145,8 @@
                 </div>
               </td>
 
-              <td class="py-3.5 px-4 text-right">
-                <div class="inline-block bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl text-right">
+              <td class="py-3.5 px-4 text-left">
+                <div class="inline-block bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl text-left">
                   <span class="text-sm font-bold text-amber-950 font-mono block">
                     {{ formatRupiah(item.avgPricePerMl) }}
                   </span>

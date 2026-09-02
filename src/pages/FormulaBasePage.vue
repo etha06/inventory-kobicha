@@ -83,8 +83,7 @@
               class="space-y-1"
             >
               <div class="flex justify-between text-xs font-medium">
-                <span :class="ing.isFragranceOilConcentrate ? 'font-bold text-amber-900 flex items-center gap-1' : 'text-stone-700'">
-                  <span v-if="ing.isFragranceOilConcentrate">💧</span>
+                <span :class="ing.isFragranceOilConcentrate ? 'font-bold text-amber-900' : 'text-stone-700'">
                   {{ ing.namaBahan }}
                 </span>
                 <span class="font-mono font-bold" :class="ing.isFragranceOilConcentrate ? 'text-amber-800' : 'text-stone-900'">
@@ -196,7 +195,7 @@
                 </span>
                 
                 <div v-if="ing.isFragranceOilConcentrate" class="px-3 py-1.5 rounded-lg bg-amber-100/70 border border-amber-300 text-xs font-bold text-amber-900 flex items-center gap-1.5">
-                  <span>💧 Fragrance Oil Concentrate</span>
+                  <span>Fragrance Oil Concentrate</span>
                 </div>
                 <select
                   v-else

@@ -183,13 +183,13 @@
         <table class="w-full text-xs text-left">
           <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
             <tr>
-              <th class="py-2.5 px-3 w-10 text-center">#</th>
-              <th class="py-2.5 px-3">Nama Fragrance Oil</th>
-              <th class="py-2.5 px-3 text-center">Pyramid</th>
-              <th class="py-2.5 px-3 text-center w-28">Jumlah Tetes</th>
-              <th class="py-2.5 px-3 text-center w-28">Porsi (% FO)</th>
-              <th class="py-2.5 px-3 text-center w-32">Volume (ml)</th>
-              <th class="py-2.5 px-3 text-right w-36">Estimasi Biaya FO</th>
+              <th class="py-2.5 px-3 w-10 text-left">#</th>
+              <th class="py-2.5 px-3 text-left">Nama Fragrance Oil</th>
+              <th class="py-2.5 px-3 text-left">Pyramid</th>
+              <th class="py-2.5 px-3 text-left w-28">Jumlah Tetes</th>
+              <th class="py-2.5 px-3 text-left w-28">Porsi (% FO)</th>
+              <th class="py-2.5 px-3 text-left w-32">Volume (ml)</th>
+              <th class="py-2.5 px-3 text-left w-36">Estimasi Biaya FO</th>
               <th class="py-2.5 px-4 text-left w-20">Aksi</th>
             </tr>
           </thead>
@@ -201,12 +201,12 @@
             </tr>
 
             <tr v-for="(row, idx) in calculatedRows" :key="row.id" class="hover:bg-stone-50">
-              <td class="py-2 px-3 text-center text-stone-400 font-mono text-[11px]">
+              <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px]">
                 {{ idx + 1 }}
               </td>
 
               <!-- Select Fragrance Oil -->
-              <td class="py-2 px-3">
+              <td class="py-2 px-3 text-left">
                 <select
                   v-model="row.fragranceOilId"
                   @change="onFoSelect(row)"
@@ -220,10 +220,10 @@
               </td>
 
               <!-- Pyramid Badge (Without "Note" word) -->
-              <td class="py-2 px-3 text-center">
+              <td class="py-2 px-3 text-left">
                 <span
                   v-if="row.pyramid"
-                  class="px-2 py-0.5 rounded text-[10px] font-bold border whitespace-nowrap"
+                  class="px-2 py-0.5 rounded text-[10px] font-bold border whitespace-nowrap inline-block"
                   :class="PYRAMID_BADGE_MAP[row.pyramid]?.bg"
                 >
                   {{ row.pyramid }}
@@ -232,28 +232,28 @@
               </td>
 
               <!-- Jumlah Tetes -->
-              <td class="py-2 px-3 text-center">
+              <td class="py-2 px-3 text-left">
                 <input
                   v-model.number="row.tetes"
                   type="number"
                   min="1"
                   required
-                  class="w-20 px-2 py-1 text-xs border rounded-lg text-center font-mono font-bold"
+                  class="w-20 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold"
                 />
               </td>
 
               <!-- % FO -->
-              <td class="py-2 px-3 text-center font-mono font-semibold text-amber-950">
+              <td class="py-2 px-3 text-left font-mono font-semibold text-amber-950">
                 {{ formatNumber(row.percentage, 1) }}%
               </td>
 
               <!-- ml FO -->
-              <td class="py-2 px-3 text-center font-mono font-bold text-stone-900 bg-amber-50/50">
+              <td class="py-2 px-3 text-left font-mono font-bold text-stone-900 bg-amber-50/50">
                 {{ formatNumber(row.mlCalculated, 2) }} ml
               </td>
 
               <!-- Estimasi Biaya FO -->
-              <td class="py-2 px-3 text-right font-mono text-stone-700">
+              <td class="py-2 px-3 text-left font-mono text-stone-700">
                 {{ formatRupiah(row.estimatedCost) }}
               </td>
 
@@ -272,12 +272,12 @@
           </tbody>
           <tfoot class="bg-stone-50 border-t font-bold text-stone-900">
             <tr>
-              <td colspan="2" class="py-2.5 px-3">Total Komposisi FO:</td>
+              <td colspan="2" class="py-2.5 px-3 text-left">Total Komposisi FO:</td>
               <td></td>
-              <td class="py-2.5 px-3 text-center font-mono text-amber-950">{{ totalDrops }} Tetes</td>
-              <td class="py-2.5 px-3 text-center font-mono text-amber-950">100%</td>
-              <td class="py-2.5 px-3 text-center font-mono text-amber-950">{{ formatNumber(targetTotalFoMl, 2) }} ml</td>
-              <td class="py-2.5 px-3 text-right font-mono text-amber-950">{{ formatRupiah(totalFoCost) }}</td>
+              <td class="py-2.5 px-3 text-left font-mono text-amber-950">{{ totalDrops }} Tetes</td>
+              <td class="py-2.5 px-3 text-left font-mono text-amber-950">100%</td>
+              <td class="py-2.5 px-3 text-left font-mono text-amber-950">{{ formatNumber(targetTotalFoMl, 2) }} ml</td>
+              <td class="py-2.5 px-3 text-left font-mono text-amber-950">{{ formatRupiah(totalFoCost) }}</td>
               <td></td>
             </tr>
           </tfoot>

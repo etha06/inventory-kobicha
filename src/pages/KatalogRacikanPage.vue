@@ -72,12 +72,12 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-3 w-10 text-center"></th>
-              <th class="py-3.5 px-4">Nama Racikan</th>
-              <th class="py-3.5 px-4">Fragrance Oil yang Dipakai</th>
-              <th class="py-3.5 px-4">Notes (Labels)</th>
-              <th class="py-3.5 px-4 text-center">Tanggal Dibuat</th>
-              <th class="py-3.5 px-4 text-center">Tipe</th>
+              <th class="py-3.5 px-3 w-10 text-left"></th>
+              <th class="py-3.5 px-4 text-left">Nama Racikan</th>
+              <th class="py-3.5 px-4 text-left">Fragrance Oil yang Dipakai</th>
+              <th class="py-3.5 px-4 text-left">Notes (Labels)</th>
+              <th class="py-3.5 px-4 text-left">Tanggal Dibuat</th>
+              <th class="py-3.5 px-4 text-left">Tipe</th>
               <th class="py-3.5 px-4 text-left w-28">Aksi</th>
             </tr>
           </thead>
@@ -96,7 +96,7 @@
               :class="selectedForCompare.includes(racikan.id) ? 'bg-amber-50/60 font-medium' : ''"
             >
               <!-- Checkbox Compare -->
-              <td class="py-3.5 px-4 text-center" @click.stop>
+              <td class="py-3.5 px-4 text-left" @click.stop>
                 <input
                   type="checkbox"
                   :value="racikan.id"
@@ -107,7 +107,7 @@
               </td>
 
               <!-- Nama Racikan -->
-              <td class="py-3.5 px-4">
+              <td class="py-3.5 px-4 text-left">
                 <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
                   <span>{{ racikan.nama }}</span>
                 </div>
@@ -117,7 +117,7 @@
               </td>
 
               <!-- Fragrance Oils Dipakai -->
-              <td class="py-3.5 px-4">
+              <td class="py-3.5 px-4 text-left">
                 <div class="space-y-1 max-w-[260px]">
                   <div
                     v-for="fo in racikan.fragranceOils"
@@ -131,7 +131,7 @@
               </td>
 
               <!-- Notes Labels -->
-              <td class="py-3.5 px-4">
+              <td class="py-3.5 px-4 text-left">
                 <div class="flex flex-wrap gap-1 max-w-[180px]">
                   <span
                     v-for="n in racikan.notes"
@@ -145,21 +145,21 @@
               </td>
 
               <!-- Tanggal Dibuat (Bulan Tahun) -->
-              <td class="py-3.5 px-4 text-center font-medium text-stone-700 whitespace-nowrap">
+              <td class="py-3.5 px-4 text-left font-medium text-stone-700 whitespace-nowrap">
                 {{ racikan.tanggalDibuat }}
               </td>
 
               <!-- Commission Badge -->
-              <td class="py-3.5 px-4 text-center">
+              <td class="py-3.5 px-4 text-left">
                 <span
                   v-if="racikan.isCommission"
-                  class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200"
+                  class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200 inline-block"
                 >
                   Commission
                 </span>
                 <span
                   v-else
-                  class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-stone-100 text-stone-600 border border-stone-200"
+                  class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-stone-100 text-stone-600 border border-stone-200 inline-block"
                 >
                   Regular
                 </span>

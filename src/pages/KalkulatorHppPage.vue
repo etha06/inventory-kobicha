@@ -140,13 +140,13 @@
           <table class="w-full text-xs text-left">
             <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
               <tr>
-                <th class="py-2.5 px-3 w-10 text-center">#</th>
-                <th class="py-2.5 px-3">Bahan Formula Liquid</th>
-                <th class="py-2.5 px-3 text-center w-24">Tipe</th>
-                <th class="py-2.5 px-3 text-center w-24">Porsi (%)</th>
-                <th class="py-2.5 px-3 text-center w-28">Volume (ml)</th>
-                <th class="py-2.5 px-3 text-right w-32">Rata-rata Harga</th>
-                <th class="py-2.5 px-3 text-right w-36">Subtotal Biaya</th>
+                <th class="py-2.5 px-3 w-10 text-left">#</th>
+                <th class="py-2.5 px-3 text-left">Bahan Formula Liquid</th>
+                <th class="py-2.5 px-3 text-left w-24">Tipe</th>
+                <th class="py-2.5 px-3 text-left w-24">Porsi (%)</th>
+                <th class="py-2.5 px-3 text-left w-28">Volume (ml)</th>
+                <th class="py-2.5 px-3 text-left w-32">Rata-rata Harga</th>
+                <th class="py-2.5 px-3 text-left w-36">Subtotal Biaya</th>
                 <th class="py-2.5 px-3 text-left w-16">Aksi</th>
               </tr>
             </thead>
@@ -158,12 +158,12 @@
               </tr>
 
               <tr v-for="(ing, idx) in liquidIngredients" :key="idx" class="hover:bg-stone-50">
-                <td class="py-2.5 px-3 text-center text-stone-400 font-mono text-[11px]">
+                <td class="py-2.5 px-3 text-left text-stone-400 font-mono text-[11px]">
                   {{ idx + 1 }}
                 </td>
 
                 <!-- Nama & Dropdown Selector for Campuran / Solvent -->
-                <td class="py-2.5 px-3">
+                <td class="py-2.5 px-3 text-left">
                   <div v-if="ing.jenis === 'FO'" class="space-y-0.5">
                     <span class="font-bold text-stone-900 block">{{ ing.nama }}</span>
                     <span class="text-[10px] text-stone-500">Konsentrat Bibit Fragrance Oil</span>
@@ -191,9 +191,9 @@
                 </td>
 
                 <!-- Tipe Badge -->
-                <td class="py-2.5 px-3 text-center">
+                <td class="py-2.5 px-3 text-left">
                   <span
-                    class="px-1.5 py-0.5 rounded text-[10px] font-bold"
+                    class="px-1.5 py-0.5 rounded text-[10px] font-bold inline-block"
                     :class="ing.jenis === 'FO' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-indigo-100 text-indigo-800 border border-indigo-200'"
                   >
                     {{ ing.jenis }}
@@ -201,7 +201,7 @@
                 </td>
 
                 <!-- Persentase (%) -->
-                <td class="py-2.5 px-3 text-center font-mono">
+                <td class="py-2.5 px-3 text-left font-mono">
                   <input
                     v-if="ing.jenis === 'Campuran'"
                     v-model.number="ing.percentage"
@@ -210,32 +210,32 @@
                     max="100"
                     step="0.5"
                     @input="onIngredientPercentChange(ing)"
-                    class="w-16 px-1.5 py-1 text-xs border rounded text-center font-mono font-bold"
+                    class="w-16 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
                   />
                   <span v-else>{{ formatNumber(ing.percentage, 1) }}%</span>
                 </td>
 
                 <!-- Volume (ml) -->
-                <td class="py-2.5 px-3 text-center font-mono font-bold">
+                <td class="py-2.5 px-3 text-left font-mono font-bold">
                   {{ formatNumber(ing.volumeMl, 2) }} ml
                 </td>
 
                 <!-- Rata-rata Harga per ml -->
-                <td class="py-2.5 px-3 text-right font-mono text-stone-600">
+                <td class="py-2.5 px-3 text-left font-mono text-stone-600">
                   <input
                     v-if="ing.jenis === 'Campuran'"
                     v-model.number="ing.pricePerMl"
                     type="number"
                     min="0"
                     @input="onIngredientPriceChange(ing)"
-                    class="w-24 px-1.5 py-1 text-xs border rounded text-right font-mono font-bold"
+                    class="w-24 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
                     title="Harga modal per 1 ml"
                   />
                   <span v-else>{{ formatRupiah(ing.pricePerMl) }}</span>
                 </td>
 
                 <!-- Subtotal Biaya -->
-                <td class="py-2.5 px-3 text-right font-mono font-bold text-stone-900">
+                <td class="py-2.5 px-3 text-left font-mono font-bold text-stone-900">
                   {{ formatRupiah(ing.cost) }}
                 </td>
 
@@ -255,7 +255,7 @@
             </tbody>
             <tfoot class="bg-stone-50 border-t font-bold text-stone-900">
               <tr>
-                <td colspan="4" class="py-2.5 px-3">
+                <td colspan="4" class="py-2.5 px-3 text-left">
                   <button
                     type="button"
                     @click="addCustomLiquidRow"
@@ -265,9 +265,9 @@
                     <span>Tambah Cairan / Pelarut Lainnya</span>
                   </button>
                 </td>
-                <td class="py-2.5 px-3 text-center font-mono font-bold text-amber-950">{{ targetBottleMl }} ml</td>
+                <td class="py-2.5 px-3 text-left font-mono font-bold text-amber-950">{{ targetBottleMl }} ml</td>
                 <td></td>
-                <td class="py-2.5 px-3 text-right font-mono text-amber-950 text-sm font-bold">{{ formatRupiah(subtotalLiquid) }}</td>
+                <td class="py-2.5 px-3 text-left font-mono text-amber-950 text-sm font-bold">{{ formatRupiah(subtotalLiquid) }}</td>
                 <td></td>
               </tr>
             </tfoot>
@@ -341,11 +341,11 @@
         <table class="w-full text-xs text-left">
           <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
             <tr>
-              <th class="py-2.5 px-3 w-10 text-center">#</th>
-              <th class="py-2.5 px-3">Nama Barang / Kemasan / Operasional</th>
-              <th class="py-2.5 px-3 text-center w-28">Jumlah (Pcs)</th>
-              <th class="py-2.5 px-3 text-right w-36">Harga Satuan (Rp)</th>
-              <th class="py-2.5 px-3 text-right w-36">Total Biaya (Rp)</th>
+              <th class="py-2.5 px-3 w-10 text-left">#</th>
+              <th class="py-2.5 px-3 text-left">Nama Barang / Kemasan / Operasional</th>
+              <th class="py-2.5 px-3 text-left w-28">Jumlah (Pcs)</th>
+              <th class="py-2.5 px-3 text-left w-36">Harga Satuan (Rp)</th>
+              <th class="py-2.5 px-3 text-left w-36">Total Biaya (Rp)</th>
               <th class="py-2.5 px-4 text-left w-20">Aksi</th>
             </tr>
           </thead>
@@ -357,11 +357,11 @@
             </tr>
 
             <tr v-for="(row, idx) in packagingRows" :key="row.id" class="hover:bg-stone-50">
-              <td class="py-2 px-3 text-center text-stone-400 font-mono text-[11px]">
+              <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px]">
                 {{ idx + 1 }}
               </td>
 
-              <td class="py-2 px-3">
+              <td class="py-2 px-3 text-left">
                 <input
                   v-model="row.namaItem"
                   type="text"
@@ -369,23 +369,23 @@
                   class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-300 font-medium"
                 />
               </td>
-              <td class="py-2 px-3 text-center">
+              <td class="py-2 px-3 text-left">
                 <input
                   v-model.number="row.jumlah"
                   type="number"
                   min="1"
-                  class="w-20 px-2 py-1 text-xs border rounded-lg text-center font-mono font-bold"
+                  class="w-20 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold"
                 />
               </td>
-              <td class="py-2 px-3 text-right">
+              <td class="py-2 px-3 text-left">
                 <input
                   v-model.number="row.hargaSatuan"
                   type="number"
                   min="0"
-                  class="w-28 px-2 py-1 text-xs border rounded-lg text-right font-mono font-bold"
+                  class="w-28 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold"
                 />
               </td>
-              <td class="py-2 px-3 text-right font-mono font-bold text-stone-900">
+              <td class="py-2 px-3 text-left font-mono font-bold text-stone-900">
                 {{ formatRupiah(row.jumlah * row.hargaSatuan) }}
               </td>
               <!-- Delete Row (Positioned Right, Aligned Left, Lucide Trash2) -->
@@ -403,8 +403,8 @@
           </tbody>
           <tfoot class="bg-stone-50 border-t font-bold text-stone-900">
             <tr>
-              <td colspan="4" class="py-2.5 px-3">Subtotal Modal Lainnya:</td>
-              <td class="py-2.5 px-3 text-right font-mono text-indigo-950 text-sm font-bold">{{ formatRupiah(subtotalPackaging) }}</td>
+              <td colspan="4" class="py-2.5 px-3 text-left">Subtotal Modal Lainnya:</td>
+              <td class="py-2.5 px-3 text-left font-mono text-indigo-950 text-sm font-bold">{{ formatRupiah(subtotalPackaging) }}</td>
               <td></td>
             </tr>
           </tfoot>
