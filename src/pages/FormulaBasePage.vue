@@ -3,7 +3,7 @@
     <!-- Top Action Card -->
     <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-forest-900 font-serif">Katalog Formula Base (Template Pelarut)</h3>
+        <h3 class="text-base font-extrabold text-forest-900 font-rounded">Katalog Formula Base (Template Pelarut)</h3>
         <p class="text-xs text-sage-600">Standar rasio konsentrat bibit parfum & bahan pelarut (total komposisi 100%)</p>
       </div>
 
@@ -37,7 +37,7 @@
           <!-- Header -->
           <div class="flex items-start justify-between gap-3 mb-3">
             <div>
-              <h4 class="font-serif font-bold text-base text-forest-900 leading-snug">
+              <h4 class="font-rounded font-extrabold text-base text-forest-900 leading-snug">
                 {{ base.nama }}
               </h4>
             </div>

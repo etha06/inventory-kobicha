@@ -3,7 +3,7 @@
     <!-- Top Action Card -->
     <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-forest-900 font-serif">Katalog Racikan Fragrance (Formula Resep)</h3>
+        <h3 class="text-base font-extrabold text-forest-900 font-rounded">Katalog Racikan Fragrance (Formula Resep)</h3>
         <p class="text-xs text-sage-600">Database resep racikan aroma parfum, perbandingan tetes, dan komparasi formula</p>
       </div>
 

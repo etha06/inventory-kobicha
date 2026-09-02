@@ -3,7 +3,7 @@
     <!-- Top Action Card -->
     <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-forest-900 font-serif">Kalkulator Racikan Fragrance (Formulator)</h3>
+        <h3 class="text-base font-extrabold text-forest-900 font-rounded">Kalkulator Racikan Fragrance (Formulator)</h3>
         <p class="text-xs text-sage-600">
           Kalkulasi porsi tetes, konversi ke ml konsentrat bibit FO, dan estimasi otomatis formula parfum
         </p>

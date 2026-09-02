@@ -94,8 +94,9 @@ export default {
         'pill': '0 4px 14px rgba(232, 139, 72, 0.35)',
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
-        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['"Plus Jakarta Sans"', '"Nunito"', 'system-ui', '-apple-system', 'sans-serif'],
+        rounded: ['"Nunito"', '"Quicksand"', '"Plus Jakarta Sans"', 'sans-serif'],
+        serif: ['"Nunito"', '"Quicksand"', '"Plus Jakarta Sans"', 'sans-serif'],
       }
     },
   },

@@ -2,7 +2,7 @@
   <div class="space-y-7">
     <!-- Top Greeting Section (Image 1 Header Style) -->
     <div class="pb-2 border-b border-sage-100">
-      <h1 class="text-2xl sm:text-3xl font-bold font-serif text-forest-900 tracking-tight flex items-center gap-2">
+      <h1 class="text-2xl sm:text-3xl font-extrabold font-rounded text-forest-900 tracking-tight flex items-center gap-2">
         <span>Selamat {{ greetingTime }}, Tim Kobicha</span>
       </h1>
       <p class="text-xs sm:text-sm text-sage-600 mt-1 font-sans">
@@ -26,7 +26,7 @@
         <!-- 1. Olfactory Notes Donut Chart Widget (Image 1 Style) -->
         <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-4">
           <div class="flex items-center justify-between">
-            <h3 class="font-bold text-forest-900 text-sm font-serif">Karakter Aroma</h3>
+            <h3 class="font-extrabold text-forest-900 text-sm font-rounded">Karakter Aroma</h3>
             <span class="text-[10px] font-mono text-sage-500 bg-sage-50 px-2 py-0.5 rounded-full border border-sage-200">
               {{ stockFragranceOil.length }} Varian
             </span>
@@ -64,7 +64,7 @@
               </svg>
               <!-- Center Badge -->
               <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span class="text-xl font-bold font-serif text-forest-900 leading-none">100%</span>
+                <span class="text-xl font-extrabold font-rounded text-forest-900 leading-none">100%</span>
                 <span class="text-[9px] text-sage-500 uppercase tracking-widest mt-0.5">Notes</span>
               </div>
             </div>
@@ -94,7 +94,7 @@
         <!-- 2. Most Used Fragrance Oils Widget (Image 1 Right Panel) -->
         <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-4">
           <div class="flex items-center justify-between">
-            <h3 class="font-bold text-forest-900 text-sm font-serif">Most Used Fragrance Oils</h3>
+            <h3 class="font-extrabold text-forest-900 text-sm font-rounded">Most Used Fragrance Oils</h3>
             <span class="text-[10px] text-sage-500 font-medium">Dalam Resep</span>
           </div>
 

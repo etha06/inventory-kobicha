@@ -22,7 +22,7 @@
             <Droplet class="w-5 h-5 fill-white text-white" />
           </div>
           <div v-show="!isCollapsed" class="transition-opacity duration-200">
-            <h1 class="font-bold text-lg tracking-tight text-white font-serif flex items-center gap-1.5">
+            <h1 class="font-extrabold text-lg tracking-tight text-white font-rounded flex items-center gap-1.5">
               Kobicha
             </h1>
             <p class="text-[11px] text-sage-100 font-sans tracking-wide">Parfumerie & Stock</p>

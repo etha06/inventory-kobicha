@@ -22,7 +22,7 @@
           <span class="text-[11px] font-semibold text-forest-900/80 block uppercase tracking-wider">
             Fragrance Oils
           </span>
-          <div class="text-3xl sm:text-4xl font-bold font-serif text-forest-900 leading-none py-1">
+          <div class="text-3xl sm:text-4xl font-extrabold font-rounded text-forest-900 leading-none py-1">
             {{ totalFoCount }}
           </div>
           <span class="text-[11px] text-forest-900/70 font-medium block">
@@ -46,7 +46,7 @@
           <span class="text-[11px] font-semibold text-[#5a330a]/80 block uppercase tracking-wider">
             Katalog Racikan
           </span>
-          <div class="text-3xl sm:text-4xl font-bold font-serif text-[#442505] leading-none py-1">
+          <div class="text-3xl sm:text-4xl font-extrabold font-rounded text-[#442505] leading-none py-1">
             {{ totalRacikanCount }}
           </div>
           <span class="text-[11px] text-[#5a330a]/70 font-medium block">
@@ -70,7 +70,7 @@
           <span class="text-[11px] font-semibold text-[#442854]/80 block uppercase tracking-wider">
             Analisis HPP
           </span>
-          <div class="text-3xl sm:text-4xl font-bold font-serif text-[#321c3f] leading-none py-1">
+          <div class="text-3xl sm:text-4xl font-extrabold font-rounded text-[#321c3f] leading-none py-1">
             {{ totalHppCount }}
           </div>
           <span class="text-[11px] text-[#442854]/70 font-medium block">
@@ -94,7 +94,7 @@
           <span class="text-[11px] font-semibold text-[#5e2323]/80 block uppercase tracking-wider">
             Stok Alert
           </span>
-          <div class="text-3xl sm:text-4xl font-bold font-serif text-[#481717] leading-none py-1">
+          <div class="text-3xl sm:text-4xl font-extrabold font-rounded text-[#481717] leading-none py-1">
             {{ String(lowStockFoCount).padStart(2, '0') }}
           </div>
           <span class="text-[11px] text-[#5e2323]/70 font-medium block">

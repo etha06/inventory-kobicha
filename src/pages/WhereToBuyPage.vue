@@ -3,7 +3,7 @@
     <!-- Top Action Card -->
     <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-forest-900 font-serif">Direktori Toko & Supplier</h3>
+        <h3 class="text-base font-extrabold text-forest-900 font-rounded">Direktori Toko & Supplier</h3>
         <p class="text-xs text-sage-600">Database supplier bibit parfum, bahan kimia pelarut, botol, dan kemasan</p>
       </div>
 
