@@ -170,21 +170,21 @@
                   <div class="flex items-center justify-start gap-1.5">
                     <button
                       @click="openInCalculator(racikan.id)"
-                      class="p-1.5 rounded-xl bg-blue-50/70 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border border-blue-200 text-xs transition-colors"
+                      class="p-1.5 rounded-lg bg-blue-50/70 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border border-blue-200 text-xs transition-colors"
                       title="Buka & Edit Racikan di Kalkulator"
                     >
                       <FlaskConical class="w-3.5 h-3.5" />
                     </button>
                     <button
                       @click="calculateHpp(racikan)"
-                      class="p-1.5 rounded-xl bg-sage-50 hover:bg-sage-100 text-forest-800 border border-sage-200 text-xs transition-colors"
+                      class="p-1.5 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-800 border border-sage-200 text-xs transition-colors"
                       title="Hitung HPP Resep Ini"
                     >
                       <DollarSign class="w-3.5 h-3.5" />
                     </button>
                     <button
                       @click="confirmDelete(racikan)"
-                      class="p-1.5 rounded-xl border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-rose-600 hover:text-rose-700 text-xs transition-colors"
+                      class="p-1.5 rounded-lg border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-rose-600 hover:text-rose-700 text-xs transition-colors"
                       title="Hapus Resep"
                     >
                       <Trash2 class="w-3.5 h-3.5" />

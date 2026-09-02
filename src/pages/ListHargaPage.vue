@@ -158,7 +158,7 @@
               <td class="py-3.5 px-4 text-left">
                 <button
                   @click="store.navigateTo('stock-fo')"
-                  class="p-1.5 rounded-xl border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
+                  class="p-1.5 rounded-lg border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
                   title="Lihat di Stok FO"
                 >
                   <Eye class="w-3.5 h-3.5" />
