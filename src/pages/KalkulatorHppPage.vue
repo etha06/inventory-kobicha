@@ -108,30 +108,23 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200/80">
           <div>
             <label class="block text-xs font-bold text-amber-950 mb-1">1. Pilih Formula Base (Pelarut %)</label>
-            <select
+            <CustomSelect
               v-model="selectedBaseId"
+              :options="baseOptions"
+              placeholder="-- Pilih Template Formula Base --"
               @change="recalculateLiquidFromRecipe"
-              class="w-full px-3 py-2 text-xs rounded-xl border border-amber-300 bg-white font-medium focus:ring-2 focus:ring-amber-500/30"
-            >
-              <option value="">-- Pilih Template Formula Base --</option>
-              <option v-for="b in formulaBases" :key="b.id" :value="b.id">
-                {{ b.nama }}
-              </option>
-            </select>
+            />
           </div>
 
           <div>
             <label class="block text-xs font-bold text-amber-950 mb-1">2. Pilih Racikan Fragrance (Bibit FO)</label>
-            <select
+            <CustomSelect
               v-model="selectedRacikanId"
+              :options="racikanOptions"
+              placeholder="-- Pilih Racikan dari Katalog --"
+              :searchable="true"
               @change="recalculateLiquidFromRecipe"
-              class="w-full px-3 py-2 text-xs rounded-xl border border-amber-300 bg-white font-medium focus:ring-2 focus:ring-amber-500/30"
-            >
-              <option value="">-- Pilih Racikan dari Katalog --</option>
-              <option v-for="r in racikanCatalog" :key="r.id" :value="r.id">
-                {{ r.nama }} ({{ r.tanggalDibuat }})
-              </option>
-            </select>
+            />
           </div>
         </div>
 
@@ -170,20 +163,13 @@
                   </div>
                   
                   <div v-else class="space-y-1.5">
-                    <select
+                    <CustomSelect
                       v-model="ing.stockCampuranId"
+                      :options="bahanBakuOptions"
+                      placeholder="-- Pilih Cairan dari Stok Bahan Baku --"
+                      :searchable="true"
                       @change="onSelectCampuranItem(ing)"
-                      class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-300 bg-white font-semibold text-stone-900 focus:border-amber-600 focus:ring-1 focus:ring-amber-500"
-                    >
-                      <option value="">-- Pilih Cairan dari Stok Bahan Baku --</option>
-                      <option
-                        v-for="c in bahanBakuCampuranList"
-                        :key="c.id"
-                        :value="c.id"
-                      >
-                        {{ c.namaBarang }} — ({{ formatRupiah(store.getCampuranAveragePricePerMl(c.id)) }}/ml)
-                      </option>
-                    </select>
+                    />
                     <span v-if="!ing.stockCampuranId" class="text-[10px] text-amber-800 font-medium block">
                       Pilih item dari stok bahan baku di atas untuk mengaitkan harga secara otomatis.
                     </span>
@@ -315,20 +301,20 @@
 
         <div class="flex items-center gap-2">
           <!-- Shortcut add from stock campuran -->
-          <select
-            @change="addFromCampuranStock"
-            class="px-3 py-1.5 text-xs rounded-xl border border-stone-200 bg-stone-50 font-medium"
-          >
-            <option value="">+ Ambil dari Stok Campuran</option>
-            <option v-for="c in stockCampuran" :key="c.id" :value="c.id">
-              {{ c.namaBarang }} ({{ formatRupiah(c.hargaPerPcs) }})
-            </option>
-          </select>
+          <div class="w-60">
+            <CustomSelect
+              v-model="selectedCampuranToAdd"
+              :options="stockCampuranOptions"
+              placeholder="+ Ambil dari Stok Campuran"
+              :searchable="true"
+              @change="onSelectAddCampuranStock"
+            />
+          </div>
 
           <button
             type="button"
             @click="addManualPackagingRow"
-            class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors flex items-center gap-1"
+            class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors flex items-center gap-1 flex-shrink-0"
           >
             <Plus class="w-3.5 h-3.5" />
             <span>Tambah Item Manual</span>
@@ -524,6 +510,7 @@ import { storeToRefs } from 'pinia';
 import { PackagingHppItem, HppLiquidIngredientDetail } from '../types';
 import { formatRupiah, formatNumber } from '../utils/formatters';
 import { RotateCcw, Save, Plus, Trash2, FlaskConical, Package, TrendingUp, Menu } from 'lucide-vue-next';
+import CustomSelect from '../components/common/CustomSelect.vue';
 
 const store = useKobichaStore();
 const { formulaBases, racikanCatalog, stockCampuran, bahanBakuCampuranList, prefilledHppRacikanId, prefilledHppBaseId } = storeToRefs(store);
@@ -534,9 +521,51 @@ const liquidMode = ref<'by_recipe' | 'manual'>('by_recipe');
 
 const selectedBaseId = ref('');
 const selectedRacikanId = ref('');
+const selectedCampuranToAdd = ref('');
 const manualLiquidPricePerMl = ref(450);
 
 const targetMarginPercentage = ref(150);
+
+const baseOptions = computed(() => [
+  { value: '', label: '-- Pilih Template Formula Base --' },
+  ...formulaBases.value.map(b => ({ value: b.id, label: b.nama }))
+]);
+
+const racikanOptions = computed(() => [
+  { value: '', label: '-- Pilih Racikan dari Katalog --' },
+  ...racikanCatalog.value.map(r => ({ value: r.id, label: `${r.nama} (${r.tanggalDibuat})` }))
+]);
+
+const bahanBakuOptions = computed(() => [
+  { value: '', label: '-- Pilih Cairan dari Stok Bahan Baku --' },
+  ...bahanBakuCampuranList.value.map(c => ({
+    value: c.id,
+    label: `${c.namaBarang} — (${formatRupiah(store.getCampuranAveragePricePerMl(c.id))}/ml)`
+  }))
+]);
+
+const stockCampuranOptions = computed(() => [
+  { value: '', label: '+ Ambil dari Stok Campuran' },
+  ...stockCampuran.value.map(c => ({
+    value: c.id,
+    label: `${c.namaBarang} (${formatRupiah(c.hargaPerPcs)})`
+  }))
+]);
+
+function onSelectAddCampuranStock(campId: string) {
+  if (!campId) return;
+  const item = stockCampuran.value.find(c => c.id === campId);
+  if (item) {
+    packagingRows.value.push({
+      id: 'pkg-' + Date.now(),
+      namaItem: item.namaBarang,
+      jumlah: 1,
+      hargaSatuan: item.hargaPerPcs,
+      total: item.hargaPerPcs
+    });
+  }
+  selectedCampuranToAdd.value = '';
+}
 
 // Section 2: Packaging Items
 const packagingRows = ref<PackagingHppItem[]>([
@@ -557,24 +586,6 @@ function addManualPackagingRow() {
 
 function removePackagingRow(idx: number) {
   packagingRows.value.splice(idx, 1);
-}
-
-function addFromCampuranStock(e: Event) {
-  const target = e.target as HTMLSelectElement;
-  const campId = target.value;
-  if (!campId) return;
-
-  const item = stockCampuran.value.find(c => c.id === campId);
-  if (item) {
-    packagingRows.value.push({
-      id: 'pkg-' + Date.now(),
-      namaItem: item.namaBarang,
-      jumlah: 1,
-      hargaSatuan: item.hargaPerPcs,
-      total: item.hargaPerPcs
-    });
-  }
-  target.value = '';
 }
 
 function onBottleSizeChange() {

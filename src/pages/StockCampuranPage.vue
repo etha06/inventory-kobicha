@@ -44,41 +44,30 @@
 
       <!-- Filter Tipe (Semua / Bahan Baku / Packaging) -->
       <div>
-        <select
+        <CustomSelect
           v-model="filterTipe"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >
-          <option value="">-- Semua Tipe Barang --</option>
-          <option value="bahan_baku">🧪 Bahan Baku / Cairan</option>
-          <option value="packaging">📦 Kemasan / Lainnya</option>
-        </select>
+          :options="tipeOptions"
+          placeholder="Semua Tipe Barang"
+        />
       </div>
 
       <!-- Filter Jenis Barang (from allJenisBarangList) -->
       <div>
-        <select
+        <CustomSelect
           v-model="filterJenis"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >
-          <option value="">-- Semua Jenis Barang --</option>
-          <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
-        </select>
+          :options="jenisOptions"
+          placeholder="Semua Jenis Barang"
+          :searchable="true"
+        />
       </div>
 
       <!-- Sort By -->
       <div>
-        <select
+        <CustomSelect
           v-model="sortBy"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >
-          <option value="name_asc">Nama Barang (A - Z)</option>
-          <option value="name_desc">Nama Barang (Z - A)</option>
-          <option value="stock_desc">Stok Terbanyak</option>
-          <option value="stock_asc">Stok Tersedikit (Alert)</option>
-          <option value="price_desc">Harga Tertinggi</option>
-          <option value="price_asc">Harga Termurah</option>
-          <option value="updated_at">Terakhir Diperbarui</option>
-        </select>
+          :options="sortOptions"
+          placeholder="Urutkan..."
+        />
       </div>
     </div>
 
@@ -93,7 +82,7 @@
               <th class="py-3.5 px-4 text-left">Tipe</th>
               <th class="py-3.5 px-4 text-left">Jenis Barang</th>
               <th class="py-3.5 px-4 text-left">Volume Kemasan</th>
-              <th class="py-3.5 px-4 text-left">Stok</th>
+              <th class="py-3.5 px-4 text-left">Current Stok</th>
               <th class="py-3.5 px-4 text-left">Toko Supplier</th>
               <th class="py-3.5 px-4 text-left">Harga Beli</th>
               <th class="py-3.5 px-4 text-left">Updated At</th>
@@ -344,14 +333,13 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-forest-800 mb-1">Toko Supplier</label>
-            <select
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Toko Supplier</label>
+            <CustomSelect
               v-model="form.storeId"
-              class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm bg-white font-medium"
-            >
-              <option value="">-- Pilih Toko Supplier --</option>
-              <option v-for="s in stores" :key="s.id" :value="s.id">{{ s.namaToko }}</option>
-            </select>
+              :options="storeOptions"
+              placeholder="-- Pilih Toko Supplier --"
+              :searchable="true"
+            />
           </div>
         </div>
 
@@ -465,6 +453,7 @@ import { formatRupiah, formatDateIndo } from '../utils/formatters';
 import { Plus, Search, Pencil, Trash2, ChevronRight, Package, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
+import CustomSelect from '../components/common/CustomSelect.vue';
 
 const store = useKobichaStore();
 const { stockCampuran, stores, allJenisBarangList } = storeToRefs(store);
@@ -474,6 +463,32 @@ const filterTipe = ref('');
 const filterJenis = ref('');
 const sortBy = ref('name_asc');
 const expandedItemId = ref<string | null>(null);
+
+const tipeOptions = [
+  { value: '', label: 'Semua Tipe Barang' },
+  { value: 'bahan_baku', label: 'Bahan Baku / Cairan' },
+  { value: 'packaging', label: 'Kemasan / Lainnya' }
+];
+
+const jenisOptions = computed(() => [
+  { value: '', label: 'Semua Jenis Barang' },
+  ...allJenisBarangList.value.map(j => ({ value: j, label: j }))
+]);
+
+const sortOptions = [
+  { value: 'name_asc', label: 'Nama Barang (A - Z)' },
+  { value: 'name_desc', label: 'Nama Barang (Z - A)' },
+  { value: 'stock_desc', label: 'Stok Terbanyak' },
+  { value: 'stock_asc', label: 'Stok Tersedikit (Alert)' },
+  { value: 'price_desc', label: 'Harga Tertinggi' },
+  { value: 'price_asc', label: 'Harga Termurah' },
+  { value: 'updated_at', label: 'Terakhir Diperbarui' }
+];
+
+const storeOptions = computed(() => [
+  { value: '', label: '-- Pilih Toko Supplier --' },
+  ...stores.value.map(s => ({ value: s.id, label: s.namaToko }))
+]);
 
 function toggleRow(id: string) {
   expandedItemId.value = expandedItemId.value === id ? null : id;

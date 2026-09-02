@@ -70,16 +70,13 @@
       <!-- Mode By Resep Selector -->
       <div v-if="mode === 'by_resep'" class="p-4 rounded-xl bg-amber-50 border border-amber-200 space-y-2">
         <label class="block text-xs font-bold text-amber-950">Pilih Racikan dari Katalog Racikan Fragrance:</label>
-        <select
+        <CustomSelect
           v-model="selectedRacikanCatalogId"
+          :options="racikanCatalogOptions"
+          placeholder="-- Pilih Resep Racikan --"
+          :searchable="true"
           @change="loadRecipeFromCatalog"
-          class="w-full px-3.5 py-2 text-xs rounded-xl border border-amber-300 bg-white font-medium focus:ring-2 focus:ring-amber-500/30"
-        >
-          <option value="">-- Pilih Resep Racikan --</option>
-          <option v-for="r in racikanCatalog" :key="r.id" :value="r.id">
-            {{ r.nama }} ({{ r.tanggalDibuat }}) - {{ r.fragranceOils.length }} FO
-          </option>
-        </select>
+        />
       </div>
 
       <!-- Target Formulation Inputs -->
@@ -90,13 +87,13 @@
             v-model="namaRacikan"
             type="text"
             required
-            placeholder="Misal: Kobicha Velvet Midnight Batch 1"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
+            placeholder="Misal: Kobicha Velvet Rose Extrait"
+            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-semibold"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-stone-700 mb-1">Target Volume Botol Parfum (ml)</label>
+          <label class="block text-xs font-semibold text-stone-700 mb-1">Target Total Botol Parfum (ml)</label>
           <div class="relative">
             <input
               v-model.number="targetTotalMl"
@@ -132,16 +129,12 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-stone-100">
         <div>
           <label class="block text-xs font-semibold text-stone-700 mb-1">Formula Base Pelarut (Opsional)</label>
-          <select
+          <CustomSelect
             v-model="selectedBaseId"
+            :options="baseOptions"
+            placeholder="-- Bebas / Tanpa Formula Base --"
             @change="applyBaseTemplate"
-            class="w-full px-3.5 py-2 text-xs rounded-xl border border-stone-200 bg-white font-medium"
-          >
-            <option value="">-- Bebas / Tanpa Formula Base --</option>
-            <option v-for="b in formulaBases" :key="b.id" :value="b.id">
-              {{ b.nama }}
-            </option>
-          </select>
+          />
         </div>
 
         <div class="flex items-center gap-3 pt-4 sm:pt-6">
@@ -207,16 +200,13 @@
 
               <!-- Select Fragrance Oil -->
               <td class="py-2 px-3 text-left">
-                <select
+                <CustomSelect
                   v-model="row.fragranceOilId"
+                  :options="foOptions"
+                  placeholder="-- Pilih Fragrance Oil --"
+                  :searchable="true"
                   @change="onFoSelect(row)"
-                  class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-300 font-medium"
-                >
-                  <option value="">-- Pilih Fragrance Oil --</option>
-                  <option v-for="fo in stockFragranceOil" :key="fo.id" :value="fo.id">
-                    {{ fo.nama }} ({{ fo.storeName }})
-                  </option>
-                </select>
+                />
               </td>
 
               <!-- Pyramid Badge (Without "Note" word) -->
@@ -349,6 +339,7 @@ import { RacikanItem, NotesEnum, PyramidEnum } from '../types';
 import { PYRAMID_BADGE_MAP } from '../utils/constants';
 import { formatRupiah, formatNumber } from '../utils/formatters';
 import { Plus, RotateCcw, Save, Trash2, DollarSign, Menu } from 'lucide-vue-next';
+import CustomSelect from '../components/common/CustomSelect.vue';
 
 const store = useKobichaStore();
 const { stockFragranceOil, formulaBases, racikanCatalog, prefilledRacikanId } = storeToRefs(store);
@@ -356,6 +347,31 @@ const { stockFragranceOil, formulaBases, racikanCatalog, prefilledRacikanId } = 
 const mode = ref<'manual' | 'by_resep'>('manual');
 const selectedRacikanCatalogId = ref('');
 const selectedBaseId = ref('');
+
+const racikanCatalogOptions = computed(() => [
+  { value: '', label: '-- Pilih Resep Racikan --' },
+  ...racikanCatalog.value.map(r => ({
+    value: r.id,
+    label: `${r.nama} (${r.tanggalDibuat}) - ${r.fragranceOils.length} FO`
+  }))
+]);
+
+const baseOptions = computed(() => [
+  { value: '', label: '-- Bebas / Tanpa Formula Base --' },
+  ...formulaBases.value.map(b => ({
+    value: b.id,
+    label: b.nama
+  }))
+]);
+
+const foOptions = computed(() => [
+  { value: '', label: '-- Pilih Fragrance Oil --' },
+  ...stockFragranceOil.value.map(fo => ({
+    value: fo.id,
+    label: `${fo.nama} (${fo.storeName})`,
+    badge: fo.pyramid
+  }))
+]);
 
 const namaRacikan = ref('');
 const targetTotalMl = ref(50);

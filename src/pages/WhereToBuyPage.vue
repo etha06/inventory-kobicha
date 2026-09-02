@@ -44,26 +44,21 @@
 
       <!-- Filter Jenis -->
       <div>
-        <select
+        <CustomSelect
           v-model="filterJenis"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >
-          <option value="">-- Semua Jenis Barang --</option>
-          <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
-        </select>
+          :options="jenisOptions"
+          placeholder="Semua Jenis Barang"
+          :searchable="true"
+        />
       </div>
 
       <!-- Sort By -->
       <div>
-        <select
+        <CustomSelect
           v-model="sortBy"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >
-          <option value="name_asc">Nama Toko (A - Z)</option>
-          <option value="name_desc">Nama Toko (Z - A)</option>
-          <option value="newest">Terbaru Ditambahkan</option>
-          <option value="oldest">Terlama</option>
-        </select>
+          :options="sortOptions"
+          placeholder="Urutkan..."
+        />
       </div>
     </div>
 
@@ -377,6 +372,7 @@ import { formatDateIndo } from '../utils/formatters';
 import { Plus, Search, Pencil, Trash2, ExternalLink, ChevronRight, Store, AlertTriangle, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
+import CustomSelect from '../components/common/CustomSelect.vue';
 
 const store = useKobichaStore();
 const { stores, stockFragranceOil, stockCampuran, allJenisBarangList } = storeToRefs(store);
@@ -385,6 +381,18 @@ const searchQuery = ref('');
 const filterJenis = ref('');
 const sortBy = ref('name_asc');
 const expandedStoreId = ref<string | null>(null);
+
+const jenisOptions = computed(() => [
+  { value: '', label: 'Semua Jenis Barang' },
+  ...allJenisBarangList.value.map(j => ({ value: j, label: j }))
+]);
+
+const sortOptions = [
+  { value: 'name_asc', label: 'Nama Toko (A - Z)' },
+  { value: 'name_desc', label: 'Nama Toko (Z - A)' },
+  { value: 'newest', label: 'Terbaru Ditambahkan' },
+  { value: 'oldest', label: 'Terlama' }
+];
 
 function toggleRow(id: string) {
   expandedStoreId.value = expandedStoreId.value === id ? null : id;

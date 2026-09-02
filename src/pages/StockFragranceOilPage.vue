@@ -45,35 +45,30 @@
 
         <!-- Filter Jenis Liquid -->
         <div>
-          <select
+          <CustomSelect
             v-model="filterLiquid"
-            class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-          >
-            <option value="">-- Semua Jenis Liquid --</option>
-            <option v-for="opt in JENIS_LIQUID_OPTIONS" :key="opt" :value="opt">{{ opt }}</option>
-          </select>
+            :options="liquidOptions"
+            placeholder="Semua Jenis Liquid"
+          />
         </div>
 
         <!-- Filter Pyramid (Without "Note" word) -->
         <div>
-          <select
+          <CustomSelect
             v-model="filterPyramid"
-            class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-          >
-            <option value="">-- Semua Piramida --</option>
-            <option v-for="opt in PYRAMID_OPTIONS" :key="opt" :value="opt">{{ opt }}</option>
-          </select>
+            :options="pyramidOptions"
+            placeholder="Semua Piramida"
+          />
         </div>
 
         <!-- Filter Notes -->
         <div>
-          <select
+          <CustomSelect
             v-model="filterNotes"
-            class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-          >
-            <option value="">-- Semua Olfactory Notes --</option>
-            <option v-for="n in NOTES_OPTIONS" :key="n" :value="n">{{ n }}</option>
-          </select>
+            :options="notesOptions"
+            placeholder="Semua Olfactory Notes"
+            :searchable="true"
+          />
         </div>
       </div>
 
@@ -116,17 +111,13 @@
 
         <div class="flex items-center gap-2">
           <span class="text-[11px] text-stone-400 font-semibold">Urutkan:</span>
-          <select
-            v-model="sortBy"
-            class="px-3 py-1 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
-          >
-            <option value="name_asc">Nama FO (A - Z)</option>
-            <option value="name_desc">Nama FO (Z - A)</option>
-            <option value="stock_status">Status Stok (Habis -> Banyak)</option>
-            <option value="usage_desc">Paling Sering Digunakan di Formula</option>
-            <option value="bottle_desc">Ukuran Botol Terbesar</option>
-            <option value="updated_at">Terakhir Diperbarui</option>
-          </select>
+          <div class="w-48">
+            <CustomSelect
+              v-model="sortBy"
+              :options="sortOptions"
+              placeholder="Urutkan..."
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -348,25 +339,23 @@
 
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Jenis Liquid (Enum)</label>
-            <select
+            <CustomSelect
               v-model="form.jenisLiquid"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
-            >
-              <option v-for="opt in JENIS_LIQUID_OPTIONS" :key="opt" :value="opt">{{ opt }}</option>
-            </select>
+              :options="JENIS_LIQUID_OPTIONS"
+              placeholder="Pilih Jenis Liquid"
+            />
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Toko Supplier</label>
-            <select
+            <CustomSelect
               v-model="form.storeId"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
-            >
-              <option value="">-- Pilih Toko Supplier --</option>
-              <option v-for="s in stores" :key="s.id" :value="s.id">{{ s.namaToko }}</option>
-            </select>
+              :options="storeOptions"
+              placeholder="-- Pilih Toko Supplier --"
+              :searchable="true"
+            />
           </div>
 
           <div>
@@ -382,14 +371,11 @@
 
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Current Stock (Enum)</label>
-            <select
+            <CustomSelect
               v-model="form.currentStock"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-bold"
-            >
-              <option value="Banyak">🟢 Banyak</option>
-              <option value="Dikit">🟡 Dikit (Menipis)</option>
-              <option value="Habis">🔴 Habis</option>
-            </select>
+              :options="currentStockOptions"
+              placeholder="Pilih Status Stok"
+            />
           </div>
         </div>
 
@@ -397,12 +383,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Pyramid (Enum)</label>
-            <select
+            <CustomSelect
               v-model="form.pyramid"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-semibold"
-            >
-              <option v-for="p in PYRAMID_OPTIONS" :key="p" :value="p">{{ p }}</option>
-            </select>
+              :options="PYRAMID_OPTIONS"
+              placeholder="Pilih Piramida"
+            />
           </div>
 
           <div>
@@ -540,6 +525,7 @@ import { formatRupiah, formatDateIndo } from '../utils/formatters';
 import { Plus, Search, Pencil, Trash2, ChevronRight, Droplet, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
+import CustomSelect from '../components/common/CustomSelect.vue';
 
 const store = useKobichaStore();
 const { stockFragranceOil, stores } = storeToRefs(store);
@@ -551,6 +537,41 @@ const filterNotes = ref('');
 const filterStock = ref('');
 const sortBy = ref('name_asc');
 const expandedItemId = ref<string | null>(null);
+
+const liquidOptions = [
+  { value: '', label: 'Semua Jenis Liquid' },
+  ...JENIS_LIQUID_OPTIONS.map(opt => ({ value: opt, label: opt }))
+];
+
+const pyramidOptions = [
+  { value: '', label: 'Semua Piramida' },
+  ...PYRAMID_OPTIONS.map(opt => ({ value: opt, label: opt }))
+];
+
+const notesOptions = [
+  { value: '', label: 'Semua Olfactory Notes' },
+  ...NOTES_OPTIONS.map(opt => ({ value: opt, label: opt }))
+];
+
+const sortOptions = [
+  { value: 'name_asc', label: 'Nama FO (A - Z)' },
+  { value: 'name_desc', label: 'Nama FO (Z - A)' },
+  { value: 'stock_status', label: 'Status Stok (Habis -> Banyak)' },
+  { value: 'usage_desc', label: 'Paling Sering Digunakan di Formula' },
+  { value: 'bottle_desc', label: 'Ukuran Botol Terbesar' },
+  { value: 'updated_at', label: 'Terakhir Diperbarui' }
+];
+
+const storeOptions = computed(() => [
+  { value: '', label: '-- Pilih Toko Supplier --' },
+  ...stores.value.map(s => ({ value: s.id, label: s.namaToko }))
+]);
+
+const currentStockOptions = [
+  { value: 'Banyak', label: 'Banyak', badge: 'Stok Aman' },
+  { value: 'Dikit', label: 'Dikit (Menipis)', badge: 'Perlu Restock' },
+  { value: 'Habis', label: 'Habis', badge: 'Kosong' }
+];
 
 function toggleRow(id: string) {
   expandedItemId.value = expandedItemId.value === id ? null : id;
