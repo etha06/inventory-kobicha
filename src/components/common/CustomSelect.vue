@@ -5,21 +5,21 @@
       type="button"
       @click="toggleDropdown"
       :disabled="disabled"
-      class="w-full bg-white border text-left px-3.5 py-2 text-xs flex items-center justify-between transition-all duration-150 select-none"
+      class="w-full bg-white text-left px-3.5 py-2 text-xs flex items-center justify-between transition-all duration-150 select-none"
       :class="[
         isOpen
-          ? 'border-amber-500 ring-2 ring-amber-500/20 shadow-sm rounded-lg'
-          : 'border-stone-300 hover:border-stone-400 rounded-lg',
+          ? 'border-2 border-stone-900 shadow-sm rounded-xl'
+          : 'border border-stone-300 hover:border-stone-400 rounded-xl',
         disabled ? 'bg-stone-100 text-stone-400 cursor-not-allowed border-stone-200' : 'cursor-pointer text-stone-800',
         buttonClass
       ]"
     >
-      <span class="truncate font-semibold" :class="!selectedLabel ? 'text-stone-400 font-normal' : 'text-stone-800'">
+      <span class="truncate" :class="!selectedLabel ? 'text-stone-400 font-normal' : 'text-stone-900 font-medium'">
         {{ selectedLabel || placeholder }}
       </span>
 
-      <span class="ml-2 flex-shrink-0 text-stone-500">
-        <ChevronUp v-if="isOpen" class="w-3.5 h-3.5 text-stone-600 transition-transform duration-150" />
+      <span class="ml-2 flex-shrink-0 text-stone-600">
+        <ChevronUp v-if="isOpen" class="w-3.5 h-3.5 text-stone-700 transition-transform duration-150" />
         <ChevronDown v-else class="w-3.5 h-3.5 text-stone-400 transition-transform duration-150" />
       </span>
     </button>
@@ -35,7 +35,7 @@
     >
       <div
         v-if="isOpen"
-        class="absolute z-50 mt-1.5 w-full bg-white border border-stone-200 rounded-xl shadow-lg py-1 max-h-60 overflow-y-auto text-xs"
+        class="absolute z-50 mt-1.5 w-full bg-white border border-stone-200/90 rounded-2xl shadow-xl py-1.5 max-h-60 overflow-y-auto text-xs overflow-hidden"
         :class="dropdownClass"
       >
         <!-- Search Input if searchable -->
@@ -45,22 +45,22 @@
             v-model="searchTerm"
             type="text"
             placeholder="Cari..."
-            class="w-full px-2.5 py-1 text-xs rounded-lg border border-stone-200 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/20 bg-stone-50/50"
+            class="w-full px-2.5 py-1.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-stone-900 focus:ring-1 focus:ring-stone-900 bg-stone-50/50"
             @click.stop
           />
         </div>
 
         <!-- Options List -->
-        <div class="divide-y divide-stone-50">
+        <div>
           <div
             v-for="(opt, idx) in normalizedFilteredOptions"
             :key="idx"
             @click="selectOption(opt)"
-            class="px-3.5 py-2 cursor-pointer transition-colors text-xs flex items-center justify-between"
+            class="px-4 py-2.5 cursor-pointer transition-colors text-xs flex items-center justify-between"
             :class="[
               isSelected(opt.value)
-                ? 'bg-stone-100 text-stone-900 font-bold'
-                : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900 font-medium'
+                ? 'bg-stone-100/90 text-stone-900 font-bold'
+                : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900 font-normal'
             ]"
           >
             <div class="flex items-center gap-2 truncate">
@@ -75,7 +75,7 @@
 
           <div
             v-if="normalizedFilteredOptions.length === 0"
-            class="px-3.5 py-3 text-center text-stone-400 text-xs italic"
+            class="px-4 py-3 text-center text-stone-400 text-xs italic"
           >
             Tidak ada pilihan ditemukan
           </div>
