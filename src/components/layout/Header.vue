@@ -24,32 +24,13 @@
       </div>
     </div>
 
-    <!-- Right: Date Indicator, User/Notification Icons & Quick Action Buttons (Image 1 Style) -->
+    <!-- Right: Date Indicator (Image 1 Style) -->
     <div class="flex items-center gap-3 sm:gap-4">
       <!-- Live Date String (Image 1 Header style) -->
-      <div class="hidden md:flex items-center gap-1.5 text-xs font-medium text-sage-700 bg-sage-50/80 px-3 py-1.5 rounded-full border border-sage-200/60">
+      <div class="flex items-center gap-1.5 text-xs font-medium text-sage-700 bg-sage-50/80 px-3.5 py-1.5 rounded-full border border-sage-200/60">
         <Calendar class="w-3.5 h-3.5 text-sage-600" />
         <span>{{ todayFormatted }}</span>
       </div>
-
-      <!-- Quick Add Campuran -->
-      <button
-        @click="store.isQuickAddCampuranOpen = true"
-        class="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-sage-50 hover:bg-sage-100 text-sage-800 text-xs font-semibold transition-all border border-sage-200 shadow-sm"
-      >
-        <Plus class="w-3.5 h-3.5 text-sage-600" />
-        <span>+ Campuran</span>
-      </button>
-
-      <!-- Quick Add Fragrance Oil -->
-      <button
-        @click="store.isQuickAddFoOpen = true"
-        class="flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all transform active:scale-95"
-      >
-        <Plus class="w-3.5 h-3.5 text-white" />
-        <span class="hidden sm:inline">+ Fragrance Oil</span>
-        <span class="sm:hidden">FO</span>
-      </button>
     </div>
   </header>
 </template>
@@ -58,7 +39,7 @@
 import { computed } from 'vue';
 import { useKobichaStore } from '../../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
-import { Menu, Plus, Calendar } from 'lucide-vue-next';
+import { Menu, Calendar } from 'lucide-vue-next';
 
 defineEmits(['open-mobile']);
 

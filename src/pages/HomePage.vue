@@ -1,33 +1,13 @@
 <template>
   <div class="space-y-7">
     <!-- Top Greeting Section (Image 1 Header Style) -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-sage-100">
-      <div>
-        <h1 class="text-2xl sm:text-3xl font-bold font-serif text-forest-900 tracking-tight flex items-center gap-2">
-          <span>Selamat {{ greetingTime }}, Tim Kobicha</span>
-        </h1>
-        <p class="text-xs sm:text-sm text-sage-600 mt-1 font-sans">
-          Welcome to your perfume formulation & inventory management system
-        </p>
-      </div>
-
-      <!-- Quick Action Buttons -->
-      <div class="flex items-center gap-2.5">
-        <button
-          @click="store.isQuickAddFoOpen = true"
-          class="px-4 py-2 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all transform active:scale-95 flex items-center gap-1.5"
-        >
-          <Plus class="w-3.5 h-3.5" />
-          <span>+ Tambah FO</span>
-        </button>
-        <button
-          @click="store.navigateTo('kalkulator-racikan')"
-          class="px-4 py-2 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-800 text-xs font-bold border border-sage-200 transition-all flex items-center gap-1.5"
-        >
-          <FlaskConical class="w-3.5 h-3.5 text-sage-600" />
-          <span>Kalkulator Racik</span>
-        </button>
-      </div>
+    <div class="pb-2 border-b border-sage-100">
+      <h1 class="text-2xl sm:text-3xl font-bold font-serif text-forest-900 tracking-tight flex items-center gap-2">
+        <span>Selamat {{ greetingTime }}, Tim Kobicha</span>
+      </h1>
+      <p class="text-xs sm:text-sm text-sage-600 mt-1 font-sans">
+        Welcome to your perfume formulation & inventory management system
+      </p>
     </div>
 
     <!-- 4 Pastel Wave Stat Cards (Image 1 Style) -->
@@ -168,7 +148,7 @@ import StatsOverview from '../components/home/StatsOverview.vue';
 import QuickNotes from '../components/home/QuickNotes.vue';
 import InteractiveCalendar from '../components/home/InteractiveCalendar.vue';
 import QuickAddModals from '../components/home/QuickAddModals.vue';
-import { Plus, FlaskConical, Sparkles } from 'lucide-vue-next';
+import { Sparkles } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { stockFragranceOil, racikanCatalog } = storeToRefs(store);
