@@ -82,7 +82,7 @@
               <th class="py-3.5 px-4 text-left">Tipe</th>
               <th class="py-3.5 px-4 text-left">Jenis Barang</th>
               <th class="py-3.5 px-4 text-left">Volume Kemasan</th>
-              <th class="py-3.5 px-4 text-left">Current Stok</th>
+              <th class="py-3.5 px-4 text-left">Current Stock</th>
               <th class="py-3.5 px-4 text-left">Toko Supplier</th>
               <th class="py-3.5 px-4 text-left">Harga Beli</th>
               <th class="py-3.5 px-4 text-left">Updated At</th>
