@@ -406,7 +406,7 @@ function getPyramidBadgeInfo(pyramid?: PyramidEnum) {
     return { badge: 'T', badgeClass: 'bg-orange-100 text-orange-800 border-orange-300' };
   }
   if (pyramid === 'Middle') {
-    return { badge: 'M', badgeClass: 'bg-peach-100 text-peach-800 border-peach-300' };
+    return { badge: 'M', badgeClass: 'bg-yellow-100 text-amber-900 border-yellow-300' };
   }
   if (pyramid === 'Bottom') {
     return { badge: 'B', badgeClass: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-300' };

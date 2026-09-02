@@ -51,7 +51,7 @@ export const NOTE_COLOR_MAP: Record<NotesEnum, { bg: string; text: string; borde
 
 export const PYRAMID_BADGE_MAP: Record<PyramidEnum, { bg: string; text: string }> = {
   Top: { bg: 'bg-orange-100 text-orange-800 border-orange-300', text: 'Top Note ☁️' },
-  Middle: { bg: 'bg-peach-100 text-peach-800 border-peach-300', text: 'Heart / Middle 🌸' },
+  Middle: { bg: 'bg-yellow-100 text-amber-900 border-yellow-300', text: 'Heart / Middle 🌸' },
   Bottom: { bg: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-300', text: 'Base / Bottom 🪵' },
 };
 
