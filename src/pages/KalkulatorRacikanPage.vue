@@ -79,8 +79,33 @@
         />
       </div>
 
-      <!-- Target Formulation Inputs -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+      <!-- Formula Base Template & Commission Toggle (Positioned on Top) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+        <div>
+          <label class="block text-xs font-semibold text-stone-700 mb-1">Formula Base Pelarut (Opsional)</label>
+          <CustomSelect
+            v-model="selectedBaseId"
+            :options="baseOptions"
+            placeholder="-- Bebas / Tanpa Formula Base --"
+            @change="applyBaseTemplate"
+          />
+        </div>
+
+        <div class="flex items-center gap-3 pt-4 sm:pt-6">
+          <input
+            v-model="isCommission"
+            type="checkbox"
+            id="commCheck"
+            class="rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer w-4 h-4"
+          />
+          <label for="commCheck" class="text-xs font-semibold text-stone-700 cursor-pointer">
+            ✨ Pesanan Kustom Klien (Commission Order)
+          </label>
+        </div>
+      </div>
+
+      <!-- Target Formulation Inputs (Nama, Target ml, Konsentrasi %) -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-stone-100">
         <div>
           <label class="block text-xs font-semibold text-stone-700 mb-1">Nama Racikan / Formula</label>
           <input
@@ -122,31 +147,6 @@
           <span class="text-[10px] text-stone-400 mt-1 block">
             Target FO: <strong>{{ formatNumber(targetTotalFoMl, 2) }} ml</strong> dari {{ targetTotalMl }} ml
           </span>
-        </div>
-      </div>
-
-      <!-- Optional Formula Base Template & Commission Toggle -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-stone-100">
-        <div>
-          <label class="block text-xs font-semibold text-stone-700 mb-1">Formula Base Pelarut (Opsional)</label>
-          <CustomSelect
-            v-model="selectedBaseId"
-            :options="baseOptions"
-            placeholder="-- Bebas / Tanpa Formula Base --"
-            @change="applyBaseTemplate"
-          />
-        </div>
-
-        <div class="flex items-center gap-3 pt-4 sm:pt-6">
-          <input
-            v-model="isCommission"
-            type="checkbox"
-            id="commCheck"
-            class="rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer w-4 h-4"
-          />
-          <label for="commCheck" class="text-xs font-semibold text-stone-700 cursor-pointer">
-            ✨ Pesanan Kustom Klien (Commission Order)
-          </label>
         </div>
       </div>
     </div>
