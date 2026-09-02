@@ -82,7 +82,9 @@
       <!-- Formula Base Template & Commission Toggle (Positioned on Top) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
         <div>
-          <label class="block text-xs font-semibold text-stone-700 mb-1">Formula Base Pelarut (Opsional)</label>
+          <label class="block text-xs font-semibold text-stone-700 mb-1">
+            Formula Base Pelarut{{ mode === 'manual' ? ' (Opsional)' : '' }}
+          </label>
           <CustomSelect
             v-model="selectedBaseId"
             :options="baseOptions"
