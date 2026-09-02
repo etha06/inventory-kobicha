@@ -30,108 +30,15 @@
       </div>
     </div>
 
-    <!-- Main Dashboard Grid (Left: Stats + Products Table, Right: Analytics Donut + Most Used FO) -->
+    <!-- 4 Pastel Wave Stat Cards (Image 1 Style) -->
+    <StatsOverview />
+
+    <!-- Main Dashboard Grid (Left: Quick Notes & Calendar, Right: Analytics Donut + Most Used FO) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      <!-- LEFT COLUMN: Stats Cards & Products Stock Table (8 cols) -->
-      <div class="lg:col-span-8 space-y-6">
-        <!-- 4 Pastel Wave Stat Cards (Image 1 Style) -->
-        <StatsOverview />
-
-        <!-- Products Stock List Table (Image 1 Style) -->
-        <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="font-bold text-forest-900 text-base font-serif">Products Stock List</h3>
-              <p class="text-xs text-sage-600">Daftar konsentrat fragrance oil terbaru dan status ketersediaan</p>
-            </div>
-            <button
-              @click="store.navigateTo('stock-fo')"
-              class="text-xs font-bold text-peach-600 hover:text-peach-700 hover:underline flex items-center gap-1"
-            >
-              <span>Lihat Semua</span>
-              <ChevronRight class="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <!-- Table with Image 1 Pill Badges -->
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr class="border-b border-sage-100 text-[10px] font-bold uppercase tracking-wider text-sage-600">
-                  <th class="py-3 px-3">Nama Fragrance Oil</th>
-                  <th class="py-3 px-3">Brand / Supplier</th>
-                  <th class="py-3 px-3 text-center">Status Stok</th>
-                  <th class="py-3 px-3 text-right">Harga</th>
-                  <th class="py-3 px-3 text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-sage-50 text-forest-800">
-                <tr
-                  v-for="fo in recentFoList"
-                  :key="fo.id"
-                  class="table-row-hover transition-colors"
-                >
-                  <!-- Nama FO & Notes -->
-                  <td class="py-3.5 px-3">
-                    <div class="font-bold text-forest-900 text-xs">{{ fo.nama }}</div>
-                    <div class="text-[10px] text-sage-500 truncate max-w-[180px]">
-                      {{ (fo.notes && fo.notes.length) ? fo.notes.join(', ') : (fo.pyramid || 'Aroma blend') }}
-                    </div>
-                  </td>
-
-                  <!-- Brand / Supplier -->
-                  <td class="py-3.5 px-3 text-sage-600 text-[11px]">
-                    {{ fo.storeName || '-' }}
-                  </td>
-
-                  <!-- Pill Status (In Stock / Low Stock / Out of Stock) -->
-                  <td class="py-3.5 px-3 text-center">
-                    <span
-                      v-if="fo.currentStock === 'Banyak'"
-                      class="px-3 py-1 rounded-full text-[10px] font-bold bg-[#e2ece0] text-[#32522c] border border-[#c1d8be] inline-block"
-                    >
-                      In Stock
-                    </span>
-                    <span
-                      v-else-if="fo.currentStock === 'Dikit'"
-                      class="px-3 py-1 rounded-full text-[10px] font-bold bg-[#fef3e2] text-[#8e520e] border border-[#fae0be] inline-block"
-                    >
-                      Low Stock
-                    </span>
-                    <span
-                      v-else
-                      class="px-3 py-1 rounded-full text-[10px] font-bold bg-[#fdeeed] text-[#9b2c2c] border border-[#f8c8c8] inline-block"
-                    >
-                      Out of Stock
-                    </span>
-                  </td>
-
-                  <!-- Harga Rata-rata -->
-                  <td class="py-3.5 px-3 text-right font-mono font-semibold text-forest-900">
-                    {{ formatRupiah(store.getFoAveragePricePerMl(fo.id)) }}
-                  </td>
-
-                  <!-- Aksi -->
-                  <td class="py-3.5 px-3 text-right">
-                    <button
-                      @click="store.navigateTo('stock-fo')"
-                      class="p-1 rounded-lg hover:bg-sage-100 text-sage-600 transition-colors"
-                      title="Lihat di Katalog FO"
-                    >
-                      <Eye class="w-3.5 h-3.5" />
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- 2 Column Layout: Quick Notes & Interactive Calendar -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          <QuickNotes />
-          <InteractiveCalendar />
-        </div>
+      <!-- LEFT COLUMN: Quick Notes & Interactive Calendar (8 cols) -->
+      <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+        <QuickNotes />
+        <InteractiveCalendar />
       </div>
 
       <!-- RIGHT COLUMN: Analytics Donut Chart & Most Used Oils (4 cols) (Image 1 Style) -->
@@ -261,8 +168,7 @@ import StatsOverview from '../components/home/StatsOverview.vue';
 import QuickNotes from '../components/home/QuickNotes.vue';
 import InteractiveCalendar from '../components/home/InteractiveCalendar.vue';
 import QuickAddModals from '../components/home/QuickAddModals.vue';
-import { Plus, FlaskConical, ChevronRight, Eye, Sparkles } from 'lucide-vue-next';
-import { formatRupiah } from '../utils/formatters';
+import { Plus, FlaskConical, Sparkles } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { stockFragranceOil, racikanCatalog } = storeToRefs(store);
@@ -274,11 +180,6 @@ const greetingTime = computed(() => {
   if (hour >= 11 && hour < 15) return 'Siang';
   if (hour >= 15 && hour < 18) return 'Sore';
   return 'Malam';
-});
-
-// Recent FO items (up to 5)
-const recentFoList = computed(() => {
-  return [...stockFragranceOil.value].slice(0, 6);
 });
 
 // Chart percentages for Donut
