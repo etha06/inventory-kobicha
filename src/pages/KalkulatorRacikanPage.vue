@@ -182,106 +182,116 @@
       </div>
 
       <!-- Drops & Volume Table -->
-      <div class="overflow-x-auto border rounded-xl min-h-[360px] pb-28">
-        <table class="w-full text-xs text-left">
-          <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
-            <tr>
-              <th class="py-2.5 px-3 w-10 text-left">#</th>
-              <th class="py-2.5 px-3 text-left">Nama Fragrance Oil</th>
-              <th class="py-2.5 px-3 text-left">Pyramid</th>
-              <th class="py-2.5 px-3 text-left w-28">Jumlah Tetes</th>
-              <th class="py-2.5 px-3 text-left w-28">Porsi (% FO)</th>
-              <th class="py-2.5 px-3 text-left w-32">Volume (ml)</th>
-              <th class="py-2.5 px-3 text-left w-36">Estimasi Biaya FO</th>
-              <th class="py-2.5 px-4 text-left w-20">Aksi</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y text-stone-800">
-            <tr v-if="rows.length === 0">
-              <td colspan="8" class="py-8 text-center text-stone-400 italic">
-                Belum ada bahan Fragrance Oil. Klik "+ Tambah Baris FO" untuk menambahkan bibit parfum.
-              </td>
-            </tr>
+      <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col justify-between min-h-[340px] overflow-hidden shadow-sm">
+        <!-- Table Body Area -->
+        <div class="overflow-x-auto flex-1">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
+              <tr>
+                <th class="py-2.5 px-3 w-10 text-left">#</th>
+                <th class="py-2.5 px-3 text-left">Nama Fragrance Oil</th>
+                <th class="py-2.5 px-3 text-left">Pyramid</th>
+                <th class="py-2.5 px-3 text-left w-28">Jumlah Tetes</th>
+                <th class="py-2.5 px-3 text-left w-28">Porsi (% FO)</th>
+                <th class="py-2.5 px-3 text-left w-32">Volume (ml)</th>
+                <th class="py-2.5 px-3 text-left w-36">Estimasi Biaya FO</th>
+                <th class="py-2.5 px-4 text-left w-20">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y text-stone-800">
+              <tr v-if="rows.length === 0">
+                <td colspan="8" class="py-12 text-center text-stone-400 italic">
+                  Belum ada bahan Fragrance Oil. Klik "+ Tambah Baris FO" untuk menambahkan bibit parfum.
+                </td>
+              </tr>
 
-            <tr v-for="(row, idx) in rows" :key="row.id" class="hover:bg-stone-50">
-              <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px]">
-                {{ idx + 1 }}
-              </td>
+              <tr v-for="(row, idx) in rows" :key="row.id" class="hover:bg-stone-50 transition-colors">
+                <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px]">
+                  {{ idx + 1 }}
+                </td>
 
-              <!-- Select Fragrance Oil -->
-              <td class="py-2 px-3 text-left">
-                <CustomSelect
-                  v-model="row.fragranceOilId"
-                  :options="foOptions"
-                  placeholder="-- Pilih Fragrance Oil --"
-                  :searchable="true"
-                  @change="onFoSelect(row)"
-                />
-              </td>
+                <!-- Select Fragrance Oil -->
+                <td class="py-2 px-3 text-left">
+                  <CustomSelect
+                    v-model="row.fragranceOilId"
+                    :options="foOptions"
+                    placeholder="-- Pilih Fragrance Oil --"
+                    :searchable="true"
+                    @change="onFoSelect(row)"
+                  />
+                </td>
 
-              <!-- Pyramid Badge (Without "Note" word) -->
-              <td class="py-2 px-3 text-left">
-                <span
-                  v-if="getRowPyramid(row)"
-                  class="px-2 py-0.5 rounded text-[10px] font-bold border whitespace-nowrap inline-block"
-                  :class="PYRAMID_BADGE_MAP[getRowPyramid(row)!]?.bg"
-                >
-                  {{ getRowPyramid(row) }}
-                </span>
-                <span v-else class="text-stone-300 text-xs">-</span>
-              </td>
+                <!-- Pyramid Badge (Without "Note" word) -->
+                <td class="py-2 px-3 text-left">
+                  <span
+                    v-if="getRowPyramid(row)"
+                    class="px-2 py-0.5 rounded text-[10px] font-bold border whitespace-nowrap inline-block"
+                    :class="PYRAMID_BADGE_MAP[getRowPyramid(row)!]?.bg"
+                  >
+                    {{ getRowPyramid(row) }}
+                  </span>
+                  <span v-else class="text-stone-300 text-xs">-</span>
+                </td>
 
-              <!-- Jumlah Tetes -->
-              <td class="py-2 px-3 text-left">
-                <input
-                  v-model.number="row.tetes"
-                  type="number"
-                  min="1"
-                  required
-                  class="w-20 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold"
-                />
-              </td>
+                <!-- Jumlah Tetes -->
+                <td class="py-2 px-3 text-left">
+                  <input
+                    v-model.number="row.tetes"
+                    type="number"
+                    min="1"
+                    required
+                    class="w-20 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold"
+                  />
+                </td>
 
-              <!-- % FO -->
-              <td class="py-2 px-3 text-left font-mono font-semibold text-amber-950">
-                {{ formatNumber(getRowPercentage(row), 1) }}%
-              </td>
+                <!-- % FO -->
+                <td class="py-2 px-3 text-left font-mono font-semibold text-amber-950">
+                  {{ formatNumber(getRowPercentage(row), 1) }}%
+                </td>
 
-              <!-- ml FO -->
-              <td class="py-2 px-3 text-left font-mono font-bold text-stone-900 bg-amber-50/50">
-                {{ formatNumber(getRowMl(row), 2) }} ml
-              </td>
+                <!-- ml FO -->
+                <td class="py-2 px-3 text-left font-mono font-bold text-stone-900 bg-amber-50/50">
+                  {{ formatNumber(getRowMl(row), 2) }} ml
+                </td>
 
-              <!-- Estimasi Biaya FO -->
-              <td class="py-2 px-3 text-left font-mono text-stone-700">
-                {{ formatRupiah(getRowCost(row)) }}
-              </td>
+                <!-- Estimasi Biaya FO -->
+                <td class="py-2 px-3 text-left font-mono text-stone-700">
+                  {{ formatRupiah(getRowCost(row)) }}
+                </td>
 
-              <!-- Delete Row Action (Positioned Right, Aligned Left, Lucide Trash2) -->
-              <td class="py-2 px-4 text-left">
-                <button
-                  type="button"
-                  @click="removeRow(idx)"
-                  class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
-                  title="Hapus Baris FO"
-                >
-                  <Trash2 class="w-3.5 h-3.5" />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot class="bg-stone-50 border-t font-bold text-stone-900">
-            <tr>
-              <td colspan="2" class="py-2.5 px-3 text-left">Total Komposisi FO:</td>
-              <td></td>
-              <td class="py-2.5 px-3 text-left font-mono text-amber-950">{{ totalDrops }} Tetes</td>
-              <td class="py-2.5 px-3 text-left font-mono text-amber-950">100%</td>
-              <td class="py-2.5 px-3 text-left font-mono text-amber-950">{{ formatNumber(targetTotalFoMl, 2) }} ml</td>
-              <td class="py-2.5 px-3 text-left font-mono text-amber-950">{{ formatRupiah(totalFoCost) }}</td>
-              <td></td>
-            </tr>
-          </tfoot>
-        </table>
+                <!-- Delete Row Action (Positioned Right, Aligned Left, Lucide Trash2) -->
+                <td class="py-2 px-4 text-left">
+                  <button
+                    type="button"
+                    @click="removeRow(idx)"
+                    class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
+                    title="Hapus Baris FO"
+                  >
+                    <Trash2 class="w-3.5 h-3.5" />
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pinned Bottom Total Bar -->
+        <div class="bg-stone-50 border-t border-stone-200 overflow-x-auto">
+          <table class="w-full text-xs text-left">
+            <tfoot>
+              <tr class="font-bold text-stone-900">
+                <th class="py-3 px-3 w-10 text-left"></th>
+                <th class="py-3 px-3 text-left">Total Komposisi FO:</th>
+                <th class="py-3 px-3 text-left"></th>
+                <th class="py-3 px-3 text-left font-mono text-amber-950 w-28">{{ totalDrops }} Tetes</th>
+                <th class="py-3 px-3 text-left font-mono text-amber-950 w-28">100%</th>
+                <th class="py-3 px-3 text-left font-mono text-amber-950 w-32">{{ formatNumber(targetTotalFoMl, 2) }} ml</th>
+                <th class="py-3 px-3 text-left font-mono text-amber-950 w-36">{{ formatRupiah(totalFoCost) }}</th>
+                <th class="py-3 px-4 text-left w-20"></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
 
