@@ -9,7 +9,7 @@
       :class="[
         isOpen
           ? 'border-2 border-stone-900 shadow-sm rounded-xl'
-          : 'border border-stone-300 hover:border-stone-400 rounded-xl',
+          : 'border border-sage-200 hover:border-sage-300 rounded-xl',
         disabled ? 'bg-stone-100 text-stone-400 cursor-not-allowed border-stone-200' : 'cursor-pointer text-stone-800',
         buttonClass
       ]"

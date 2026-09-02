@@ -57,7 +57,6 @@
           v-model="filterJenis"
           :options="jenisOptions"
           placeholder="Semua Jenis Barang"
-          :searchable="true"
         />
       </div>
 
