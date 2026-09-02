@@ -197,18 +197,14 @@
                 <div v-if="ing.isFragranceOilConcentrate" class="px-3 py-1.5 rounded-lg bg-amber-100/70 border border-amber-300 text-xs font-bold text-amber-900 flex items-center gap-1.5">
                   <span>Fragrance Oil Concentrate</span>
                 </div>
-                <select
+                <CustomSelect
                   v-else
                   v-model="ing.stockCampuranId"
+                  :options="campuranOptions"
+                  placeholder="-- Pilih Bahan Campuran --"
+                  :searchable="true"
                   @change="onSelectCampuran(ing)"
-                  required
-                  class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-300 bg-white"
-                >
-                  <option value="">-- Pilih Bahan Campuran --</option>
-                  <option v-for="c in stockCampuran" :key="c.id" :value="c.id">
-                    {{ c.namaBarang }} ({{ c.jenis }})
-                  </option>
-                </select>
+                />
               </div>
 
               <div class="w-28">
@@ -280,9 +276,18 @@ import { FormulaBase, FormulaBaseIngredient } from '../types';
 import { Plus, Pencil, Trash2, FlaskConical, X, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
+import CustomSelect from '../components/common/CustomSelect.vue';
 
 const store = useKobichaStore();
 const { formulaBases, stockCampuran } = storeToRefs(store);
+
+const campuranOptions = computed(() => [
+  { value: '', label: '-- Pilih Bahan Campuran --' },
+  ...stockCampuran.value.map(c => ({
+    value: c.id,
+    label: `${c.namaBarang} (${c.jenis})`
+  }))
+]);
 
 function useInCalculator(baseId: string) {
   store.prefilledFormulaBaseId = baseId;

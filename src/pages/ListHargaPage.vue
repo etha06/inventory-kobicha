@@ -40,25 +40,20 @@
 
       <!-- Filter Pyramid (Without "Note" word) -->
       <div>
-        <select
+        <CustomSelect
           v-model="filterPyramid"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >
-          <option value="">-- Semua Piramida --</option>
-          <option v-for="p in PYRAMID_OPTIONS" :key="p" :value="p">{{ p }}</option>
-        </select>
+          :options="pyramidOptions"
+          placeholder="Semua Piramida"
+        />
       </div>
 
       <!-- Sort By -->
       <div>
-        <select
+        <CustomSelect
           v-model="sortBy"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >
-          <option value="price_asc">Harga Termurah → Termahal</option>
-          <option value="price_desc">Harga Termahal → Termurah</option>
-          <option value="name_asc">Nama FO (A - Z)</option>
-        </select>
+          :options="sortOptions"
+          placeholder="Urutkan..."
+        />
       </div>
     </div>
 
@@ -179,6 +174,7 @@ import { storeToRefs } from 'pinia';
 import { PYRAMID_OPTIONS, NOTE_COLOR_MAP, PYRAMID_BADGE_MAP } from '../utils/constants';
 import { formatRupiah } from '../utils/formatters';
 import { Search, Eye, Tag, Menu } from 'lucide-vue-next';
+import CustomSelect from '../components/common/CustomSelect.vue';
 
 const store = useKobichaStore();
 const { stockFragranceOil } = storeToRefs(store);
@@ -186,6 +182,17 @@ const { stockFragranceOil } = storeToRefs(store);
 const searchQuery = ref('');
 const filterPyramid = ref('');
 const sortBy = ref('price_asc');
+
+const pyramidOptions = [
+  { value: '', label: 'Semua Piramida' },
+  ...PYRAMID_OPTIONS.map(p => ({ value: p, label: p }))
+];
+
+const sortOptions = [
+  { value: 'price_asc', label: 'Harga Termurah → Termahal' },
+  { value: 'price_desc', label: 'Harga Termahal → Termurah' },
+  { value: 'name_asc', label: 'Nama FO (A - Z)' }
+];
 
 const processedFoList = computed(() => {
   let list = stockFragranceOil.value.map(fo => {

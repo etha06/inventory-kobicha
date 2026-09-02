@@ -171,15 +171,11 @@
 
         <div>
           <label class="block text-xs font-semibold text-forest-800 mb-1">Kategori Kegiatan</label>
-          <select
+          <CustomSelect
             v-model="deadlineForm.category"
-            class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm bg-white"
-          >
-            <option value="maturasi">Maturasi / Maserasi Parfum</option>
-            <option value="beli_stok">Beli / Restock Bahan Baku</option>
-            <option value="deadline_order">Deadline Pesanan / Commission</option>
-            <option value="lainnya">Lainnya</option>
-          </select>
+            :options="categoryOptions"
+            placeholder="Pilih Kategori"
+          />
         </div>
 
         <div>
@@ -219,10 +215,18 @@ import { storeToRefs } from 'pinia';
 import { format, startOfMonth, getDaysInMonth, getDay } from 'date-fns';
 import { id } from 'date-fns/locale';
 import Modal from '../common/Modal.vue';
+import CustomSelect from '../common/CustomSelect.vue';
 import { Calendar, ChevronLeft, ChevronRight, Plus, Clock, Trash2 } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { deadlines } = storeToRefs(store);
+
+const categoryOptions = [
+  { value: 'maturasi', label: 'Maturasi / Maserasi Parfum' },
+  { value: 'beli_stok', label: 'Beli / Restock Bahan Baku' },
+  { value: 'deadline_order', label: 'Deadline Pesanan / Commission' },
+  { value: 'lainnya', label: 'Lainnya' }
+];
 
 const currentDate = ref(new Date());
 const selectedDate = ref(new Date());

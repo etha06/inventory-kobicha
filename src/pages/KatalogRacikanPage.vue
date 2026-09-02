@@ -44,25 +44,21 @@
 
       <!-- Filter Commission -->
       <div>
-        <select
+        <CustomSelect
           v-model="filterCommission"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >
-          <option value="">-- Semua Tipe Resep --</option>
-          <option value="regular">Formula Reguler / House Signature</option>
-          <option value="commission">Pesanan Kustom (Commission)</option>
-        </select>
+          :options="commissionOptions"
+          placeholder="Semua Tipe Resep"
+        />
       </div>
 
       <!-- Filter Notes -->
       <div>
-        <select
+        <CustomSelect
           v-model="filterNotes"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >
-          <option value="">-- Semua Olfactory Notes --</option>
-          <option v-for="n in NOTES_OPTIONS" :key="n" :value="n">{{ n }}</option>
-        </select>
+          :options="notesOptions"
+          placeholder="Semua Olfactory Notes"
+          :searchable="true"
+        />
       </div>
     </div>
 
@@ -335,6 +331,7 @@ import { RacikanFragrance, NotesEnum } from '../types';
 import { NOTES_OPTIONS, NOTE_COLOR_MAP } from '../utils/constants';
 import { FlaskConical, Search, DollarSign, Trash2, Scale, Scroll, X, Menu } from 'lucide-vue-next';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
+import CustomSelect from '../components/common/CustomSelect.vue';
 
 const store = useKobichaStore();
 const { racikanCatalog } = storeToRefs(store);
@@ -343,6 +340,17 @@ const searchQuery = ref('');
 const filterCommission = ref('');
 const filterNotes = ref('');
 const selectedForCompare = ref<string[]>([]);
+
+const commissionOptions = [
+  { value: '', label: 'Semua Tipe Resep' },
+  { value: 'regular', label: 'Formula Reguler / House Signature' },
+  { value: 'commission', label: 'Pesanan Kustom (Commission)' }
+];
+
+const notesOptions = [
+  { value: '', label: 'Semua Olfactory Notes' },
+  ...NOTES_OPTIONS.map(n => ({ value: n, label: n }))
+];
 
 const filteredRacikan = computed(() => {
   let list = [...racikanCatalog.value];

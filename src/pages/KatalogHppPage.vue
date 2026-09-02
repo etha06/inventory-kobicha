@@ -62,28 +62,20 @@
 
       <!-- Filter Bottle Size -->
       <div>
-        <select
+        <CustomSelect
           v-model="filterBottleSize"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >
-          <option value="">-- Semua Ukuran Botol --</option>
-          <option value="30">Botol 30 ml</option>
-          <option value="50">Botol 50 ml</option>
-          <option value="100">Botol 100 ml</option>
-        </select>
+          :options="bottleSizeOptions"
+          placeholder="Semua Ukuran Botol"
+        />
       </div>
 
       <!-- Sort By -->
       <div>
-        <select
+        <CustomSelect
           v-model="sortBy"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        >     >
-          <option value="newest">Terbaru Dihitung</option>
-          <option value="hpp_asc">HPP / Botol Termurah</option>
-          <option value="hpp_desc">HPP / Botol Termahal</option>
-          <option value="name_asc">Nama Analisis (A - Z)</option>
-        </select>
+          :options="sortOptions"
+          placeholder="Urutkan..."
+        />
       </div>
     </div>
 
@@ -503,6 +495,7 @@ import { formatRupiah, formatNumber, formatDateIndo } from '../utils/formatters'
 import { Calculator, Search, Eye, Trash2, Scale, Receipt, X, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
+import CustomSelect from '../components/common/CustomSelect.vue';
 
 const store = useKobichaStore();
 const { hppCatalog } = storeToRefs(store);
@@ -512,6 +505,20 @@ const searchQuery = ref('');
 const filterBottleSize = ref<number | ''>('');
 const sortBy = ref('newest');
 const selectedForCompare = ref<string[]>([]);
+
+const bottleSizeOptions = [
+  { value: '', label: 'Semua Ukuran Botol' },
+  { value: 30, label: 'Botol 30 ml' },
+  { value: 50, label: 'Botol 50 ml' },
+  { value: 100, label: 'Botol 100 ml' }
+];
+
+const sortOptions = [
+  { value: 'newest', label: 'Terbaru Dihitung' },
+  { value: 'hpp_asc', label: 'HPP / Botol Termurah' },
+  { value: 'hpp_desc', label: 'HPP / Botol Termahal' },
+  { value: 'name_asc', label: 'Nama Analisis (A - Z)' }
+];
 
 const filteredHppList = computed(() => {
   let list = [...hppCatalog.value];

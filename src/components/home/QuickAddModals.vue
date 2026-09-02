@@ -23,13 +23,12 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Toko Supplier</label>
-            <select
+            <CustomSelect
               v-model="foForm.storeId"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
-            >
-              <option value="">-- Pilih Toko Supplier --</option>
-              <option v-for="s in stores" :key="s.id" :value="s.id">{{ s.namaToko }}</option>
-            </select>
+              :options="storeOptions"
+              placeholder="-- Pilih Toko Supplier --"
+              :searchable="true"
+            />
           </div>
 
           <div>
@@ -58,24 +57,20 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Pyramid</label>
-            <select
+            <CustomSelect
               v-model="foForm.pyramid"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
-            >
-              <option v-for="p in PYRAMID_OPTIONS" :key="p" :value="p">{{ p }}</option>
-            </select>
+              :options="PYRAMID_OPTIONS"
+              placeholder="Pilih Piramida"
+            />
           </div>
 
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Current Stock</label>
-            <select
+            <CustomSelect
               v-model="foForm.currentStock"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-bold"
-            >
-              <option value="Banyak">Banyak</option>
-              <option value="Dikit">Dikit</option>
-              <option value="Habis">Habis</option>
-            </select>
+              :options="currentStockOptions"
+              placeholder="Pilih Status Stok"
+            />
           </div>
         </div>
 
@@ -154,13 +149,12 @@
 
         <div>
           <label class="block text-xs font-semibold text-stone-700 mb-1">Toko Supplier</label>
-          <select
+          <CustomSelect
             v-model="campuranForm.storeId"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
-          >
-            <option value="">-- Pilih Toko Supplier --</option>
-            <option v-for="s in stores" :key="s.id" :value="s.id">{{ s.namaToko }}</option>
-          </select>
+            :options="storeOptions"
+            placeholder="-- Pilih Toko Supplier --"
+            :searchable="true"
+          />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
@@ -208,15 +202,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useKobichaStore } from '../../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { PyramidEnum, CurrentStockEnum } from '../../types';
 import { PYRAMID_OPTIONS } from '../../utils/constants';
 import Modal from '../common/Modal.vue';
+import CustomSelect from '../common/CustomSelect.vue';
 
 const store = useKobichaStore();
 const { isQuickAddFoOpen, isQuickAddCampuranOpen, stores, allJenisBarangList } = storeToRefs(store);
+
+const storeOptions = computed(() => [
+  { value: '', label: '-- Pilih Toko Supplier --' },
+  ...stores.value.map(s => ({ value: s.id, label: s.namaToko }))
+]);
+
+const currentStockOptions = [
+  { value: 'Banyak', label: 'Banyak' },
+  { value: 'Dikit', label: 'Dikit' },
+  { value: 'Habis', label: 'Habis' }
+];
 
 const foForm = ref({
   nama: '',
