@@ -401,13 +401,30 @@ const baseOptions = computed(() => [
   }))
 ]);
 
+function getPyramidBadgeInfo(pyramid?: PyramidEnum) {
+  if (pyramid === 'Top') {
+    return { badge: 'T', badgeClass: 'bg-amber-100 text-amber-800 border-amber-300' };
+  }
+  if (pyramid === 'Middle') {
+    return { badge: 'M', badgeClass: 'bg-indigo-100 text-indigo-800 border-indigo-300' };
+  }
+  if (pyramid === 'Bottom') {
+    return { badge: 'B', badgeClass: 'bg-stone-200 text-stone-800 border-stone-400' };
+  }
+  return { badge: undefined, badgeClass: undefined };
+}
+
 const foOptions = computed(() => [
   { value: '', label: '-- Pilih Fragrance Oil --' },
-  ...stockFragranceOil.value.map(fo => ({
-    value: fo.id,
-    label: `${fo.nama} (${fo.storeName})`,
-    badge: fo.pyramid
-  }))
+  ...stockFragranceOil.value.map(fo => {
+    const info = getPyramidBadgeInfo(fo.pyramid);
+    return {
+      value: fo.id,
+      label: `${fo.nama} (${fo.storeName})`,
+      badge: info.badge,
+      badgeClass: info.badgeClass
+    };
+  })
 ]);
 
 const namaRacikan = ref('');

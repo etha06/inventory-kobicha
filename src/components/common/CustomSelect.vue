@@ -71,7 +71,11 @@
                 <span class="truncate">{{ opt.label }}</span>
               </div>
 
-              <span v-if="opt.badge" class="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-500 font-normal">
+              <span
+                v-if="opt.badge"
+                class="ml-2 text-[10px] font-bold px-1.5 py-0.5 rounded border inline-flex items-center justify-center min-w-[20px]"
+                :class="opt.badgeClass || 'bg-stone-100 text-stone-600 border-stone-200'"
+              >
                 {{ opt.badge }}
               </span>
             </div>
@@ -98,6 +102,7 @@ export interface SelectOption {
   label: string;
   icon?: string;
   badge?: string;
+  badgeClass?: string;
 }
 
 const props = withDefaults(
