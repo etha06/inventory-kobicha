@@ -403,13 +403,13 @@ const baseOptions = computed(() => [
 
 function getPyramidBadgeInfo(pyramid?: PyramidEnum) {
   if (pyramid === 'Top') {
-    return { badge: 'T', badgeClass: 'bg-amber-100 text-amber-800 border-amber-300' };
+    return { badge: 'T', badgeClass: 'bg-orange-100 text-orange-800 border-orange-300' };
   }
   if (pyramid === 'Middle') {
-    return { badge: 'M', badgeClass: 'bg-indigo-100 text-indigo-800 border-indigo-300' };
+    return { badge: 'M', badgeClass: 'bg-peach-100 text-peach-800 border-peach-300' };
   }
   if (pyramid === 'Bottom') {
-    return { badge: 'B', badgeClass: 'bg-stone-200 text-stone-800 border-stone-400' };
+    return { badge: 'B', badgeClass: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-300' };
   }
   return { badge: undefined, badgeClass: undefined };
 }

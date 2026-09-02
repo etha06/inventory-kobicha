@@ -50,9 +50,9 @@ export const NOTE_COLOR_MAP: Record<NotesEnum, { bg: string; text: string; borde
 };
 
 export const PYRAMID_BADGE_MAP: Record<PyramidEnum, { bg: string; text: string }> = {
-  Top: { bg: 'bg-amber-500/15 text-amber-700 border-amber-300', text: 'Top Note ☁️' },
-  Middle: { bg: 'bg-indigo-500/15 text-indigo-700 border-indigo-300', text: 'Heart / Middle 🌸' },
-  Bottom: { bg: 'bg-stone-600/15 text-stone-800 border-stone-400', text: 'Base / Bottom 🪵' },
+  Top: { bg: 'bg-orange-100 text-orange-800 border-orange-300', text: 'Top Note ☁️' },
+  Middle: { bg: 'bg-peach-100 text-peach-800 border-peach-300', text: 'Heart / Middle 🌸' },
+  Bottom: { bg: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-300', text: 'Base / Bottom 🪵' },
 };
 
 export const STOCK_STATUS_MAP: Record<CurrentStockEnum, { bg: string; text: string; dot: string }> = {
