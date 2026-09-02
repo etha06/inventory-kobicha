@@ -172,13 +172,6 @@
                       <FlaskConical class="w-3.5 h-3.5" />
                     </button>
                     <button
-                      @click="calculateHpp(racikan)"
-                      class="p-1.5 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-700 hover:text-emerald-800 border border-emerald-200 text-xs transition-colors"
-                      title="Hitung HPP Resep Ini"
-                    >
-                      <DollarSign class="w-3.5 h-3.5" />
-                    </button>
-                    <button
                       @click="confirmDelete(racikan)"
                       class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 text-xs transition-colors"
                       title="Hapus Resep"
@@ -329,7 +322,7 @@ import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { RacikanFragrance, NotesEnum } from '../types';
 import { NOTES_OPTIONS, NOTE_COLOR_MAP } from '../utils/constants';
-import { FlaskConical, Search, DollarSign, Trash2, Scale, Scroll, X, Menu } from 'lucide-vue-next';
+import { FlaskConical, Search, Trash2, Scale, Scroll, X, Menu } from 'lucide-vue-next';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 import CustomSelect from '../components/common/CustomSelect.vue';
 
