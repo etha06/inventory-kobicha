@@ -178,7 +178,7 @@
           class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 self-start sm:self-auto"
         >
           <Plus class="w-3.5 h-3.5" />
-          <span>Tambah Baris FO</span>
+          <span>Tambah FO</span>
         </button>
       </div>
 
@@ -468,9 +468,10 @@ function getRowMl(row: FormFoRow): number {
 }
 
 function getRowCost(row: FormFoRow): number {
+  if (!row.fragranceOilId) return 0;
   const ml = getRowMl(row);
   const fo = stockFragranceOil.value.find(f => f.id === row.fragranceOilId);
-  const avgPrice = fo ? store.getFoAveragePricePerMl(fo.id) : 2000;
+  const avgPrice = fo ? store.getFoAveragePricePerMl(fo.id) : 0;
   return Math.round(ml * avgPrice);
 }
 
