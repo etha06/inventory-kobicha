@@ -117,27 +117,50 @@
           />
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Jenis / Kategori</label>
-            <select
-              v-model="campuranForm.jenis"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
-            >
-              <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
-            </select>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-semibold text-stone-700">Jenis Barang</label>
+            <span class="text-[10px] text-stone-400">Pilih yang sudah ada atau ketik baru</span>
           </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Toko Supplier</label>
-            <select
-              v-model="campuranForm.storeId"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
-            >
-              <option value="">-- Pilih Toko Supplier --</option>
-              <option v-for="s in stores" :key="s.id" :value="s.id">{{ s.namaToko }}</option>
-            </select>
+          <div class="relative">
+            <input
+              v-model="campuranForm.jenis"
+              type="text"
+              required
+              list="quickCampuranJenisDatalist"
+              placeholder="Ketik atau pilih jenis barang..."
+              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium bg-white"
+            />
+            <datalist id="quickCampuranJenisDatalist">
+              <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
+            </datalist>
           </div>
+
+          <!-- Quick Suggestion Badges -->
+          <div v-if="allJenisBarangList.length > 0" class="flex flex-wrap gap-1.5 mt-2 max-h-24 overflow-y-auto p-1.5 bg-stone-50 rounded-xl border border-stone-100">
+            <button
+              v-for="j in allJenisBarangList"
+              :key="j"
+              type="button"
+              @click="campuranForm.jenis = j"
+              class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border"
+              :class="campuranForm.jenis === j ? 'bg-peach-500 text-white border-peach-500 shadow-sm' : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-100'"
+            >
+              {{ j }}
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-stone-700 mb-1">Toko Supplier</label>
+          <select
+            v-model="campuranForm.storeId"
+            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
+          >
+            <option value="">-- Pilih Toko Supplier --</option>
+            <option v-for="s in stores" :key="s.id" :value="s.id">{{ s.namaToko }}</option>
+          </select>
         </div>
 
         <div class="grid grid-cols-2 gap-3">

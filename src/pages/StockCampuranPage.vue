@@ -294,23 +294,48 @@
           />
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- Jenis Barang (Input Text + Suggestion Badges) & Toko Supplier -->
+        <div class="space-y-3">
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Jenis Barang (Sesuai Where to Buy)</label>
-            <select
-              v-model="form.jenis"
-              required
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
-            >
-              <option v-for="c in allJenisBarangList" :key="c" :value="c">{{ c }}</option>
-            </select>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-semibold text-forest-800">Jenis Barang</label>
+              <span class="text-[10px] text-sage-500">Pilih yang sudah ada atau ketik baru</span>
+            </div>
+
+            <div class="relative">
+              <input
+                v-model="form.jenis"
+                type="text"
+                required
+                list="campuranJenisDatalist"
+                placeholder="Ketik atau pilih jenis barang..."
+                class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm font-medium bg-white"
+              />
+              <datalist id="campuranJenisDatalist">
+                <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
+              </datalist>
+            </div>
+
+            <!-- Quick Suggestion Badges -->
+            <div v-if="allJenisBarangList.length > 0" class="flex flex-wrap gap-1.5 mt-2 max-h-28 overflow-y-auto p-1.5 bg-sage-50/60 rounded-xl border border-sage-200/60">
+              <button
+                v-for="j in allJenisBarangList"
+                :key="j"
+                type="button"
+                @click="form.jenis = j"
+                class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border"
+                :class="form.jenis === j ? 'bg-peach-500 text-white border-peach-500 shadow-sm' : 'bg-white text-forest-800 border-sage-200 hover:border-peach-300 hover:bg-peach-50/40'"
+              >
+                {{ j }}
+              </button>
+            </div>
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Toko Supplier</label>
+            <label class="block text-xs font-semibold text-forest-800 mb-1">Toko Supplier</label>
             <select
               v-model="form.storeId"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
+              class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm bg-white font-medium"
             >
               <option value="">-- Pilih Toko Supplier --</option>
               <option v-for="s in stores" :key="s.id" :value="s.id">{{ s.namaToko }}</option>

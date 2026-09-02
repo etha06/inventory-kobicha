@@ -193,25 +193,25 @@ export const useKobichaStore = defineStore('kobicha', () => {
     });
   });
 
-  // Dynamic unified list of Jenis Barang across Where to Buy & Stock Campuran
+  // Dynamic unified list of Jenis Barang purely derived from existing items
   const allJenisBarangList = computed(() => {
     const set = new Set<string>();
-    const defaults = [
-      'Fragrance Oil',
-      'Pelarut / Solvent',
-      'Fixative / Pengikat',
-      'Botol & Packaging',
-      'Sprayer & Cap',
-      'Peralatan Lab & Pipet'
-    ];
-    defaults.forEach(d => set.add(d));
-    stores.value.forEach(s => {
-      if (s.jenisBarang && s.jenisBarang.trim()) set.add(s.jenisBarang.trim());
-    });
     stockCampuran.value.forEach(c => {
       if (c.jenis && c.jenis.trim()) set.add(c.jenis.trim());
     });
-    return Array.from(set);
+    stores.value.forEach(s => {
+      if (s.jenisBarang && s.jenisBarang.trim()) set.add(s.jenisBarang.trim());
+    });
+    // If completely empty database, provide basic starter categories
+    if (set.size === 0) {
+      return [
+        'Pelarut / Solvent',
+        'Fixative / Pengikat',
+        'Botol & Packaging',
+        'Sprayer & Cap'
+      ];
+    }
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
   });
 
   function renameJenisBarangCascade(oldName: string, newName: string) {

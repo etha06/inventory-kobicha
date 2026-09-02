@@ -262,8 +262,8 @@
               :key="j"
               type="button"
               @click="form.jenisBarang = j"
-              class="px-2 py-0.5 rounded-lg text-[11px] font-medium transition-all"
-              :class="form.jenisBarang === j ? 'bg-amber-600 text-white shadow-sm font-bold' : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-100'"
+              class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border"
+              :class="form.jenisBarang === j ? 'bg-peach-500 text-white border-peach-500 shadow-sm' : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-100'"
             >
               {{ j }}
             </button>
