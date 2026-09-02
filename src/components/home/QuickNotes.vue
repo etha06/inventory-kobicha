@@ -48,14 +48,14 @@
           <div class="flex items-center gap-1 opacity-80 group-hover:opacity-100">
             <button
               @click="editNote(note)"
-              class="p-1 rounded-lg text-sage-500 hover:text-forest-900 hover:bg-sage-100 text-xs transition-colors"
+              class="p-1.5 rounded-lg text-blue-600 hover:text-blue-700 hover:bg-blue-50 text-xs transition-colors"
               title="Edit"
             >
               <Pencil class="w-3.5 h-3.5" />
             </button>
             <button
               @click="store.deleteQuickNote(note.id)"
-              class="p-1 rounded-lg text-sage-400 hover:text-rose-600 hover:bg-rose-50 text-xs transition-colors"
+              class="p-1.5 rounded-lg text-rose-600 hover:text-rose-700 hover:bg-rose-50 text-xs transition-colors"
               title="Hapus"
             >
               <Trash2 class="w-3.5 h-3.5" />

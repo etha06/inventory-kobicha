@@ -2,9 +2,20 @@
   <div class="space-y-6">
     <!-- Top Action Card -->
     <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <h3 class="text-base font-extrabold text-forest-900 font-rounded">Direktori Toko & Supplier</h3>
-        <p class="text-xs text-sage-600">Database supplier bibit parfum, bahan kimia pelarut, botol, dan kemasan</p>
+      <div class="flex items-center gap-3">
+        <!-- Mobile Burger Button -->
+        <button
+          @click="store.openMobileNav()"
+          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          title="Buka Menu"
+        >
+          <Menu class="w-4 h-4" />
+        </button>
+
+        <div>
+          <h3 class="text-base font-extrabold text-forest-900 font-rounded">Direktori Toko & Supplier</h3>
+          <p class="text-xs text-sage-600">Database supplier bibit parfum, bahan kimia pelarut, botol, dan kemasan</p>
+        </div>
       </div>
 
       <div class="flex items-center gap-3">
@@ -120,7 +131,7 @@
                 </td>
 
                 <td class="py-3.5 px-4 text-center">
-                  <span class="px-2 py-0.5 rounded-full bg-stone-100 text-stone-700 text-[10px] font-semibold">
+                  <span class="text-xs text-forest-800 font-medium">
                     {{ getLinkedProductsCount(store.id) }} Produk
                   </span>
                 </td>
@@ -130,14 +141,14 @@
                   <div class="flex items-center justify-start gap-1.5">
                     <button
                       @click="openEditModal(store)"
-                      class="p-1.5 rounded-lg border border-stone-200 hover:bg-amber-50 hover:border-amber-300 text-stone-600 hover:text-amber-800 transition-colors"
+                      class="p-1.5 rounded-xl border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
                       title="Edit Toko"
                     >
                       <Pencil class="w-3.5 h-3.5" />
                     </button>
                     <button
                       @click="confirmDelete(store)"
-                      class="p-1.5 rounded-lg border border-stone-200 hover:bg-rose-50 hover:border-rose-300 text-stone-600 hover:text-rose-600 transition-colors"
+                      class="p-1.5 rounded-xl border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
                       title="Hapus Toko"
                     >
                       <Trash2 class="w-3.5 h-3.5" />
@@ -365,7 +376,7 @@ import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { StoreSupplier } from '../types';
 import { formatDateIndo } from '../utils/formatters';
-import { Plus, Search, Pencil, Trash2, ExternalLink, ChevronRight, Store, AlertTriangle } from 'lucide-vue-next';
+import { Plus, Search, Pencil, Trash2, ExternalLink, ChevronRight, Store, AlertTriangle, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 

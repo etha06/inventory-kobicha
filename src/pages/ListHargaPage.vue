@@ -2,14 +2,25 @@
   <div class="space-y-6">
     <!-- Top Card -->
     <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <h3 class="text-base font-extrabold text-forest-900 font-rounded">List Harga & Analisis Biaya per ml FO</h3>
-        <p class="text-xs text-sage-600">Katalog komparasi efisiensi harga beli per 1 ml untuk mempermudah perhitungan HPP parfum</p>
+      <div class="flex items-center gap-3">
+        <!-- Mobile Burger Button -->
+        <button
+          @click="store.openMobileNav()"
+          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          title="Buka Menu"
+        >
+          <Menu class="w-4 h-4" />
+        </button>
+
+        <div>
+          <h3 class="text-base font-extrabold text-forest-900 font-rounded">List Harga & Analisis Biaya per ml FO</h3>
+          <p class="text-xs text-sage-600">Katalog komparasi efisiensi harga beli per 1 ml untuk mempermudah perhitungan HPP parfum</p>
+        </div>
       </div>
 
       <div class="flex items-center gap-2">
         <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-sage-50 text-forest-800 border border-sage-200">
-          💡 Rata-rata digunakan otomatis di Kalkulator
+          Rata-rata digunakan otomatis di Kalkulator
         </span>
       </div>
     </div>
@@ -147,7 +158,7 @@
               <td class="py-3.5 px-4 text-left">
                 <button
                   @click="store.navigateTo('stock-fo')"
-                  class="p-1.5 rounded-lg border border-stone-200 hover:bg-stone-100 text-stone-600 hover:text-stone-900 transition-colors"
+                  class="p-1.5 rounded-xl border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
                   title="Lihat di Stok FO"
                 >
                   <Eye class="w-3.5 h-3.5" />
@@ -167,7 +178,7 @@ import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { PYRAMID_OPTIONS, NOTE_COLOR_MAP, PYRAMID_BADGE_MAP } from '../utils/constants';
 import { formatRupiah } from '../utils/formatters';
-import { Search, Eye, Tag } from 'lucide-vue-next';
+import { Search, Eye, Tag, Menu } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { stockFragranceOil } = storeToRefs(store);

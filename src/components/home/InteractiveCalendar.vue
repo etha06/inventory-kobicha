@@ -121,7 +121,7 @@
 
           <button
             @click="store.deleteDeadline(dl.id)"
-            class="text-sage-400 hover:text-rose-600 p-1 text-xs transition-colors"
+            class="text-rose-600 hover:text-rose-700 hover:bg-rose-50 p-1.5 rounded-lg text-xs transition-colors"
             title="Hapus Agenda"
           >
             <Trash2 class="w-3.5 h-3.5" />

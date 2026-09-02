@@ -2,11 +2,22 @@
   <div class="space-y-6">
     <!-- Header Card -->
     <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <h3 class="text-base font-extrabold text-forest-900 font-rounded">Kalkulator Harga Modal & HPP Parfum</h3>
-        <p class="text-xs text-sage-600">
-          Perhitungan terpisah modal cairan formula liquid dan kemasan packaging dengan input manual bebas
-        </p>
+      <div class="flex items-center gap-3">
+        <!-- Mobile Burger Button -->
+        <button
+          @click="store.openMobileNav()"
+          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          title="Buka Menu"
+        >
+          <Menu class="w-4 h-4" />
+        </button>
+
+        <div>
+          <h3 class="text-base font-extrabold text-forest-900 font-rounded">Kalkulator Harga Modal & HPP Parfum</h3>
+          <p class="text-xs text-sage-600">
+            Perhitungan terpisah modal cairan formula liquid dan kemasan packaging dengan input manual bebas
+          </p>
+        </div>
       </div>
 
       <div class="flex items-center gap-2">
@@ -223,13 +234,13 @@
                   {{ formatRupiah(ing.cost) }}
                 </td>
 
-                <!-- Aksi Hapus (hanya untuk baris campuran / solvent) -->
+                <!-- Aksi Hapus (hanya untuk baris cairan / solvent) -->
                 <td class="py-2.5 px-3 text-left">
                   <button
                     v-if="ing.jenis === 'Campuran'"
                     type="button"
                     @click="removeLiquidIngredient(idx)"
-                    class="p-1 rounded hover:bg-rose-50 text-stone-400 hover:text-rose-600 transition-colors"
+                    class="p-1.5 rounded-lg hover:bg-rose-50 text-rose-600 hover:text-rose-700 transition-colors"
                     title="Hapus baris cairan ini"
                   >
                     <Trash2 class="w-3.5 h-3.5" />
@@ -372,7 +383,7 @@
                 <button
                   type="button"
                   @click="removePackagingRow(idx)"
-                  class="p-1 rounded-lg hover:bg-rose-50 text-stone-400 hover:text-rose-600 text-xs transition-colors"
+                  class="p-1 rounded-lg hover:bg-rose-50 text-rose-600 hover:text-rose-700 text-xs transition-colors"
                   title="Hapus Item"
                 >
                   <Trash2 class="w-3.5 h-3.5" />
@@ -502,7 +513,7 @@ import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { PackagingHppItem, HppLiquidIngredientDetail } from '../types';
 import { formatRupiah, formatNumber } from '../utils/formatters';
-import { RotateCcw, Save, Plus, Trash2, FlaskConical, Package, TrendingUp } from 'lucide-vue-next';
+import { RotateCcw, Save, Plus, Trash2, FlaskConical, Package, TrendingUp, Menu } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { formulaBases, racikanCatalog, stockCampuran, bahanBakuCampuranList, prefilledHppRacikanId, prefilledHppBaseId } = storeToRefs(store);

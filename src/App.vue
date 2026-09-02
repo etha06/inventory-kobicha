@@ -33,13 +33,8 @@
         class="flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out bg-white overflow-y-auto"
         :class="[isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72']"
       >
-        <!-- Top Header inside Card -->
-        <Header
-          @open-mobile="isMobileNavOpen = true"
-        />
-
         <!-- Page View Container -->
-        <main class="flex-1 p-4 sm:p-7 max-w-7xl w-full mx-auto">
+        <main class="flex-1 p-4 sm:p-6 w-full">
           <Transition
             mode="out-in"
             enter-active-class="transition duration-150 ease-out"
@@ -70,11 +65,6 @@
             <KalkulatorHppPage v-else-if="activeTab === 'kalkulator-hpp'" />
           </Transition>
         </main>
-
-        <!-- Minimalist App Footer -->
-        <footer class="py-3 px-8 border-t border-sage-100 text-center text-xs text-sage-400">
-          Kobicha Parfumerie • Internal Formulation & Inventory System
-        </footer>
       </div>
     </div>
 
@@ -89,7 +79,6 @@ import { useKobichaStore } from './stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 
 import Sidebar from './components/layout/Sidebar.vue';
-import Header from './components/layout/Header.vue';
 import Toast from './components/common/Toast.vue';
 
 import HomePage from './pages/HomePage.vue';
@@ -104,8 +93,7 @@ import KatalogHppPage from './pages/KatalogHppPage.vue';
 import KalkulatorHppPage from './pages/KalkulatorHppPage.vue';
 
 const store = useKobichaStore();
-const { activeTab } = storeToRefs(store);
+const { activeTab, isMobileNavOpen } = storeToRefs(store);
 
 const isSidebarCollapsed = ref(false);
-const isMobileNavOpen = ref(false);
 </script>

@@ -36,12 +36,23 @@ export type NavigationTab =
   | 'kalkulator-hpp';
 
 export const useKobichaStore = defineStore('kobicha', () => {
-  // Navigation State
+  // Navigation & UI States
   const activeTab = ref<NavigationTab>('home');
+  const isMobileNavOpen = ref(false);
   const prefilledRacikanId = ref<string | null>(null);
   const prefilledFormulaBaseId = ref<string | null>(null);
   const prefilledHppRacikanId = ref<string | null>(null);
   const prefilledHppBaseId = ref<string | null>(null);
+
+  function openMobileNav() {
+    isMobileNavOpen.value = true;
+  }
+  function closeMobileNav() {
+    isMobileNavOpen.value = false;
+  }
+  function toggleMobileNav() {
+    isMobileNavOpen.value = !isMobileNavOpen.value;
+  }
 
   // Global Quick Add Modal Triggers
   const isQuickAddFoOpen = ref(false);
@@ -580,13 +591,17 @@ export const useKobichaStore = defineStore('kobicha', () => {
   return {
     // Navigation
     activeTab,
+    isMobileNavOpen,
+    openMobileNav,
+    closeMobileNav,
+    toggleMobileNav,
+    navigateTo,
     prefilledRacikanId,
     prefilledFormulaBaseId,
     prefilledHppRacikanId,
     prefilledHppBaseId,
     isQuickAddFoOpen,
     isQuickAddCampuranOpen,
-    navigateTo,
     openCalculatorWithRacikan,
     openHppWithRacikan,
 

@@ -2,9 +2,20 @@
   <div class="space-y-8">
     <!-- Top Action Card -->
     <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <h3 class="text-base font-extrabold text-forest-900 font-rounded">Katalog Racikan Fragrance (Formula Resep)</h3>
-        <p class="text-xs text-sage-600">Database resep racikan aroma parfum, perbandingan tetes, dan komparasi formula</p>
+      <div class="flex items-center gap-3">
+        <!-- Mobile Burger Button -->
+        <button
+          @click="store.openMobileNav()"
+          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          title="Buka Menu"
+        >
+          <Menu class="w-4 h-4" />
+        </button>
+
+        <div>
+          <h3 class="text-base font-extrabold text-forest-900 font-rounded">Katalog Racikan Fragrance (Formula Resep)</h3>
+          <p class="text-xs text-sage-600">Database resep racikan aroma parfum, perbandingan tetes, dan komparasi formula</p>
+        </div>
       </div>
 
       <div class="flex items-center gap-3">
@@ -154,32 +165,32 @@
                 </span>
               </td>
 
-              <!-- Action Buttons (Positioned Right, Aligned Left, Lucide Icons) -->
-              <td class="py-3.5 px-4 text-left" @click.stop>
-                <div class="flex items-center justify-start gap-1.5">
-                  <button
-                    @click="openInCalculator(racikan.id)"
-                    class="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs transition-colors"
-                    title="Buka & Racik di Kalkulator"
-                  >
-                    <FlaskConical class="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    @click="calculateHpp(racikan)"
-                    class="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 border border-stone-200 text-xs transition-colors"
-                    title="Hitung HPP Resep Ini"
-                  >
-                    <DollarSign class="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    @click="confirmDelete(racikan)"
-                    class="p-1.5 rounded-lg border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs transition-colors"
-                    title="Hapus Resep"
-                  >
-                    <Trash2 class="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </td>
+                <!-- Action Buttons (Positioned Right, Aligned Left, Lucide Icons) -->
+                <td class="py-3.5 px-4 text-left" @click.stop>
+                  <div class="flex items-center justify-start gap-1.5">
+                    <button
+                      @click="openInCalculator(racikan.id)"
+                      class="p-1.5 rounded-xl bg-blue-50/70 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border border-blue-200 text-xs transition-colors"
+                      title="Buka & Edit Racikan di Kalkulator"
+                    >
+                      <FlaskConical class="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      @click="calculateHpp(racikan)"
+                      class="p-1.5 rounded-xl bg-sage-50 hover:bg-sage-100 text-forest-800 border border-sage-200 text-xs transition-colors"
+                      title="Hitung HPP Resep Ini"
+                    >
+                      <DollarSign class="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      @click="confirmDelete(racikan)"
+                      class="p-1.5 rounded-xl border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-rose-600 hover:text-rose-700 text-xs transition-colors"
+                      title="Hapus Resep"
+                    >
+                      <Trash2 class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </td>
             </tr>
           </tbody>
         </table>
@@ -322,7 +333,7 @@ import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { RacikanFragrance, NotesEnum } from '../types';
 import { NOTES_OPTIONS, NOTE_COLOR_MAP } from '../utils/constants';
-import { FlaskConical, Search, DollarSign, Trash2, Scale, Scroll, X } from 'lucide-vue-next';
+import { FlaskConical, Search, DollarSign, Trash2, Scale, Scroll, X, Menu } from 'lucide-vue-next';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 
 const store = useKobichaStore();

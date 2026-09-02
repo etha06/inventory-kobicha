@@ -2,9 +2,20 @@
   <div class="space-y-6">
     <!-- Top Action Card -->
     <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <h3 class="text-base font-extrabold text-forest-900 font-rounded">Stock Fragrance Oil (Bibit Parfum)</h3>
-        <p class="text-xs text-sage-600">Database konsentrat aroma, piramida wangi, dan riwayat harga beli per ml</p>
+      <div class="flex items-center gap-3">
+        <!-- Mobile Burger Button -->
+        <button
+          @click="store.openMobileNav()"
+          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          title="Buka Menu"
+        >
+          <Menu class="w-4 h-4" />
+        </button>
+
+        <div>
+          <h3 class="text-base font-extrabold text-forest-900 font-rounded">Stock Fragrance Oil (Bibit Parfum)</h3>
+          <p class="text-xs text-sage-600">Database konsentrat aroma, piramida wangi, dan riwayat harga beli per ml</p>
+        </div>
       </div>
 
       <div class="flex items-center gap-3">
@@ -231,14 +242,14 @@
                   <div class="flex items-center justify-start gap-1.5">
                     <button
                       @click="openEditModal(item)"
-                      class="p-1.5 rounded-lg border border-stone-200 hover:bg-amber-50 hover:border-amber-300 text-stone-600 hover:text-amber-800 transition-colors"
+                      class="p-1.5 rounded-xl border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
                       title="Edit Fragrance Oil"
                     >
                       <Pencil class="w-3.5 h-3.5" />
                     </button>
                     <button
                       @click="confirmDelete(item)"
-                      class="p-1.5 rounded-lg border border-stone-200 hover:bg-rose-50 hover:border-rose-300 text-stone-600 hover:text-rose-600 transition-colors"
+                      class="p-1.5 rounded-xl border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
                       title="Hapus Fragrance Oil"
                     >
                       <Trash2 class="w-3.5 h-3.5" />
@@ -524,7 +535,7 @@ import {
   STOCK_STATUS_MAP
 } from '../utils/constants';
 import { formatRupiah, formatDateIndo } from '../utils/formatters';
-import { Plus, Search, Pencil, Trash2, ChevronRight, Droplet } from 'lucide-vue-next';
+import { Plus, Search, Pencil, Trash2, ChevronRight, Droplet, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 

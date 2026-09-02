@@ -1,13 +1,26 @@
 <template>
   <div class="space-y-7">
     <!-- Top Greeting Section (Image 1 Header Style) -->
-    <div class="pb-2 border-b border-sage-100">
-      <h1 class="text-2xl sm:text-3xl font-extrabold font-rounded text-forest-900 tracking-tight flex items-center gap-2">
-        <span>Selamat {{ greetingTime }}, Tim Kobicha</span>
-      </h1>
-      <p class="text-xs sm:text-sm text-sage-600 mt-1 font-sans">
-        Welcome to your perfume formulation & inventory management system
-      </p>
+    <div class="pb-2 border-b border-sage-100 flex items-center justify-between">
+      <div class="flex items-center gap-3.5">
+        <!-- Mobile Burger Button -->
+        <button
+          @click="store.openMobileNav()"
+          class="lg:hidden w-10 h-10 rounded-2xl bg-white hover:bg-sage-50 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          title="Buka Menu"
+        >
+          <Menu class="w-5 h-5 text-forest-900" />
+        </button>
+
+        <div>
+          <h1 class="text-xl sm:text-3xl font-extrabold font-rounded text-forest-900 tracking-tight flex items-center gap-2">
+            <span>Selamat {{ greetingTime }}, Tim Kobicha</span>
+          </h1>
+          <p class="text-xs sm:text-sm text-sage-600 mt-0.5 font-sans">
+            Welcome to your perfume formulation & inventory management system
+          </p>
+        </div>
+      </div>
     </div>
 
     <!-- 4 Pastel Wave Stat Cards (Image 1 Style) -->
@@ -137,6 +150,7 @@ import StatsOverview from '../components/home/StatsOverview.vue';
 import QuickNotes from '../components/home/QuickNotes.vue';
 import InteractiveCalendar from '../components/home/InteractiveCalendar.vue';
 import QuickAddModals from '../components/home/QuickAddModals.vue';
+import { Menu } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { stockFragranceOil, racikanCatalog } = storeToRefs(store);

@@ -2,11 +2,22 @@
   <div class="space-y-6">
     <!-- Top Action Card -->
     <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <h3 class="text-base font-extrabold text-forest-900 font-rounded">Kalkulator Racikan Fragrance (Formulator)</h3>
-        <p class="text-xs text-sage-600">
-          Kalkulasi porsi tetes, konversi ke ml konsentrat bibit FO, dan estimasi otomatis formula parfum
-        </p>
+      <div class="flex items-center gap-3">
+        <!-- Mobile Burger Button -->
+        <button
+          @click="store.openMobileNav()"
+          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          title="Buka Menu"
+        >
+          <Menu class="w-4 h-4" />
+        </button>
+
+        <div>
+          <h3 class="text-base font-extrabold text-forest-900 font-rounded">Kalkulator Racikan Fragrance (Formulator)</h3>
+          <p class="text-xs text-sage-600">
+            Kalkulasi porsi tetes, konversi ke ml konsentrat bibit FO, dan estimasi otomatis formula parfum
+          </p>
+        </div>
       </div>
 
       <div class="flex items-center gap-2">
@@ -246,7 +257,7 @@
                 <button
                   type="button"
                   @click="removeRow(idx)"
-                  class="p-1 rounded-lg hover:bg-rose-50 text-stone-400 hover:text-rose-600 text-xs transition-colors"
+                  class="p-1 rounded-lg hover:bg-rose-50 text-rose-600 hover:text-rose-700 text-xs transition-colors"
                   title="Hapus Baris FO"
                 >
                   <Trash2 class="w-3.5 h-3.5" />
@@ -332,7 +343,7 @@ import { storeToRefs } from 'pinia';
 import { RacikanItem, NotesEnum, PyramidEnum } from '../types';
 import { PYRAMID_BADGE_MAP } from '../utils/constants';
 import { formatRupiah, formatNumber } from '../utils/formatters';
-import { Plus, RotateCcw, Save, Trash2, DollarSign } from 'lucide-vue-next';
+import { Plus, RotateCcw, Save, Trash2, DollarSign, Menu } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { stockFragranceOil, formulaBases, racikanCatalog, prefilledRacikanId } = storeToRefs(store);

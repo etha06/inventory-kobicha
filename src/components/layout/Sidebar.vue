@@ -48,8 +48,20 @@
         </button>
       </div>
 
+      <!-- Live Date Indicator in Sidebar -->
+      <div class="px-3 pt-3">
+        <div
+          class="flex items-center gap-2 text-xs font-medium text-white/90 bg-black/15 px-3 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm transition-all"
+          :class="isCollapsed ? 'justify-center px-1.5' : 'justify-start'"
+          :title="todayFormatted"
+        >
+          <Calendar class="w-3.5 h-3.5 text-sage-200 flex-shrink-0" />
+          <span v-show="!isCollapsed" class="truncate font-sans text-[11px] text-sage-100 font-semibold">{{ todayFormatted }}</span>
+        </div>
+      </div>
+
       <!-- Navigation Menu Items -->
-      <div class="flex-1 overflow-y-auto py-5 px-3 space-y-5">
+      <div class="flex-1 overflow-y-auto py-3 px-3 space-y-5">
         <!-- 1. Home Group -->
         <div>
           <button
@@ -278,7 +290,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Menu,
-  X
+  X,
+  Calendar
 } from 'lucide-vue-next';
 
 defineProps<{
@@ -293,6 +306,16 @@ const emit = defineEmits<{
 
 const store = useKobichaStore();
 const { activeTab, stores, stockCampuran, stockFragranceOil, racikanCatalog, hppCatalog } = storeToRefs(store);
+
+const todayFormatted = computed(() => {
+  const now = new Date();
+  return now.toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    weekday: 'short'
+  });
+});
 
 const totalStoresCount = computed(() => stores.value.length);
 const totalCampuranCount = computed(() => stockCampuran.value.length);
