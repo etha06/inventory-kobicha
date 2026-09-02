@@ -172,6 +172,7 @@
         </div>
 
         <button
+          v-if="mode === 'manual'"
           type="button"
           @click="addRow"
           class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 self-start sm:self-auto"
@@ -182,26 +183,31 @@
       </div>
 
       <!-- Drops & Volume Table -->
-      <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col justify-between min-h-[340px] overflow-hidden shadow-sm">
-        <!-- Table Body Area -->
-        <div class="overflow-x-auto flex-1">
+      <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col justify-between overflow-hidden shadow-sm">
+        <!-- Table Body Area (Scrollable when 2+ rows) -->
+        <div class="overflow-x-auto overflow-y-auto max-h-[180px] flex-1">
           <table class="w-full text-xs text-left">
-            <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
+            <thead class="bg-stone-100 border-b text-[10px] text-stone-500 uppercase font-bold sticky top-0 z-10">
               <tr>
-                <th class="py-2.5 px-3 w-10 text-left">#</th>
-                <th class="py-2.5 px-3 text-left">Nama Fragrance Oil</th>
-                <th class="py-2.5 px-3 text-left">Pyramid</th>
-                <th class="py-2.5 px-3 text-left w-28">Jumlah Tetes</th>
-                <th class="py-2.5 px-3 text-left w-28">Porsi (% FO)</th>
-                <th class="py-2.5 px-3 text-left w-32">Volume (ml)</th>
-                <th class="py-2.5 px-3 text-left w-36">Estimasi Biaya FO</th>
-                <th class="py-2.5 px-4 text-left w-20">Aksi</th>
+                <th class="py-2.5 px-3 w-10 text-left bg-stone-100">#</th>
+                <th class="py-2.5 px-3 text-left bg-stone-100">Nama Fragrance Oil</th>
+                <th class="py-2.5 px-3 text-left bg-stone-100">Pyramid</th>
+                <th class="py-2.5 px-3 text-left w-28 bg-stone-100">Jumlah Tetes</th>
+                <th class="py-2.5 px-3 text-left w-28 bg-stone-100">Porsi (% FO)</th>
+                <th class="py-2.5 px-3 text-left w-32 bg-stone-100">Volume (ml)</th>
+                <th class="py-2.5 px-3 text-left w-36 bg-stone-100">Estimasi Biaya FO</th>
+                <th class="py-2.5 px-4 text-left w-20 bg-stone-100">Aksi</th>
               </tr>
             </thead>
             <tbody class="divide-y text-stone-800">
               <tr v-if="rows.length === 0">
                 <td colspan="8" class="py-12 text-center text-stone-400 italic">
-                  Belum ada bahan Fragrance Oil. Klik "+ Tambah Baris FO" untuk menambahkan bibit parfum.
+                  <span v-if="mode === 'by_resep' && !selectedRacikanCatalogId">
+                    Silakan pilih resep racikan dari katalog di atas terlebih dahulu untuk memuat komposisi Fragrance Oil.
+                  </span>
+                  <span v-else>
+                    Belum ada bahan Fragrance Oil. Klik "+ Tambah Baris FO" untuk menambahkan bibit parfum.
+                  </span>
                 </td>
               </tr>
 
@@ -217,6 +223,7 @@
                     :options="foOptions"
                     placeholder="-- Pilih Fragrance Oil --"
                     :searchable="true"
+                    :disabled="mode === 'by_resep'"
                     @change="onFoSelect(row)"
                   />
                 </td>
@@ -240,7 +247,9 @@
                     type="number"
                     min="1"
                     required
-                    class="w-20 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold"
+                    :disabled="mode === 'by_resep'"
+                    class="w-20 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold transition-colors"
+                    :class="mode === 'by_resep' ? 'bg-stone-100 text-stone-500 cursor-not-allowed border-stone-200' : 'bg-white border-stone-300'"
                   />
                 </td>
 
@@ -262,6 +271,7 @@
                 <!-- Delete Row Action (Positioned Right, Aligned Left, Lucide Trash2) -->
                 <td class="py-2 px-4 text-left">
                   <button
+                    v-if="mode === 'manual'"
                     type="button"
                     @click="removeRow(idx)"
                     class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
@@ -269,6 +279,7 @@
                   >
                     <Trash2 class="w-3.5 h-3.5" />
                   </button>
+                  <span v-else class="text-stone-300 text-xs">-</span>
                 </td>
               </tr>
             </tbody>
@@ -485,13 +496,20 @@ function onFoSelect(row: FormFoRow) {
 
 function setMode(m: 'manual' | 'by_resep') {
   mode.value = m;
-  if (m === 'by_resep' && racikanCatalog.value.length > 0 && !selectedRacikanCatalogId.value) {
-    selectedRacikanCatalogId.value = racikanCatalog.value[0].id;
-    loadRecipeFromCatalog();
-  }
+  selectedRacikanCatalogId.value = '';
+  selectedBaseId.value = '';
+  namaRacikan.value = '';
+  rows.value = [];
 }
 
 function loadRecipeFromCatalog() {
+  if (!selectedRacikanCatalogId.value) {
+    namaRacikan.value = '';
+    selectedBaseId.value = '';
+    rows.value = [];
+    return;
+  }
+
   const r = racikanCatalog.value.find(x => x.id === selectedRacikanCatalogId.value);
   if (!r) return;
 
