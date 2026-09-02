@@ -8,7 +8,7 @@
       class="w-full bg-white border text-left px-3.5 py-2 text-xs flex items-center justify-between transition-all duration-150 select-none"
       :class="[
         isOpen
-          ? 'border-sky-400 ring-2 ring-sky-100/80 shadow-sm rounded-lg'
+          ? 'border-amber-500 ring-2 ring-amber-500/20 shadow-sm rounded-lg'
           : 'border-stone-300 hover:border-stone-400 rounded-lg',
         disabled ? 'bg-stone-100 text-stone-400 cursor-not-allowed border-stone-200' : 'cursor-pointer text-stone-800',
         buttonClass
@@ -45,7 +45,7 @@
             v-model="searchTerm"
             type="text"
             placeholder="Cari..."
-            class="w-full px-2.5 py-1 text-xs rounded-lg border border-stone-200 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 bg-stone-50/50"
+            class="w-full px-2.5 py-1 text-xs rounded-lg border border-stone-200 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/20 bg-stone-50/50"
             @click.stop
           />
         </div>
