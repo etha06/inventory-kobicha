@@ -24,64 +24,68 @@
       </span>
     </button>
 
-    <!-- Dropdown Panel -->
-    <transition
-      enter-active-class="transition duration-100 ease-out"
-      enter-from-class="transform scale-95 opacity-0 -translate-y-1"
-      enter-to-class="transform scale-100 opacity-100 translate-y-0"
-      leave-active-class="transition duration-75 ease-in"
-      leave-from-class="transform scale-100 opacity-100 translate-y-0"
-      leave-to-class="transform scale-95 opacity-0 -translate-y-1"
-    >
-      <div
-        v-if="isOpen"
-        class="absolute z-50 mt-1.5 w-full bg-white border border-stone-200/90 rounded-2xl shadow-xl py-1.5 max-h-60 overflow-y-auto text-xs overflow-hidden"
-        :class="dropdownClass"
+    <!-- Teleported Dropdown Panel (Floats on top of all tables, modals, and overflow containers) -->
+    <Teleport to="body">
+      <transition
+        enter-active-class="transition duration-100 ease-out"
+        enter-from-class="transform scale-95 opacity-0 -translate-y-1"
+        enter-to-class="transform scale-100 opacity-100 translate-y-0"
+        leave-active-class="transition duration-75 ease-in"
+        leave-from-class="transform scale-100 opacity-100 translate-y-0"
+        leave-to-class="transform scale-95 opacity-0 -translate-y-1"
       >
-        <!-- Search Input if searchable -->
-        <div v-if="searchable" class="p-2 border-b border-stone-100 sticky top-0 bg-white">
-          <input
-            ref="searchInput"
-            v-model="searchTerm"
-            type="text"
-            placeholder="Cari..."
-            class="w-full px-2.5 py-1.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-stone-900 focus:ring-1 focus:ring-stone-900 bg-stone-50/50"
-            @click.stop
-          />
-        </div>
+        <div
+          v-if="isOpen"
+          ref="dropdownRef"
+          :style="dropdownStyle"
+          class="bg-white border border-stone-200/90 rounded-2xl shadow-2xl py-1.5 max-h-60 overflow-y-auto text-xs overflow-hidden"
+          :class="dropdownClass"
+        >
+          <!-- Search Input if searchable -->
+          <div v-if="searchable" class="p-2 border-b border-stone-100 sticky top-0 bg-white">
+            <input
+              ref="searchInput"
+              v-model="searchTerm"
+              type="text"
+              placeholder="Cari..."
+              class="w-full px-2.5 py-1.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-stone-900 focus:ring-1 focus:ring-stone-900 bg-stone-50/50"
+              @click.stop
+            />
+          </div>
 
-        <!-- Options List -->
-        <div>
-          <div
-            v-for="(opt, idx) in normalizedFilteredOptions"
-            :key="idx"
-            @click="selectOption(opt)"
-            class="px-4 py-2.5 cursor-pointer transition-colors text-xs flex items-center justify-between"
-            :class="[
-              isSelected(opt.value)
-                ? 'bg-stone-100/90 text-stone-900 font-bold'
-                : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900 font-normal'
-            ]"
-          >
-            <div class="flex items-center gap-2 truncate">
-              <span v-if="opt.icon">{{ opt.icon }}</span>
-              <span class="truncate">{{ opt.label }}</span>
+          <!-- Options List -->
+          <div>
+            <div
+              v-for="(opt, idx) in normalizedFilteredOptions"
+              :key="idx"
+              @click="selectOption(opt)"
+              class="px-4 py-2.5 cursor-pointer transition-colors text-xs flex items-center justify-between"
+              :class="[
+                isSelected(opt.value)
+                  ? 'bg-stone-100/90 text-stone-900 font-bold'
+                  : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900 font-normal'
+              ]"
+            >
+              <div class="flex items-center gap-2 truncate">
+                <span v-if="opt.icon">{{ opt.icon }}</span>
+                <span class="truncate">{{ opt.label }}</span>
+              </div>
+
+              <span v-if="opt.badge" class="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-500 font-normal">
+                {{ opt.badge }}
+              </span>
             </div>
 
-            <span v-if="opt.badge" class="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-500 font-normal">
-              {{ opt.badge }}
-            </span>
-          </div>
-
-          <div
-            v-if="normalizedFilteredOptions.length === 0"
-            class="px-4 py-3 text-center text-stone-400 text-xs italic"
-          >
-            Tidak ada pilihan ditemukan
+            <div
+              v-if="normalizedFilteredOptions.length === 0"
+              class="px-4 py-3 text-center text-stone-400 text-xs italic"
+            >
+              Tidak ada pilihan ditemukan
+            </div>
           </div>
         </div>
-      </div>
-    </transition>
+      </transition>
+    </Teleport>
   </div>
 </template>
 
@@ -123,7 +127,9 @@ const emit = defineEmits<{
 const isOpen = ref(false);
 const searchTerm = ref('');
 const selectContainer = ref<HTMLElement | null>(null);
+const dropdownRef = ref<HTMLElement | null>(null);
 const searchInput = ref<HTMLInputElement | null>(null);
+const dropdownStyle = ref<Record<string, string>>({});
 
 const normalizedOptions = computed<SelectOption[]>(() => {
   return props.options.map((opt) => {
@@ -165,13 +171,44 @@ function isSelected(val: any) {
   return props.modelValue === val;
 }
 
+function updateDropdownPosition() {
+  if (!selectContainer.value) return;
+  const rect = selectContainer.value.getBoundingClientRect();
+  const dropdownHeight = 240;
+  const spaceBelow = window.innerHeight - rect.bottom;
+  const spaceAbove = rect.top;
+
+  if (spaceBelow < dropdownHeight && spaceAbove > spaceBelow) {
+    // Open upwards if not enough space below
+    dropdownStyle.value = {
+      position: 'fixed',
+      bottom: `${window.innerHeight - rect.top + 6}px`,
+      left: `${rect.left}px`,
+      width: `${Math.max(rect.width, 220)}px`,
+      zIndex: '99999'
+    };
+  } else {
+    // Open downwards
+    dropdownStyle.value = {
+      position: 'fixed',
+      top: `${rect.bottom + 6}px`,
+      left: `${rect.left}px`,
+      width: `${Math.max(rect.width, 220)}px`,
+      zIndex: '99999'
+    };
+  }
+}
+
 function toggleDropdown() {
   if (props.disabled) return;
   isOpen.value = !isOpen.value;
-  if (isOpen.value && props.searchable) {
-    nextTick(() => {
-      searchInput.value?.focus();
-    });
+  if (isOpen.value) {
+    updateDropdownPosition();
+    if (props.searchable) {
+      nextTick(() => {
+        searchInput.value?.focus();
+      });
+    }
   }
 }
 
@@ -183,17 +220,33 @@ function selectOption(opt: SelectOption) {
 }
 
 function handleClickOutside(e: MouseEvent) {
-  if (selectContainer.value && !selectContainer.value.contains(e.target as Node)) {
+  const target = e.target as Node;
+  if (
+    selectContainer.value &&
+    !selectContainer.value.contains(target) &&
+    dropdownRef.value &&
+    !dropdownRef.value.contains(target)
+  ) {
     isOpen.value = false;
     searchTerm.value = '';
   }
 }
 
+function handleScrollOrResize() {
+  if (isOpen.value) {
+    updateDropdownPosition();
+  }
+}
+
 onMounted(() => {
   window.addEventListener('click', handleClickOutside);
+  window.addEventListener('scroll', handleScrollOrResize, true);
+  window.addEventListener('resize', handleScrollOrResize);
 });
 
 onUnmounted(() => {
   window.removeEventListener('click', handleClickOutside);
+  window.removeEventListener('scroll', handleScrollOrResize, true);
+  window.removeEventListener('resize', handleScrollOrResize);
 });
 </script>
