@@ -140,11 +140,16 @@
               min="1"
               max="100"
               required
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono font-bold pr-8"
+              :disabled="!!selectedBaseId"
+              class="w-full px-3.5 py-2 rounded-xl border text-sm font-mono font-bold pr-8 transition-colors"
+              :class="selectedBaseId ? 'bg-stone-100/90 text-stone-500 cursor-not-allowed border-stone-200 select-none' : 'bg-white border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-stone-900'"
             />
-            <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold">%</span>
+            <span class="absolute right-3 top-2.5 text-xs font-bold" :class="selectedBaseId ? 'text-stone-400' : 'text-stone-500'">%</span>
           </div>
-          <span class="text-[10px] text-stone-400 mt-1 block">
+          <span v-if="selectedBaseId" class="text-[10px] text-amber-700 mt-1 block font-medium">
+            Terkunci dari Formula Base (Pilih <em>Bebas</em> untuk edit manual)
+          </span>
+          <span v-else class="text-[10px] text-stone-400 mt-1 block">
             Target FO: <strong>{{ formatNumber(targetTotalFoMl, 2) }} ml</strong> dari {{ targetTotalMl }} ml
           </span>
         </div>
