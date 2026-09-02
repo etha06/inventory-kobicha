@@ -153,13 +153,8 @@
                   <span v-else class="text-stone-400 text-xs">-</span>
                 </td>
 
-                <td class="py-3.5 px-4 text-left">
-                  <span
-                    class="px-2.5 py-1 rounded-full text-xs font-bold font-mono inline-flex items-center gap-1"
-                    :class="item.jumlahStok <= 5 ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-stone-100 text-stone-800'"
-                  >
-                    {{ item.jumlahStok }} pcs
-                  </span>
+                <td class="py-3.5 px-4 text-left font-mono font-bold text-stone-800 text-xs">
+                  {{ item.jumlahStok }} pcs
                 </td>
 
                 <td class="py-3.5 px-4 text-left text-stone-600">
