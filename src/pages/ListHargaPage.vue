@@ -1,39 +1,39 @@
 <template>
   <div class="space-y-6">
     <!-- Top Card -->
-    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-stone-900 font-serif">List Harga & Analisis Biaya per ml FO</h3>
-        <p class="text-xs text-stone-500">Katalog komparasi efisiensi harga beli per 1 ml untuk mempermudah perhitungan HPP parfum</p>
+        <h3 class="text-base font-bold text-forest-900 font-serif">List Harga & Analisis Biaya per ml FO</h3>
+        <p class="text-xs text-sage-600">Katalog komparasi efisiensi harga beli per 1 ml untuk mempermudah perhitungan HPP parfum</p>
       </div>
 
       <div class="flex items-center gap-2">
-        <span class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200">
-          💡 Rata-rata /ml digunakan otomatis di Kalkulator
+        <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-sage-50 text-forest-800 border border-sage-200">
+          💡 Rata-rata digunakan otomatis di Kalkulator
         </span>
       </div>
     </div>
 
     <!-- Search & Filter Bar -->
-    <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
       <!-- Search -->
       <div class="relative">
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Cari nama fragrance oil..."
-          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         />
-        <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+        <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
       </div>
 
       <!-- Filter Pyramid (Without "Note" word) -->
       <div>
         <select
           v-model="filterPyramid"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         >
-          <option value="">-- Semua Pyramid --</option>
+          <option value="">-- Semua Piramida --</option>
           <option v-for="p in PYRAMID_OPTIONS" :key="p" :value="p">{{ p }}</option>
         </select>
       </div>
@@ -42,17 +42,17 @@
       <div>
         <select
           v-model="sortBy"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         >
-          <option value="price_asc">Harga / ml Termurah → Termahal</option>
-          <option value="price_desc">Harga / ml Termahal → Termurah</option>
+          <option value="price_asc">Harga Termurah → Termahal</option>
+          <option value="price_desc">Harga Termahal → Termurah</option>
           <option value="name_asc">Nama FO (A - Z)</option>
         </select>
       </div>
     </div>
 
     <!-- List Harga Table -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-[24px] border border-sage-100 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>

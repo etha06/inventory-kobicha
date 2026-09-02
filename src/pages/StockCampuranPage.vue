@@ -1,16 +1,16 @@
 <template>
   <div class="space-y-6">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-stone-900 font-serif">Stock Barang Campuran & Packaging</h3>
-        <p class="text-xs text-stone-500">Stok alkohol, fixative DPG, pelarut bahan baku dengan kalkulasi harga/ml serta botol packaging</p>
+        <h3 class="text-base font-bold text-forest-900 font-serif">Stock Barang Campuran & Kemasan</h3>
+        <p class="text-xs text-sage-600">Stok alkohol, fixative DPG, pelarut bahan baku dengan kalkulasi harga/ml serta botol packaging</p>
       </div>
 
       <div class="flex items-center gap-3">
         <button
           @click="openAddModal"
-          class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-md shadow-amber-900/20 transition-all flex items-center gap-1.5"
+          class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
         >
           <Plus class="w-4 h-4" />
           <span>Tambah Barang Campuran</span>
@@ -19,27 +19,27 @@
     </div>
 
     <!-- Search, Filter & Sort Bar -->
-    <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-4 gap-3">
+    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm grid grid-cols-1 sm:grid-cols-4 gap-3">
       <!-- Search -->
       <div class="relative sm:col-span-1">
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Cari nama barang / toko..."
-          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         />
-        <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+        <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
       </div>
 
       <!-- Filter Tipe (Semua / Bahan Baku / Packaging) -->
       <div>
         <select
           v-model="filterTipe"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         >
           <option value="">-- Semua Tipe Barang --</option>
           <option value="bahan_baku">🧪 Bahan Baku / Cairan</option>
-          <option value="packaging">📦 Packaging / Lainnya</option>
+          <option value="packaging">📦 Kemasan / Lainnya</option>
         </select>
       </div>
 
@@ -47,7 +47,7 @@
       <div>
         <select
           v-model="filterJenis"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         >
           <option value="">-- Semua Jenis Barang --</option>
           <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
@@ -58,7 +58,7 @@
       <div>
         <select
           v-model="sortBy"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         >
           <option value="name_asc">Nama Barang (A - Z)</option>
           <option value="name_desc">Nama Barang (Z - A)</option>

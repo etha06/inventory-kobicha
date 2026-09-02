@@ -1,16 +1,16 @@
 <template>
   <div class="space-y-6">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-stone-900 font-serif">Stock Fragrance Oil (Bibit Parfum)</h3>
-        <p class="text-xs text-stone-500">Database konsentrat aroma, piramida wangi, dan riwayat harga beli per ml</p>
+        <h3 class="text-base font-bold text-forest-900 font-serif">Stock Fragrance Oil (Bibit Parfum)</h3>
+        <p class="text-xs text-sage-600">Database konsentrat aroma, piramida wangi, dan riwayat harga beli per ml</p>
       </div>
 
       <div class="flex items-center gap-3">
         <button
           @click="openAddModal"
-          class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-md shadow-amber-900/20 transition-all flex items-center gap-1.5"
+          class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
         >
           <Plus class="w-4 h-4" />
           <span>Tambah Fragrance Oil</span>
@@ -19,7 +19,7 @@
     </div>
 
     <!-- Search & Multi-Filter Bar -->
-    <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm space-y-3">
+    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm space-y-3">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <!-- Search -->
         <div class="relative">
@@ -27,16 +27,16 @@
             v-model="searchQuery"
             type="text"
             placeholder="Cari nama FO / toko..."
-            class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+            class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
           />
-          <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+          <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
         </div>
 
         <!-- Filter Jenis Liquid -->
         <div>
           <select
             v-model="filterLiquid"
-            class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+            class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
           >
             <option value="">-- Semua Jenis Liquid --</option>
             <option v-for="opt in JENIS_LIQUID_OPTIONS" :key="opt" :value="opt">{{ opt }}</option>
@@ -47,10 +47,10 @@
         <div>
           <select
             v-model="filterPyramid"
-            class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+            class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
           >
-            <option value="">-- Semua Pyramid --</option>
-            <option v-for="p in PYRAMID_OPTIONS" :key="p" :value="p">{{ p }}</option>
+            <option value="">-- Semua Piramida --</option>
+            <option v-for="opt in PYRAMID_OPTIONS" :key="opt" :value="opt">{{ opt }}</option>
           </select>
         </div>
 
@@ -58,7 +58,7 @@
         <div>
           <select
             v-model="filterNotes"
-            class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+            class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
           >
             <option value="">-- Semua Olfactory Notes --</option>
             <option v-for="n in NOTES_OPTIONS" :key="n" :value="n">{{ n }}</option>

@@ -1,47 +1,53 @@
-﻿<template>
-  <header class="sticky top-0 z-30 h-20 bg-white/85 backdrop-blur-md border-b border-stone-200/80 px-4 sm:px-8 flex items-center justify-between transition-all">
+<template>
+  <header class="sticky top-0 z-30 h-20 bg-white/95 backdrop-blur-md border-b border-sage-100/80 px-4 sm:px-8 flex items-center justify-between transition-all">
     <!-- Left: Mobile Menu Trigger & Page Title -->
     <div class="flex items-center gap-3 sm:gap-4">
       <button
         @click="$emit('open-mobile')"
-        class="lg:hidden w-10 h-10 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-colors"
+        class="lg:hidden w-10 h-10 rounded-2xl bg-sage-50 hover:bg-sage-100 text-sage-800 flex items-center justify-center transition-colors border border-sage-200"
       >
         <Menu class="w-5 h-5" />
       </button>
 
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-stone-100 text-stone-600 border border-stone-200">
+          <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-sage-100 text-sage-800 border border-sage-200/80">
             {{ getCategoryLabel }}
           </span>
-          <h2 class="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
+          <h2 class="text-base sm:text-lg font-bold text-forest-800 font-serif tracking-tight">
             {{ getPageTitle }}
           </h2>
         </div>
-        <p class="text-xs text-stone-500 hidden sm:block mt-0.5">
+        <p class="text-xs text-sage-600 hidden sm:block mt-0.5 font-sans">
           {{ getPageSubtitle }}
         </p>
       </div>
     </div>
 
-    <!-- Right: Quick Action Buttons & Status -->
-    <div class="flex items-center gap-2 sm:gap-3">
+    <!-- Right: Date Indicator, User/Notification Icons & Quick Action Buttons (Image 1 Style) -->
+    <div class="flex items-center gap-3 sm:gap-4">
+      <!-- Live Date String (Image 1 Header style) -->
+      <div class="hidden md:flex items-center gap-1.5 text-xs font-medium text-sage-700 bg-sage-50/80 px-3 py-1.5 rounded-full border border-sage-200/60">
+        <Calendar class="w-3.5 h-3.5 text-sage-600" />
+        <span>{{ todayFormatted }}</span>
+      </div>
+
       <!-- Quick Add Campuran -->
       <button
         @click="store.isQuickAddCampuranOpen = true"
-        class="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold transition-all border border-stone-200/80 shadow-sm"
+        class="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-sage-50 hover:bg-sage-100 text-sage-800 text-xs font-semibold transition-all border border-sage-200 shadow-sm"
       >
-        <Plus class="w-3.5 h-3.5 text-stone-600" />
-        <span>Stok Campuran</span>
+        <Plus class="w-3.5 h-3.5 text-sage-600" />
+        <span>+ Campuran</span>
       </button>
 
       <!-- Quick Add Fragrance Oil -->
       <button
         @click="store.isQuickAddFoOpen = true"
-        class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-md shadow-amber-900/20 transition-all transform active:scale-95"
+        class="flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all transform active:scale-95"
       >
-        <Plus class="w-3.5 h-3.5 text-amber-200" />
-        <span class="hidden sm:inline">Stok Fragrance Oil</span>
+        <Plus class="w-3.5 h-3.5 text-white" />
+        <span class="hidden sm:inline">+ Fragrance Oil</span>
         <span class="sm:hidden">FO</span>
       </button>
     </div>
@@ -52,12 +58,22 @@
 import { computed } from 'vue';
 import { useKobichaStore } from '../../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
-import { Menu, Plus } from 'lucide-vue-next';
+import { Menu, Plus, Calendar } from 'lucide-vue-next';
 
 defineEmits(['open-mobile']);
 
 const store = useKobichaStore();
 const { activeTab } = storeToRefs(store);
+
+const todayFormatted = computed(() => {
+  const now = new Date();
+  return now.toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    weekday: 'short'
+  });
+});
 
 const getCategoryLabel = computed(() => {
   switch (activeTab.value) {

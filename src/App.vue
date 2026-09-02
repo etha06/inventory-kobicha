@@ -1,60 +1,81 @@
-﻿<template>
-  <div class="min-h-screen flex bg-stone-100/60 font-sans text-stone-900 selection:bg-amber-200 selection:text-amber-900">
-    <!-- Sidebar Navigation (Desktop Collapsible + Mobile Drawer) -->
-    <Sidebar
-      :isCollapsed="isSidebarCollapsed"
-      :isMobileOpen="isMobileNavOpen"
-      @toggle-collapse="isSidebarCollapsed = !isSidebarCollapsed"
-      @close-mobile="isMobileNavOpen = false"
-    />
+<template>
+  <div class="min-h-screen bg-canvas p-2 sm:p-5 lg:p-6 flex flex-col justify-center items-center relative overflow-x-hidden font-sans text-forest-800">
+    <!-- Background Decorative Organic Shapes (Image 1 Accents) -->
+    <div class="fixed top-2 left-4 pointer-events-none opacity-20 hidden md:block">
+      <svg width="120" height="120" viewBox="0 0 100 100" fill="none" stroke="#608356" stroke-width="1.5">
+        <path d="M10 90 Q 50 10 90 90" />
+        <path d="M20 90 Q 50 25 80 90" />
+        <path d="M30 90 Q 50 40 70 90" />
+        <path d="M40 90 Q 50 55 60 90" />
+      </svg>
+    </div>
+    
+    <div class="fixed bottom-2 right-4 pointer-events-none opacity-25 hidden md:block">
+      <svg width="130" height="130" viewBox="0 0 100 100" fill="none" stroke="#608356" stroke-width="1.5">
+        <circle cx="90" cy="90" r="70" />
+        <circle cx="90" cy="90" r="50" />
+        <circle cx="90" cy="90" r="30" />
+      </svg>
+    </div>
 
-    <!-- Main Content Wrapper -->
-    <div
-      class="flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out"
-      :class="[isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72']"
-    >
-      <!-- Top Sticky Header -->
-      <Header
-        @open-mobile="isMobileNavOpen = true"
+    <!-- Main Floating App Card Container -->
+    <div class="w-full max-w-[1560px] bg-white rounded-[24px] sm:rounded-[36px] shadow-floating border border-[#d2e0d0]/80 flex overflow-hidden min-h-[93vh] relative z-10">
+      <!-- Sidebar Navigation (Image 2 style with organic curve & peach active pill) -->
+      <Sidebar
+        :isCollapsed="isSidebarCollapsed"
+        :isMobileOpen="isMobileNavOpen"
+        @toggle-collapse="isSidebarCollapsed = !isSidebarCollapsed"
+        @close-mobile="isMobileNavOpen = false"
       />
 
-      <!-- Page Router View Container -->
-      <main class="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
-        <Transition
-          mode="out-in"
-          enter-active-class="transition duration-150 ease-out"
-          enter-from-class="opacity-0 translate-y-2"
-          enter-to-class="opacity-100 translate-y-0"
-          leave-active-class="transition duration-100 ease-in"
-          leave-from-class="opacity-100"
-          leave-to-class="opacity-0"
-        >
-          <!-- 1. Home / Dashboard -->
-          <HomePage v-if="activeTab === 'home'" />
+      <!-- Main Content Wrapper inside the Card -->
+      <div
+        class="flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out bg-white overflow-y-auto"
+        :class="[isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72']"
+      >
+        <!-- Top Header inside Card -->
+        <Header
+          @open-mobile="isMobileNavOpen = true"
+        />
 
-          <!-- 2. Where to Buy -->
-          <WhereToBuyPage v-else-if="activeTab === 'wheretobuy'" />
+        <!-- Page View Container -->
+        <main class="flex-1 p-4 sm:p-7 max-w-7xl w-full mx-auto">
+          <Transition
+            mode="out-in"
+            enter-active-class="transition duration-150 ease-out"
+            enter-from-class="opacity-0 translate-y-2"
+            enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition duration-100 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+          >
+            <!-- 1. Home / Dashboard -->
+            <HomePage v-if="activeTab === 'home'" />
 
-          <!-- 3. Stock Barang Submenus -->
-          <StockCampuranPage v-else-if="activeTab === 'stock-campuran'" />
-          <StockFragranceOilPage v-else-if="activeTab === 'stock-fo'" />
-          <ListHargaPage v-else-if="activeTab === 'list-harga-fo'" />
+            <!-- 2. Where to Buy -->
+            <WhereToBuyPage v-else-if="activeTab === 'wheretobuy'" />
 
-          <!-- 4. Formula Submenus -->
-          <FormulaBasePage v-else-if="activeTab === 'formula-base'" />
-          <KatalogRacikanPage v-else-if="activeTab === 'katalog-racikan'" />
-          <KalkulatorRacikanPage v-else-if="activeTab === 'kalkulator-racikan'" />
+            <!-- 3. Stock Barang Submenus -->
+            <StockCampuranPage v-else-if="activeTab === 'stock-campuran'" />
+            <StockFragranceOilPage v-else-if="activeTab === 'stock-fo'" />
+            <ListHargaPage v-else-if="activeTab === 'list-harga-fo'" />
 
-          <!-- 5. Harga Modal / HPP Submenus -->
-          <KatalogHppPage v-else-if="activeTab === 'katalog-hpp'" />
-          <KalkulatorHppPage v-else-if="activeTab === 'kalkulator-hpp'" />
-        </Transition>
-      </main>
+            <!-- 4. Formula Submenus -->
+            <FormulaBasePage v-else-if="activeTab === 'formula-base'" />
+            <KatalogRacikanPage v-else-if="activeTab === 'katalog-racikan'" />
+            <KalkulatorRacikanPage v-else-if="activeTab === 'kalkulator-racikan'" />
 
-      <!-- Minimalist App Footer -->
-      <footer class="py-4 px-8 border-t border-stone-200/80 text-center text-xs text-stone-400">
-        Stock Barang Kobicha • Internal Perfume Formulation & Inventory System
-      </footer>
+            <!-- 5. Harga Modal / HPP Submenus -->
+            <KatalogHppPage v-else-if="activeTab === 'katalog-hpp'" />
+            <KalkulatorHppPage v-else-if="activeTab === 'kalkulator-hpp'" />
+          </Transition>
+        </main>
+
+        <!-- Minimalist App Footer -->
+        <footer class="py-3 px-8 border-t border-sage-100 text-center text-xs text-sage-400">
+          Kobicha Parfumerie • Internal Formulation & Inventory System
+        </footer>
+      </div>
     </div>
 
     <!-- Global Floating Toast Notifications -->

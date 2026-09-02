@@ -1,10 +1,10 @@
 <template>
   <div class="space-y-6">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-stone-900 font-serif">Kalkulator Racikan Fragrance (Formulator)</h3>
-        <p class="text-xs text-stone-500">
+        <h3 class="text-base font-bold text-forest-900 font-serif">Kalkulator Racikan Fragrance (Formulator)</h3>
+        <p class="text-xs text-sage-600">
           Kalkulasi porsi tetes, konversi ke ml konsentrat bibit FO, dan estimasi otomatis formula parfum
         </p>
       </div>
@@ -12,14 +12,14 @@
       <div class="flex items-center gap-2">
         <button
           @click="resetForm"
-          class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold transition-colors flex items-center gap-1.5"
+          class="px-3.5 py-2 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-800 text-xs font-semibold border border-sage-200 transition-colors flex items-center gap-1.5"
         >
           <RotateCcw class="w-3.5 h-3.5" />
           <span>Reset Form</span>
         </button>
         <button
           @click="saveRacikan"
-          class="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-md shadow-amber-900/20 transition-all flex items-center gap-1.5"
+          class="px-5 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
         >
           <Save class="w-4 h-4" />
           <span>Simpan ke Katalog Racikan</span>
@@ -28,30 +28,30 @@
     </div>
 
     <!-- Formula Mode Selector & General Configurations -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 p-5 sm:p-6 shadow-sm space-y-5">
+    <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-5">
       <!-- Mode Toggle -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-sage-100 pb-4">
         <div>
-          <label class="block text-xs font-bold text-stone-900 uppercase tracking-wider mb-0.5">Mode Formulasi:</label>
-          <p class="text-xs text-stone-500">Pilih Racik Manual atau By Resep yang sudah tersimpan di Katalog</p>
+          <label class="block text-xs font-bold text-forest-900 uppercase tracking-wider mb-0.5">Mode Formulasi:</label>
+          <p class="text-xs text-sage-600">Pilih Racik Manual atau By Resep yang sudah tersimpan di Katalog</p>
         </div>
 
-        <div class="flex items-center gap-2 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+        <div class="flex items-center gap-2 bg-sage-50 p-1 rounded-2xl text-xs font-semibold border border-sage-200/60">
           <button
             type="button"
             @click="setMode('manual')"
-            class="px-4 py-2 rounded-lg transition-all"
-            :class="mode === 'manual' ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-stone-600 hover:text-stone-900'"
+            class="px-4 py-2 rounded-xl transition-all"
+            :class="mode === 'manual' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900'"
           >
             Mode Manual (Bebas)
           </button>
           <button
             type="button"
             @click="setMode('by_resep')"
-            class="px-4 py-2 rounded-lg transition-all"
-            :class="mode === 'by_resep' ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-stone-600 hover:text-stone-900'"
+            class="px-4 py-2 rounded-xl transition-all"
+            :class="mode === 'by_resep' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900'"
           >
-            Mode By Resep (Katalog Racikan)
+            Mode By Resep Katalog
           </button>
         </div>
       </div>

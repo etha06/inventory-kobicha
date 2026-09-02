@@ -1,26 +1,26 @@
 <template>
   <div class="space-y-8">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-stone-900 font-serif">Katalog Harga Modal / HPP Parfum</h3>
-        <p class="text-xs text-stone-500">Database rekaman HPP botolan, rincian biaya liquid & kemasan, serta simulasi harga jual</p>
+        <h3 class="text-base font-bold text-forest-900 font-serif">Katalog Harga Modal / HPP Parfum</h3>
+        <p class="text-xs text-sage-600">Database rekaman HPP botolan, rincian biaya liquid & kemasan, serta simulasi harga jual</p>
       </div>
 
       <div class="flex items-center gap-3">
         <!-- View Mode Toggle (Card vs Table) -->
-        <div class="flex items-center bg-stone-100 p-1 rounded-xl text-xs font-semibold text-stone-600">
+        <div class="flex items-center bg-sage-50 p-1 rounded-2xl text-xs font-semibold text-sage-700 border border-sage-200/60">
           <button
             @click="viewMode = 'table'"
-            class="px-3 py-1.5 rounded-lg transition-all"
-            :class="viewMode === 'table' ? 'bg-white text-stone-900 shadow-sm font-bold' : 'hover:text-stone-900'"
+            class="px-3 py-1.5 rounded-xl transition-all"
+            :class="viewMode === 'table' ? 'bg-white text-forest-900 shadow-sm font-bold' : 'hover:text-forest-900'"
           >
             📋 Tabel
           </button>
           <button
             @click="viewMode = 'card'"
-            class="px-3 py-1.5 rounded-lg transition-all"
-            :class="viewMode === 'card' ? 'bg-white text-stone-900 shadow-sm font-bold' : 'hover:text-stone-900'"
+            class="px-3 py-1.5 rounded-xl transition-all"
+            :class="viewMode === 'card' ? 'bg-white text-forest-900 shadow-sm font-bold' : 'hover:text-forest-900'"
           >
             🎴 Card
           </button>
@@ -28,7 +28,7 @@
 
         <button
           @click="store.navigateTo('kalkulator-hpp')"
-          class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-md shadow-amber-900/20 transition-all flex items-center gap-1.5"
+          class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
         >
           <Calculator class="w-4 h-4" />
           <span>Hitung HPP Baru</span>
@@ -37,28 +37,28 @@
     </div>
 
     <!-- Search & Filter Bar -->
-    <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
       <!-- Search -->
       <div class="relative">
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Cari nama analisis HPP / formula..."
-          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         />
-        <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+        <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
       </div>
 
       <!-- Filter Bottle Size -->
       <div>
         <select
           v-model="filterBottleSize"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         >
           <option value="">-- Semua Ukuran Botol --</option>
-          <option :value="30">Botol 30 ml</option>
-          <option :value="50">Botol 50 ml</option>
-          <option :value="100">Botol 100 ml</option>
+          <option value="30">Botol 30 ml</option>
+          <option value="50">Botol 50 ml</option>
+          <option value="100">Botol 100 ml</option>
         </select>
       </div>
 
@@ -66,8 +66,8 @@
       <div>
         <select
           v-model="sortBy"
-          class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
-        >
+          class="w-full px-3 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
+        >     >
           <option value="newest">Terbaru Dihitung</option>
           <option value="hpp_asc">HPP / Botol Termurah</option>
           <option value="hpp_desc">HPP / Botol Termahal</option>

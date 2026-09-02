@@ -4,12 +4,12 @@
 
 @layer base {
   body {
-    @apply bg-stone-50 text-stone-900 antialiased;
+    @apply bg-canvas text-[#243422] antialiased font-sans min-h-screen selection:bg-sage-200 selection:text-sage-900;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-/* Custom modern scrollbar */
+/* Custom organic scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -18,13 +18,24 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d6c7b8;
+  background: #bed1bb;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #b89d85;
+  background: #9ab497;
 }
 
 .table-row-hover {
-  @apply transition-colors duration-150 hover:bg-stone-50/80 cursor-pointer;
+  @apply transition-colors duration-150 hover:bg-sage-50/70;
+}
+
+/* Organic curved bottom background for stat cards */
+.wave-pattern {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  opacity: 0.35;
+  pointer-events: none;
 }

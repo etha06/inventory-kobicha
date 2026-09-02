@@ -1,16 +1,16 @@
 <template>
   <div class="space-y-6">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-stone-900 font-serif">Katalog Formula Base (Template Pelarut)</h3>
-        <p class="text-xs text-stone-500">Standar rasio konsentrat bibit parfum & bahan pelarut (total komposisi 100%)</p>
+        <h3 class="text-base font-bold text-forest-900 font-serif">Katalog Formula Base (Template Pelarut)</h3>
+        <p class="text-xs text-sage-600">Standar rasio konsentrat bibit parfum & bahan pelarut (total komposisi 100%)</p>
       </div>
 
       <div class="flex items-center gap-3">
         <button
           @click="openAddModal"
-          class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-md shadow-amber-900/20 transition-all flex items-center gap-1.5"
+          class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
         >
           <Plus class="w-4 h-4" />
           <span>Buat Formula Base Baru</span>
@@ -22,22 +22,22 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       <div
         v-if="formulaBases.length === 0"
-        class="col-span-full py-16 text-center text-stone-400 bg-white rounded-2xl border border-stone-200"
+        class="col-span-full py-16 text-center text-sage-400 bg-white rounded-[24px] border border-sage-200"
       >
-        <FlaskConical class="w-10 h-10 mx-auto mb-2 opacity-40 text-amber-700" />
+        <FlaskConical class="w-10 h-10 mx-auto mb-2 opacity-40 text-sage-700" />
         Belum ada Formula Base. Buat formula base seperti EDT 10%, EDP 20%, atau Extrait 30%.
       </div>
 
       <div
         v-for="base in formulaBases"
         :key="base.id"
-        class="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+        class="bg-white rounded-[24px] border border-sage-100 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
       >
         <div>
           <!-- Header -->
           <div class="flex items-start justify-between gap-3 mb-3">
             <div>
-              <h4 class="font-serif font-bold text-base text-stone-900 leading-snug">
+              <h4 class="font-serif font-bold text-base text-forest-900 leading-snug">
                 {{ base.nama }}
               </h4>
             </div>

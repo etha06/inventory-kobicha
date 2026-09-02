@@ -1,10 +1,10 @@
 <template>
   <div class="space-y-6">
     <!-- Header Card -->
-    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h3 class="text-base font-bold text-stone-900 font-serif">Kalkulator Harga Modal & HPP Parfum</h3>
-        <p class="text-xs text-stone-500">
+        <h3 class="text-base font-bold text-forest-900 font-serif">Kalkulator Harga Modal & HPP Parfum</h3>
+        <p class="text-xs text-sage-600">
           Perhitungan terpisah modal cairan formula liquid dan kemasan packaging dengan input manual bebas
         </p>
       </div>
@@ -12,14 +12,14 @@
       <div class="flex items-center gap-2">
         <button
           @click="resetForm"
-          class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold transition-colors flex items-center gap-1.5"
+          class="px-3.5 py-2 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-800 text-xs font-semibold border border-sage-200 transition-colors flex items-center gap-1.5"
         >
           <RotateCcw class="w-3.5 h-3.5" />
           <span>Reset Form</span>
         </button>
         <button
           @click="saveHpp"
-          class="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-md shadow-amber-900/20 transition-all flex items-center gap-1.5"
+          class="px-5 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
         >
           <Save class="w-4 h-4" />
           <span>Simpan ke Katalog HPP</span>
@@ -28,16 +28,16 @@
     </div>
 
     <!-- General Title & Bottle Size Configuration -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 p-5 sm:p-6 shadow-sm">
+    <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm">
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="sm:col-span-2">
-          <label class="block text-xs font-semibold text-stone-700 mb-1">Nama Analisis / Produk HPP</label>
+          <label class="block text-xs font-semibold text-forest-800 mb-1">Nama Analisis / Produk HPP</label>
           <input
             v-model="hppTitle"
             type="text"
             required
             placeholder="Misal: HPP Kobicha Signature No. 1 (Botol 50ml Amber)"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
+            class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm font-medium bg-white"
           />
         </div>
 
