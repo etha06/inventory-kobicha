@@ -130,10 +130,8 @@
                   <span v-else class="text-stone-400 text-xs">-</span>
                 </td>
 
-                <td class="py-3.5 px-4 text-left">
-                  <span class="text-xs text-forest-800 font-medium">
-                    {{ getLinkedProductsCount(store.id) }} Produk
-                  </span>
+                <td class="py-3.5 px-4 text-left font-mono font-bold text-stone-800 text-xs">
+                  {{ getLinkedProductsCount(store.id) }} Produk
                 </td>
 
                 <!-- Aksi Column (Positioned Right, Aligned Left, Lucide Icons) -->
@@ -191,7 +189,7 @@
                           :key="fo.id"
                           class="p-2 rounded-lg bg-stone-50 border border-stone-200 text-xs flex items-center justify-between"
                         >
-                          <span class="font-medium text-stone-800">💧 {{ fo.nama }}</span>
+                          <span class="font-medium text-stone-800">{{ fo.nama }}</span>
                           <span class="text-[10px] text-stone-500 font-mono">{{ fo.botolMl }}ml • {{ fo.currentStock }}</span>
                         </div>
 
@@ -200,7 +198,7 @@
                           :key="c.id"
                           class="p-2 rounded-lg bg-stone-50 border border-stone-200 text-xs flex items-center justify-between"
                         >
-                          <span class="font-medium text-stone-800">📦 {{ c.namaBarang }}</span>
+                          <span class="font-medium text-stone-800">{{ c.namaBarang }}</span>
                           <span class="text-[10px] text-stone-500 font-mono">Stok: {{ c.jumlahStok }} pcs</span>
                         </div>
 
