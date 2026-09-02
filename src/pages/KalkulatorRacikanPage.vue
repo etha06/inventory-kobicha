@@ -182,23 +182,29 @@
         </button>
       </div>
 
-      <!-- Drops & Volume Table -->
-      <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col justify-between overflow-hidden shadow-sm">
-        <!-- Table Body Area (Scrollable when 2+ rows) -->
-        <div class="overflow-x-auto overflow-y-auto max-h-[180px] flex-1">
-          <table class="w-full text-xs text-left">
-            <thead class="bg-stone-100 border-b text-[10px] text-stone-500 uppercase font-bold sticky top-0 z-10">
+      <!-- Drops & Volume Table Container (Fixed Height with Fixed Header, Fixed Footer, and Scrollable Body) -->
+      <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col h-[260px] overflow-hidden shadow-sm">
+        <!-- 1. FIXED HEADER -->
+        <div class="bg-stone-100/90 border-b border-stone-200 flex-shrink-0">
+          <table class="w-full text-xs text-left table-fixed">
+            <thead class="text-[10px] text-stone-500 uppercase font-bold">
               <tr>
-                <th class="py-2.5 px-3 w-10 text-left bg-stone-100">#</th>
-                <th class="py-2.5 px-3 text-left bg-stone-100">Nama Fragrance Oil</th>
-                <th class="py-2.5 px-3 text-left bg-stone-100">Pyramid</th>
-                <th class="py-2.5 px-3 text-left w-28 bg-stone-100">Jumlah Tetes</th>
-                <th class="py-2.5 px-3 text-left w-28 bg-stone-100">Porsi (% FO)</th>
-                <th class="py-2.5 px-3 text-left w-32 bg-stone-100">Volume (ml)</th>
-                <th class="py-2.5 px-3 text-left w-36 bg-stone-100">Estimasi Biaya FO</th>
-                <th class="py-2.5 px-4 text-left w-20 bg-stone-100">Aksi</th>
+                <th class="py-2.5 px-3 w-10 text-left">#</th>
+                <th class="py-2.5 px-3 text-left">Nama Fragrance Oil</th>
+                <th class="py-2.5 px-3 text-left w-20">Pyramid</th>
+                <th class="py-2.5 px-3 text-left w-28">Jumlah Tetes</th>
+                <th class="py-2.5 px-3 text-left w-24">Porsi (% FO)</th>
+                <th class="py-2.5 px-3 text-left w-28">Volume (ml)</th>
+                <th class="py-2.5 px-3 text-left w-36">Estimasi Biaya FO</th>
+                <th class="py-2.5 px-4 text-left w-16">Aksi</th>
               </tr>
             </thead>
+          </table>
+        </div>
+
+        <!-- 2. SCROLLABLE MIDDLE TBODY AREA -->
+        <div class="overflow-y-auto overflow-x-hidden flex-1">
+          <table class="w-full text-xs text-left table-fixed">
             <tbody class="divide-y text-stone-800">
               <tr v-if="rows.length === 0">
                 <td colspan="8" class="py-12 text-center text-stone-400 italic">
@@ -212,7 +218,7 @@
               </tr>
 
               <tr v-for="(row, idx) in rows" :key="row.id" class="hover:bg-stone-50 transition-colors">
-                <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px]">
+                <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px] w-10">
                   {{ idx + 1 }}
                 </td>
 
@@ -228,8 +234,8 @@
                   />
                 </td>
 
-                <!-- Pyramid Badge (Without "Note" word) -->
-                <td class="py-2 px-3 text-left">
+                <!-- Pyramid Badge -->
+                <td class="py-2 px-3 text-left w-20">
                   <span
                     v-if="getRowPyramid(row)"
                     class="px-2 py-0.5 rounded text-[10px] font-bold border whitespace-nowrap inline-block"
@@ -241,7 +247,7 @@
                 </td>
 
                 <!-- Jumlah Tetes -->
-                <td class="py-2 px-3 text-left">
+                <td class="py-2 px-3 text-left w-28">
                   <input
                     v-model.number="row.tetes"
                     type="number"
@@ -254,22 +260,22 @@
                 </td>
 
                 <!-- % FO -->
-                <td class="py-2 px-3 text-left font-mono font-semibold text-amber-950">
+                <td class="py-2 px-3 text-left font-mono font-semibold text-amber-950 w-24">
                   {{ formatNumber(getRowPercentage(row), 1) }}%
                 </td>
 
                 <!-- ml FO -->
-                <td class="py-2 px-3 text-left font-mono font-bold text-stone-900 bg-amber-50/50">
+                <td class="py-2 px-3 text-left font-mono font-bold text-stone-900 bg-amber-50/50 w-28">
                   {{ formatNumber(getRowMl(row), 2) }} ml
                 </td>
 
                 <!-- Estimasi Biaya FO -->
-                <td class="py-2 px-3 text-left font-mono text-stone-700">
+                <td class="py-2 px-3 text-left font-mono text-stone-700 w-36">
                   {{ formatRupiah(getRowCost(row)) }}
                 </td>
 
-                <!-- Delete Row Action (Positioned Right, Aligned Left, Lucide Trash2) -->
-                <td class="py-2 px-4 text-left">
+                <!-- Delete Row Action -->
+                <td class="py-2 px-4 text-left w-16">
                   <button
                     v-if="mode === 'manual'"
                     type="button"
@@ -286,19 +292,19 @@
           </table>
         </div>
 
-        <!-- Pinned Bottom Total Bar -->
-        <div class="bg-stone-50 border-t border-stone-200 overflow-x-auto">
-          <table class="w-full text-xs text-left">
+        <!-- 3. FIXED FOOTER AT THE BOTTOM -->
+        <div class="bg-stone-50 border-t border-stone-200 flex-shrink-0">
+          <table class="w-full text-xs text-left table-fixed">
             <tfoot>
               <tr class="font-bold text-stone-900">
                 <th class="py-3 px-3 w-10 text-left"></th>
                 <th class="py-3 px-3 text-left">Total Komposisi FO:</th>
-                <th class="py-3 px-3 text-left"></th>
+                <th class="py-3 px-3 text-left w-20"></th>
                 <th class="py-3 px-3 text-left font-mono text-amber-950 w-28">{{ totalDrops }} Tetes</th>
-                <th class="py-3 px-3 text-left font-mono text-amber-950 w-28">100%</th>
-                <th class="py-3 px-3 text-left font-mono text-amber-950 w-32">{{ formatNumber(targetTotalFoMl, 2) }} ml</th>
+                <th class="py-3 px-3 text-left font-mono text-amber-950 w-24">100%</th>
+                <th class="py-3 px-3 text-left font-mono text-amber-950 w-28">{{ formatNumber(targetTotalFoMl, 2) }} ml</th>
                 <th class="py-3 px-3 text-left font-mono text-amber-950 w-36">{{ formatRupiah(totalFoCost) }}</th>
-                <th class="py-3 px-4 text-left w-20"></th>
+                <th class="py-3 px-4 text-left w-16"></th>
               </tr>
             </tfoot>
           </table>
