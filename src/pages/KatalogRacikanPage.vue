@@ -298,7 +298,7 @@
           <!-- Bottom Action inside Compare Card -->
           <div class="pt-3 border-t border-stone-700/60 flex items-center justify-between">
             <span class="text-[11px] text-stone-400">
-              {{ r.isCommission ? '✨ Commission Order' : '🌿 Regular Formula' }}
+              {{ r.isCommission ? 'Commission Order' : 'Regular Formula' }}
             </span>
             <button
               @click="openInCalculator(r.id)"
@@ -344,7 +344,7 @@ const selectedForCompare = ref<string[]>([]);
 const commissionOptions = [
   { value: '', label: 'Semua Tipe Resep' },
   { value: 'regular', label: 'Formula Reguler / House Signature' },
-  { value: 'commission', label: 'Pesanan Kustom (Commission)' }
+  { value: 'commission', label: 'Commission Order' }
 ];
 
 const notesOptions = [

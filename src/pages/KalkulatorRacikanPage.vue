@@ -99,7 +99,7 @@
             class="rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer w-4 h-4"
           />
           <label for="commCheck" class="text-xs font-semibold text-stone-700 cursor-pointer">
-            ✨ Pesanan Kustom Klien (Commission Order)
+            Commission Order
           </label>
         </div>
       </div>
