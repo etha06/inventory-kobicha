@@ -1,0 +1,586 @@
+<template>
+  <div class="space-y-6">
+    <!-- Top Action Card -->
+    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <h3 class="text-base font-bold text-stone-900 font-serif">Stock Barang Campuran & Packaging</h3>
+        <p class="text-xs text-stone-500">Stok alkohol, fixative DPG, pelarut bahan baku dengan kalkulasi harga/ml serta botol packaging</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button
+          @click="openAddModal"
+          class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-md shadow-amber-900/20 transition-all flex items-center gap-1.5"
+        >
+          <Plus class="w-4 h-4" />
+          <span>Tambah Barang Campuran</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search, Filter & Sort Bar -->
+    <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-4 gap-3">
+      <!-- Search -->
+      <div class="relative sm:col-span-1">
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Cari nama barang / toko..."
+          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+        />
+        <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+      </div>
+
+      <!-- Filter Tipe (Semua / Bahan Baku / Packaging) -->
+      <div>
+        <select
+          v-model="filterTipe"
+          class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+        >
+          <option value="">-- Semua Tipe Barang --</option>
+          <option value="bahan_baku">🧪 Bahan Baku / Cairan</option>
+          <option value="packaging">📦 Packaging / Lainnya</option>
+        </select>
+      </div>
+
+      <!-- Filter Jenis Barang (from allJenisBarangList) -->
+      <div>
+        <select
+          v-model="filterJenis"
+          class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+        >
+          <option value="">-- Semua Jenis Barang --</option>
+          <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
+        </select>
+      </div>
+
+      <!-- Sort By -->
+      <div>
+        <select
+          v-model="sortBy"
+          class="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+        >
+          <option value="name_asc">Nama Barang (A - Z)</option>
+          <option value="name_desc">Nama Barang (Z - A)</option>
+          <option value="stock_desc">Stok Terbanyak</option>
+          <option value="stock_asc">Stok Tersedikit (Alert)</option>
+          <option value="price_desc">Harga Tertinggi</option>
+          <option value="price_asc">Harga Termurah</option>
+          <option value="updated_at">Terakhir Diperbarui</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
+              <th class="py-3.5 px-4 w-10 text-center">#</th>
+              <th class="py-3.5 px-4 text-center">Tipe</th>
+              <th class="py-3.5 px-4">Jenis Barang</th>
+              <th class="py-3.5 px-4">Nama Barang</th>
+              <th class="py-3.5 px-4 text-center">Volume Kemasan</th>
+              <th class="py-3.5 px-4 text-center">Stok</th>
+              <th class="py-3.5 px-4">Toko Supplier</th>
+              <th class="py-3.5 px-4 text-right">Harga Beli</th>
+              <th class="py-3.5 px-4 text-center">Updated At</th>
+              <th class="py-3.5 px-4 text-left w-24">Aksi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-stone-100 text-stone-800">
+            <tr v-if="filteredList.length === 0">
+              <td colspan="10" class="py-12 text-center text-stone-400">
+                <Package class="w-8 h-8 mx-auto mb-2 opacity-50" />
+                Tidak ada data barang campuran ditemukan.
+              </td>
+            </tr>
+
+            <template v-for="(item, idx) in filteredList" :key="item.id">
+              <!-- Main Row (Click to expand) -->
+              <tr
+                @click="toggleRow(item.id)"
+                class="table-row-hover transition-colors cursor-pointer"
+                :class="expandedItemId === item.id ? 'bg-amber-50/60 font-medium' : ''"
+              >
+                <td class="py-3.5 px-4 text-center text-stone-400 font-mono">
+                  {{ idx + 1 }}
+                </td>
+
+                <!-- 1. Kolom Tipe -->
+                <td class="py-3.5 px-4 text-center">
+                  <span
+                    v-if="item.isBahanBaku"
+                    class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300 whitespace-nowrap inline-flex items-center gap-1"
+                  >
+                    🧪 Bahan Baku
+                  </span>
+                  <span
+                    v-else
+                    class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-medium border border-indigo-200 whitespace-nowrap inline-flex items-center gap-1"
+                  >
+                    📦 Kemasan
+                  </span>
+                </td>
+
+                <!-- 2. Kolom Jenis Barang -->
+                <td class="py-3.5 px-4">
+                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium whitespace-nowrap">
+                    {{ item.jenis }}
+                  </span>
+                </td>
+
+                <td class="py-3.5 px-4">
+                  <div class="flex items-center gap-2">
+                    <ChevronRight
+                      class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150 flex-shrink-0"
+                      :class="expandedItemId === item.id ? 'rotate-90' : ''"
+                    />
+                    <span class="font-bold text-stone-900 text-xs">{{ item.namaBarang }}</span>
+                  </div>
+                </td>
+
+                <!-- Volume Kemasan / ml kalkulasi -->
+                <td class="py-3.5 px-4 text-center">
+                  <div v-if="item.isBahanBaku && item.ukuranMl" class="space-y-0.5">
+                    <span class="font-mono font-bold text-stone-800 block text-xs">{{ item.ukuranMl }} ml</span>
+                    <span class="text-[10px] text-amber-800 font-mono font-bold bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                      {{ formatRupiah(store.getCampuranAveragePricePerMl(item.id)) }}/ml
+                    </span>
+                  </div>
+                  <span v-else class="text-stone-400 text-xs">-</span>
+                </td>
+
+                <td class="py-3.5 px-4 text-center">
+                  <span
+                    class="px-2.5 py-1 rounded-full text-xs font-bold font-mono inline-flex items-center gap-1"
+                    :class="item.jumlahStok <= 5 ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-stone-100 text-stone-800'"
+                  >
+                    {{ item.jumlahStok }} pcs
+                  </span>
+                </td>
+
+                <td class="py-3.5 px-4 text-stone-600">
+                  <span class="font-medium text-stone-700 truncate max-w-[120px] block" :title="item.storeName">
+                    {{ item.storeName }}
+                  </span>
+                </td>
+
+                <td class="py-3.5 px-4 text-right font-mono font-bold text-stone-900">
+                  {{ formatRupiah(item.hargaPerPcs) }}
+                </td>
+
+                <td class="py-3.5 px-4 text-center text-[11px] text-stone-500 whitespace-nowrap">
+                  {{ formatDateIndo(item.updatedAt || item.createdAt) }}
+                </td>
+
+                <!-- Aksi Column (Positioned Right, Aligned Left, Lucide Icons) -->
+                <td class="py-3.5 px-4 text-left" @click.stop>
+                  <div class="flex items-center justify-start gap-1.5">
+                    <button
+                      @click="openEditModal(item)"
+                      class="p-1.5 rounded-lg border border-stone-200 hover:bg-amber-50 hover:border-amber-300 text-stone-600 hover:text-amber-800 transition-colors"
+                      title="Edit Barang"
+                    >
+                      <Pencil class="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      @click="confirmDelete(item)"
+                      class="p-1.5 rounded-lg border border-stone-200 hover:bg-rose-50 hover:border-rose-300 text-stone-600 hover:text-rose-600 transition-colors"
+                      title="Hapus Barang"
+                    >
+                      <Trash2 class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Expandable Inline Detail Sub-Row -->
+              <tr v-if="expandedItemId === item.id" class="bg-amber-50/30 border-b border-amber-200/70">
+                <td colspan="10" class="p-5">
+                  <div class="bg-white rounded-xl p-4 border border-amber-200/80 shadow-sm space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                      <div class="space-y-1.5 flex-1">
+                        <h4 class="font-bold text-stone-900 text-xs flex items-center gap-2">
+                          <Package class="w-4 h-4 text-amber-700" />
+                          <span>Detail: {{ item.namaBarang }}</span>
+                          <span class="text-[11px] font-normal text-stone-500">({{ item.jenis }})</span>
+                        </h4>
+                        <p v-if="item.deskripsi" class="text-xs text-stone-600 leading-relaxed">
+                          {{ item.deskripsi }}
+                        </p>
+                        <p v-else class="text-xs text-stone-400 italic">
+                          Tidak ada deskripsi tambahan.
+                        </p>
+
+                        <div class="pt-2 flex flex-wrap gap-4 text-xs">
+                          <span class="text-stone-500">Toko Supplier: <strong class="text-stone-800">{{ item.storeName }}</strong></span>
+                          <span class="text-stone-500">Harga Beli: <strong class="text-stone-800 font-mono">{{ formatRupiah(item.hargaPerPcs) }}</strong></span>
+                          <span v-if="item.isBahanBaku && item.ukuranMl" class="text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-medium">
+                            Kalkulasi Modal / 1 ml: <strong class="font-mono">{{ formatRupiah(store.getCampuranAveragePricePerMl(item.id)) }}</strong> (dari kemasan {{ item.ukuranMl }} ml)
+                          </span>
+                        </div>
+                      </div>
+
+                      <div v-if="item.gambar" class="w-20 h-20 rounded-xl overflow-hidden border">
+                        <img :src="item.gambar" alt="Product" class="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modal Form (Add / Edit) -->
+    <Modal
+      :isOpen="isModalOpen"
+      :title="isEditing ? 'Edit Barang Campuran' : 'Tambah Barang Campuran'"
+      subtitle="Input stok pelarut, DPG, botol, pipet, atau packaging"
+      maxWidth="2xl"
+      @close="isModalOpen = false"
+    >
+      <form @submit.prevent="saveItem" class="space-y-4">
+        <!-- Tipe Barang (Bahan Baku vs Kemasan) -->
+        <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-2">
+          <label class="block text-xs font-bold text-stone-800">Kategori Tipe Barang:</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <label
+              class="flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer transition-all"
+              :class="form.isBahanBaku ? 'bg-amber-50 border-amber-400 shadow-sm' : 'bg-white border-stone-200 hover:bg-stone-100'"
+            >
+              <input
+                type="radio"
+                :value="true"
+                v-model="form.isBahanBaku"
+                class="mt-0.5 text-amber-600 focus:ring-amber-500"
+              />
+              <div>
+                <span class="text-xs font-bold text-stone-900 block">🧪 Bahan Baku / Cairan</span>
+                <span class="text-[11px] text-stone-500">Pelarut alkohol, DPG, fixative, aquades (Bisa dihitung /ml di kalkulator HPP)</span>
+              </div>
+            </label>
+
+            <label
+              class="flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer transition-all"
+              :class="!form.isBahanBaku ? 'bg-indigo-50 border-indigo-400 shadow-sm' : 'bg-white border-stone-200 hover:bg-stone-100'"
+            >
+              <input
+                type="radio"
+                :value="false"
+                v-model="form.isBahanBaku"
+                class="mt-0.5 text-indigo-600 focus:ring-indigo-500"
+              />
+              <div>
+                <span class="text-xs font-bold text-stone-900 block">📦 Kemasan / Perlengkapan</span>
+                <span class="text-[11px] text-stone-500">Botol kaca, sprayer, box, stiker, pipet ukur</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-stone-700 mb-1">Nama Barang</label>
+          <input
+            v-model="form.namaBarang"
+            type="text"
+            required
+            placeholder="Misal: Ethanol Absolute 96% Super Fine Grade"
+            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Jenis Barang (Sesuai Where to Buy)</label>
+            <select
+              v-model="form.jenis"
+              required
+              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
+            >
+              <option v-for="c in allJenisBarangList" :key="c" :value="c">{{ c }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Toko Supplier</label>
+            <select
+              v-model="form.storeId"
+              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm bg-white font-medium"
+            >
+              <option value="">-- Pilih Toko Supplier --</option>
+              <option v-for="s in stores" :key="s.id" :value="s.id">{{ s.namaToko }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Volume ml (Hanya jika Bahan Baku) & Harga -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div v-if="form.isBahanBaku">
+            <label class="block text-xs font-semibold text-amber-950 mb-1">Volume Kemasan Beli (ml)</label>
+            <div class="relative">
+              <input
+                v-model.number="form.ukuranMl"
+                type="number"
+                min="1"
+                required
+                placeholder="1000"
+                class="w-full px-3.5 py-2 rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono font-bold pr-8"
+              />
+              <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold">ml</span>
+            </div>
+            <span class="text-[10px] text-stone-500 mt-1 block">Misal: 1000 ml = 1 Liter</span>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Harga per Kemasan (Rp)</label>
+            <input
+              v-model.number="form.hargaPerPcs"
+              type="number"
+              min="0"
+              required
+              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-semibold font-mono"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Jumlah Stok (pcs / botol)</label>
+            <input
+              v-model.number="form.jumlahStok"
+              type="number"
+              min="0"
+              required
+              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono"
+            />
+          </div>
+        </div>
+
+        <!-- Live Price per ml Preview if Bahan Baku -->
+        <div v-if="form.isBahanBaku && form.ukuranMl > 0" class="p-3 bg-amber-50 rounded-xl border border-amber-200 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-bold text-amber-950 block">✨ Estimasi Rata-rata Biaya per 1 ml:</span>
+            <span class="text-[11px] text-amber-700">{{ formatRupiah(form.hargaPerPcs) }} / {{ form.ukuranMl }} ml</span>
+          </div>
+          <span class="text-base font-bold font-mono text-amber-950">
+            {{ formatRupiah(Math.round(form.hargaPerPcs / form.ukuranMl)) }} / ml
+          </span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-stone-700 mb-1">Link Gambar Produk (Opsional)</label>
+          <input
+            v-model="form.gambar"
+            type="url"
+            placeholder="https://... (URL gambar)"
+            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-stone-700 mb-1">Deskripsi / Catatan (Opsional)</label>
+          <textarea
+            v-model="form.deskripsi"
+            rows="2"
+            placeholder="Spesifikasi, grade kebersihan, tanggal expired, dsb..."
+            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+          ></textarea>
+        </div>
+
+        <div class="pt-3 border-t flex justify-end gap-2">
+          <button
+            type="button"
+            @click="isModalOpen = false"
+            class="px-4 py-2 rounded-xl border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+          >
+            Batal
+          </button>
+          <button
+            type="submit"
+            class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-sm"
+          >
+            Simpan Barang Campuran
+          </button>
+        </div>
+      </form>
+    </Modal>
+
+    <!-- Delete Confirm Modal -->
+    <ConfirmModal
+      :isOpen="isDeleteModalOpen"
+      title="Hapus Barang Campuran?"
+      :message="`Apakah Anda yakin ingin menghapus '${itemToDelete?.namaBarang}' dari stok?`"
+      @confirm="doDelete"
+      @cancel="isDeleteModalOpen = false"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { useKobichaStore } from '../stores/kobichaStore';
+import { storeToRefs } from 'pinia';
+import { StockCampuran } from '../types';
+import { formatRupiah, formatDateIndo } from '../utils/formatters';
+import { Plus, Search, Pencil, Trash2, ChevronRight, Package } from 'lucide-vue-next';
+import Modal from '../components/common/Modal.vue';
+import ConfirmModal from '../components/common/ConfirmModal.vue';
+
+const store = useKobichaStore();
+const { stockCampuran, stores, allJenisBarangList } = storeToRefs(store);
+
+const searchQuery = ref('');
+const filterTipe = ref('');
+const filterJenis = ref('');
+const sortBy = ref('name_asc');
+const expandedItemId = ref<string | null>(null);
+
+function toggleRow(id: string) {
+  expandedItemId.value = expandedItemId.value === id ? null : id;
+}
+
+const filteredList = computed(() => {
+  let list = [...stockCampuran.value];
+
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.toLowerCase();
+    list = list.filter(
+      c => c.namaBarang.toLowerCase().includes(q) || c.storeName.toLowerCase().includes(q) || c.jenis.toLowerCase().includes(q)
+    );
+  }
+
+  if (filterTipe.value === 'bahan_baku') {
+    list = list.filter(c => c.isBahanBaku === true);
+  } else if (filterTipe.value === 'packaging') {
+    list = list.filter(c => c.isBahanBaku === false);
+  }
+
+  if (filterJenis.value) {
+    list = list.filter(c => c.jenis === filterJenis.value);
+  }
+
+  list.sort((a, b) => {
+    if (sortBy.value === 'name_asc') return a.namaBarang.localeCompare(b.namaBarang);
+    if (sortBy.value === 'name_desc') return b.namaBarang.localeCompare(a.namaBarang);
+    if (sortBy.value === 'stock_desc') return b.jumlahStok - a.jumlahStok;
+    if (sortBy.value === 'stock_asc') return a.jumlahStok - b.jumlahStok;
+    if (sortBy.value === 'price_desc') return b.hargaPerPcs - a.hargaPerPcs;
+    if (sortBy.value === 'price_asc') return a.hargaPerPcs - b.hargaPerPcs;
+    if (sortBy.value === 'updated_at') return new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime();
+    return 0;
+  });
+
+  return list;
+});
+
+// Modal State
+const isModalOpen = ref(false);
+const isEditing = ref(false);
+const editingId = ref<string | null>(null);
+
+const form = ref({
+  namaBarang: '',
+  jenis: 'Pelarut / Solvent',
+  isBahanBaku: true,
+  ukuranMl: 1000,
+  storeId: '',
+  jumlahStok: 10,
+  hargaPerPcs: 65000,
+  gambar: '',
+  deskripsi: ''
+});
+
+function openAddModal() {
+  isEditing.value = false;
+  editingId.value = null;
+  form.value = {
+    namaBarang: '',
+    jenis: allJenisBarangList.value[0] || 'Pelarut / Solvent',
+    isBahanBaku: true,
+    ukuranMl: 1000,
+    storeId: '',
+    jumlahStok: 10,
+    hargaPerPcs: 65000,
+    gambar: '',
+    deskripsi: ''
+  };
+  isModalOpen.value = true;
+}
+
+function openEditModal(c: StockCampuran) {
+  isEditing.value = true;
+  editingId.value = c.id;
+  form.value = {
+    namaBarang: c.namaBarang,
+    jenis: c.jenis,
+    isBahanBaku: c.isBahanBaku ?? true,
+    ukuranMl: c.ukuranMl || 1000,
+    storeId: c.storeId || '',
+    jumlahStok: c.jumlahStok,
+    hargaPerPcs: c.hargaPerPcs,
+    gambar: c.gambar || '',
+    deskripsi: c.deskripsi || ''
+  };
+  isModalOpen.value = true;
+}
+
+function saveItem() {
+  if (!form.value.namaBarang.trim() || !form.value.jenis.trim()) return;
+  const selectedStore = stores.value.find(s => s.id === form.value.storeId);
+  const storeName = selectedStore?.namaToko || 'Toko Lainnya';
+
+  const hargaPerMl = form.value.isBahanBaku && form.value.ukuranMl > 0
+    ? Math.round(form.value.hargaPerPcs / form.value.ukuranMl)
+    : undefined;
+
+  if (isEditing.value && editingId.value) {
+    store.updateStockCampuran(editingId.value, {
+      namaBarang: form.value.namaBarang,
+      jenis: form.value.jenis,
+      isBahanBaku: form.value.isBahanBaku,
+      ukuranMl: form.value.isBahanBaku ? form.value.ukuranMl : undefined,
+      hargaPerMl,
+      storeId: form.value.storeId || undefined,
+      storeName,
+      jumlahStok: form.value.jumlahStok,
+      hargaPerPcs: form.value.hargaPerPcs,
+      gambar: form.value.gambar || undefined,
+      deskripsi: form.value.deskripsi || undefined
+    });
+  } else {
+    store.addStockCampuran({
+      namaBarang: form.value.namaBarang,
+      jenis: form.value.jenis,
+      isBahanBaku: form.value.isBahanBaku,
+      ukuranMl: form.value.isBahanBaku ? form.value.ukuranMl : undefined,
+      hargaPerMl,
+      storeId: form.value.storeId || undefined,
+      storeName,
+      jumlahStok: form.value.jumlahStok,
+      hargaPerPcs: form.value.hargaPerPcs,
+      gambar: form.value.gambar || undefined,
+      deskripsi: form.value.deskripsi || undefined
+    });
+  }
+  isModalOpen.value = false;
+}
+
+// Delete State
+const isDeleteModalOpen = ref(false);
+const itemToDelete = ref<StockCampuran | null>(null);
+
+function confirmDelete(item: StockCampuran) {
+  itemToDelete.value = item;
+  isDeleteModalOpen.value = true;
+}
+
+function doDelete() {
+  if (itemToDelete.value) {
+    store.deleteStockCampuran(itemToDelete.value.id);
+  }
+  isDeleteModalOpen.value = false;
+}
+</script>
