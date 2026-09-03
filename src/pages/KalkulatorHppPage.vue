@@ -163,7 +163,7 @@
               <thead class="text-[10px] text-stone-500 uppercase font-bold">
                 <tr>
                   <th class="py-2.5 px-3 w-10 text-left">#</th>
-                  <th class="py-2.5 px-3 text-left">Bahan Formula Liquid</th>
+                  <th class="py-2.5 px-3 text-left">Bahan Formula Resep</th>
                   <th class="py-2.5 px-3 text-left w-24">Tipe</th>
                   <th class="py-2.5 px-3 text-left w-24">Porsi (%)</th>
                   <th class="py-2.5 px-3 text-left w-28">Volume (ml)</th>
@@ -437,7 +437,7 @@
             {{ hppTitle || 'Perhitungan HPP Produk' }}
           </h3>
           <p class="text-xs text-stone-300 mt-1">
-            Botol {{ targetBottleMl }} ml • Liquid: {{ formatRupiah(subtotalLiquid) }} • Modal Lainnya: {{ formatRupiah(subtotalPackaging) }}
+            Botol {{ targetBottleMl }} ml • Modal Resep: {{ formatRupiah(subtotalLiquid) }} • Modal Lainnya: {{ formatRupiah(subtotalPackaging) }}
           </p>
         </div>
 
