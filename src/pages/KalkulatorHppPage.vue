@@ -619,16 +619,6 @@
             </button>
           </div>
         </div>
-
-        <div class="flex justify-end pt-2">
-          <button
-            type="button"
-            @click="isCampuranPickerModalOpen = false"
-            class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition-colors"
-          >
-            Selesai / Tutup
-          </button>
-        </div>
       </div>
     </Modal>
 
@@ -729,16 +719,6 @@
               <span>{{ selectedRacikanId === item.id ? 'Terpilih' : 'Pilih Racikan' }}</span>
             </button>
           </div>
-        </div>
-
-        <div class="flex justify-end pt-2">
-          <button
-            type="button"
-            @click="isRacikanPickerModalOpen = false"
-            class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition-colors"
-          >
-            Tutup
-          </button>
         </div>
       </div>
     </Modal>
