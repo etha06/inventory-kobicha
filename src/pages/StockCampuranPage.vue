@@ -121,7 +121,7 @@
                 <!-- 2. Kolom Tipe -->
                 <td class="py-3.5 px-4 text-left">
                   <span
-                    v-if="item.isBahanBaku"
+                    v-if="isItemBahanBaku(item)"
                     class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300 whitespace-nowrap inline-flex items-center gap-1"
                   >
                     Bahan Baku
@@ -143,7 +143,7 @@
 
                 <!-- Volume Kemasan / ml kalkulasi -->
                 <td class="py-3.5 px-4 text-left">
-                  <div v-if="item.isBahanBaku && item.ukuranMl" class="space-y-0.5 text-left">
+                  <div v-if="isItemBahanBaku(item) && item.ukuranMl" class="space-y-0.5 text-left">
                     <span class="font-mono font-bold text-stone-800 block text-xs">{{ item.ukuranMl }} ml</span>
                     <span class="text-[10px] text-amber-800 font-mono font-bold bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 inline-block">
                       {{ formatRupiah(store.getCampuranAveragePricePerMl(item.id)) }}/ml
@@ -212,7 +212,7 @@
                         <div class="pt-2 flex flex-wrap gap-4 text-xs">
                           <span class="text-stone-500">Toko Supplier: <strong class="text-stone-800">{{ item.storeName }}</strong></span>
                           <span class="text-stone-500">Harga Beli: <strong class="text-stone-800 font-mono">{{ formatRupiah(item.hargaPerPcs) }}</strong></span>
-                          <span v-if="item.isBahanBaku && item.ukuranMl" class="text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-medium">
+                          <span v-if="isItemBahanBaku(item) && item.ukuranMl" class="text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-medium">
                             Kalkulasi Modal / 1 ml: <strong class="font-mono">{{ formatRupiah(store.getCampuranAveragePricePerMl(item.id)) }}</strong> (dari kemasan {{ item.ukuranMl }} ml)
                           </span>
                         </div>
@@ -484,6 +484,25 @@ const storeOptions = computed(() => [
   ...stores.value.map(s => ({ value: s.id, label: s.namaToko }))
 ]);
 
+function isItemBahanBaku(c: StockCampuran): boolean {
+  if (c.isBahanBaku === true) return true;
+  if (c.isBahanBaku === false) return false;
+  const j = (c.jenis || '').toLowerCase();
+  const n = (c.namaBarang || '').toLowerCase();
+  return (
+    j.includes('pelarut') ||
+    j.includes('fixative') ||
+    j.includes('solvent') ||
+    j.includes('kimia') ||
+    j.includes('aditif') ||
+    n.includes('ethanol') ||
+    n.includes('alkohol') ||
+    n.includes('dpg') ||
+    n.includes('water') ||
+    n.includes('aquades')
+  );
+}
+
 function toggleRow(id: string) {
   expandedItemId.value = expandedItemId.value === id ? null : id;
 }
@@ -499,9 +518,9 @@ const filteredList = computed(() => {
   }
 
   if (filterTipe.value === 'bahan_baku') {
-    list = list.filter(c => c.isBahanBaku === true);
+    list = list.filter(c => isItemBahanBaku(c));
   } else if (filterTipe.value === 'packaging') {
-    list = list.filter(c => c.isBahanBaku === false);
+    list = list.filter(c => !isItemBahanBaku(c));
   }
 
   if (filterJenis.value) {
@@ -562,7 +581,7 @@ function openEditModal(c: StockCampuran) {
   form.value = {
     namaBarang: c.namaBarang,
     jenis: c.jenis,
-    isBahanBaku: c.isBahanBaku ?? true,
+    isBahanBaku: isItemBahanBaku(c),
     ukuranMl: c.ukuranMl || 1000,
     storeId: c.storeId || '',
     jumlahStok: c.jumlahStok,
