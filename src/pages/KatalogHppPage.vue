@@ -263,7 +263,7 @@
     <!-- ========================================================= -->
     <!-- COMPARE SECTION (Side-by-Side Comparison Cards at Bottom) -->
     <!-- ========================================================= -->
-    <div v-if="compareList.length > 0" class="bg-stone-900 text-stone-100 rounded-3xl p-6 sm:p-8 border border-stone-800 shadow-xl space-y-6">
+    <div class="bg-stone-900 text-stone-100 rounded-3xl p-6 sm:p-8 border border-stone-800 shadow-xl space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-800 pb-5">
         <div>
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30 mb-2">
@@ -279,15 +279,24 @@
             {{ selectedForCompare.length }} Analisis Dipilih
           </span>
           <button
+            v-if="selectedForCompare.length > 0"
             @click="selectedForCompare = []"
-            class="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-medium border border-stone-700"
+            class="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-medium border border-stone-700 transition-colors"
           >
             Reset Pilihan
           </button>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Empty State when nothing is checked -->
+      <div v-if="compareList.length === 0" class="py-12 text-center text-stone-400 bg-stone-950/40 rounded-2xl border border-stone-800/80">
+        <Scale class="w-8 h-8 mx-auto mb-2 opacity-50 text-amber-400" />
+        <p class="text-xs font-semibold text-stone-300">Belum Ada Produk Dipilih</p>
+        <p class="text-[11px] text-stone-500 mt-1">Centang kotak centang pada baris tabel di atas untuk membandingkan formula HPP secara berdampingan.</p>
+      </div>
+
+      <!-- Side-by-Side Cards -->
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <div
           v-for="item in compareList"
           :key="item.id"
@@ -337,18 +346,6 @@
                   class="bg-indigo-500 h-full"
                   :style="{ width: Math.round((item.subtotalPackaging / Math.max(item.grandTotalHpp, 1)) * 100) + '%' }"
                 ></div>
-              </div>
-            </div>
-
-            <!-- Profit Summary -->
-            <div class="mt-4 p-3 rounded-xl bg-stone-900/80 border border-stone-700/60 text-xs space-y-1">
-              <div class="flex justify-between text-stone-300">
-                <span>Target Margin:</span>
-                <span class="font-bold text-white font-mono">{{ item.targetMarginPercentage }}%</span>
-              </div>
-              <div class="flex justify-between text-emerald-400">
-                <span>Estimasi Profit / Botol:</span>
-                <span class="font-bold font-mono">+{{ formatRupiah(item.recommendedSellingPrice - item.grandTotalHpp) }}</span>
               </div>
             </div>
           </div>
