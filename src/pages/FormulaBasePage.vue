@@ -333,7 +333,14 @@ function openAddModal() {
   form.value = {
     nama: '',
     deskripsi: '',
-    ingredients: []
+    ingredients: [
+      {
+        id: 'ing-fo',
+        namaBahan: 'Fragrance Oil Concentrate',
+        percentage: 0,
+        isFragranceOilConcentrate: true
+      }
+    ]
   };
   isModalOpen.value = true;
 }
