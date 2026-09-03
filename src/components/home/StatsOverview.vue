@@ -44,7 +44,7 @@
 
         <div class="relative z-10 text-center space-y-1">
           <span class="text-[11px] font-semibold text-[#5a330a]/80 block uppercase tracking-wider">
-            Katalog Racikan
+            Total Resep Racikan
           </span>
           <div class="text-3xl sm:text-4xl font-extrabold font-rounded text-[#442505] leading-none py-1">
             {{ totalRacikanCount }}
@@ -55,9 +55,9 @@
         </div>
       </div>
 
-      <!-- 3. Soft Lilac Card: Analisis HPP -->
+      <!-- 3. Soft Lilac Card: Ready to Sell -->
       <div
-        @click="store.navigateTo('katalog-hpp')"
+        @click="store.navigateTo('ready-to-sell')"
         class="relative overflow-hidden rounded-[24px] p-5 cursor-pointer transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg group"
         style="background: linear-gradient(135deg, #cbb6d8 0%, #b29ac2 100%);"
       >
@@ -68,13 +68,13 @@
 
         <div class="relative z-10 text-center space-y-1">
           <span class="text-[11px] font-semibold text-[#442854]/80 block uppercase tracking-wider">
-            Analisis HPP
+            Ready To Sell
           </span>
           <div class="text-3xl sm:text-4xl font-extrabold font-rounded text-[#321c3f] leading-none py-1">
-            {{ totalHppCount }}
+            {{ totalReadyToSellCount }}
           </div>
           <span class="text-[11px] text-[#442854]/70 font-medium block">
-            Kalkulasi Biaya
+            Produk Siap Jual
           </span>
         </div>
       </div>
@@ -116,6 +116,6 @@ const {
   lowStockFoCount,
   totalCampuranCount,
   totalRacikanCount,
-  totalHppCount
+  totalReadyToSellCount
 } = storeToRefs(store);
 </script>
