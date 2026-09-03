@@ -63,11 +63,11 @@
     </div>
 
     <!-- Table Racikan -->
-    <div class="bg-white rounded-[24px] border border-sage-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
-            <tr class="bg-sage-50/80 border-b border-sage-200 text-forest-700 uppercase tracking-wider text-[10px] font-bold">
+            <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-3 w-10 text-left"></th>
               <th class="py-3.5 px-4 text-left">Nama Racikan</th>
               <th class="py-3.5 px-4 text-left">Fragrance Oil yang Dipakai</th>
@@ -77,9 +77,9 @@
               <th class="py-3.5 px-4 text-left w-28">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-sage-100 text-stone-800">
+          <tbody class="divide-y divide-stone-100 text-stone-800">
             <tr v-if="filteredRacikan.length === 0">
-              <td colspan="7" class="py-12 text-center text-sage-400">
+              <td colspan="7" class="py-12 text-center text-stone-400">
                 <Scroll class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Belum ada data racikan parfum. Gunakan kalkulator racikan untuk membuat dan menyimpan resep.
               </td>
@@ -88,8 +88,8 @@
             <tr
               v-for="racikan in filteredRacikan"
               :key="racikan.id"
-              class="hover:bg-sage-50/40 transition-colors"
-              :class="selectedForCompare.includes(racikan.id) ? 'bg-peach-50/60 font-medium' : ''"
+              class="table-row-hover transition-colors"
+              :class="selectedForCompare.includes(racikan.id) ? 'bg-amber-50/60 font-medium' : ''"
             >
               <!-- Checkbox Compare -->
               <td class="py-3.5 px-4 text-left" @click.stop>
@@ -97,7 +97,7 @@
                   type="checkbox"
                   :value="racikan.id"
                   v-model="selectedForCompare"
-                  class="rounded border-sage-300 text-peach-500 focus:ring-peach-500 cursor-pointer"
+                  class="rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
                   title="Centang untuk bandingkan"
                 />
               </td>
@@ -118,10 +118,10 @@
                   <div
                     v-for="fo in racikan.fragranceOils"
                     :key="fo.id"
-                    class="text-[11px] flex items-center justify-between bg-sage-50/60 px-2 py-0.5 rounded-lg border border-sage-200/80"
+                    class="text-[11px] flex items-center justify-between bg-stone-50 px-2 py-0.5 rounded border border-stone-200"
                   >
                     <span class="text-stone-800 truncate mr-2">{{ fo.fragranceOilName }}</span>
-                    <span class="font-bold font-mono text-peach-700 flex-shrink-0">{{ fo.tetes }} tetes</span>
+                    <span class="font-bold font-mono text-amber-800 flex-shrink-0">{{ fo.tetes }} tetes</span>
                   </div>
                 </div>
               </td>
@@ -149,13 +149,13 @@
               <td class="py-3.5 px-4 text-left">
                 <span
                   v-if="racikan.isCommission"
-                  class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-peach-100 text-peach-900 border border-peach-300 inline-block"
+                  class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200 inline-block"
                 >
                   Commission
                 </span>
                 <span
                   v-else
-                  class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-sage-100 text-forest-800 border border-sage-200 inline-block"
+                  class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-stone-100 text-stone-600 border border-stone-200 inline-block"
                 >
                   Regular
                 </span>
@@ -166,14 +166,14 @@
                   <div class="flex items-center justify-start gap-1.5">
                     <button
                       @click="openInCalculator(racikan.id)"
-                      class="p-1.5 rounded-lg text-sage-600 hover:text-forest-900 hover:bg-sage-100 text-xs transition-colors"
+                      class="p-1.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 border border-blue-200 text-xs transition-colors"
                       title="Buka & Edit Racikan di Kalkulator"
                     >
                       <FlaskConical class="w-3.5 h-3.5" />
                     </button>
                     <button
                       @click="confirmDelete(racikan)"
-                      class="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 text-xs transition-colors"
+                      class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 text-xs transition-colors"
                       title="Hapus Resep"
                     >
                       <Trash2 class="w-3.5 h-3.5" />
@@ -189,25 +189,25 @@
     <!-- ========================================================= -->
     <!-- COMPARE SECTION (Side-by-Side Comparison Cards at Bottom) -->
     <!-- ========================================================= -->
-    <div class="bg-forest-900 text-stone-100 rounded-[24px] p-6 sm:p-8 border border-forest-800 shadow-md space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-forest-800 pb-5">
+    <div class="bg-stone-900 text-stone-100 rounded-3xl p-6 sm:p-8 border border-stone-800 shadow-xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-800 pb-5">
         <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-950/80 text-sage-300 text-xs font-semibold border border-forest-700/80 mb-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30 mb-2">
             <Scale class="w-3.5 h-3.5" />
             <span>Fitur Komparasi Formula</span>
           </div>
-          <h3 class="text-xl font-bold font-rounded text-white">Bandingkan Racikan Fragrance (Side-by-Side)</h3>
-          <p class="text-xs text-sage-400 mt-1">Centang 2 atau lebih resep di tabel atas untuk membandingkan piramida tetes dan aroma</p>
+          <h3 class="text-xl font-bold font-serif text-white">Bandingkan Racikan Fragrance (Side-by-Side)</h3>
+          <p class="text-xs text-stone-400 mt-1">Centang 2 atau lebih resep di tabel atas untuk membandingkan piramida tetes dan aroma</p>
         </div>
 
         <div class="flex items-center gap-2">
-          <span class="text-xs text-sage-400 font-mono">
+          <span class="text-xs text-stone-400 font-mono">
             {{ selectedForCompare.length }} Resep Dipilih
           </span>
           <button
             v-if="selectedForCompare.length > 0"
             @click="selectedForCompare = []"
-            class="px-3.5 py-1.5 rounded-xl bg-forest-800 hover:bg-forest-700 text-sage-300 text-xs font-medium border border-forest-700 transition-colors"
+            class="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-medium border border-stone-700"
           >
             Reset Pilihan
           </button>
@@ -227,17 +227,17 @@
           class="bg-stone-800/90 rounded-2xl border border-stone-700/80 p-5 space-y-4 flex flex-col justify-between"
         >
           <div>
-            <div class="flex items-start justify-between gap-2 border-b border-forest-800 pb-3">
+            <div class="flex items-start justify-between gap-2 border-b border-stone-700/60 pb-3">
               <div>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-peach-500/20 text-peach-300 border border-peach-500/30">
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
                   {{ r.tanggalDibuat }}
                 </span>
-                <h4 class="text-base font-bold text-white font-rounded mt-1">{{ r.nama }}</h4>
-                <p v-if="r.formulaBaseName" class="text-xs text-sage-400">{{ r.formulaBaseName }}</p>
+                <h4 class="text-base font-bold text-white font-serif mt-1">{{ r.nama }}</h4>
+                <p v-if="r.formulaBaseName" class="text-xs text-stone-400">{{ r.formulaBaseName }}</p>
               </div>
               <button
                 @click="removeFromCompare(r.id)"
-                class="text-sage-400 hover:text-white text-xs p-1"
+                class="text-stone-400 hover:text-stone-200 text-xs p-1"
                 title="Hapus dari perbandingan"
               >
                 <X class="w-4 h-4" />
@@ -246,7 +246,7 @@
 
             <!-- Notes Tags -->
             <div class="mt-3">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-sage-400 block mb-1">Aroma Notes:</span>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block mb-1">Aroma Notes:</span>
               <div class="flex flex-wrap gap-1">
                 <span
                   v-for="n in r.notes"
@@ -261,7 +261,7 @@
 
             <!-- FO Drops List & Percentages -->
             <div class="mt-4 space-y-2">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-sage-400 block">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block">
                 Komposisi Tetes (Total: {{ getTotalDrops(r) }} Tetes):
               </span>
               
@@ -269,17 +269,17 @@
                 <div
                   v-for="fo in r.fragranceOils"
                   :key="fo.id"
-                  class="bg-forest-900/80 p-2 rounded-xl border border-forest-800 space-y-1"
+                  class="bg-stone-900/80 p-2 rounded-xl border border-stone-700/50 space-y-1"
                 >
                   <div class="flex justify-between text-xs">
                     <span class="text-stone-200 font-medium truncate mr-2">{{ fo.fragranceOilName }}</span>
-                    <span class="font-bold text-peach-300 font-mono">
+                    <span class="font-bold text-amber-400 font-mono">
                       {{ fo.tetes }} tetes ({{ Math.round((fo.tetes / Math.max(getTotalDrops(r), 1)) * 100) }}%)
                     </span>
                   </div>
-                  <div class="w-full bg-forest-950 h-1.5 rounded-full overflow-hidden">
+                  <div class="w-full bg-stone-800 h-1.5 rounded-full overflow-hidden">
                     <div
-                      class="h-full bg-peach-500 rounded-full"
+                      class="h-full bg-amber-500 rounded-full"
                       :style="{ width: Math.round((fo.tetes / Math.max(getTotalDrops(r), 1)) * 100) + '%' }"
                     ></div>
                   </div>
@@ -289,13 +289,13 @@
           </div>
 
           <!-- Bottom Action inside Compare Card -->
-          <div class="pt-3 border-t border-forest-800 flex items-center justify-between">
-            <span class="text-[11px] text-sage-400">
+          <div class="pt-3 border-t border-stone-700/60 flex items-center justify-between">
+            <span class="text-[11px] text-stone-400">
               {{ r.isCommission ? 'Commission Order' : 'Regular Formula' }}
             </span>
             <button
               @click="openInCalculator(r.id)"
-              class="px-3.5 py-1.5 rounded-xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1"
+              class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition-colors flex items-center gap-1"
             >
               <span>Buka di Kalkulator</span>
               <span>→</span>

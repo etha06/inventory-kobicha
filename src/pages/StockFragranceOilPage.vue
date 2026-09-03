@@ -122,12 +122,12 @@
       </div>
     </div>
 
-    <!-- Table View of Fragrance Oils -->
-    <div class="bg-white rounded-[24px] border border-sage-100 shadow-sm overflow-hidden">
+    <!-- Table -->
+    <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
-            <tr class="bg-sage-50/80 border-b border-sage-200 text-forest-700 uppercase tracking-wider text-[10px] font-bold">
+            <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-4 w-10 text-left">#</th>
               <th class="py-3.5 px-4 text-left">Nama FO</th>
               <th class="py-3.5 px-4 text-left">Jenis Liquid</th>
@@ -141,9 +141,9 @@
               <th class="py-3.5 px-4 text-left w-24">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-sage-100 text-stone-800">
+          <tbody class="divide-y divide-stone-100 text-stone-800">
             <tr v-if="filteredList.length === 0">
-              <td colspan="11" class="py-12 text-center text-sage-400">
+              <td colspan="11" class="py-12 text-center text-stone-400">
                 <Droplet class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Tidak ada data Fragrance Oil ditemukan.
               </td>
@@ -153,8 +153,8 @@
               <!-- Main Row (Click to expand) -->
               <tr
                 @click="toggleRow(item.id)"
-                class="hover:bg-sage-50/40 transition-colors cursor-pointer"
-                :class="expandedItemId === item.id ? 'bg-peach-50/60 font-medium' : ''"
+                class="table-row-hover transition-colors cursor-pointer"
+                :class="expandedItemId === item.id ? 'bg-amber-50/60 font-medium' : ''"
               >
                 <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
                   {{ idx + 1 }}
@@ -164,7 +164,7 @@
                 <td class="py-3.5 px-4 text-left">
                   <div class="flex items-center gap-2">
                     <ChevronRight
-                      class="w-3.5 h-3.5 text-forest-700 transition-transform duration-150"
+                      class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150"
                       :class="expandedItemId === item.id ? 'rotate-90' : ''"
                     />
                     <span class="font-bold text-stone-900 text-xs">{{ item.nama }}</span>
@@ -173,7 +173,7 @@
 
                 <!-- 2. Kolom Jenis Liquid -->
                 <td class="py-3.5 px-4 text-left">
-                  <span class="px-2 py-0.5 rounded-md bg-sage-50 text-forest-800 border border-sage-200 text-[10px] font-medium whitespace-nowrap">
+                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-medium whitespace-nowrap">
                     {{ item.jenisLiquid }}
                   </span>
                 </td>
@@ -219,14 +219,14 @@
                 <!-- Pyramid (Without "Note" word) -->
                 <td class="py-3.5 px-4 text-left">
                   <span
-                    class="px-2 py-0.5 rounded text-[10px] font-bold border whitespace-nowrap inline-block"
+                    class="px-2 py-0.5 rounded-md text-[10px] font-bold border whitespace-nowrap"
                     :class="PYRAMID_BADGE_MAP[item.pyramid].bg"
                   >
                     {{ item.pyramid }}
                   </span>
                 </td>
 
-                <td class="py-3.5 px-4 text-left text-[11px] text-stone-500 whitespace-nowrap">
+                <td class="py-3.5 px-4 text-left text-[10px] text-stone-500 whitespace-nowrap">
                   {{ formatDateIndo(item.updatedAt || item.createdAt) }}
                 </td>
 
@@ -235,14 +235,14 @@
                   <div class="flex items-center justify-start gap-1.5">
                     <button
                       @click="openEditModal(item)"
-                      class="p-1.5 rounded-lg text-sage-600 hover:text-forest-900 hover:bg-sage-100 text-xs transition-colors"
+                      class="p-1.5 rounded-md border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
                       title="Edit Fragrance Oil"
                     >
                       <Pencil class="w-3.5 h-3.5" />
                     </button>
                     <button
                       @click="confirmDelete(item)"
-                      class="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 text-xs transition-colors"
+                      class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
                       title="Hapus Fragrance Oil"
                     >
                       <Trash2 class="w-3.5 h-3.5" />
@@ -252,15 +252,15 @@
               </tr>
 
               <!-- Expandable Inline Detail Sub-Row -->
-              <tr v-if="expandedItemId === item.id" class="bg-sage-50/40 border-b border-sage-200">
+              <tr v-if="expandedItemId === item.id" class="bg-amber-50/30 border-b border-amber-200/70">
                 <td colspan="11" class="p-5">
-                  <div class="bg-white rounded-2xl p-5 border border-sage-200/80 shadow-sm space-y-4">
+                  <div class="bg-white rounded-xl p-5 border border-amber-200/80 shadow-sm space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                       <div class="space-y-2 flex-1">
                         <div class="flex items-center gap-2">
-                          <Droplet class="w-4 h-4 text-peach-600" />
-                          <span class="text-base font-bold text-forest-900 font-rounded">{{ item.nama }}</span>
-                          <span class="px-2 py-0.5 rounded bg-sage-50 text-forest-800 text-xs border border-sage-200">{{ item.jenisLiquid }}</span>
+                          <Droplet class="w-4 h-4 text-amber-700" />
+                          <span class="text-base font-bold text-stone-900 font-serif">{{ item.nama }}</span>
+                          <span class="px-2 py-0.5 rounded bg-stone-100 text-stone-700 text-xs border">{{ item.jenisLiquid }}</span>
                           <span class="px-2 py-0.5 rounded font-bold text-xs" :class="PYRAMID_BADGE_MAP[item.pyramid].bg">
                             {{ item.pyramid }}
                           </span>
@@ -276,33 +276,33 @@
                         <div class="flex flex-wrap gap-4 text-xs text-stone-600 pt-1">
                           <span>Toko Supplier: <strong class="text-stone-800">{{ item.storeName }}</strong></span>
                           <span>Kemasan Utama: <strong class="text-stone-800">{{ item.botolMl }} ml</strong></span>
-                          <span>Rata-rata Harga/ml: <strong class="text-peach-800 font-mono">{{ formatRupiah(store.getFoAveragePricePerMl(item.id)) }} / ml</strong></span>
+                          <span>Rata-rata Harga/ml: <strong class="text-amber-800">{{ formatRupiah(store.getFoAveragePricePerMl(item.id)) }} / ml</strong></span>
                         </div>
                       </div>
 
-                      <div v-if="item.gambar" class="w-24 h-24 rounded-xl overflow-hidden border border-sage-200">
+                      <div v-if="item.gambar" class="w-24 h-24 rounded-xl overflow-hidden border">
                         <img :src="item.gambar" alt="Product" class="w-full h-full object-cover" />
                       </div>
                     </div>
 
                     <!-- Price Tiers Table & History -->
-                    <div class="pt-3 border-t border-sage-100">
-                      <h5 class="text-xs font-bold text-forest-900 uppercase tracking-wider mb-2">
+                    <div class="pt-3 border-t border-stone-100">
+                      <h5 class="text-xs font-bold text-stone-800 uppercase tracking-wider mb-2">
                         Rincian Varian Harga Beli:
                       </h5>
                       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div
                           v-for="tier in item.priceTiers"
                           :key="tier.id"
-                          class="p-3 rounded-xl bg-sage-50/60 border border-sage-200 flex items-center justify-between"
+                          class="p-3 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-between"
                         >
                           <div>
                             <span class="text-xs font-bold text-stone-900 block">{{ tier.ml }} ml</span>
-                            <span class="text-xs text-stone-600 font-mono">{{ formatRupiah(tier.harga) }}</span>
+                            <span class="text-xs text-stone-600">{{ formatRupiah(tier.harga) }}</span>
                           </div>
                           <div class="text-right">
-                            <span class="text-[10px] uppercase font-bold text-forest-700 block">Kalkulasi / ml</span>
-                            <span class="text-xs font-bold font-mono text-peach-800">{{ formatRupiah(tier.hargaPerMl) }}</span>
+                            <span class="text-[10px] uppercase font-bold text-amber-700 block">Kalkulasi / ml</span>
+                            <span class="text-xs font-bold text-amber-950">{{ formatRupiah(tier.hargaPerMl) }}</span>
                           </div>
                         </div>
                       </div>

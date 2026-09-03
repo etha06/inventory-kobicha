@@ -110,12 +110,12 @@
       </div>
     </div>
 
-    <!-- Table View of Barang Campuran -->
-    <div class="bg-white rounded-[24px] border border-sage-100 shadow-sm overflow-hidden">
+    <!-- Table -->
+    <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
-            <tr class="bg-sage-50/80 border-b border-sage-200 text-forest-700 uppercase tracking-wider text-[10px] font-bold">
+            <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-4 w-10 text-left">#</th>
               <th class="py-3.5 px-4 text-left">Nama Barang</th>
               <th class="py-3.5 px-4 text-left">Tipe</th>
@@ -128,9 +128,9 @@
               <th class="py-3.5 px-4 text-left w-24">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-sage-100 text-stone-800">
+          <tbody class="divide-y divide-stone-100 text-stone-800">
             <tr v-if="filteredList.length === 0">
-              <td colspan="10" class="py-12 text-center text-sage-400">
+              <td colspan="10" class="py-12 text-center text-stone-400">
                 <Package class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Tidak ada data barang campuran ditemukan.
               </td>
@@ -140,8 +140,8 @@
               <!-- Main Row (Click to expand) -->
               <tr
                 @click="toggleRow(item.id)"
-                class="hover:bg-sage-50/40 transition-colors cursor-pointer"
-                :class="expandedItemId === item.id ? 'bg-peach-50/60 font-medium' : ''"
+                class="table-row-hover transition-colors cursor-pointer"
+                :class="expandedItemId === item.id ? 'bg-amber-50/60 font-medium' : ''"
               >
                 <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
                   {{ idx + 1 }}
@@ -151,7 +151,7 @@
                 <td class="py-3.5 px-4 text-left">
                   <div class="flex items-center gap-2">
                     <ChevronRight
-                      class="w-3.5 h-3.5 text-forest-700 transition-transform duration-150 flex-shrink-0"
+                      class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150 flex-shrink-0"
                       :class="expandedItemId === item.id ? 'rotate-90' : ''"
                     />
                     <span class="font-bold text-stone-900 text-xs">{{ item.namaBarang }}</span>
@@ -162,13 +162,13 @@
                 <td class="py-3.5 px-4 text-left">
                   <span
                     v-if="isItemBahanBaku(item)"
-                    class="px-2 py-0.5 rounded-full bg-peach-100 text-peach-900 text-[10px] font-bold border border-peach-300 whitespace-nowrap inline-flex items-center gap-1"
+                    class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300 whitespace-nowrap inline-flex items-center gap-1"
                   >
                     Bahan Baku
                   </span>
                   <span
                     v-else
-                    class="px-2 py-0.5 rounded-full bg-sage-100 text-forest-800 text-[10px] font-medium border border-sage-200 whitespace-nowrap inline-flex items-center gap-1"
+                    class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-medium border border-indigo-200 whitespace-nowrap inline-flex items-center gap-1"
                   >
                     Kemasan
                   </span>
@@ -176,7 +176,7 @@
 
                 <!-- 3. Kolom Jenis Barang -->
                 <td class="py-3.5 px-4 text-left">
-                  <span class="px-2 py-0.5 rounded-md bg-sage-50 text-forest-800 border border-sage-200 text-[11px] font-medium whitespace-nowrap">
+                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium whitespace-nowrap">
                     {{ item.jenis }}
                   </span>
                 </td>
@@ -185,7 +185,7 @@
                 <td class="py-3.5 px-4 text-left">
                   <div v-if="isItemBahanBaku(item) && item.ukuranMl" class="space-y-0.5 text-left">
                     <span class="font-mono font-bold text-stone-800 block text-xs">{{ item.ukuranMl }} ml</span>
-                    <span class="text-[10px] text-peach-800 font-mono font-bold bg-peach-50 px-1.5 py-0.5 rounded border border-peach-200 inline-block">
+                    <span class="text-[10px] text-amber-800 font-mono font-bold bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 inline-block">
                       {{ formatRupiah(store.getCampuranAveragePricePerMl(item.id)) }}/ml
                     </span>
                   </div>
@@ -205,18 +205,17 @@
                     ></span>
                     {{ item.currentStock || (item.jumlahStok <= 0 ? 'Habis' : (item.jumlahStok <= 5 ? 'Dikit' : 'Banyak')) }}
                   </span>
-                  <div v-else class="space-y-0.5">
-                    <span class="font-mono font-bold text-stone-800 block text-xs">{{ item.jumlahStok }} pcs</span>
-                    <span class="text-[10px] text-stone-500">Stok Kemasan</span>
-                  </div>
+                  <span v-else class="font-mono font-bold text-stone-800 text-xs">
+                    {{ item.jumlahStok }} pcs
+                  </span>
                 </td>
 
-                <!-- 4. Kolom Toko Supplier -->
-                <td class="py-3.5 px-4 text-left text-stone-600 text-xs">
-                  {{ item.storeName }}
+                <td class="py-3.5 px-4 text-left text-stone-600">
+                  <span class="font-medium text-stone-700 truncate max-w-[120px] block" :title="item.storeName">
+                    {{ item.storeName }}
+                  </span>
                 </td>
 
-                <!-- 5. Kolom Harga Beli -->
                 <td class="py-3.5 px-4 text-left font-mono font-bold text-stone-900">
                   {{ formatRupiah(item.hargaPerPcs) }}
                 </td>
@@ -230,14 +229,14 @@
                   <div class="flex items-center justify-start gap-1.5">
                     <button
                       @click="openEditModal(item)"
-                      class="p-1.5 rounded-lg text-sage-600 hover:text-forest-900 hover:bg-sage-100 text-xs transition-colors"
+                      class="p-1.5 rounded-md border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
                       title="Edit Barang"
                     >
                       <Pencil class="w-3.5 h-3.5" />
                     </button>
                     <button
                       @click="confirmDelete(item)"
-                      class="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 text-xs transition-colors"
+                      class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
                       title="Hapus Barang"
                     >
                       <Trash2 class="w-3.5 h-3.5" />
@@ -247,15 +246,15 @@
               </tr>
 
               <!-- Expandable Inline Detail Sub-Row -->
-              <tr v-if="expandedItemId === item.id" class="bg-sage-50/40 border-b border-sage-200">
+              <tr v-if="expandedItemId === item.id" class="bg-amber-50/30 border-b border-amber-200/70">
                 <td colspan="10" class="p-5">
-                  <div class="bg-white rounded-2xl p-4 border border-sage-200/80 shadow-sm space-y-3">
+                  <div class="bg-white rounded-xl p-4 border border-amber-200/80 shadow-sm space-y-3">
                     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                       <div class="space-y-1.5 flex-1">
-                        <h4 class="font-bold text-forest-900 text-xs flex items-center gap-2">
-                          <Package class="w-4 h-4 text-peach-600" />
+                        <h4 class="font-bold text-stone-900 text-xs flex items-center gap-2">
+                          <Package class="w-4 h-4 text-amber-700" />
                           <span>Detail: {{ item.namaBarang }}</span>
-                          <span class="text-[11px] font-normal text-sage-600">({{ item.jenis }})</span>
+                          <span class="text-[11px] font-normal text-stone-500">({{ item.jenis }})</span>
                         </h4>
                         <p v-if="item.deskripsi" class="text-xs text-stone-600 leading-relaxed">
                           {{ item.deskripsi }}
@@ -267,13 +266,13 @@
                         <div class="pt-2 flex flex-wrap gap-4 text-xs">
                           <span class="text-stone-500">Toko Supplier: <strong class="text-stone-800">{{ item.storeName }}</strong></span>
                           <span class="text-stone-500">Harga Beli: <strong class="text-stone-800 font-mono">{{ formatRupiah(item.hargaPerPcs) }}</strong></span>
-                          <span v-if="isItemBahanBaku(item) && item.ukuranMl" class="text-peach-900 bg-peach-50 px-2 py-0.5 rounded border border-peach-200 font-medium">
+                          <span v-if="isItemBahanBaku(item) && item.ukuranMl" class="text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-medium">
                             Kalkulasi Modal / 1 ml: <strong class="font-mono">{{ formatRupiah(store.getCampuranAveragePricePerMl(item.id)) }}</strong> (dari kemasan {{ item.ukuranMl }} ml)
                           </span>
                         </div>
                       </div>
 
-                      <div v-if="item.gambar" class="w-20 h-20 rounded-xl overflow-hidden border border-sage-200">
+                      <div v-if="item.gambar" class="w-20 h-20 rounded-xl overflow-hidden border">
                         <img :src="item.gambar" alt="Product" class="w-full h-full object-cover" />
                       </div>
                     </div>
