@@ -426,65 +426,6 @@
       </div>
     </div>
 
-    <!-- TOTAL HPP SUMMARY -->
-    <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-stone-800 pb-6">
-        <div>
-          <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold block mb-1">
-            Total HPP Produk
-          </span>
-          <h3 class="text-2xl font-bold font-serif text-white">
-            {{ hppTitle || 'Perhitungan HPP Produk' }}
-          </h3>
-          <p class="text-xs text-stone-300 mt-1">
-            Botol {{ targetBottleMl }} ml • Modal Racikan: {{ formatRupiah(subtotalLiquid) }} • Modal Lainnya: {{ formatRupiah(subtotalPackaging) }}
-          </p>
-        </div>
-
-        <!-- Big HPP Badges -->
-        <div class="flex items-center gap-3">
-          <div class="bg-stone-950/80 border border-stone-700/80 px-5 py-3 rounded-2xl text-center">
-            <span class="text-[10px] uppercase font-bold text-stone-400 block">Grand Total HPP / Botol</span>
-            <span class="text-2xl font-bold font-mono text-amber-400">{{ formatRupiah(grandTotalHpp) }}</span>
-          </div>
-
-          <div class="bg-stone-950/80 border border-stone-700/80 px-4 py-3 rounded-2xl text-center">
-            <span class="text-[10px] uppercase font-bold text-stone-400 block">Biaya Modal</span>
-            <span class="text-lg font-bold font-mono text-white">{{ formatRupiah(hppPerMl) }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cost Split Progress Bar -->
-      <div class="space-y-2">
-        <div class="flex justify-between text-xs text-stone-300">
-          <span>🧪 Porsi Modal Racikan: <strong>{{ Math.round((subtotalLiquid / Math.max(grandTotalHpp, 1)) * 100) }}%</strong> ({{ formatRupiah(subtotalLiquid) }})</span>
-          <span>📦 Porsi Modal Lainnya: <strong>{{ Math.round((subtotalPackaging / Math.max(grandTotalHpp, 1)) * 100) }}%</strong> ({{ formatRupiah(subtotalPackaging) }})</span>
-        </div>
-        <div class="w-full bg-stone-950 h-3 rounded-full overflow-hidden flex border border-stone-800">
-          <div
-            class="bg-amber-500 h-full transition-all duration-300"
-            :style="{ width: Math.round((subtotalLiquid / Math.max(grandTotalHpp, 1)) * 100) + '%' }"
-          ></div>
-          <div
-            class="bg-indigo-500 h-full transition-all duration-300"
-            :style="{ width: Math.round((subtotalPackaging / Math.max(grandTotalHpp, 1)) * 100) + '%' }"
-          ></div>
-        </div>
-      </div>
-
-      <!-- Action -->
-      <div class="pt-2 flex justify-end gap-3">
-        <button
-          @click="saveHpp"
-          class="px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white text-sm font-bold shadow-lg shadow-amber-950/50 transition-all transform active:scale-95 flex items-center gap-2"
-        >
-          <Save class="w-4 h-4" />
-          <span>Simpan Hasil ke Katalog HPP</span>
-        </button>
-      </div>
-    </div>
-
     <!-- Modal Picker: Ambil dari Stok Campuran & Kemasan -->
     <Modal
       :isOpen="isCampuranPickerModalOpen"
