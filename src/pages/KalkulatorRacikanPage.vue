@@ -431,7 +431,7 @@
               class="px-2.5 py-1 rounded-lg transition-all"
               :class="foPickerPyramid === 'Top' ? 'bg-orange-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
-              Top ☁️
+              Top
             </button>
             <button
               type="button"
@@ -439,7 +439,7 @@
               class="px-2.5 py-1 rounded-lg transition-all"
               :class="foPickerPyramid === 'Middle' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
-              Heart 🌸
+              Heart
             </button>
             <button
               type="button"
@@ -447,7 +447,7 @@
               class="px-2.5 py-1 rounded-lg transition-all"
               :class="foPickerPyramid === 'Bottom' ? 'bg-fuchsia-700 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
-              Base 🪵
+              Base
             </button>
           </div>
         </div>
