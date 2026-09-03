@@ -11,7 +11,6 @@
       <div
         v-if="isOpen"
         class="fixed inset-0 z-50 bg-stone-950/60 backdrop-blur-xs flex items-center justify-center p-4"
-        @click.self="handleCancel"
       >
         <div class="bg-white rounded-xl shadow-2xl border border-stone-200 max-w-md w-full p-6 sm:p-7 text-center transition-all">
           <div

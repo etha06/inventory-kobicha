@@ -16,12 +16,19 @@
       ]"
     >
       <!-- Brand Logo & Header (Image 2 style) -->
-      <div class="h-20 px-5 flex items-center justify-between border-b border-white/10 bg-black/5">
-        <div class="flex items-center gap-3 overflow-hidden cursor-pointer" @click="store.navigateTo('home')">
+      <div
+        class="h-20 flex items-center border-b border-white/10 bg-black/5 transition-all"
+        :class="isCollapsed ? 'justify-center px-2' : 'justify-between px-5'"
+      >
+        <div
+          v-if="!isCollapsed"
+          class="flex items-center gap-3 overflow-hidden cursor-pointer"
+          @click="store.navigateTo('home')"
+        >
           <div class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-inner flex-shrink-0 text-white font-bold border border-white/30">
             <Droplet class="w-5 h-5 fill-white text-white" />
           </div>
-          <div v-show="!isCollapsed" class="transition-opacity duration-200">
+          <div class="transition-opacity duration-200">
             <h1 class="font-extrabold text-lg tracking-tight text-white font-rounded flex items-center gap-1.5">
               Kobicha
             </h1>
@@ -32,7 +39,7 @@
         <!-- Desktop Collapse / Menu Button (Image 2 Hamburger toggle) -->
         <button
           @click="$emit('toggle-collapse')"
-          class="hidden lg:flex w-8 h-8 rounded-xl text-white/80 hover:text-white hover:bg-white/15 items-center justify-center transition-colors"
+          class="hidden lg:flex w-10 h-10 rounded-xl text-white/80 hover:text-white hover:bg-white/15 items-center justify-center transition-colors"
           :title="isCollapsed ? 'Perluas Sidebar' : 'Ciutkan Sidebar'"
         >
           <Menu v-if="isCollapsed" class="w-5 h-5" />

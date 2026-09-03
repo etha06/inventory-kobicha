@@ -67,7 +67,7 @@ const props = withDefaults(
   }>(),
   {
     maxWidth: 'lg',
-    closeOnBackdrop: true
+    closeOnBackdrop: false
   }
 );
 

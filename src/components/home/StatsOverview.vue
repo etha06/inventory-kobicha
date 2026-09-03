@@ -95,7 +95,7 @@
             Stok Alert
           </span>
           <div class="text-3xl sm:text-4xl font-extrabold font-rounded text-[#481717] leading-none py-1">
-            {{ String(lowStockFoCount).padStart(2, '0') }}
+            {{ lowStockFoCount }}
           </div>
           <span class="text-[11px] text-[#5e2323]/70 font-medium block">
             {{ lowStockFoCount > 0 ? 'Perlu Restock' : 'Semua Stok Aman' }}
