@@ -424,7 +424,7 @@
               <span class="font-semibold text-stone-200 truncate block">{{ simulatedLinkedHpp.nama }} ({{ simulatedLinkedHpp.targetBottleMl }}ml)</span>
             </div>
             <div class="bg-stone-900/90 p-3 rounded-xl border border-stone-800">
-              <span class="text-[10px] uppercase font-bold text-amber-400/90 block mb-0.5">Modal Resep Racikan (Liquid)</span>
+              <span class="text-[10px] uppercase font-bold text-amber-400/90 block mb-0.5">Modal Resep Racikan</span>
               <span class="font-bold font-mono text-amber-300 text-sm">{{ formatRupiah(simulatedLinkedHpp.subtotalLiquid || 0) }}</span>
             </div>
             <div class="bg-stone-900/90 p-3 rounded-xl border border-stone-800">
