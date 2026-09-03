@@ -419,16 +419,15 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                  <div class="w-24 relative">
+                  <div class="w-20">
                     <input
                       v-model.number="bItem.qty"
                       type="number"
                       min="1"
                       required
                       placeholder="Qty"
-                      class="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 text-xs font-semibold text-center pr-6 text-stone-900"
+                      class="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 text-xs font-semibold text-center text-stone-900"
                     />
-                    <span class="absolute right-2 top-2 text-[10px] font-bold text-stone-400">x</span>
                   </div>
 
                   <button
