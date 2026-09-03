@@ -517,7 +517,7 @@ const sortOptions = [
   { value: 'newest', label: 'Terbaru Dihitung' },
   { value: 'hpp_asc', label: 'HPP / Botol Termurah' },
   { value: 'hpp_desc', label: 'HPP / Botol Termahal' },
-  { value: 'name_asc', label: 'Nama Analisis (A - Z)' }
+  { value: 'name_asc', label: 'Nama Produk (A - Z)' }
 ];
 
 const filteredHppList = computed(() => {

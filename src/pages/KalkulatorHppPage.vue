@@ -120,22 +120,30 @@
       <div class="space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200/80">
           <div>
-            <label class="block text-xs font-bold text-amber-950 mb-1">1. Pilih Formula Base (Pelarut %)</label>
+            <label class="block text-xs font-bold text-amber-950 mb-1">
+              1. Pilih Formula Base (Pelarut %)
+              <span v-if="mode === 'detail_update'" class="text-[10px] font-normal text-amber-700 ml-1">(Disable di mode Detail)</span>
+            </label>
             <CustomSelect
               v-model="selectedBaseId"
               :options="baseOptions"
               placeholder="-- Pilih Template Formula Base --"
+              :disabled="mode === 'detail_update'"
               @change="recalculateLiquidFromRecipe"
             />
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-amber-950 mb-1">2. Pilih Racikan Fragrance (Bibit FO)</label>
+            <label class="block text-xs font-bold text-amber-950 mb-1">
+              2. Pilih Racikan Fragrance (Bibit FO)
+              <span v-if="mode === 'detail_update'" class="text-[10px] font-normal text-amber-700 ml-1">(Disable di mode Detail)</span>
+            </label>
             <CustomSelect
               v-model="selectedRacikanId"
               :options="racikanOptions"
               placeholder="-- Pilih Racikan dari Katalog --"
               :searchable="true"
+              :disabled="mode === 'detail_update'"
               @change="recalculateLiquidFromRecipe"
             />
           </div>
