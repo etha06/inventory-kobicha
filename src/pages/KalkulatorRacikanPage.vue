@@ -482,6 +482,13 @@
                   <span class="w-1.5 h-1.5 rounded-full" :class="STOCK_STATUS_MAP[fo.currentStock]?.dot"></span>
                   {{ fo.currentStock }}
                 </span>
+                <span
+                  v-if="getFoRowCount(fo.id) > 0"
+                  class="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1"
+                >
+                  <Check class="w-2.5 h-2.5" />
+                  Masuk Formula ({{ getFoRowCount(fo.id) }})
+                </span>
               </div>
               <div class="flex items-center gap-2 text-[11px] text-stone-500 flex-wrap">
                 <span>{{ fo.jenisLiquid }}</span>
@@ -830,18 +837,23 @@ function selectFoFromPicker(fo: StockFragranceOil) {
     targetRowForFoPicker.value.fragranceOilName = fo.nama;
     targetRowForFoPicker.value.pyramid = fo.pyramid;
     store.showToast(`"${fo.nama}" dipilih untuk baris formula!`, 'success');
+    isFoPickerModalOpen.value = false;
+    targetRowForFoPicker.value = null;
   } else {
     rows.value.push({
-      id: 'row-' + Date.now(),
+      id: 'row-' + Date.now() + '-' + Math.random().toString(36).substring(2, 5),
       fragranceOilId: fo.id,
       fragranceOilName: fo.nama,
       pyramid: fo.pyramid,
       tetes: 5
     });
     store.showToast(`"${fo.nama}" ditambahkan ke racikan!`, 'success');
+    // Modal remains open so user can easily add multiple fragrance oils
   }
-  isFoPickerModalOpen.value = false;
-  targetRowForFoPicker.value = null;
+}
+
+function getFoRowCount(foId: string): number {
+  return rows.value.filter(r => r.fragranceOilId === foId).length;
 }
 
 // Racikan Modal Picker State & Methods
