@@ -283,6 +283,7 @@
     <!-- GRAND TOTAL ANALISIS BIAYA & PROFIT SIMULATOR (Ready to Sell) -->
     <!-- ========================================================= -->
     <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
+      <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800/80 pb-4">
         <div>
           <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold block mb-1">
@@ -296,9 +297,25 @@
         <span class="text-xs text-stone-400">Pilih produk untuk simulasi harga jual & margin</span>
       </div>
 
+      <!-- Alert Rumus Perhitungan (Di Bawah Header) -->
+      <div class="p-3.5 bg-stone-950/80 rounded-2xl border border-stone-800 flex items-start gap-3 text-stone-300">
+        <Info class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+        <div class="space-y-1 text-xs leading-relaxed">
+          <p>
+            <strong class="text-amber-300 font-semibold">Rumus Profit Margin (%):</strong>
+            <span class="font-mono text-stone-200 ml-1">((Harga Jual - Modal HPP) / Modal HPP) &times; 100%</span>
+          </p>
+          <p>
+            <strong class="text-emerald-300 font-semibold">Rumus Laba Bersih / Unit:</strong>
+            <span class="font-mono text-stone-200 ml-1">Harga Jual - Modal HPP</span>
+            <span class="text-stone-400 ml-1.5">(Anda dapat mengedit Harga Jual maupun Profit Margin untuk simulasi 2 arah).</span>
+          </p>
+        </div>
+      </div>
+
       <!-- Profit Margin Simulator / Calculator -->
       <div class="bg-stone-950/60 rounded-2xl p-5 border border-stone-800 space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-5 gap-3.5">
           <!-- 1. Pilih Produk untuk Disimulasikan (Dark Themed Dropdown) -->
           <div class="sm:col-span-1">
             <label class="block text-xs text-stone-300 mb-1">Pilih Produk</label>
@@ -312,7 +329,18 @@
             />
           </div>
 
-          <!-- 2. Simulasi Harga Jual (Input yang Bisa Diedit, Default Sesuai Harga Jual Produk) -->
+          <!-- 2. Modal HPP / Unit -->
+          <div>
+            <label class="block text-xs text-stone-300 mb-1">Modal HPP / Unit</label>
+            <div class="px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-bold text-amber-300 truncate flex items-center h-[38px]">
+              <span v-if="simulatedProductId">
+                {{ formatRupiah(simulatedProductHpp) }}
+              </span>
+              <span v-else class="text-stone-500">-</span>
+            </div>
+          </div>
+
+          <!-- 3. Simulasi Harga Jual (Input yang Bisa Diedit, Default Sesuai Harga Jual Produk) -->
           <div>
             <label class="block text-xs text-stone-300 mb-1">Simulasi Harga Jual (Rp)</label>
             <div class="relative">
@@ -330,7 +358,7 @@
             </div>
           </div>
 
-          <!-- 3. Profit Margin (%) (Bisa Diedit) -->
+          <!-- 4. Profit Margin (%) (Bisa Diedit) -->
           <div>
             <label class="block text-xs text-stone-300 mb-1">Profit Margin (%)</label>
             <div class="relative">
@@ -347,7 +375,7 @@
             </div>
           </div>
 
-          <!-- 4. Estimasi Laba Bersih / Unit -->
+          <!-- 5. Estimasi Laba Bersih / Unit -->
           <div>
             <label class="block text-xs text-stone-300 mb-1">Estimasi Laba / Unit</label>
             <div class="px-3.5 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 truncate flex items-center h-[38px]">
@@ -359,19 +387,54 @@
           </div>
         </div>
 
-        <!-- Alert Rumus Perhitungan -->
-        <div class="p-3 bg-stone-900/90 rounded-xl border border-stone-800 flex items-start gap-2.5 text-stone-300">
-          <Info class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-          <div class="space-y-1 text-[11px] leading-relaxed">
-            <p>
-              <strong class="text-amber-300 font-semibold">Rumus Profit Margin (%):</strong>
-              <span class="font-mono text-stone-200 ml-1">((Harga Jual - Modal HPP) / Modal HPP) &times; 100%</span>
-            </p>
-            <p>
-              <strong class="text-emerald-300 font-semibold">Rumus Laba Bersih / Unit:</strong>
-              <span class="font-mono text-stone-200 ml-1">Harga Jual - Modal HPP</span>
-              <span class="text-stone-400 ml-1.5">(Anda dapat mengedit Harga Jual maupun Profit Margin untuk simulasi 2 arah).</span>
-            </p>
+        <!-- Rincian Modal Produk (HPP Breakdown) -->
+        <div v-if="simulatedProduct" class="mt-4 pt-4 border-t border-stone-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+              <span>📋 Rincian Modal HPP Produk:</span>
+              <span class="text-white normal-case font-semibold">{{ simulatedProduct.nama }}</span>
+            </span>
+            <span class="text-xs font-bold font-mono text-amber-300 bg-stone-900 px-3 py-1 rounded-lg border border-stone-700">
+              Total Modal HPP: {{ formatRupiah(simulatedProductHpp) }}
+            </span>
+          </div>
+
+          <!-- Single Product Breakdown -->
+          <div v-if="!simulatedProduct.isBundle && simulatedLinkedHpp" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+            <div class="bg-stone-900/90 p-3 rounded-xl border border-stone-800">
+              <span class="text-[10px] uppercase font-bold text-stone-400 block mb-0.5">Katalog HPP Terkait</span>
+              <span class="font-semibold text-stone-200 truncate block">{{ simulatedLinkedHpp.nama }} ({{ simulatedLinkedHpp.targetBottleMl }}ml)</span>
+            </div>
+            <div class="bg-stone-900/90 p-3 rounded-xl border border-stone-800">
+              <span class="text-[10px] uppercase font-bold text-amber-400/90 block mb-0.5">Modal Resep Racikan (Liquid)</span>
+              <span class="font-bold font-mono text-amber-300 text-sm">{{ formatRupiah(simulatedLinkedHpp.subtotalLiquid || 0) }}</span>
+            </div>
+            <div class="bg-stone-900/90 p-3 rounded-xl border border-stone-800">
+              <span class="text-[10px] uppercase font-bold text-indigo-400/90 block mb-0.5">Modal Kemasan & Lainnya</span>
+              <span class="font-bold font-mono text-indigo-300 text-sm">{{ formatRupiah(simulatedLinkedHpp.subtotalPackaging || 0) }}</span>
+            </div>
+          </div>
+
+          <!-- Bundle Items Breakdown -->
+          <div v-else-if="simulatedProduct.isBundle && simulatedProduct.bundleItems && simulatedProduct.bundleItems.length > 0" class="border border-stone-800 rounded-xl overflow-hidden">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-stone-900 text-[10px] font-bold text-stone-400 uppercase">
+                <tr>
+                  <th class="py-2.5 px-3">Item Produk dalam Paket Bundle</th>
+                  <th class="py-2.5 px-3 text-center">Kuantitas</th>
+                  <th class="py-2.5 px-3 text-right">Modal HPP / Unit</th>
+                  <th class="py-2.5 px-3 text-right">Subtotal Modal HPP</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-stone-800 text-stone-300 bg-stone-950/40">
+                <tr v-for="(bi, idx) in simulatedProduct.bundleItems" :key="idx">
+                  <td class="py-2.5 px-3 font-medium text-stone-200">{{ bi.namaProduk }} ({{ bi.ukuranBotolMl || '-' }} ml)</td>
+                  <td class="py-2.5 px-3 text-center font-mono font-bold text-indigo-400">{{ bi.qty }}x</td>
+                  <td class="py-2.5 px-3 text-right font-mono text-stone-400">{{ formatRupiah(bi.hppPerItem || 0) }}</td>
+                  <td class="py-2.5 px-3 text-right font-mono font-bold text-amber-300">{{ formatRupiah((bi.hppPerItem || 0) * (bi.qty || 1)) }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -931,6 +994,13 @@ const simulatedProduct = computed(() => {
 
 const simulatedProductHpp = computed(() => {
   return simulatedProduct.value ? getItemHpp(simulatedProduct.value) : 0;
+});
+
+const simulatedLinkedHpp = computed(() => {
+  if (!simulatedProduct.value || simulatedProduct.value.isBundle || !simulatedProduct.value.hppCalculationId) {
+    return null;
+  }
+  return hppCatalog.value.find(h => h.id === simulatedProduct.value?.hppCalculationId) || null;
 });
 
 function onSimulatedProductChange() {
