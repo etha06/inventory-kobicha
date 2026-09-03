@@ -318,11 +318,11 @@
       />
     </div>
 
-    <!-- Modal Form (Add / Edit) -->
+      <!-- Modal Form (Add / Edit) -->
     <Modal
       :isOpen="isModalOpen"
       :title="isEditing ? 'Edit Fragrance Oil' : 'Tambah Fragrance Oil Baru'"
-      subtitle="Input detail aroma, enum notes & pyramid, serta varian harga beli"
+      subtitle="Input detail aroma, olfactory notes & pyramid, serta varian harga beli"
       maxWidth="3xl"
       @close="isModalOpen = false"
     >
@@ -340,7 +340,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Jenis Liquid (Enum)</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Jenis Liquid</label>
             <CustomSelect
               v-model="form.jenisLiquid"
               :options="JENIS_LIQUID_OPTIONS"
@@ -372,7 +372,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Current Stock (Enum)</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Status Stok</label>
             <CustomSelect
               v-model="form.currentStock"
               :options="currentStockOptions"
@@ -384,7 +384,7 @@
         <!-- Pyramid & Notes -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Pyramid (Enum)</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Pyramid</label>
             <CustomSelect
               v-model="form.pyramid"
               :options="PYRAMID_OPTIONS"
@@ -393,7 +393,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Olfactory Notes (Enum - Bisa Multiple)</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Olfactory Notes (Bisa Multiple)</label>
             <div class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-2 border border-stone-200 rounded-lg bg-stone-50/50">
               <button
                 v-for="note in NOTES_OPTIONS"
