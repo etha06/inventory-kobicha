@@ -60,7 +60,7 @@
               type="text"
               required
               placeholder="Misal: Kobicha Velvet Wood"
-              class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm font-medium bg-white"
+              class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm font-semibold bg-white"
             />
           </div>
         </div>

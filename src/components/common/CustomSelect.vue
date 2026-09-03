@@ -14,7 +14,7 @@
         buttonClass
       ]"
     >
-      <span class="truncate" :class="!selectedLabel ? 'text-stone-400 font-normal' : (disabled ? 'text-stone-600 font-medium' : 'text-stone-900 font-medium')">
+      <span class="truncate" :class="!selectedLabel ? 'text-stone-400 font-normal' : (disabled ? 'text-stone-700 font-semibold' : 'text-stone-900 font-semibold')">
         {{ selectedLabel || placeholder }}
       </span>
 
