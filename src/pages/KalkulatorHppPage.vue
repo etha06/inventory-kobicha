@@ -144,7 +144,7 @@
         </div>
 
         <!-- Liquid Ingredients Table Breakdown Container (Fixed Height with Fixed Header, Scrollable Body, and Fixed Footer at Bottom) -->
-        <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col h-[300px] overflow-hidden shadow-sm">
+        <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col h-[420px] overflow-hidden shadow-sm">
           <!-- 1. FIXED HEADER -->
           <div class="bg-stone-100/90 border-b border-stone-200 flex-shrink-0">
             <table class="w-full text-xs text-left table-fixed">
