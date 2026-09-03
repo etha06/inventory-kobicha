@@ -54,7 +54,7 @@
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="Cari nama analisis HPP / formula..."
+          placeholder="Cari nama produk / formula..."
           class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         />
         <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
@@ -86,7 +86,7 @@
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-3 w-10 text-left"></th>
-              <th class="py-3.5 px-4 text-left">Nama Analisis HPP</th>
+              <th class="py-3.5 px-4 text-left">Nama Produk</th>
               <th class="py-3.5 px-4 text-left">Ukuran Botol</th>
               <th class="py-3.5 px-4 text-left">Modal Liquid</th>
               <th class="py-3.5 px-4 text-left">Modal Lainnya</th>
