@@ -135,7 +135,6 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-3 w-12 text-center">Foto</th>
               <th class="py-3.5 px-4 text-left">Nama Produk</th>
               <th class="py-3.5 px-4 text-left">Tipe</th>
               <th class="py-3.5 px-4 text-left">Isi / Komponen</th>
@@ -148,7 +147,7 @@
           </thead>
           <tbody class="divide-y divide-stone-100 text-stone-800">
             <tr v-if="filteredProducts.length === 0">
-              <td colspan="9" class="py-12 text-center text-stone-400">
+              <td colspan="8" class="py-12 text-center text-stone-400">
                 <ShoppingBag class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Belum ada data produk siap jual. Klik tombol "+ Tambah Produk" di atas untuk menambahkan produk retail atau paket bundle.
               </td>
@@ -159,23 +158,6 @@
               :key="item.id"
               class="hover:bg-amber-50/40 transition-colors"
             >
-              <!-- Foto Thumbnail -->
-              <td class="py-3 px-3 text-center">
-                <div
-                  class="w-10 h-10 rounded-xl overflow-hidden border border-stone-200 bg-stone-50 flex items-center justify-center mx-auto cursor-pointer flex-shrink-0"
-                  @click="viewDetail(item)"
-                >
-                  <img
-                    v-if="item.gambar"
-                    :src="item.gambar"
-                    :alt="item.nama"
-                    class="w-full h-full object-cover"
-                  />
-                  <Gift v-else-if="item.isBundle" class="w-4 h-4 text-indigo-400" />
-                  <ShoppingBag v-else class="w-4 h-4 text-stone-400" />
-                </div>
-              </td>
-
               <!-- Nama Produk -->
               <td class="py-3.5 px-4 text-left">
                 <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
@@ -190,10 +172,9 @@
               <td class="py-3.5 px-4 text-left">
                 <span
                   v-if="item.isBundle"
-                  class="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold inline-flex items-center gap-1"
+                  class="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold"
                 >
-                  <Gift class="w-3 h-3" />
-                  <span>Bundle ({{ item.bundleItems?.length || 0 }})</span>
+                  Bundle
                 </span>
                 <span
                   v-else
@@ -687,26 +668,25 @@
         <!-- Metric Badges -->
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div class="p-3.5 rounded-xl bg-white border border-stone-200 text-center">
-            <span class="text-[10px] uppercase font-bold text-stone-400 block">Stok Fisik</span>
+            <span class="text-[10px] uppercase font-bold text-stone-400 block">Current Stock</span>
             <span class="text-base font-extrabold font-mono text-stone-900">{{ detailItem.jumlahStok }} pcs</span>
           </div>
 
           <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-center">
-            <span class="text-[10px] uppercase font-bold text-emerald-700 block">Harga Jual Retail</span>
+            <span class="text-[10px] uppercase font-bold text-emerald-700 block">Harga Jual</span>
             <span class="text-base font-extrabold font-mono text-emerald-900">{{ formatRupiah(detailItem.hargaJual) }}</span>
           </div>
 
           <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-center col-span-2 sm:col-span-1">
-            <span class="text-[10px] uppercase font-bold text-amber-700 block">Pertama Kali Dijual</span>
-            <span class="text-xs font-extrabold font-mono text-amber-950">{{ formatDate(detailItem.pertamaKaliDijual) }}</span>
+            <span class="text-[10px] uppercase font-bold text-amber-700 block">First Time Sell</span>
+            <span class="text-base font-extrabold font-mono text-amber-950">{{ formatDate(detailItem.pertamaKaliDijual) }}</span>
           </div>
         </div>
 
         <!-- Bundle Contents Table if Bundle -->
         <div v-if="detailItem.isBundle && detailItem.bundleItems && detailItem.bundleItems.length > 0" class="space-y-2">
-          <h5 class="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-1.5">
-            <Gift class="w-3.5 h-3.5 text-indigo-600" />
-            <span>Rincian Produk dalam Paket Bundle:</span>
+          <h5 class="text-xs font-bold text-stone-800 uppercase tracking-wider">
+            Rincian Produk dalam Paket Bundle:
           </h5>
           <div class="border rounded-xl overflow-hidden">
             <table class="w-full text-xs text-left">
