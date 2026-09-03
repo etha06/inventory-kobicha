@@ -116,16 +116,14 @@
           </button>
         </div>
 
-        <!-- Filter Series Dropdown -->
-        <select
-          v-model="filterSeries"
-          class="px-3 py-2 rounded-xl border border-stone-200 text-xs font-medium bg-white focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
-        >
-          <option value="">Semua Series</option>
-          <option v-for="s in allReadyToSellSeries" :key="s" :value="s">
-            {{ s }}
-          </option>
-        </select>
+        <!-- Filter Series Dropdown using CustomSelect -->
+        <div class="min-w-[170px]">
+          <CustomSelect
+            v-model="filterSeries"
+            :options="seriesOptions"
+            placeholder="Semua Series"
+          />
+        </div>
       </div>
     </div>
 
@@ -344,16 +342,12 @@
               </label>
               <span class="text-[11px] text-stone-400">Otomatis isi nama & rekomendasi harga</span>
             </div>
-            <select
+            <CustomSelect
               v-model="form.hppCalculationId"
+              :options="hppSelectOptions"
+              placeholder="-- Input Bebas / Tanpa Link HPP --"
               @change="onSelectHppForSingle"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-medium bg-white"
-            >
-              <option value="">-- Input Bebas / Tanpa Link HPP --</option>
-              <option v-for="h in hppCatalog" :key="h.id" :value="h.id">
-                {{ h.nama }} ({{ h.targetBottleMl }}ml • HPP: {{ formatRupiah(h.grandTotalHpp) }})
-              </option>
-            </select>
+            />
           </div>
 
           <!-- Nama Produk -->
@@ -419,17 +413,12 @@
                 class="p-3 bg-white rounded-xl border border-stone-200 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shadow-xs"
               >
                 <div class="flex-1">
-                  <select
+                  <CustomSelect
                     v-model="bItem.hppCalculationId"
+                    :options="bundleHppOptions"
+                    placeholder="-- Pilih Produk HPP --"
                     @change="onSelectBundleItemHpp(bItem)"
-                    required
-                    class="w-full px-3 py-1.5 rounded-lg border border-stone-200 text-xs font-medium bg-white focus:ring-2 focus:ring-indigo-500/20"
-                  >
-                    <option value="" disabled>-- Pilih Produk HPP --</option>
-                    <option v-for="h in hppCatalog" :key="h.id" :value="h.id">
-                      {{ h.nama }} ({{ h.targetBottleMl }}ml)
-                    </option>
-                  </select>
+                  />
                 </div>
 
                 <div class="flex items-center gap-2">
@@ -748,6 +737,7 @@ import { ReadyToSellProduct, BundleProductItem } from '../types';
 import { formatRupiah } from '../utils/formatters';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
+import CustomSelect from '../components/common/CustomSelect.vue';
 import {
   ShoppingBag,
   Plus,
@@ -770,6 +760,36 @@ const { readyToSellProducts, hppCatalog, allReadyToSellSeries, totalReadyToSellS
 const searchQuery = ref('');
 const filterType = ref<'all' | 'single' | 'bundle'>('all');
 const filterSeries = ref('');
+
+const seriesOptions = computed(() => {
+  const opts: { value: string; label: string }[] = [
+    { value: '', label: 'Semua Series' }
+  ];
+  allReadyToSellSeries.value.forEach(s => {
+    opts.push({ value: s, label: s });
+  });
+  return opts;
+});
+
+const hppSelectOptions = computed(() => {
+  const opts: { value: string; label: string }[] = [
+    { value: '', label: '-- Input Bebas / Tanpa Link HPP --' }
+  ];
+  hppCatalog.value.forEach(h => {
+    opts.push({
+      value: h.id,
+      label: `${h.nama} (${h.targetBottleMl}ml • HPP: ${formatRupiah(h.grandTotalHpp)})`
+    });
+  });
+  return opts;
+});
+
+const bundleHppOptions = computed(() => {
+  return hppCatalog.value.map(h => ({
+    value: h.id,
+    label: `${h.nama} (${h.targetBottleMl}ml)`
+  }));
+});
 
 const totalBundleCount = computed(() => readyToSellProducts.value.filter(p => p.isBundle).length);
 const totalSingleCount = computed(() => readyToSellProducts.value.filter(p => !p.isBundle).length);
