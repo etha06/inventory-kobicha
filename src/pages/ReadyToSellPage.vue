@@ -429,7 +429,7 @@
                       min="1"
                       required
                       placeholder="Qty"
-                      class="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 text-xs font-mono font-bold text-center pr-6"
+                      class="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 text-xs font-semibold text-center pr-6 text-stone-900"
                     />
                     <span class="absolute right-2 top-2 text-[10px] font-bold text-stone-400">x</span>
                   </div>
@@ -461,7 +461,7 @@
                 type="number"
                 min="0"
                 required
-                class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-mono font-bold pr-12 text-stone-900"
+                class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-semibold pr-12 text-stone-900"
               />
               <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold pointer-events-none">pcs</span>
             </div>
@@ -479,7 +479,7 @@
                 min="0"
                 step="500"
                 required
-                class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-xs font-mono font-bold text-emerald-800 pl-8"
+                class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-xs font-semibold text-emerald-800 pl-8"
               />
               <span class="absolute left-3 top-2.5 text-stone-400 text-xs font-bold pointer-events-none">Rp</span>
             </div>
