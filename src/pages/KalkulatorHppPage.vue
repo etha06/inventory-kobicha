@@ -724,7 +724,6 @@
               :class="selectedRacikanId === item.id ? 'bg-emerald-600 text-white shadow-xs' : 'bg-peach-500 hover:bg-peach-600 text-white shadow-pill'"
             >
               <Check v-if="selectedRacikanId === item.id" class="w-3.5 h-3.5" />
-              <Plus v-else class="w-3.5 h-3.5" />
               <span>{{ selectedRacikanId === item.id ? 'Terpilih' : 'Pilih Racikan' }}</span>
             </button>
           </div>
