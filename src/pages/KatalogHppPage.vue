@@ -87,8 +87,10 @@
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-3 w-10 text-left"></th>
               <th class="py-3.5 px-4 text-left">Nama Produk</th>
+              <th class="py-3.5 px-4 text-left">Resep</th>
+              <th class="py-3.5 px-4 text-left">Jenis Produk</th>
               <th class="py-3.5 px-4 text-left">Ukuran Botol</th>
-              <th class="py-3.5 px-4 text-left">Modal Resep</th>
+              <th class="py-3.5 px-4 text-left">Modal Produk</th>
               <th class="py-3.5 px-4 text-left">Modal Lainnya</th>
               <th class="py-3.5 px-4 text-left">Grand Total HPP</th>
               <th class="py-3.5 px-4 text-left">HPP</th>
@@ -98,7 +100,7 @@
           </thead>
           <tbody class="divide-y divide-stone-100 text-stone-800">
             <tr v-if="filteredHppList.length === 0">
-              <td colspan="9" class="py-12 text-center text-stone-400">
+              <td colspan="11" class="py-12 text-center text-stone-400">
                 <Receipt class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Belum ada rekaman data HPP. Klik "Hitung HPP Baru" untuk menghitung modal produksi botol parfum.
               </td>
@@ -121,15 +123,23 @@
                 />
               </td>
 
-              <!-- Nama Analisis & Formula -->
+              <!-- Nama Produk -->
               <td class="py-3.5 px-4 text-left">
-                <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
-                  <span>{{ item.nama }}</span>
-                </div>
-                <div class="text-[10px] text-stone-500 mt-0.5 space-x-2">
-                  <span v-if="item.racikanName">Racikan: <strong>{{ item.racikanName }}</strong></span>
-                  <span v-if="item.formulaBaseName">Base: <strong>{{ item.formulaBaseName }}</strong></span>
-                </div>
+                <span class="font-bold text-stone-900 text-xs">{{ item.nama }}</span>
+              </td>
+
+              <!-- Resep (Racikan) -->
+              <td class="py-3.5 px-4 text-left">
+                <span v-if="item.racikanName" class="font-semibold text-stone-800 text-xs">{{ item.racikanName }}</span>
+                <span v-else class="text-stone-400 text-xs italic">Manual</span>
+              </td>
+
+              <!-- Jenis Produk (Formula Base) -->
+              <td class="py-3.5 px-4 text-left">
+                <span v-if="item.formulaBaseName" class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium whitespace-nowrap">
+                  {{ item.formulaBaseName }}
+                </span>
+                <span v-else class="text-stone-400 text-xs">-</span>
               </td>
 
               <!-- Ukuran Botol -->
@@ -137,7 +147,7 @@
                 {{ item.targetBottleMl }} ml
               </td>
 
-              <!-- Modal Resep -->
+              <!-- Modal Produk -->
               <td class="py-3.5 px-4 text-left font-mono text-stone-700">
                 {{ formatRupiah(item.subtotalLiquid) }}
               </td>
@@ -224,7 +234,7 @@
           <!-- Cost Breakdown List -->
           <div class="mt-3 space-y-2 text-xs">
             <div class="flex justify-between text-stone-600">
-              <span>🧪 Modal Resep:</span>
+              <span>🧪 Modal Produk:</span>
               <span class="font-mono font-bold text-stone-900">{{ formatRupiah(item.subtotalLiquid) }}</span>
             </div>
             <div class="flex justify-between text-stone-600">
@@ -267,7 +277,7 @@
     <!-- ========================================================= -->
     <!-- COMPARE SECTION (Side-by-Side Comparison Cards at Bottom) -->
     <!-- ========================================================= -->
-    <div class="bg-stone-900 text-stone-100 rounded-3xl p-6 sm:p-8 border border-stone-800 shadow-xl space-y-6">
+    <div v-if="compareList.length > 0" class="bg-stone-900 text-stone-100 rounded-3xl p-6 sm:p-8 border border-stone-800 shadow-xl space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-800 pb-5">
         <div>
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30 mb-2">
@@ -283,7 +293,6 @@
             {{ selectedForCompare.length }} Analisis Dipilih
           </span>
           <button
-            v-if="selectedForCompare.length > 0"
             @click="selectedForCompare = []"
             class="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-medium border border-stone-700"
           >
@@ -292,13 +301,7 @@
         </div>
       </div>
 
-      <!-- Comparison Cards -->
-      <div v-if="compareList.length === 0" class="py-10 text-center text-stone-500 bg-stone-950/40 rounded-2xl border border-stone-800/80">
-        <Search class="w-8 h-8 mx-auto mb-2 opacity-50" />
-        Pilih minimal 2 analisis HPP dari daftar di atas untuk melihat perbandingan side-by-side di sini.
-      </div>
-
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <div
           v-for="item in compareList"
           :key="item.id"
@@ -336,7 +339,7 @@
             <!-- Cost Proportion Progress Bar -->
             <div class="mt-4 space-y-2">
               <div class="flex justify-between text-[11px] text-stone-300">
-                <span>🧪 Resep: {{ formatRupiah(item.subtotalLiquid) }}</span>
+                <span>🧪 Modal Produk: {{ formatRupiah(item.subtotalLiquid) }}</span>
                 <span>📦 Modal Lainnya: {{ formatRupiah(item.subtotalPackaging) }}</span>
               </div>
               <div class="w-full bg-stone-900 h-2 rounded-full overflow-hidden flex border border-stone-700">
@@ -381,7 +384,7 @@
     <Modal
       :isOpen="isDetailModalOpen"
       :title="`Rincian HPP: ${detailItem?.nama || ''}`"
-      subtitle="Breakdown modal resep formula dan modal lainnya"
+      subtitle="Breakdown modal produk dan modal lainnya"
       maxWidth="3xl"
       @close="isDetailModalOpen = false"
     >
@@ -393,7 +396,7 @@
             <span class="text-sm font-bold font-mono text-stone-900">{{ detailItem.targetBottleMl }} ml</span>
           </div>
           <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-center">
-            <span class="text-[10px] text-amber-700 uppercase font-bold block">Modal Resep</span>
+            <span class="text-[10px] text-amber-700 uppercase font-bold block">Modal Produk</span>
             <span class="text-sm font-bold font-mono text-amber-950">{{ formatRupiah(detailItem.subtotalLiquid) }}</span>
           </div>
           <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-center">
@@ -409,7 +412,7 @@
         <!-- Liquid Ingredients Breakdown -->
         <div class="space-y-2">
           <h5 class="text-xs font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5">
-            <span>Rincian Modal Resep Formula</span>
+            <span>Rincian Modal Produk (Bahan Formula Resep)</span>
           </h5>
           <div class="overflow-x-auto border rounded-xl">
             <table class="w-full text-xs text-left">
