@@ -282,73 +282,32 @@
     <!-- ========================================================= -->
     <!-- GRAND TOTAL ANALISIS BIAYA & PROFIT SIMULATOR (Ready to Sell) -->
     <!-- ========================================================= -->
-    <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-stone-800 pb-6">
+    <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800/80 pb-4">
         <div>
           <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold block mb-1">
             ✨ Grand Total Analisis Biaya & Profit
           </span>
-          <h3 class="text-2xl font-bold font-serif text-white">
-            Ringkasan Modal & Potensi Keuntungan
+          <h3 class="text-xl font-bold font-serif text-white flex items-center gap-2">
+            <TrendingUp class="w-5 h-5 text-emerald-400" />
+            <span>Kalkulator & Simulasi Margin Keuntungan Produk</span>
           </h3>
         </div>
-
-        <!-- Big Summary Badges -->
-        <div class="flex flex-wrap items-center gap-3">
-          <div class="bg-stone-950/80 border border-stone-700/80 px-5 py-3 rounded-2xl text-center">
-            <span class="text-[10px] uppercase font-bold text-stone-400 block">Total Modal HPP</span>
-            <span class="text-xl font-bold font-mono text-amber-400">{{ formatRupiah(totalInventoryHppCost) }}</span>
-          </div>
-
-          <div class="bg-stone-950/80 border border-stone-700/80 px-5 py-3 rounded-2xl text-center">
-            <span class="text-[10px] uppercase font-bold text-stone-400 block">Total Estimasi Omset</span>
-            <span class="text-xl font-bold font-mono text-emerald-400">{{ formatRupiah(totalReadyToSellValue) }}</span>
-          </div>
-
-          <div class="bg-stone-950/80 border border-emerald-500/40 px-5 py-3 rounded-2xl text-center bg-emerald-950/40">
-            <span class="text-[10px] uppercase font-bold text-emerald-300 block">Potensi Laba Bersih</span>
-            <span class="text-xl font-bold font-mono text-emerald-300">+{{ formatRupiah(totalPotentialProfit) }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cost vs Profit Split Progress Bar -->
-      <div class="space-y-2">
-        <div class="flex justify-between text-xs text-stone-300">
-          <span>🏷️ Porsi Modal HPP: <strong>{{ totalReadyToSellValue > 0 ? Math.round((totalInventoryHppCost / totalReadyToSellValue) * 100) : 0 }}%</strong> ({{ formatRupiah(totalInventoryHppCost) }})</span>
-          <span>💰 Porsi Laba Bersih: <strong>{{ totalReadyToSellValue > 0 ? Math.round((totalPotentialProfit / totalReadyToSellValue) * 100) : 0 }}%</strong> ({{ formatRupiah(totalPotentialProfit) }})</span>
-        </div>
-        <div class="w-full bg-stone-950 h-3 rounded-full overflow-hidden flex border border-stone-800">
-          <div
-            class="bg-amber-500 h-full transition-all duration-300"
-            :style="{ width: (totalReadyToSellValue > 0 ? Math.round((totalInventoryHppCost / totalReadyToSellValue) * 100) : 0) + '%' }"
-          ></div>
-          <div
-            class="bg-emerald-500 h-full transition-all duration-300"
-            :style="{ width: (totalReadyToSellValue > 0 ? Math.round((totalPotentialProfit / totalReadyToSellValue) * 100) : 0) + '%' }"
-          ></div>
-        </div>
+        <span class="text-xs text-stone-400">Pilih produk untuk simulasi harga jual & margin</span>
       </div>
 
       <!-- Profit Margin Simulator / Calculator -->
       <div class="bg-stone-950/60 rounded-2xl p-5 border border-stone-800 space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-            <TrendingUp class="w-4 h-4" />
-            <span>Kalkulator & Simulasi Margin Keuntungan Produk</span>
-          </h4>
-          <span class="text-xs text-stone-400">Pilih produk untuk simulasi harga jual & margin</span>
-        </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          <!-- 1. Pilih Produk untuk Disimulasikan (Kosong Awalnya) -->
+          <!-- 1. Pilih Produk untuk Disimulasikan (Dark Themed Dropdown) -->
           <div class="sm:col-span-1">
             <label class="block text-xs text-stone-300 mb-1">Pilih Produk</label>
             <CustomSelect
               v-model="simulatedProductId"
               :options="simulationProductOptions"
               placeholder="-- Pilih Produk --"
-              buttonClass="bg-stone-900 text-white border-stone-700"
+              :dark="true"
+              :searchable="true"
               @change="onSimulatedProductChange"
             />
           </div>

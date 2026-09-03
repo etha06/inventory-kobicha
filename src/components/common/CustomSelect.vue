@@ -5,22 +5,22 @@
       type="button"
       @click="toggleDropdown"
       :disabled="disabled"
-      class="w-full bg-white text-left px-3.5 py-2 text-xs flex items-center justify-between transition-all duration-150 select-none"
+      class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between transition-all duration-150 select-none"
       :class="[
-        isOpen
-          ? 'border-2 border-stone-900 shadow-sm rounded-xl'
-          : 'border border-sage-200 hover:border-sage-300 rounded-xl',
-        disabled ? 'bg-stone-100/80 text-stone-500 cursor-not-allowed border-stone-200/80 opacity-60 pointer-events-none' : 'cursor-pointer text-stone-800',
+        dark
+          ? (isOpen ? 'bg-stone-900 border border-stone-700 ring-2 ring-emerald-500/30 rounded-xl text-white' : 'bg-stone-900 border border-stone-700 hover:border-stone-600 rounded-xl text-white')
+          : (isOpen ? 'bg-white border-2 border-stone-900 shadow-sm rounded-xl' : 'bg-white border border-sage-200 hover:border-sage-300 rounded-xl'),
+        disabled ? (dark ? 'bg-stone-950/80 text-stone-500 cursor-not-allowed border-stone-800 opacity-60 pointer-events-none' : 'bg-stone-100/80 text-stone-500 cursor-not-allowed border-stone-200/80 opacity-60 pointer-events-none') : 'cursor-pointer',
         buttonClass
       ]"
     >
-      <span class="truncate" :class="!selectedLabel ? 'text-stone-400 font-normal' : (disabled ? 'text-stone-700 font-semibold' : 'text-stone-900 font-semibold')">
+      <span class="truncate" :class="!selectedLabel ? 'text-stone-400 font-normal' : (disabled ? (dark ? 'text-stone-400 font-semibold' : 'text-stone-700 font-semibold') : (dark ? 'text-white font-semibold' : 'text-stone-900 font-semibold'))">
         {{ selectedLabel || placeholder }}
       </span>
 
-      <span class="ml-2 flex-shrink-0" :class="disabled ? 'text-stone-400' : 'text-stone-600'">
-        <ChevronUp v-if="isOpen" class="w-3.5 h-3.5 text-stone-700 transition-transform duration-150" />
-        <ChevronDown v-else class="w-3.5 h-3.5 text-stone-400 transition-transform duration-150" />
+      <span class="ml-2 flex-shrink-0" :class="disabled ? 'text-stone-500' : (dark ? 'text-stone-400' : 'text-stone-600')">
+        <ChevronUp v-if="isOpen" class="w-3.5 h-3.5 transition-transform duration-150" :class="dark ? 'text-stone-300' : 'text-stone-700'" />
+        <ChevronDown v-else class="w-3.5 h-3.5 transition-transform duration-150" :class="dark ? 'text-stone-400' : 'text-stone-400'" />
       </span>
     </button>
 
@@ -38,17 +38,23 @@
           v-if="isOpen"
           ref="dropdownRef"
           :style="dropdownStyle"
-          class="bg-white border border-stone-200/90 rounded-2xl shadow-2xl py-1.5 max-h-60 overflow-y-auto text-xs overflow-hidden"
-          :class="dropdownClass"
+          class="rounded-2xl shadow-2xl py-1.5 max-h-60 overflow-y-auto text-xs overflow-hidden"
+          :class="[
+            dark
+              ? 'bg-stone-900 border border-stone-700 text-stone-200'
+              : 'bg-white border border-stone-200/90 text-stone-900',
+            dropdownClass
+          ]"
         >
           <!-- Search Input if searchable -->
-          <div v-if="searchable" class="p-2 border-b border-stone-100 sticky top-0 bg-white">
+          <div v-if="searchable" class="p-2 sticky top-0" :class="dark ? 'bg-stone-900 border-b border-stone-800' : 'bg-white border-b border-stone-100'">
             <input
               ref="searchInput"
               v-model="searchTerm"
               type="text"
               placeholder="Cari..."
-              class="w-full px-2.5 py-1.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-stone-900 focus:ring-1 focus:ring-stone-900 bg-stone-50/50"
+              class="w-full px-2.5 py-1.5 text-xs rounded-xl focus:outline-none focus:ring-1"
+              :class="dark ? 'border border-stone-700 focus:border-stone-500 focus:ring-stone-500 bg-stone-950 text-white placeholder-stone-500' : 'border border-stone-200 focus:border-stone-900 focus:ring-stone-900 bg-stone-50/50'"
               @click.stop
             />
           </div>
@@ -62,8 +68,8 @@
               class="px-4 py-2.5 cursor-pointer transition-colors text-xs flex items-center justify-between"
               :class="[
                 isSelected(opt.value)
-                  ? 'bg-stone-100/90 text-stone-900 font-bold'
-                  : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900 font-normal'
+                  ? (dark ? 'bg-stone-800 text-emerald-400 font-bold' : 'bg-stone-100/90 text-stone-900 font-bold')
+                  : (dark ? 'text-stone-300 hover:bg-stone-800/80 hover:text-white font-normal' : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900 font-normal')
               ]"
             >
               <div class="flex items-center gap-2 truncate">
@@ -74,7 +80,7 @@
               <span
                 v-if="opt.badge"
                 class="ml-2 text-[10px] font-bold px-1.5 py-0.5 rounded border inline-flex items-center justify-center min-w-[20px]"
-                :class="opt.badgeClass || 'bg-stone-100 text-stone-600 border-stone-200'"
+                :class="opt.badgeClass || (dark ? 'bg-stone-800 text-stone-300 border-stone-700' : 'bg-stone-100 text-stone-600 border-stone-200')"
               >
                 {{ opt.badge }}
               </span>
@@ -82,7 +88,8 @@
 
             <div
               v-if="normalizedFilteredOptions.length === 0"
-              class="px-4 py-3 text-center text-stone-400 text-xs italic"
+              class="px-4 py-3 text-center text-xs italic"
+              :class="dark ? 'text-stone-500' : 'text-stone-400'"
             >
               Tidak ada pilihan ditemukan
             </div>
@@ -112,6 +119,7 @@ const props = withDefaults(
     placeholder?: string;
     disabled?: boolean;
     searchable?: boolean;
+    dark?: boolean;
     buttonClass?: string;
     dropdownClass?: string;
   }>(),
@@ -119,6 +127,7 @@ const props = withDefaults(
     placeholder: 'Pilih...',
     disabled: false,
     searchable: false,
+    dark: false,
     buttonClass: '',
     dropdownClass: ''
   }
