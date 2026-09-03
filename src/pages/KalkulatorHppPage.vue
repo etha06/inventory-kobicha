@@ -331,10 +331,10 @@
           <button
             type="button"
             @click="openStockCampuranPicker"
-            class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition-colors flex items-center gap-1.5 flex-shrink-0"
+            class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0"
           >
             <Layers class="w-3.5 h-3.5" />
-            <span>+ Ambil dari Stok Campuran</span>
+            <span>Ambil dari Stok Campuran</span>
           </button>
 
           <button
