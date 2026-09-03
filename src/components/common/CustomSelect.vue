@@ -10,15 +10,15 @@
         isOpen
           ? 'border-2 border-stone-900 shadow-sm rounded-xl'
           : 'border border-sage-200 hover:border-sage-300 rounded-xl',
-        disabled ? 'bg-stone-100 text-stone-400 cursor-not-allowed border-stone-200' : 'cursor-pointer text-stone-800',
+        disabled ? 'bg-stone-100/80 text-stone-500 cursor-not-allowed border-stone-200/80 opacity-60 pointer-events-none' : 'cursor-pointer text-stone-800',
         buttonClass
       ]"
     >
-      <span class="truncate" :class="!selectedLabel ? 'text-stone-400 font-normal' : 'text-stone-900 font-medium'">
+      <span class="truncate" :class="!selectedLabel ? 'text-stone-400 font-normal' : (disabled ? 'text-stone-600 font-medium' : 'text-stone-900 font-medium')">
         {{ selectedLabel || placeholder }}
       </span>
 
-      <span class="ml-2 flex-shrink-0 text-stone-600">
+      <span class="ml-2 flex-shrink-0" :class="disabled ? 'text-stone-400' : 'text-stone-600'">
         <ChevronUp v-if="isOpen" class="w-3.5 h-3.5 text-stone-700 transition-transform duration-150" />
         <ChevronDown v-else class="w-3.5 h-3.5 text-stone-400 transition-transform duration-150" />
       </span>
