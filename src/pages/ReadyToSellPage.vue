@@ -156,24 +156,23 @@
               :key="item.id"
               class="table-row-hover transition-colors"
             >
-              <!-- Foto Produk (Small Thumbnail) -->
+              <!-- Nama Produk (dengan Foto Thumbnail) -->
               <td class="py-3 px-4 text-left">
-                <div class="w-10 h-10 rounded-xl bg-stone-100 border border-stone-200 overflow-hidden flex items-center justify-center flex-shrink-0">
-                  <img
-                    v-if="item.gambar"
-                    :src="item.gambar"
-                    :alt="item.nama"
-                    class="w-full h-full object-cover"
-                  />
-                  <PackageCheck v-else-if="!item.isBundle" class="w-5 h-5 text-stone-400" />
-                  <Gift v-else class="w-5 h-5 text-indigo-400" />
-                </div>
-              </td>
-
-              <!-- Nama Produk -->
-              <td class="py-3.5 px-4 text-left">
-                <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
-                  <span class="truncate max-w-[220px]">{{ item.nama }}</span>
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-stone-100 border border-stone-200 overflow-hidden flex items-center justify-center flex-shrink-0">
+                    <img
+                      v-if="item.gambar"
+                      :src="item.gambar"
+                      :alt="item.nama"
+                      class="w-full h-full object-cover"
+                    />
+                    <PackageCheck v-else-if="!item.isBundle" class="w-5 h-5 text-stone-400" />
+                    <Gift v-else class="w-5 h-5 text-indigo-400" />
+                  </div>
+                  <div class="min-w-0">
+                    <span class="font-bold text-stone-900 text-xs block leading-snug">{{ item.nama }}</span>
+                    <span v-if="item.deskripsi" class="text-[10px] text-stone-500 line-clamp-1 block mt-0.5 max-w-xs">{{ item.deskripsi }}</span>
+                  </div>
                 </div>
               </td>
 
