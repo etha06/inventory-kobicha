@@ -93,15 +93,16 @@ export const useKobichaStore = defineStore('kobicha', () => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        stores.value = parsed.stores || INITIAL_STORES;
-        stockCampuran.value = parsed.stockCampuran || INITIAL_CAMPURAN;
-        stockFragranceOil.value = parsed.stockFragranceOil || INITIAL_FRAGRANCE_OILS;
-        formulaBases.value = parsed.formulaBases || INITIAL_FORMULA_BASES;
-        racikanCatalog.value = parsed.racikanCatalog || INITIAL_RACIKAN;
-        hppCatalog.value = parsed.hppCatalog || INITIAL_HPP;
-        readyToSellProducts.value = parsed.readyToSellProducts || INITIAL_READY_TO_SELL;
-        quickNotes.value = parsed.quickNotes || INITIAL_QUICK_NOTES;
-        deadlines.value = parsed.deadlines || INITIAL_DEADLINES;
+        stores.value = (parsed.stores && parsed.stores.length > 0) ? parsed.stores : INITIAL_STORES;
+        stockCampuran.value = (parsed.stockCampuran && parsed.stockCampuran.length > 0) ? parsed.stockCampuran : INITIAL_CAMPURAN;
+        stockFragranceOil.value = (parsed.stockFragranceOil && parsed.stockFragranceOil.length > 0) ? parsed.stockFragranceOil : INITIAL_FRAGRANCE_OILS;
+        formulaBases.value = (parsed.formulaBases && parsed.formulaBases.length > 0) ? parsed.formulaBases : INITIAL_FORMULA_BASES;
+        racikanCatalog.value = (parsed.racikanCatalog && parsed.racikanCatalog.length > 0) ? parsed.racikanCatalog : INITIAL_RACIKAN;
+        hppCatalog.value = (parsed.hppCatalog && parsed.hppCatalog.length > 0) ? parsed.hppCatalog : INITIAL_HPP;
+        readyToSellProducts.value = (parsed.readyToSellProducts && parsed.readyToSellProducts.length > 0) ? parsed.readyToSellProducts : INITIAL_READY_TO_SELL;
+        quickNotes.value = (parsed.quickNotes && parsed.quickNotes.length > 0) ? parsed.quickNotes : INITIAL_QUICK_NOTES;
+        deadlines.value = (parsed.deadlines && parsed.deadlines.length > 0) ? parsed.deadlines : INITIAL_DEADLINES;
+        saveDatabase();
       } else {
         resetToSampleData(false);
       }

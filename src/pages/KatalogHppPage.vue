@@ -85,7 +85,16 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-3 w-10 text-left"></th>
+              <th class="py-3.5 px-4 w-10 text-left">
+                <input
+                  v-if="filteredHppList.length > 0"
+                  type="checkbox"
+                  :checked="filteredHppList.length > 0 && selectedForCompare.length === filteredHppList.length"
+                  @change="toggleSelectAllCompare"
+                  class="rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
+                  title="Pilih Semua untuk Bandingkan"
+                />
+              </th>
               <th class="py-3.5 px-4 text-left">Nama Produk</th>
               <th class="py-3.5 px-4 text-left">Racikan</th>
               <th class="py-3.5 px-4 text-left">Jenis Produk</th>
@@ -100,7 +109,15 @@
             <tr v-if="filteredHppList.length === 0">
               <td colspan="9" class="py-12 text-center text-stone-400">
                 <Receipt class="w-8 h-8 mx-auto mb-2 opacity-50" />
-                Belum ada rekaman data HPP. Klik "Hitung HPP Baru" untuk menghitung modal produksi botol parfum.
+                <p class="text-xs text-stone-500 mb-3">Belum ada rekaman data HPP.</p>
+                <button
+                  type="button"
+                  @click="store.navigateTo('kalkulator-hpp')"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-bold transition-all shadow-xs"
+                >
+                  <Calculator class="w-3.5 h-3.5" />
+                  <span>Hitung HPP Baru</span>
+                </button>
               </td>
             </tr>
 
@@ -570,6 +587,14 @@ const compareList = computed(() => {
 
 function removeFromCompare(id: string) {
   selectedForCompare.value = selectedForCompare.value.filter(x => x !== id);
+}
+
+function toggleSelectAllCompare() {
+  if (selectedForCompare.value.length === filteredHppList.value.length) {
+    selectedForCompare.value = [];
+  } else {
+    selectedForCompare.value = filteredHppList.value.map(h => h.id);
+  }
 }
 
 // Detail Modal State

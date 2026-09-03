@@ -331,6 +331,63 @@ export const INITIAL_HPP: HppCalculation[] = [
     notes: 'Perhitungan standar untuk botol 50ml EDP dengan kemasan lengkap siap jual.',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'hpp-2',
+    nama: 'HPP Dark Rose Nocturne Extrait (Botol 30ml Matte Black)',
+    formulaBaseId: 'base-3',
+    formulaBaseName: 'Extrait de Parfum 30% Intense',
+    racikanId: 'racikan-2',
+    racikanName: 'Dark Rose Nocturne (Custom Batch)',
+    targetBottleMl: 30,
+    subtotalLiquid: 24600,
+    subtotalPackaging: 14000,
+    grandTotalHpp: 38600,
+    hppPerMl: 1287,
+    targetMarginPercentage: 180,
+    recommendedSellingPrice: 110000,
+    packagingItems: [
+      { id: 'pkg-201', namaItem: 'Botol Kaca Matte Black 30ml + Gold Spray', jumlah: 1, hargaSatuan: 8000, total: 8000 },
+      { id: 'pkg-202', namaItem: 'Hardbox Hitam Velvet 30ml', jumlah: 1, hargaSatuan: 4000, total: 4000 },
+      { id: 'pkg-203', namaItem: 'Stiker Emboss Black Gold Label', jumlah: 1, hargaSatuan: 2000, total: 2000 }
+    ],
+    liquidDetails: [
+      { nama: 'Konsentrat Fragrance Oils Extrait (9ml)', jenis: 'FO', volumeMl: 9, biaya: 22800 },
+      { nama: 'Ethanol 96% (19.5ml)', jenis: 'Campuran', volumeMl: 19.5, biaya: 1268 },
+      { nama: 'DPG Fixative (1.5ml)', jenis: 'Campuran', volumeMl: 1.5, biaya: 532 }
+    ],
+    notes: 'Formulasi konsentrasi tinggi 30% untuk pesanan batch eksklusif.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'hpp-3',
+    nama: 'HPP Velvet Wood Daily Mist (Botol 100ml Clear Spray)',
+    formulaBaseId: 'base-1',
+    formulaBaseName: 'Eau de Parfum (EDP) 20% Standard',
+    racikanId: 'racikan-1',
+    racikanName: 'Kobicha Signature No. 1 - Velvet Wood',
+    targetBottleMl: 100,
+    subtotalLiquid: 45700,
+    subtotalPackaging: 19500,
+    grandTotalHpp: 65200,
+    hppPerMl: 652,
+    targetMarginPercentage: 130,
+    recommendedSellingPrice: 150000,
+    packagingItems: [
+      { id: 'pkg-301', namaItem: 'Botol Kaca Bening Tebal 100ml + Fine Mist', jumlah: 1, hargaSatuan: 12000, total: 12000 },
+      { id: 'pkg-302', namaItem: 'Dus Box Karton Kraft 100ml', jumlah: 1, hargaSatuan: 5000, total: 5000 },
+      { id: 'pkg-303', namaItem: 'Label Vinyl Waterproof Glossy', jumlah: 1, hargaSatuan: 2500, total: 2500 }
+    ],
+    liquidDetails: [
+      { nama: 'Konsentrat Fragrance Oils (20ml)', jenis: 'FO', volumeMl: 20, biaya: 40300 },
+      { nama: 'Ethanol 96% (75ml)', jenis: 'Campuran', volumeMl: 75, biaya: 4875 },
+      { nama: 'DPG Fixative (3ml)', jenis: 'Campuran', volumeMl: 3, biaya: 510 },
+      { nama: 'Aquades (2ml)', jenis: 'Campuran', volumeMl: 2, biaya: 15 }
+    ],
+    notes: 'Ukuran botol besar 100ml ekonomis untuk penjualan retail online.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   }
 ];
 
