@@ -168,21 +168,37 @@
 
         <!-- Ingredients Input List -->
         <div class="space-y-2.5">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <label class="block text-xs font-bold text-stone-900 uppercase tracking-wider">
               Komposisi Bahan & Persentase (%):
             </label>
-            <button
-              type="button"
-              @click="addIngredientRow"
-              class="px-2.5 py-1 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold flex items-center gap-1"
-            >
-              <Plus class="w-3 h-3" />
-              <span>Tambah Bahan Campuran</span>
-            </button>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button
+                v-if="!form.ingredients.some(i => i.isFragranceOilConcentrate)"
+                type="button"
+                @click="addFoSlot"
+                class="px-2.5 py-1 rounded-md bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-semibold flex items-center gap-1 transition-colors border border-amber-300"
+              >
+                <Plus class="w-3 h-3" />
+                <span>+ Slot Konsentrat FO</span>
+              </button>
+
+              <button
+                type="button"
+                @click="addIngredientRow"
+                class="px-2.5 py-1 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold flex items-center gap-1 transition-colors border border-stone-200"
+              >
+                <Plus class="w-3 h-3" />
+                <span>Tambah Bahan Lainnya</span>
+              </button>
+            </div>
           </div>
 
-          <div class="space-y-2">
+          <div v-if="form.ingredients.length === 0" class="py-8 text-center text-stone-400 text-xs italic bg-stone-50/70 rounded-lg border border-dashed border-stone-200">
+            Belum ada komposisi bahan. Klik "+ Slot Konsentrat FO" atau "+ Tambah Bahan Lainnya" di atas untuk menyusun formula.
+          </div>
+
+          <div v-else class="space-y-2">
             <div
               v-for="(ing, idx) in form.ingredients"
               :key="ing.id"
@@ -191,7 +207,7 @@
             >
               <div class="flex-1">
                 <span class="text-[10px] text-stone-500 block mb-0.5">
-                  {{ ing.isFragranceOilConcentrate ? 'Slot Konsentrat Minyak Wangi' : 'Pilih Bahan dari Stock Campuran' }}
+                  {{ ing.isFragranceOilConcentrate ? 'Slot Konsentrat Minyak Wangi' : 'Pilih Bahan dari Stock Lainnya' }}
                 </span>
                 
                 <div v-if="ing.isFragranceOilConcentrate" class="px-3 py-1.5 rounded-md bg-amber-100/70 border border-amber-300 text-xs font-bold text-amber-900 flex items-center gap-1.5">
@@ -201,7 +217,7 @@
                   v-else
                   v-model="ing.stockCampuranId"
                   :options="campuranOptions"
-                  placeholder="-- Pilih Bahan Campuran --"
+                  placeholder="-- Pilih Bahan Lainnya --"
                   :searchable="true"
                   @change="onSelectCampuran(ing)"
                 />
@@ -224,7 +240,6 @@
               </div>
 
               <button
-                v-if="!ing.isFragranceOilConcentrate"
                 type="button"
                 @click="removeIngredientRow(idx)"
                 class="text-stone-400 hover:text-rose-600 p-1 text-xs mt-3.5"
@@ -232,7 +247,6 @@
               >
                 <X class="w-4 h-4" />
               </button>
-              <div v-else class="w-5"></div>
             </div>
           </div>
         </div>
@@ -319,11 +333,7 @@ function openAddModal() {
   form.value = {
     nama: '',
     deskripsi: '',
-    ingredients: [
-      { id: 'ing-fo', namaBahan: 'Fragrance Oil Concentrate', percentage: 20, isFragranceOilConcentrate: true },
-      { id: 'ing-1', namaBahan: stockCampuran.value[0]?.namaBarang || 'Ethanol Absolute 96%', stockCampuranId: stockCampuran.value[0]?.id, percentage: 75, isFragranceOilConcentrate: false },
-      { id: 'ing-2', namaBahan: stockCampuran.value[1]?.namaBarang || 'DPG / Fixative', stockCampuranId: stockCampuran.value[1]?.id, percentage: 5, isFragranceOilConcentrate: false }
-    ]
+    ingredients: []
   };
   isModalOpen.value = true;
 }
@@ -339,13 +349,25 @@ function openEditModal(base: FormulaBase) {
   isModalOpen.value = true;
 }
 
+function addFoSlot() {
+  if (form.value.ingredients.some(i => i.isFragranceOilConcentrate)) {
+    store.showToast('Slot Konsentrat FO sudah ada di formula', 'info');
+    return;
+  }
+  form.value.ingredients.unshift({
+    id: 'ing-fo-' + Date.now(),
+    namaBahan: 'Fragrance Oil Concentrate',
+    percentage: 20,
+    isFragranceOilConcentrate: true
+  });
+}
+
 function addIngredientRow() {
-  const item = stockCampuran.value[0];
   form.value.ingredients.push({
     id: 'ing-' + Date.now(),
-    namaBahan: item ? item.namaBarang : 'Bahan Campuran',
-    stockCampuranId: item ? item.id : undefined,
-    percentage: 5,
+    namaBahan: '',
+    stockCampuranId: undefined,
+    percentage: 0,
     isFragranceOilConcentrate: false
   });
 }
