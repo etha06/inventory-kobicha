@@ -17,12 +17,6 @@
           <p class="text-xs text-sage-600">Katalog komparasi efisiensi harga beli per 1 ml untuk mempermudah perhitungan HPP parfum</p>
         </div>
       </div>
-
-      <div class="flex items-center gap-2">
-        <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-sage-50 text-forest-800 border border-sage-200">
-          Rata-rata digunakan otomatis di Kalkulator
-        </span>
-      </div>
     </div>
 
     <!-- Search & Filter Bar -->
