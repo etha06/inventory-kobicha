@@ -128,7 +128,6 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-4 w-10 text-left">#</th>
               <th class="py-3.5 px-4 text-left">Nama FO</th>
               <th class="py-3.5 px-4 text-left">Jenis Liquid</th>
               <th class="py-3.5 px-4 text-left">Toko Supplier</th>
@@ -143,24 +142,20 @@
           </thead>
           <tbody class="divide-y divide-stone-100 text-stone-800">
             <tr v-if="filteredList.length === 0">
-              <td colspan="11" class="py-12 text-center text-stone-400">
+              <td colspan="10" class="py-12 text-center text-stone-400">
                 <Droplet class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Tidak ada data Fragrance Oil ditemukan.
               </td>
             </tr>
 
-            <template v-for="(item, idx) in paginatedList" :key="item.id">
+            <template v-for="item in paginatedList" :key="item.id">
               <!-- Main Row (Click to expand) -->
               <tr
                 @click="toggleRow(item.id)"
                 class="table-row-hover transition-colors cursor-pointer"
                 :class="expandedItemId === item.id ? 'bg-amber-50/60 font-medium' : ''"
               >
-                <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
-                  {{ (currentPage - 1) * itemsPerPage + idx + 1 }}
-                </td>
-
-                <!-- 1. Kolom Nama FO (Setelah No) -->
+                <!-- 1. Kolom Nama FO -->
                 <td class="py-3.5 px-4 text-left">
                   <div class="flex items-center gap-2">
                     <ChevronRight
@@ -253,7 +248,7 @@
 
               <!-- Expandable Inline Detail Sub-Row -->
               <tr v-if="expandedItemId === item.id" class="bg-amber-50/30 border-b border-amber-200/70">
-                <td colspan="11" class="p-5">
+                <td colspan="10" class="p-5">
                   <div class="bg-white rounded-xl p-5 border border-amber-200/80 shadow-sm space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                       <div class="space-y-2 flex-1">

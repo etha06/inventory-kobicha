@@ -200,7 +200,6 @@
           <table class="w-full text-xs text-left table-fixed">
             <thead class="text-[10px] text-stone-500 uppercase font-bold">
               <tr>
-                <th class="py-2.5 px-3 w-10 text-left">#</th>
                 <th class="py-2.5 px-3 text-left">Nama Fragrance Oil</th>
                 <th class="py-2.5 px-3 text-left w-20">Pyramid</th>
                 <th class="py-2.5 px-3 text-left w-28">Jumlah Tetes</th>
@@ -218,7 +217,7 @@
           <table class="w-full text-xs text-left table-fixed">
             <tbody class="divide-y text-stone-800">
               <tr v-if="rows.length === 0">
-                <td colspan="8" class="py-12 text-center text-stone-400 italic">
+                <td colspan="7" class="py-12 text-center text-stone-400 italic">
                   <span v-if="mode === 'by_resep' && !selectedRacikanCatalogId">
                     Silakan pilih resep racikan dari katalog di atas terlebih dahulu untuk memuat komposisi Fragrance Oil.
                   </span>
@@ -229,10 +228,6 @@
               </tr>
 
               <tr v-for="(row, idx) in rows" :key="row.id" class="hover:bg-stone-50 transition-colors">
-                <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px] w-10">
-                  {{ idx + 1 }}
-                </td>
-
                 <!-- Select Fragrance Oil -->
                 <td class="py-2 px-3 text-left">
                   <div class="flex items-center gap-1.5">

@@ -63,7 +63,6 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-4 w-10 text-left">#</th>
               <th class="py-3.5 px-4 text-left">Nama Fragrance Oil</th>
               <th class="py-3.5 px-4 text-left">Jenis Liquid</th>
               <th class="py-3.5 px-4 text-left">Pyramid</th>
@@ -75,21 +74,17 @@
           </thead>
           <tbody class="divide-y divide-stone-100 text-stone-800">
             <tr v-if="processedFoList.length === 0">
-              <td colspan="8" class="py-12 text-center text-stone-400">
+              <td colspan="7" class="py-12 text-center text-stone-400">
                 <Tag class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Tidak ada data harga ditemukan.
               </td>
             </tr>
 
             <tr
-              v-for="(item, idx) in processedFoList"
+              v-for="item in paginatedFoList"
               :key="item.id"
               class="table-row-hover transition-colors"
             >
-              <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
-                {{ idx + 1 }}
-              </td>
-
               <td class="py-3.5 px-4 text-left">
                 <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
                   <span>{{ item.nama }}</span>
@@ -163,18 +158,26 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination for Table -->
+      <Pagination
+        v-model:currentPage="currentPage"
+        :totalItems="processedFoList.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { PYRAMID_OPTIONS, NOTE_COLOR_MAP, PYRAMID_BADGE_MAP } from '../utils/constants';
 import { formatRupiah } from '../utils/formatters';
 import { Search, Eye, Tag, Menu } from 'lucide-vue-next';
 import CustomSelect from '../components/common/CustomSelect.vue';
+import Pagination from '../components/common/Pagination.vue';
 
 const store = useKobichaStore();
 const { stockFragranceOil } = storeToRefs(store);
@@ -182,6 +185,10 @@ const { stockFragranceOil } = storeToRefs(store);
 const searchQuery = ref('');
 const filterPyramid = ref('');
 const sortBy = ref('price_asc');
+
+// Pagination State (Max 10 rows per page)
+const currentPage = ref(1);
+const itemsPerPage = 10;
 
 const pyramidOptions = [
   { value: '', label: 'Semua Piramida' },
@@ -220,5 +227,14 @@ const processedFoList = computed(() => {
   });
 
   return list;
+});
+
+const paginatedFoList = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return processedFoList.value.slice(start, start + itemsPerPage);
+});
+
+watch([searchQuery, filterPyramid, sortBy], () => {
+  currentPage.value = 1;
 });
 </script>

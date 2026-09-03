@@ -67,7 +67,6 @@
         <table class="w-full text-left border-collapse text-xs">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
-              <th class="py-3.5 px-4 w-10 text-left">#</th>
               <th class="py-3.5 px-4 text-left">Nama Toko</th>
               <th class="py-3.5 px-4 text-left">Jenis Barang</th>
               <th class="py-3.5 px-4 text-left">Link Toko</th>
@@ -77,23 +76,19 @@
           </thead>
           <tbody class="divide-y divide-stone-100 text-stone-800">
             <tr v-if="filteredStores.length === 0">
-              <td colspan="6" class="py-12 text-center text-stone-400">
+              <td colspan="5" class="py-12 text-center text-stone-400">
                 <Store class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Tidak ada data toko ditemukan.
               </td>
             </tr>
 
-            <template v-for="(store, idx) in paginatedStores" :key="store.id">
+            <template v-for="store in paginatedStores" :key="store.id">
               <!-- Main Row (Clickable to expand) -->
               <tr
                 @click="toggleRow(store.id)"
                 class="table-row-hover transition-colors cursor-pointer"
                 :class="expandedStoreId === store.id ? 'bg-amber-50/60 font-medium' : ''"
               >
-                <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
-                  <span class="text-[11px]">{{ (currentPage - 1) * itemsPerPage + idx + 1 }}</span>
-                </td>
-
                 <td class="py-3.5 px-4 text-left">
                   <div class="flex items-center gap-2">
                     <ChevronRight
@@ -151,7 +146,7 @@
 
               <!-- Expandable Inline Detail Sub-Row -->
               <tr v-if="expandedStoreId === store.id" class="bg-amber-50/30 border-b border-amber-200/70">
-                <td colspan="6" class="p-5">
+                <td colspan="5" class="p-5">
                   <div class="bg-white rounded-xl p-4 border border-amber-200/80 shadow-sm space-y-3">
                     <div class="flex items-start justify-between">
                       <div>

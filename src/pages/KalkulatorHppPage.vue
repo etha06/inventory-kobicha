@@ -162,7 +162,6 @@
             <table class="w-full text-xs text-left table-fixed">
               <thead class="text-[10px] text-stone-500 uppercase font-bold">
                 <tr>
-                  <th class="py-2.5 px-3 w-10 text-left">#</th>
                   <th class="py-2.5 px-3 text-left">Bahan Formula Resep</th>
                   <th class="py-2.5 px-3 text-left w-24">Tipe</th>
                   <th class="py-2.5 px-3 text-left w-24">Porsi (%)</th>
@@ -180,16 +179,12 @@
             <table class="w-full text-xs text-left table-fixed">
               <tbody class="divide-y text-stone-800">
                 <tr v-if="liquidIngredients.length === 0">
-                  <td colspan="8" class="py-12 text-center text-stone-400 italic">
+                  <td colspan="7" class="py-12 text-center text-stone-400 italic">
                     Pilih Formula Base dan Racikan di atas untuk menghitung otomatis komposisi cairan.
                   </td>
                 </tr>
 
                 <tr v-for="(ing, idx) in liquidIngredients" :key="idx" class="hover:bg-stone-50 transition-colors">
-                  <td class="py-2.5 px-3 text-left text-stone-400 font-mono text-[11px] w-10">
-                    {{ idx + 1 }}
-                  </td>
-
                   <!-- Nama & Dropdown Selector (Plain text for FO and Base items, Dropdown only for custom added rows) -->
                   <td class="py-2.5 px-3 text-left">
                     <div v-if="ing.jenis === 'FO'" class="space-y-0.5">
@@ -355,7 +350,6 @@
         <table class="w-full text-xs text-left">
           <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
             <tr>
-              <th class="py-2.5 px-3 w-10 text-left">#</th>
               <th class="py-2.5 px-3 text-left">Nama Barang / Kemasan / Operasional</th>
               <th class="py-2.5 px-3 text-left w-28">Jumlah (Pcs)</th>
               <th class="py-2.5 px-3 text-left w-36">Harga Satuan (Rp)</th>
@@ -365,16 +359,12 @@
           </thead>
           <tbody class="divide-y text-stone-800">
             <tr v-if="packagingRows.length === 0">
-              <td colspan="6" class="py-6 text-center text-stone-400 italic">
+              <td colspan="5" class="py-6 text-center text-stone-400 italic">
                 Belum ada komponen modal lainnya. Klik "+ Tambah Item Manual" untuk memasukkan botol, box, atau stiker.
               </td>
             </tr>
 
             <tr v-for="(row, idx) in packagingRows" :key="row.id" class="hover:bg-stone-50">
-              <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px]">
-                {{ idx + 1 }}
-              </td>
-
               <td class="py-2 px-3 text-left">
                 <input
                   v-model="row.namaItem"
