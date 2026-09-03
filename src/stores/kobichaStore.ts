@@ -87,32 +87,36 @@ export const useKobichaStore = defineStore('kobicha', () => {
     toasts.value = toasts.value.filter(t => t.id !== id);
   }
 
-  // Load from LocalStorage or initialize with Sample Data
+  // Load from LocalStorage or initialize with Empty Data
   function loadDatabase() {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      clearAllData(false);
+      return;
+    }
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        stores.value = (parsed.stores && parsed.stores.length > 0) ? parsed.stores : INITIAL_STORES;
-        stockCampuran.value = (parsed.stockCampuran && parsed.stockCampuran.length > 0) ? parsed.stockCampuran : INITIAL_CAMPURAN;
-        stockFragranceOil.value = (parsed.stockFragranceOil && parsed.stockFragranceOil.length > 0) ? parsed.stockFragranceOil : INITIAL_FRAGRANCE_OILS;
-        formulaBases.value = (parsed.formulaBases && parsed.formulaBases.length > 0) ? parsed.formulaBases : INITIAL_FORMULA_BASES;
-        racikanCatalog.value = (parsed.racikanCatalog && parsed.racikanCatalog.length > 0) ? parsed.racikanCatalog : INITIAL_RACIKAN;
-        hppCatalog.value = (parsed.hppCatalog && parsed.hppCatalog.length > 0) ? parsed.hppCatalog : INITIAL_HPP;
-        readyToSellProducts.value = (parsed.readyToSellProducts && parsed.readyToSellProducts.length > 0) ? parsed.readyToSellProducts : INITIAL_READY_TO_SELL;
-        quickNotes.value = (parsed.quickNotes && parsed.quickNotes.length > 0) ? parsed.quickNotes : INITIAL_QUICK_NOTES;
-        deadlines.value = (parsed.deadlines && parsed.deadlines.length > 0) ? parsed.deadlines : INITIAL_DEADLINES;
-        saveDatabase();
+        stores.value = parsed.stores || [];
+        stockCampuran.value = parsed.stockCampuran || [];
+        stockFragranceOil.value = parsed.stockFragranceOil || [];
+        formulaBases.value = parsed.formulaBases || [];
+        racikanCatalog.value = parsed.racikanCatalog || [];
+        hppCatalog.value = parsed.hppCatalog || [];
+        readyToSellProducts.value = parsed.readyToSellProducts || [];
+        quickNotes.value = parsed.quickNotes || [];
+        deadlines.value = parsed.deadlines || [];
       } else {
-        resetToSampleData(false);
+        clearAllData(false);
       }
     } catch (e) {
       console.error('Error loading database from localStorage:', e);
-      resetToSampleData(false);
+      clearAllData(false);
     }
   }
 
   function saveDatabase() {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') return;
     try {
       const payload = {
         stores: stores.value,
@@ -124,7 +128,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
         readyToSellProducts: readyToSellProducts.value,
         quickNotes: quickNotes.value,
         deadlines: deadlines.value,
-        version: '1.0'
+        version: '1.1'
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch (e) {
@@ -132,18 +136,23 @@ export const useKobichaStore = defineStore('kobicha', () => {
     }
   }
 
-  function resetToSampleData(notify = true) {
-    stores.value = JSON.parse(JSON.stringify(INITIAL_STORES));
-    stockCampuran.value = JSON.parse(JSON.stringify(INITIAL_CAMPURAN));
-    stockFragranceOil.value = JSON.parse(JSON.stringify(INITIAL_FRAGRANCE_OILS));
-    formulaBases.value = JSON.parse(JSON.stringify(INITIAL_FORMULA_BASES));
-    racikanCatalog.value = JSON.parse(JSON.stringify(INITIAL_RACIKAN));
-    hppCatalog.value = JSON.parse(JSON.stringify(INITIAL_HPP));
-    readyToSellProducts.value = JSON.parse(JSON.stringify(INITIAL_READY_TO_SELL));
-    quickNotes.value = JSON.parse(JSON.stringify(INITIAL_QUICK_NOTES));
-    deadlines.value = JSON.parse(JSON.stringify(INITIAL_DEADLINES));
+  function clearAllData(notify = true) {
+    stores.value = [];
+    stockCampuran.value = [];
+    stockFragranceOil.value = [];
+    formulaBases.value = [];
+    racikanCatalog.value = [];
+    hppCatalog.value = [];
+    readyToSellProducts.value = [];
+    quickNotes.value = [];
+    deadlines.value = [];
     saveDatabase();
-    if (notify) showToast('Database telah di-reset ke data contoh awal', 'info');
+    if (notify) showToast('Database telah dikosongkan (Mulai dari 0)', 'info');
+  }
+
+  function resetToSampleData(notify = true) {
+    clearAllData(false);
+    if (notify) showToast('Database telah di-reset (Kosong)', 'info');
   }
 
   // Auto-save on every state change
@@ -789,6 +798,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
     // Persistence & Backup
     exportDatabase,
     importDatabase,
-    resetToSampleData
+    resetToSampleData,
+    clearAllData
   };
 });

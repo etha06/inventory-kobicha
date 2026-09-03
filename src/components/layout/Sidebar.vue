@@ -286,19 +286,42 @@
           </label>
         </div>
 
+        <div v-show="!isCollapsed">
+          <button
+            @click="isConfirmClearOpen = true"
+            class="w-full px-2.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 hover:text-rose-100 text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors border border-rose-400/20"
+            title="Hapus Semua Data & Mulai dari 0"
+          >
+            <Trash2 class="w-3.5 h-3.5" />
+            <span>Kosongkan Semua Data</span>
+          </button>
+        </div>
+
         <div class="flex items-center justify-between px-2 pt-1 text-[11px] text-sage-200">
           <span v-show="!isCollapsed">v1.1 Kobicha</span>
           <span class="font-mono">Offline-ready</span>
         </div>
       </div>
     </aside>
+
+    <!-- Modal Konfirmasi Kosongkan Data -->
+    <ConfirmModal
+      :isOpen="isConfirmClearOpen"
+      title="Kosongkan Semua Data?"
+      message="Tindakan ini akan menghapus seluruh data Stok, Racikan, HPP, Produk Siap Jual, Notes, dan Kalender sehingga database benar-benar kosong (mulai dari 0). Pastikan Anda sudah mengekspor backup jika ada data penting."
+      confirmText="Ya, Kosongkan Semua"
+      type="danger"
+      @confirm="executeClearData"
+      @close="isConfirmClearOpen = false"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useKobichaStore } from '../../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
+import ConfirmModal from '../common/ConfirmModal.vue';
 import {
   Home,
   Store,
@@ -317,7 +340,8 @@ import {
   ChevronRight,
   Menu,
   X,
-  Calendar
+  Calendar,
+  Trash2
 } from 'lucide-vue-next';
 
 defineProps<{
@@ -332,6 +356,14 @@ const emit = defineEmits<{
 
 const store = useKobichaStore();
 const { activeTab, stores, stockCampuran, stockFragranceOil, racikanCatalog, hppCatalog, totalReadyToSellCount } = storeToRefs(store);
+
+const isConfirmClearOpen = ref(false);
+
+function executeClearData() {
+  store.clearAllData(true);
+  isConfirmClearOpen.value = false;
+  store.navigateTo('home');
+}
 
 const todayFormatted = computed(() => {
   const now = new Date();
