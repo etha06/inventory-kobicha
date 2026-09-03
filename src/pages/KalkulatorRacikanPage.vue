@@ -38,6 +38,14 @@
       </div>
     </div>
 
+    <!-- Yellow Info Alert (Not Bold) -->
+    <div class="bg-amber-50 border border-amber-200/90 rounded-2xl p-3.5 px-4 flex items-center gap-2.5 text-amber-900 text-xs shadow-xs">
+      <Info class="w-4 h-4 text-amber-600 flex-shrink-0" />
+      <span class="font-normal text-amber-800">
+        Formula Base sama Target total botol itu ga ke simpen di katalog, dia cuma buat bantu perhitungan aja.
+      </span>
+    </div>
+
     <!-- Formula Mode Selector & General Configurations -->
     <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-5">
       <!-- Mode Toggle -->
@@ -375,7 +383,7 @@ import { storeToRefs } from 'pinia';
 import { RacikanItem, NotesEnum, PyramidEnum } from '../types';
 import { PYRAMID_BADGE_MAP } from '../utils/constants';
 import { formatRupiah, formatNumber } from '../utils/formatters';
-import { Plus, RotateCcw, Save, Trash2, DollarSign, Menu } from 'lucide-vue-next';
+import { Plus, RotateCcw, Save, Trash2, DollarSign, Menu, Info } from 'lucide-vue-next';
 import CustomSelect from '../components/common/CustomSelect.vue';
 
 const store = useKobichaStore();

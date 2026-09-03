@@ -41,15 +41,33 @@
     <!-- General Title & Bottle Size Configuration -->
     <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm">
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="sm:col-span-2">
-          <label class="block text-xs font-semibold text-forest-800 mb-1">Nama Analisis / Produk HPP</label>
-          <input
-            v-model="hppTitle"
-            type="text"
-            required
-            placeholder="Misal: HPP Kobicha Signature No. 1 (Botol 50ml Amber)"
-            class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm font-medium bg-white"
-          />
+        <div class="sm:col-span-2 space-y-1.5">
+          <label class="block text-xs font-semibold text-forest-800">Nama Produk</label>
+          <div v-if="liquidMode === 'manual'" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <CustomSelect
+              v-model="selectedRacikanForNew"
+              :options="racikanOptions"
+              placeholder="-- Pilih dari Resep Racikan --"
+              :searchable="true"
+              @change="onSelectRacikanForNew"
+            />
+            <input
+              v-model="hppTitle"
+              type="text"
+              required
+              placeholder="Atau ketik Nama Produk..."
+              class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-xs font-medium bg-white"
+            />
+          </div>
+          <div v-else>
+            <input
+              v-model="hppTitle"
+              type="text"
+              required
+              placeholder="Misal: Kobicha Signature No. 1"
+              class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-xs font-medium bg-white"
+            />
+          </div>
         </div>
 
         <div>
@@ -69,7 +87,7 @@
       </div>
     </div>
 
-    <!-- SECTION 1: HPP RESEP / LIQUID FORMULA (TERPISAH) -->
+    <!-- SECTION 1: HPP RESEP RACIKAN -->
     <div class="bg-white rounded-2xl border border-stone-200/80 p-5 sm:p-6 shadow-sm space-y-5">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-200 pb-4">
         <div class="flex items-center gap-2.5">
@@ -77,33 +95,33 @@
             <FlaskConical class="w-4 h-4" />
           </div>
           <div>
-            <h4 class="text-sm font-bold text-stone-900">1. HPP Resep / Cairan Liquid Parfum</h4>
+            <h4 class="text-sm font-bold text-stone-900">1. HPP Resep Racikan</h4>
             <p class="text-xs text-stone-500">Biaya konsentrat fragrance oil dan bahan pelarut campuran</p>
           </div>
         </div>
 
-        <!-- Mode Toggle -->
+        <!-- Mode Toggle (Tambah Baru on Left, Detail & Update on Right) -->
         <div class="flex items-center gap-1.5 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
           <button
             type="button"
-            @click="liquidMode = 'by_recipe'"
-            class="px-3 py-1.5 rounded-lg transition-all"
-            :class="liquidMode === 'by_recipe' ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-stone-600 hover:text-stone-900'"
+            @click="setLiquidMode('manual')"
+            class="px-3.5 py-1.5 rounded-lg transition-all"
+            :class="liquidMode === 'manual' ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-stone-600 hover:text-stone-900'"
           >
-            By Base & Racikan Resep
+            Tambah Baru
           </button>
           <button
             type="button"
-            @click="liquidMode = 'manual'"
-            class="px-3 py-1.5 rounded-lg transition-all"
-            :class="liquidMode === 'manual' ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-stone-600 hover:text-stone-900'"
+            @click="setLiquidMode('by_recipe')"
+            class="px-3.5 py-1.5 rounded-lg transition-all"
+            :class="liquidMode === 'by_recipe' ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-stone-600 hover:text-stone-900'"
           >
-            Input Manual Rp/ml
+            Detail & Update
           </button>
         </div>
       </div>
 
-      <!-- Option A: By Formula Base & Racikan -->
+      <!-- Option A: By Formula Base & Racikan / Breakdown Table -->
       <div v-if="liquidMode === 'by_recipe'" class="space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200/80">
           <div>
@@ -128,7 +146,7 @@
           </div>
         </div>
 
-        <!-- Liquid Ingredients Table Breakdown with Interactive Pelarut Dropdown from Bahan Baku -->
+        <!-- Liquid Ingredients Table Breakdown -->
         <div class="overflow-x-auto border rounded-xl min-h-[320px] pb-24">
           <table class="w-full text-xs text-left">
             <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
@@ -155,13 +173,18 @@
                   {{ idx + 1 }}
                 </td>
 
-                <!-- Nama & Dropdown Selector for Campuran / Solvent -->
+                <!-- Nama & Dropdown Selector (Plain text for FO and Base items, Dropdown only for custom added rows) -->
                 <td class="py-2.5 px-3 text-left">
                   <div v-if="ing.jenis === 'FO'" class="space-y-0.5">
                     <span class="font-bold text-stone-900 block">{{ ing.nama }}</span>
                     <span class="text-[10px] text-stone-500">Konsentrat Bibit Fragrance Oil</span>
                   </div>
                   
+                  <div v-else-if="!ing.isCustomRow" class="space-y-0.5">
+                    <span class="font-bold text-stone-900 block">{{ ing.nama }}</span>
+                    <span class="text-[10px] text-stone-500">Pelarut Formula Base</span>
+                  </div>
+
                   <div v-else class="space-y-1.5">
                     <CustomSelect
                       v-model="ing.stockCampuranId"
@@ -189,7 +212,7 @@
                 <!-- Persentase (%) -->
                 <td class="py-2.5 px-3 text-left font-mono">
                   <input
-                    v-if="ing.jenis === 'Campuran'"
+                    v-if="ing.isCustomRow"
                     v-model.number="ing.percentage"
                     type="number"
                     min="0"
@@ -209,7 +232,7 @@
                 <!-- Rata-rata Harga per ml -->
                 <td class="py-2.5 px-3 text-left font-mono text-stone-600">
                   <input
-                    v-if="ing.jenis === 'Campuran'"
+                    v-if="ing.isCustomRow"
                     v-model.number="ing.pricePerMl"
                     type="number"
                     min="0"
@@ -217,7 +240,7 @@
                     class="w-24 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
                     title="Harga modal per 1 ml"
                   />
-                  <span v-else>{{ formatRupiah(ing.pricePerMl) }}</span>
+                  <span v-else>{{ formatRupiah(ing.pricePerMl) }}/ml</span>
                 </td>
 
                 <!-- Subtotal Biaya -->
@@ -225,10 +248,10 @@
                   {{ formatRupiah(ing.cost) }}
                 </td>
 
-                <!-- Aksi Hapus (hanya untuk baris cairan / solvent) -->
+                <!-- Aksi Hapus (hanya untuk baris cairan kustom tambahan) -->
                 <td class="py-2.5 px-3 text-left">
                   <button
-                    v-if="ing.jenis === 'Campuran'"
+                    v-if="ing.isCustomRow"
                     type="button"
                     @click="removeLiquidIngredient(idx)"
                     class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
@@ -236,6 +259,7 @@
                   >
                     <Trash2 class="w-3.5 h-3.5" />
                   </button>
+                  <span v-else class="text-stone-300 text-xs">-</span>
                 </td>
               </tr>
             </tbody>
@@ -261,17 +285,17 @@
         </div>
       </div>
 
-      <!-- Option B: Manual Input Liquid Price -->
+      <!-- Option B: Manual Input Liquid Price / Tambah Baru Mode -->
       <div v-else class="space-y-4 p-4 rounded-xl bg-stone-50 border border-stone-200">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Harga Modal Liquid (Rp)</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Harga Modal Liquid (Rp/ml)</label>
             <input
               v-model.number="manualLiquidPricePerMl"
               type="number"
               min="0"
               placeholder="Misal: 500"
-              class="w-full px-3.5 py-2 text-xs rounded-xl border border-stone-300 font-mono font-bold"
+              class="w-full px-3.5 py-2 text-xs rounded-xl border border-stone-300 font-mono font-bold bg-white"
             />
           </div>
           <div>
@@ -517,12 +541,13 @@ const { formulaBases, racikanCatalog, stockCampuran, bahanBakuCampuranList, pref
 
 const hppTitle = ref('');
 const targetBottleMl = ref(50);
-const liquidMode = ref<'by_recipe' | 'manual'>('by_recipe');
+const liquidMode = ref<'by_recipe' | 'manual'>('manual');
 
 const selectedBaseId = ref('');
 const selectedRacikanId = ref('');
+const selectedRacikanForNew = ref('');
 const selectedCampuranToAdd = ref('');
-const manualLiquidPricePerMl = ref(450);
+const manualLiquidPricePerMl = ref(0);
 
 const targetMarginPercentage = ref(150);
 
@@ -552,6 +577,24 @@ const stockCampuranOptions = computed(() => [
   }))
 ]);
 
+function setLiquidMode(m: 'manual' | 'by_recipe') {
+  liquidMode.value = m;
+}
+
+function onSelectRacikanForNew() {
+  if (!selectedRacikanForNew.value) return;
+  const r = racikanCatalog.value.find(x => x.id === selectedRacikanForNew.value);
+  if (r) {
+    hppTitle.value = r.nama;
+    selectedRacikanId.value = r.id;
+    targetBottleMl.value = r.targetTotalMl || 50;
+    if (r.formulaBaseId) {
+      selectedBaseId.value = r.formulaBaseId;
+    }
+    recalculateLiquidFromRecipe();
+  }
+}
+
 function onSelectAddCampuranStock(campId: string) {
   if (!campId) return;
   const item = stockCampuran.value.find(c => c.id === campId);
@@ -568,11 +611,7 @@ function onSelectAddCampuranStock(campId: string) {
 }
 
 // Section 2: Packaging Items
-const packagingRows = ref<PackagingHppItem[]>([
-  { id: 'pkg-1', namaItem: 'Botol Kaca Amber 50ml + Spray Atomizer', jumlah: 1, hargaSatuan: 9500, total: 9500 },
-  { id: 'pkg-2', namaItem: 'Hardbox Packaging Custom Kobicha', jumlah: 1, hargaSatuan: 4500, total: 4500 },
-  { id: 'pkg-3', namaItem: 'Stiker Label Gold Foil + Pita Segel', jumlah: 1, hargaSatuan: 1500, total: 1500 }
-]);
+const packagingRows = ref<PackagingHppItem[]>([]);
 
 function addManualPackagingRow() {
   packagingRows.value.push({
@@ -589,7 +628,9 @@ function removePackagingRow(idx: number) {
 }
 
 function onBottleSizeChange() {
-  recalculateLiquidFromRecipe();
+  if (selectedRacikanId.value || selectedBaseId.value) {
+    recalculateLiquidFromRecipe();
+  }
 }
 
 // Section 1 Liquid Calculation from Recipe
@@ -601,6 +642,7 @@ export interface LiquidIngredientRow {
   volumeMl: number;
   pricePerMl: number;
   cost: number;
+  isCustomRow?: boolean;
 }
 
 const liquidIngredients = ref<LiquidIngredientRow[]>([]);
@@ -608,6 +650,11 @@ const liquidIngredients = ref<LiquidIngredientRow[]>([]);
 function recalculateLiquidFromRecipe() {
   const base = formulaBases.value.find(b => b.id === selectedBaseId.value);
   const racikan = racikanCatalog.value.find(r => r.id === selectedRacikanId.value);
+
+  if (!base && !racikan) {
+    liquidIngredients.value = [];
+    return;
+  }
 
   const result: LiquidIngredientRow[] = [];
   const bottleMl = targetBottleMl.value;
@@ -634,10 +681,11 @@ function recalculateLiquidFromRecipe() {
         percentage: foPercentInBottle,
         volumeMl: foMl,
         pricePerMl,
-        cost
+        cost,
+        isCustomRow: false
       });
     });
-  } else {
+  } else if (foPercent > 0) {
     // Fallback single generic FO
     result.push({
       nama: 'Fragrance Oil Concentrate (Generic)',
@@ -645,7 +693,8 @@ function recalculateLiquidFromRecipe() {
       percentage: foPercent,
       volumeMl: totalFoMl,
       pricePerMl: 2000,
-      cost: Math.round(totalFoMl * 2000)
+      cost: Math.round(totalFoMl * 2000),
+      isCustomRow: false
     });
   }
 
@@ -656,7 +705,6 @@ function recalculateLiquidFromRecipe() {
       .forEach(i => {
         const vol = (bottleMl * i.percentage) / 100;
         
-        // Find matching stock campuran in bahan baku list
         let matchedCamp = stockCampuran.value.find(c => c.id === i.stockCampuranId);
         if (!matchedCamp) {
           const lower = i.namaBahan.toLowerCase();
@@ -677,10 +725,11 @@ function recalculateLiquidFromRecipe() {
           percentage: i.percentage,
           volumeMl: vol,
           pricePerMl,
-          cost
+          cost,
+          isCustomRow: false
         });
       });
-  } else {
+  } else if (bottleMl > totalFoMl) {
     // Default Ethanol 96%
     const defaultCamp = bahanBakuCampuranList.value.find(c => 
       c.jenis.toLowerCase().includes('pelarut') || c.namaBarang.toLowerCase().includes('ethanol') || c.namaBarang.toLowerCase().includes('alkohol')
@@ -695,7 +744,8 @@ function recalculateLiquidFromRecipe() {
       percentage: 100 - foPercent,
       volumeMl: solventMl,
       pricePerMl,
-      cost: Math.round(solventMl * pricePerMl)
+      cost: Math.round(solventMl * pricePerMl),
+      isCustomRow: false
     });
   }
 
@@ -734,7 +784,8 @@ function addCustomLiquidRow() {
     percentage: percent,
     volumeMl: vol,
     pricePerMl,
-    cost: Math.round(vol * pricePerMl)
+    cost: Math.round(vol * pricePerMl),
+    isCustomRow: true
   });
 }
 
@@ -768,21 +819,21 @@ const recommendedSellingPrice = computed(() => {
 });
 
 function resetForm() {
-  selectedBaseId.value = formulaBases.value[0]?.id || '';
-  selectedRacikanId.value = racikanCatalog.value[0]?.id || '';
+  selectedBaseId.value = '';
+  selectedRacikanId.value = '';
+  selectedRacikanForNew.value = '';
   targetBottleMl.value = 50;
   targetMarginPercentage.value = 150;
-  liquidMode.value = 'by_recipe';
-  
-  const r = racikanCatalog.value[0];
-  hppTitle.value = `HPP ${r ? r.nama : 'Batch Baru'} (Botol 50ml)`;
-
-  recalculateLiquidFromRecipe();
+  liquidMode.value = 'manual';
+  hppTitle.value = '';
+  liquidIngredients.value = [];
+  manualLiquidPricePerMl.value = 0;
+  packagingRows.value = [];
 }
 
 function saveHpp() {
   if (!hppTitle.value.trim()) {
-    store.showToast('Masukkan nama analisis HPP terlebih dahulu', 'warning');
+    store.showToast('Masukkan nama produk terlebih dahulu', 'warning');
     return;
   }
 
@@ -835,11 +886,12 @@ function saveHpp() {
 
 onMounted(() => {
   if (prefilledHppRacikanId.value) {
+    liquidMode.value = 'by_recipe';
     selectedRacikanId.value = prefilledHppRacikanId.value;
     if (prefilledHppBaseId.value) selectedBaseId.value = prefilledHppBaseId.value;
     const r = racikanCatalog.value.find(x => x.id === prefilledHppRacikanId.value);
     if (r) {
-      hppTitle.value = `HPP ${r.nama} (Botol ${r.targetTotalMl || 50}ml)`;
+      hppTitle.value = r.nama;
       targetBottleMl.value = r.targetTotalMl || 50;
       if (r.formulaBaseId) selectedBaseId.value = r.formulaBaseId;
     }
