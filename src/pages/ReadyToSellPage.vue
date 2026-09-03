@@ -291,9 +291,6 @@
           <h3 class="text-2xl font-bold font-serif text-white">
             Ringkasan Modal & Potensi Keuntungan
           </h3>
-          <p class="text-xs text-stone-300 mt-1">
-            Total {{ totalReadyToSellStock }} unit produk siap jual • Estimasi Modal: {{ formatRupiah(totalInventoryHppCost) }} • Estimasi Omset: {{ formatRupiah(totalReadyToSellValue) }}
-          </p>
         </div>
 
         <!-- Big Summary Badges -->
@@ -340,11 +337,11 @@
             <TrendingUp class="w-4 h-4" />
             <span>Kalkulator & Simulasi Margin Keuntungan Produk</span>
           </h4>
-          <span class="text-xs text-stone-400">Pilih produk untuk simulasi margin & laba</span>
+          <span class="text-xs text-stone-400">Pilih produk untuk simulasi harga jual & margin</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          <!-- Pilih Produk untuk Disimulasikan -->
+          <!-- 1. Pilih Produk untuk Disimulasikan (Kosong Awalnya) -->
           <div class="sm:col-span-1">
             <label class="block text-xs text-stone-300 mb-1">Pilih Produk</label>
             <CustomSelect
@@ -352,37 +349,46 @@
               :options="simulationProductOptions"
               placeholder="-- Pilih Produk --"
               buttonClass="bg-stone-900 text-white border-stone-700"
+              @change="onSimulatedProductChange"
             />
           </div>
 
-          <!-- Target Margin Input -->
+          <!-- 2. Simulasi Harga Jual (Input yang Bisa Diedit, Default Sesuai Harga Jual Produk) -->
           <div>
-            <label class="block text-xs text-stone-300 mb-1">Target Profit Margin (%)</label>
+            <label class="block text-xs text-stone-300 mb-1">Simulasi Harga Jual (Rp)</label>
             <div class="relative">
               <input
-                v-model.number="simulatedMargin"
+                v-model.number="simulatedSellingPrice"
                 type="number"
                 min="0"
-                step="5"
-                class="w-full px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-semibold text-white pr-8 focus:ring-2 focus:ring-emerald-500/30"
+                step="500"
+                :disabled="!simulatedProductId"
+                placeholder="0"
+                class="w-full px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-semibold text-white pl-8 focus:ring-2 focus:ring-emerald-500/30 disabled:opacity-40 disabled:cursor-not-allowed"
               />
-              <span class="absolute right-3 top-2 text-stone-400 text-xs font-bold pointer-events-none">%</span>
+              <span class="absolute left-3 top-2 text-stone-400 text-xs font-bold pointer-events-none">Rp</span>
             </div>
           </div>
 
-          <!-- Rekomendasi Harga Jual -->
+          <!-- 3. Profit Margin (%) -->
           <div>
-            <label class="block text-xs text-stone-300 mb-1">Simulasi Harga Jual</label>
-            <div class="px-3.5 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-300 truncate">
-              {{ formatRupiah(simulatedSellingPrice) }}
+            <label class="block text-xs text-stone-300 mb-1">Profit Margin (%)</label>
+            <div class="px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-bold text-white truncate">
+              <span v-if="simulatedProductId && simulatedProductHpp > 0" :class="calculatedMarginPercentage >= 0 ? 'text-emerald-400' : 'text-rose-400'">
+                {{ calculatedMarginPercentage >= 0 ? '+' : '' }}{{ calculatedMarginPercentage }}%
+              </span>
+              <span v-else class="text-stone-500">-</span>
             </div>
           </div>
 
-          <!-- Estimasi Laba Bersih / Unit -->
+          <!-- 4. Estimasi Laba Bersih / Unit -->
           <div>
             <label class="block text-xs text-stone-300 mb-1">Estimasi Laba / Unit</label>
-            <div class="px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-bold text-emerald-400 truncate">
-              +{{ formatRupiah(simulatedProfitPerUnit) }}
+            <div class="px-3.5 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 truncate">
+              <span v-if="simulatedProductId">
+                +{{ formatRupiah(simulatedProfitPerUnit) }}
+              </span>
+              <span v-else class="text-stone-500">-</span>
             </div>
           </div>
         </div>
@@ -926,7 +932,7 @@ const totalPotentialProfit = computed(() => {
 
 // Profit Margin Simulation State
 const simulatedProductId = ref<string>('');
-const simulatedMargin = ref<number>(100);
+const simulatedSellingPrice = ref<number>(0);
 
 const simulationProductOptions = computed(() => {
   return readyToSellProducts.value.map(p => ({
@@ -935,28 +941,33 @@ const simulationProductOptions = computed(() => {
   }));
 });
 
-watch(readyToSellProducts, (newVal) => {
-  if (newVal.length > 0 && !simulatedProductId.value) {
-    simulatedProductId.value = newVal[0].id;
+function onSimulatedProductChange() {
+  if (!simulatedProductId.value) {
+    simulatedSellingPrice.value = 0;
+    return;
   }
-}, { immediate: true });
+  const p = readyToSellProducts.value.find(item => item.id === simulatedProductId.value);
+  if (p) {
+    simulatedSellingPrice.value = p.hargaJual || 0;
+  }
+}
 
 const simulatedProduct = computed(() => {
-  return readyToSellProducts.value.find(p => p.id === simulatedProductId.value) || readyToSellProducts.value[0];
+  return readyToSellProducts.value.find(p => p.id === simulatedProductId.value) || null;
 });
 
 const simulatedProductHpp = computed(() => {
   return simulatedProduct.value ? getItemHpp(simulatedProduct.value) : 0;
 });
 
-const simulatedSellingPrice = computed(() => {
-  const hpp = simulatedProductHpp.value;
-  if (hpp <= 0) return simulatedProduct.value?.hargaJual || 0;
-  const rawPrice = hpp * (1 + simulatedMargin.value / 100);
-  return Math.round(rawPrice / 500) * 500;
+const calculatedMarginPercentage = computed(() => {
+  if (!simulatedProduct.value || simulatedProductHpp.value <= 0) return 0;
+  const margin = ((simulatedSellingPrice.value - simulatedProductHpp.value) / simulatedProductHpp.value) * 100;
+  return Math.round(margin);
 });
 
 const simulatedProfitPerUnit = computed(() => {
+  if (!simulatedProduct.value) return 0;
   return Math.max(0, simulatedSellingPrice.value - simulatedProductHpp.value);
 });
 
