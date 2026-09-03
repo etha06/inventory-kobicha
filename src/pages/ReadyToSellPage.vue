@@ -279,6 +279,116 @@
       </div>
     </div>
 
+    <!-- ========================================================= -->
+    <!-- GRAND TOTAL ANALISIS BIAYA & PROFIT SIMULATOR (Ready to Sell) -->
+    <!-- ========================================================= -->
+    <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-stone-800 pb-6">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold block mb-1">
+            ✨ Grand Total Analisis Biaya & Profit
+          </span>
+          <h3 class="text-2xl font-bold font-serif text-white">
+            Ringkasan Modal & Potensi Keuntungan
+          </h3>
+          <p class="text-xs text-stone-300 mt-1">
+            Total {{ totalReadyToSellStock }} unit produk siap jual • Estimasi Modal: {{ formatRupiah(totalInventoryHppCost) }} • Estimasi Omset: {{ formatRupiah(totalReadyToSellValue) }}
+          </p>
+        </div>
+
+        <!-- Big Summary Badges -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="bg-stone-950/80 border border-stone-700/80 px-5 py-3 rounded-2xl text-center">
+            <span class="text-[10px] uppercase font-bold text-stone-400 block">Total Modal HPP</span>
+            <span class="text-xl font-bold font-mono text-amber-400">{{ formatRupiah(totalInventoryHppCost) }}</span>
+          </div>
+
+          <div class="bg-stone-950/80 border border-stone-700/80 px-5 py-3 rounded-2xl text-center">
+            <span class="text-[10px] uppercase font-bold text-stone-400 block">Total Estimasi Omset</span>
+            <span class="text-xl font-bold font-mono text-emerald-400">{{ formatRupiah(totalReadyToSellValue) }}</span>
+          </div>
+
+          <div class="bg-stone-950/80 border border-emerald-500/40 px-5 py-3 rounded-2xl text-center bg-emerald-950/40">
+            <span class="text-[10px] uppercase font-bold text-emerald-300 block">Potensi Laba Bersih</span>
+            <span class="text-xl font-bold font-mono text-emerald-300">+{{ formatRupiah(totalPotentialProfit) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cost vs Profit Split Progress Bar -->
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs text-stone-300">
+          <span>🏷️ Porsi Modal HPP: <strong>{{ totalReadyToSellValue > 0 ? Math.round((totalInventoryHppCost / totalReadyToSellValue) * 100) : 0 }}%</strong> ({{ formatRupiah(totalInventoryHppCost) }})</span>
+          <span>💰 Porsi Laba Bersih: <strong>{{ totalReadyToSellValue > 0 ? Math.round((totalPotentialProfit / totalReadyToSellValue) * 100) : 0 }}%</strong> ({{ formatRupiah(totalPotentialProfit) }})</span>
+        </div>
+        <div class="w-full bg-stone-950 h-3 rounded-full overflow-hidden flex border border-stone-800">
+          <div
+            class="bg-amber-500 h-full transition-all duration-300"
+            :style="{ width: (totalReadyToSellValue > 0 ? Math.round((totalInventoryHppCost / totalReadyToSellValue) * 100) : 0) + '%' }"
+          ></div>
+          <div
+            class="bg-emerald-500 h-full transition-all duration-300"
+            :style="{ width: (totalReadyToSellValue > 0 ? Math.round((totalPotentialProfit / totalReadyToSellValue) * 100) : 0) + '%' }"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Profit Margin Simulator / Calculator -->
+      <div class="bg-stone-950/60 rounded-2xl p-5 border border-stone-800 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+            <TrendingUp class="w-4 h-4" />
+            <span>Kalkulator & Simulasi Margin Keuntungan Produk</span>
+          </h4>
+          <span class="text-xs text-stone-400">Pilih produk untuk simulasi margin & laba</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <!-- Pilih Produk untuk Disimulasikan -->
+          <div class="sm:col-span-1">
+            <label class="block text-xs text-stone-300 mb-1">Pilih Produk</label>
+            <CustomSelect
+              v-model="simulatedProductId"
+              :options="simulationProductOptions"
+              placeholder="-- Pilih Produk --"
+              buttonClass="bg-stone-900 text-white border-stone-700"
+            />
+          </div>
+
+          <!-- Target Margin Input -->
+          <div>
+            <label class="block text-xs text-stone-300 mb-1">Target Profit Margin (%)</label>
+            <div class="relative">
+              <input
+                v-model.number="simulatedMargin"
+                type="number"
+                min="0"
+                step="5"
+                class="w-full px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-semibold text-white pr-8 focus:ring-2 focus:ring-emerald-500/30"
+              />
+              <span class="absolute right-3 top-2 text-stone-400 text-xs font-bold pointer-events-none">%</span>
+            </div>
+          </div>
+
+          <!-- Rekomendasi Harga Jual -->
+          <div>
+            <label class="block text-xs text-stone-300 mb-1">Simulasi Harga Jual</label>
+            <div class="px-3.5 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-300 truncate">
+              {{ formatRupiah(simulatedSellingPrice) }}
+            </div>
+          </div>
+
+          <!-- Estimasi Laba Bersih / Unit -->
+          <div>
+            <label class="block text-xs text-stone-300 mb-1">Estimasi Laba / Unit</label>
+            <div class="px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-bold text-emerald-400 truncate">
+              +{{ formatRupiah(simulatedProfitPerUnit) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- MODAL FORM (TAMBAH / EDIT PRODUK) -->
     <Modal
       :isOpen="isModalOpen"
@@ -627,13 +737,13 @@
                 v-if="detailItem.isBundle"
                 class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold text-[10px]"
               >
-                🎁 Paket Bundle
+                Paket Bundle
               </span>
               <span
                 v-else
                 class="px-2.5 py-0.5 rounded-full bg-stone-200 text-stone-800 font-semibold text-[10px]"
               >
-                📦 Single Product
+                Single Product
               </span>
               <span
                 v-if="detailItem.series"
@@ -665,6 +775,40 @@
           <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-center col-span-2 sm:col-span-1">
             <span class="text-[10px] uppercase font-bold text-amber-700 block">First Time Sell</span>
             <span class="text-base font-extrabold font-mono text-amber-950">{{ formatDate(detailItem.pertamaKaliDijual) }}</span>
+          </div>
+        </div>
+
+        <!-- Analisis Biaya & Estimasi Profit per Produk -->
+        <div class="p-4 rounded-2xl bg-stone-900 text-stone-100 border border-stone-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-stone-800 pb-2.5">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+              <TrendingUp class="w-3.5 h-3.5" />
+              <span>Analisis Modal & Laba</span>
+            </span>
+            <span v-if="getItemHpp(detailItem) > 0" class="text-[11px] text-emerald-400 font-mono font-bold">
+              Margin: +{{ Math.round(((detailItem.hargaJual - getItemHpp(detailItem)) / Math.max(getItemHpp(detailItem), 1)) * 100) }}%
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+            <div class="bg-stone-950/80 p-2.5 rounded-xl border border-stone-800 text-center">
+              <span class="text-[10px] uppercase font-bold text-stone-400 block">Modal HPP / Unit</span>
+              <span class="text-sm font-bold font-mono text-amber-300">{{ formatRupiah(getItemHpp(detailItem)) }}</span>
+            </div>
+
+            <div class="bg-stone-950/80 p-2.5 rounded-xl border border-stone-800 text-center">
+              <span class="text-[10px] uppercase font-bold text-stone-400 block">Laba Bersih / Unit</span>
+              <span class="text-sm font-bold font-mono text-emerald-400">
+                +{{ formatRupiah(Math.max(0, detailItem.hargaJual - getItemHpp(detailItem))) }}
+              </span>
+            </div>
+
+            <div class="bg-stone-950/80 p-2.5 rounded-xl border border-stone-800 text-center col-span-2 sm:col-span-1">
+              <span class="text-[10px] uppercase font-bold text-stone-400 block">Total Potensi Laba</span>
+              <span class="text-sm font-bold font-mono text-emerald-300">
+                +{{ formatRupiah(Math.max(0, detailItem.hargaJual - getItemHpp(detailItem)) * detailItem.jumlahStok) }}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -726,7 +870,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { ReadyToSellProduct, BundleProductItem } from '../types';
@@ -746,11 +890,75 @@ import {
   Eye,
   Pencil,
   Trash2,
-  Upload
+  Upload,
+  TrendingUp
 } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { readyToSellProducts, hppCatalog, allReadyToSellSeries, totalReadyToSellStock, totalReadyToSellValue } = storeToRefs(store);
+
+// Helper to get HPP cost for a ready to sell product (Single or Bundle)
+function getItemHpp(product: ReadyToSellProduct | null | undefined): number {
+  if (!product) return 0;
+  if (!product.isBundle) {
+    if (product.hppCalculationId) {
+      const h = hppCatalog.value.find(item => item.id === product.hppCalculationId);
+      if (h) return h.grandTotalHpp;
+    }
+    return 0;
+  }
+  // Bundle items aggregation
+  if (product.bundleItems && product.bundleItems.length > 0) {
+    return product.bundleItems.reduce((acc, bi) => acc + ((bi.hppPerItem || 0) * (bi.qty || 1)), 0);
+  }
+  return 0;
+}
+
+const totalInventoryHppCost = computed(() => {
+  return readyToSellProducts.value.reduce((acc, p) => {
+    return acc + (getItemHpp(p) * (p.jumlahStok || 0));
+  }, 0);
+});
+
+const totalPotentialProfit = computed(() => {
+  return Math.max(0, totalReadyToSellValue.value - totalInventoryHppCost.value);
+});
+
+// Profit Margin Simulation State
+const simulatedProductId = ref<string>('');
+const simulatedMargin = ref<number>(100);
+
+const simulationProductOptions = computed(() => {
+  return readyToSellProducts.value.map(p => ({
+    value: p.id,
+    label: `${p.nama} (${formatRupiah(p.hargaJual)})`
+  }));
+});
+
+watch(readyToSellProducts, (newVal) => {
+  if (newVal.length > 0 && !simulatedProductId.value) {
+    simulatedProductId.value = newVal[0].id;
+  }
+}, { immediate: true });
+
+const simulatedProduct = computed(() => {
+  return readyToSellProducts.value.find(p => p.id === simulatedProductId.value) || readyToSellProducts.value[0];
+});
+
+const simulatedProductHpp = computed(() => {
+  return simulatedProduct.value ? getItemHpp(simulatedProduct.value) : 0;
+});
+
+const simulatedSellingPrice = computed(() => {
+  const hpp = simulatedProductHpp.value;
+  if (hpp <= 0) return simulatedProduct.value?.hargaJual || 0;
+  const rawPrice = hpp * (1 + simulatedMargin.value / 100);
+  return Math.round(rawPrice / 500) * 500;
+});
+
+const simulatedProfitPerUnit = computed(() => {
+  return Math.max(0, simulatedSellingPrice.value - simulatedProductHpp.value);
+});
 
 // Filter & Search
 const searchQuery = ref('');

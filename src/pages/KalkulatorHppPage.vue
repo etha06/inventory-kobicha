@@ -426,12 +426,12 @@
       </div>
     </div>
 
-    <!-- GRAND TOTAL HPP & PROFIT SIMULATOR -->
+    <!-- TOTAL HPP SUMMARY -->
     <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-stone-800 pb-6">
         <div>
           <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold block mb-1">
-            ✨ Grand Total Analisis Biaya
+            Total HPP Produk
           </span>
           <h3 class="text-2xl font-bold font-serif text-white">
             {{ hppTitle || 'Perhitungan HPP Produk' }}
@@ -470,50 +470,6 @@
             class="bg-indigo-500 h-full transition-all duration-300"
             :style="{ width: Math.round((subtotalPackaging / Math.max(grandTotalHpp, 1)) * 100) + '%' }"
           ></div>
-        </div>
-      </div>
-
-      <!-- Profit Margin Simulator -->
-      <div class="bg-stone-950/60 rounded-2xl p-5 border border-stone-800 space-y-4">
-        <div class="flex items-center justify-between">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-            <TrendingUp class="w-4 h-4" />
-            <span>Simulasi Margin Keuntungan & Harga Jual Rekomendasi</span>
-          </h4>
-          <span class="text-xs text-stone-400">Sesuaikan target profit margin</span>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <!-- Margin Input -->
-          <div>
-            <label class="block text-xs text-stone-300 mb-1">Target Profit Margin (%)</label>
-            <div class="relative">
-              <input
-                v-model.number="targetMarginPercentage"
-                type="number"
-                min="0"
-                step="5"
-                class="w-full px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 font-mono font-bold text-white pr-8 focus:ring-2 focus:ring-emerald-500/30"
-              />
-              <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold pointer-events-none">%</span>
-            </div>
-          </div>
-
-          <!-- Recommended Selling Price -->
-          <div>
-            <label class="block text-xs text-stone-300 mb-1">Rekomendasi Harga Jual (Rp)</label>
-            <div class="px-4 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 font-mono font-bold text-base text-emerald-300">
-              {{ formatRupiah(recommendedSellingPrice) }}
-            </div>
-          </div>
-
-          <!-- Net Profit per Bottle -->
-          <div>
-            <label class="block text-xs text-stone-300 mb-1">Estimasi Laba Bersih / Botol</label>
-            <div class="px-4 py-2 rounded-xl bg-stone-900 border border-stone-700 font-mono font-bold text-base text-emerald-400">
-              +{{ formatRupiah(recommendedSellingPrice - grandTotalHpp) }}
-            </div>
-          </div>
         </div>
       </div>
 
