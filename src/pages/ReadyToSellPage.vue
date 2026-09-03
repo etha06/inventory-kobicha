@@ -831,40 +831,6 @@
           </div>
         </div>
 
-        <!-- Analisis Biaya & Estimasi Profit per Produk -->
-        <div class="p-4 rounded-2xl bg-stone-900 text-stone-100 border border-stone-800 space-y-3">
-          <div class="flex items-center justify-between border-b border-stone-800 pb-2.5">
-            <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-              <TrendingUp class="w-3.5 h-3.5" />
-              <span>Analisis Modal & Laba</span>
-            </span>
-            <span v-if="getItemHpp(detailItem) > 0" class="text-[11px] text-emerald-400 font-mono font-bold">
-              Margin: +{{ Math.round(((detailItem.hargaJual - getItemHpp(detailItem)) / Math.max(getItemHpp(detailItem), 1)) * 100) }}%
-            </span>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-            <div class="bg-stone-950/80 p-2.5 rounded-xl border border-stone-800 text-center">
-              <span class="text-[10px] uppercase font-bold text-stone-400 block">Modal HPP / Unit</span>
-              <span class="text-sm font-bold font-mono text-amber-300">{{ formatRupiah(getItemHpp(detailItem)) }}</span>
-            </div>
-
-            <div class="bg-stone-950/80 p-2.5 rounded-xl border border-stone-800 text-center">
-              <span class="text-[10px] uppercase font-bold text-stone-400 block">Laba Bersih / Unit</span>
-              <span class="text-sm font-bold font-mono text-emerald-400">
-                +{{ formatRupiah(Math.max(0, detailItem.hargaJual - getItemHpp(detailItem))) }}
-              </span>
-            </div>
-
-            <div class="bg-stone-950/80 p-2.5 rounded-xl border border-stone-800 text-center col-span-2 sm:col-span-1">
-              <span class="text-[10px] uppercase font-bold text-stone-400 block">Total Potensi Laba</span>
-              <span class="text-sm font-bold font-mono text-emerald-300">
-                +{{ formatRupiah(Math.max(0, detailItem.hargaJual - getItemHpp(detailItem)) * detailItem.jumlahStok) }}
-              </span>
-            </div>
-          </div>
-        </div>
-
         <!-- Bundle Contents Table if Bundle -->
         <div v-if="detailItem.isBundle && detailItem.bundleItems && detailItem.bundleItems.length > 0" class="space-y-2">
           <h5 class="text-xs font-bold text-stone-800 uppercase tracking-wider">
