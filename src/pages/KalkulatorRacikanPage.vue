@@ -76,37 +76,23 @@
       </div>
 
       <!-- Mode By Resep Selector -->
-      <div v-if="mode === 'by_resep'" class="p-4 rounded-xl bg-amber-50 border border-amber-200 space-y-2">
-        <div class="flex items-center justify-between">
-          <label class="block text-xs font-bold text-amber-950">Pilih Racikan dari Katalog Racikan Fragrance:</label>
-          <button
-            type="button"
-            @click="openRacikanPickerModal"
-            class="text-[11px] font-bold text-amber-800 hover:text-amber-900 underline inline-flex items-center gap-1"
-          >
-            <Layers class="w-3 h-3" />
-            <span>Buka Modal Katalog</span>
-          </button>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="flex-1">
-            <CustomSelect
-              v-model="selectedRacikanCatalogId"
-              :options="racikanCatalogOptions"
-              placeholder="-- Pilih Resep Racikan --"
-              :searchable="true"
-              @change="loadRecipeFromCatalog"
-            />
+      <div v-if="mode === 'by_resep'" class="p-4 rounded-xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="space-y-0.5">
+          <label class="block text-xs font-bold text-amber-950">Resep Racikan Terpilih:</label>
+          <div v-if="selectedRacikanCatalogId" class="text-xs font-bold text-stone-900 flex items-center gap-1.5">
+            <Check class="w-3.5 h-3.5 text-emerald-600" />
+            <span>{{ namaRacikan }}</span>
           </div>
-          <button
-            type="button"
-            @click="openRacikanPickerModal"
-            class="p-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 transition-colors flex-shrink-0"
-            title="Buka Modal Pemilih Racikan"
-          >
-            <Search class="w-4 h-4" />
-          </button>
+          <span v-else class="text-xs text-stone-500 italic">Belum ada resep racikan yang dipilih dari katalog.</span>
         </div>
+        <button
+          type="button"
+          @click="openRacikanPickerModal"
+          class="px-4 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition-colors flex items-center gap-1.5 flex-shrink-0"
+        >
+          <Layers class="w-3.5 h-3.5" />
+          <span>{{ selectedRacikanCatalogId ? 'Ganti Resep Racikan' : '+ Pilih Racikan dari Katalog' }}</span>
+        </button>
       </div>
 
       <!-- Formula Base Template & Commission Toggle (Positioned on Top) -->
@@ -175,8 +161,8 @@
               min="1"
               max="100"
               required
-              :disabled="!!selectedBaseId"
-              class="w-full px-3.5 py-2 rounded-xl border text-sm font-mono font-bold pr-8 transition-colors"
+              :disabled="Boolean(selectedBaseId)"
+              class="w-full px-3.5 py-2 rounded-xl text-sm font-mono font-bold pr-8 transition-colors"
               :class="selectedBaseId ? 'bg-stone-100/90 text-stone-500 cursor-not-allowed border-stone-200 select-none' : 'bg-white border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-stone-900'"
             />
             <span class="absolute right-3 top-2.5 text-xs font-bold" :class="selectedBaseId ? 'text-stone-400' : 'text-stone-500'">%</span>
@@ -201,26 +187,15 @@
           </p>
         </div>
 
-        <div class="flex items-center gap-2">
-          <button
-            v-if="mode === 'manual'"
-            type="button"
-            @click="openFoPickerModal()"
-            class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition-colors flex items-center gap-1.5 self-start sm:self-auto"
-          >
-            <Layers class="w-3.5 h-3.5" />
-            <span>+ Ambil dari Stok FO</span>
-          </button>
-          <button
-            v-if="mode === 'manual'"
-            type="button"
-            @click="addRow"
-            class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 self-start sm:self-auto"
-          >
-            <Plus class="w-3.5 h-3.5" />
-            <span>Tambah FO</span>
-          </button>
-        </div>
+        <button
+          v-if="mode === 'manual'"
+          type="button"
+          @click="openFoPickerModal()"
+          class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition-colors flex items-center gap-1.5 self-start sm:self-auto shadow-xs"
+        >
+          <Plus class="w-3.5 h-3.5" />
+          <span>+ Tambah FO dari Stok</span>
+        </button>
       </div>
 
       <!-- Drops & Volume Table Container (Fixed Height with Fixed Header, Fixed Footer, and Scrollable Body) -->
