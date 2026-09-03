@@ -66,7 +66,7 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
-            <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
+            <tr class="bg-sage-50/80 border-b border-sage-200 text-forest-700 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-4 w-10 text-left">#</th>
               <th class="py-3.5 px-4 text-left">Nama Toko</th>
               <th class="py-3.5 px-4 text-left">Jenis Barang</th>
@@ -75,9 +75,9 @@
               <th class="py-3.5 px-4 text-left w-24">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-stone-100 text-stone-800">
+          <tbody class="divide-y divide-sage-100 text-stone-800">
             <tr v-if="filteredStores.length === 0">
-              <td colspan="6" class="py-12 text-center text-stone-400">
+              <td colspan="6" class="py-12 text-center text-sage-400">
                 <Store class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Tidak ada data toko ditemukan.
               </td>
@@ -87,8 +87,8 @@
               <!-- Main Row (Clickable to expand) -->
               <tr
                 @click="toggleRow(store.id)"
-                class="table-row-hover transition-colors cursor-pointer"
-                :class="expandedStoreId === store.id ? 'bg-amber-50/60 font-medium' : ''"
+                class="hover:bg-sage-50/40 transition-colors cursor-pointer"
+                :class="expandedStoreId === store.id ? 'bg-peach-50/60 font-medium' : ''"
               >
                 <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
                   <span class="text-[11px]">{{ idx + 1 }}</span>
@@ -97,7 +97,7 @@
                 <td class="py-3.5 px-4 text-left">
                   <div class="flex items-center gap-2">
                     <ChevronRight
-                      class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150"
+                      class="w-3.5 h-3.5 text-forest-700 transition-transform duration-150"
                       :class="expandedStoreId === store.id ? 'rotate-90' : ''"
                     />
                     <span class="font-bold text-stone-900 text-xs">{{ store.namaToko }}</span>
@@ -105,7 +105,7 @@
                 </td>
 
                 <td class="py-3.5 px-4 text-left text-stone-600">
-                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium">
+                  <span class="px-2 py-0.5 rounded-md bg-sage-50 text-forest-800 border border-sage-200 text-[11px] font-medium">
                     {{ store.jenisBarang }}
                   </span>
                 </td>
@@ -116,7 +116,7 @@
                     :href="store.linkToko"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200 font-medium text-[11px] transition-colors"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-sage-50 text-forest-800 hover:bg-sage-100 border border-sage-200 font-medium text-[11px] transition-colors"
                   >
                     <span>Kunjungi Toko</span>
                     <ExternalLink class="w-3 h-3" />
@@ -133,14 +133,14 @@
                   <div class="flex items-center justify-start gap-1.5">
                     <button
                       @click="openEditModal(store)"
-                      class="p-1.5 rounded-md border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
+                      class="p-1.5 rounded-lg text-sage-600 hover:text-forest-900 hover:bg-sage-100 text-xs transition-colors"
                       title="Edit Toko"
                     >
                       <Pencil class="w-3.5 h-3.5" />
                     </button>
                     <button
                       @click="confirmDelete(store)"
-                      class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
+                      class="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 text-xs transition-colors"
                       title="Hapus Toko"
                     >
                       <Trash2 class="w-3.5 h-3.5" />
@@ -150,50 +150,58 @@
               </tr>
 
               <!-- Expandable Inline Detail Sub-Row -->
-              <tr v-if="expandedStoreId === store.id" class="bg-amber-50/30 border-b border-amber-200/70">
+              <tr v-if="expandedStoreId === store.id" class="bg-sage-50/40 border-b border-sage-200">
                 <td colspan="6" class="p-5">
-                  <div class="bg-white rounded-xl p-4 border border-amber-200/80 shadow-sm space-y-3">
-                    <div class="flex items-start justify-between">
-                      <div>
-                        <h4 class="font-bold text-stone-900 text-xs flex items-center gap-2">
-                          <Store class="w-4 h-4 text-amber-700" />
-                          <span>Detail Toko: {{ store.namaToko }}</span>
-                        </h4>
-                        <p v-if="store.deskripsi" class="text-xs text-stone-600 mt-1 leading-relaxed">
+                  <div class="bg-white rounded-2xl p-5 border border-sage-200/80 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                      <div class="space-y-2 flex-1">
+                        <div class="flex items-center gap-2">
+                          <Store class="w-4 h-4 text-peach-600" />
+                          <span class="text-base font-bold text-forest-900 font-rounded">{{ store.namaToko }}</span>
+                          <span class="px-2 py-0.5 rounded bg-sage-50 text-forest-800 text-xs border border-sage-200">{{ store.jenisBarang }}</span>
+                        </div>
+
+                        <p v-if="store.deskripsi" class="text-xs text-stone-600 leading-relaxed">
                           {{ store.deskripsi }}
                         </p>
-                        <p v-else class="text-xs text-stone-400 italic mt-1">
-                          Tidak ada deskripsi tambahan.
+                        <p v-else class="text-xs text-stone-400 italic">
+                          Tidak ada catatan toko.
                         </p>
+
+                        <div class="flex flex-wrap gap-4 text-xs text-stone-600 pt-1">
+                          <span v-if="store.linkToko">
+                            Link: <a :href="store.linkToko" target="_blank" class="text-forest-700 underline font-semibold">{{ store.linkToko }}</a>
+                          </span>
+                        </div>
                       </div>
 
-                      <div v-if="store.gambar" class="w-16 h-16 rounded-xl overflow-hidden border">
-                        <img :src="store.gambar" alt="Store logo" class="w-full h-full object-cover" />
+                      <div v-if="store.gambar" class="w-24 h-24 rounded-xl overflow-hidden border border-sage-200">
+                        <img :src="store.gambar" alt="Store" class="w-full h-full object-cover" />
                       </div>
                     </div>
 
-                    <!-- List of items bought from this store -->
-                    <div class="pt-3 border-t border-stone-100">
-                      <span class="text-[11px] font-bold text-stone-700 uppercase tracking-wider block mb-2">
-                        Daftar Barang dari Toko Ini:
-                      </span>
+                    <!-- Products Linked to this store -->
+                    <div class="pt-3 border-t border-sage-100 space-y-2">
+                      <h5 class="text-xs font-bold text-forest-900 uppercase tracking-wider">
+                        Produk / Stok yang Dibeli dari Toko Ini ({{ getLinkedProductsCount(store.id) }} Item):
+                      </h5>
                       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div
                           v-for="fo in getLinkedFo(store.id)"
                           :key="fo.id"
-                          class="p-2 rounded-lg bg-stone-50 border border-stone-200 text-xs flex items-center justify-between"
+                          class="p-2.5 rounded-xl bg-sage-50/60 border border-sage-200 flex items-center justify-between text-xs"
                         >
-                          <span class="font-medium text-stone-800">{{ fo.nama }}</span>
-                          <span class="text-[10px] text-stone-500 font-mono">{{ fo.botolMl }}ml • {{ fo.currentStock }}</span>
+                          <span class="font-bold text-forest-900">{{ fo.nama }}</span>
+                          <span class="text-[10px] text-sage-600 font-mono">{{ fo.botolMl }}ml • {{ fo.currentStock }}</span>
                         </div>
 
                         <div
                           v-for="c in getLinkedCampuran(store.id)"
                           :key="c.id"
-                          class="p-2 rounded-lg bg-stone-50 border border-stone-200 text-xs flex items-center justify-between"
+                          class="p-2.5 rounded-xl bg-sage-50/60 border border-sage-200 flex items-center justify-between text-xs"
                         >
-                          <span class="font-medium text-stone-800">{{ c.namaBarang }}</span>
-                          <span class="text-[10px] text-stone-500 font-mono">Stok: {{ c.jumlahStok }} pcs</span>
+                          <span class="font-bold text-forest-900">{{ c.namaBarang }}</span>
+                          <span class="text-[10px] text-sage-600 font-mono">Stok: {{ c.jumlahStok }} pcs</span>
                         </div>
 
                         <div

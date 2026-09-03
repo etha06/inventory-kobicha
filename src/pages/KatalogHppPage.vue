@@ -80,11 +80,11 @@
     </div>
 
     <!-- VIEW 1: TABLE VIEW (Action on right, header text-left, lucide icons) -->
-    <div v-if="viewMode === 'table'" class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
+    <div v-if="viewMode === 'table'" class="bg-white rounded-[24px] border border-sage-100 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
-            <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
+            <tr class="bg-sage-50/80 border-b border-sage-200 text-forest-700 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-3 w-10 text-left"></th>
               <th class="py-3.5 px-4 text-left">Nama Produk</th>
               <th class="py-3.5 px-4 text-left">Ukuran Botol</th>
@@ -96,9 +96,9 @@
               <th class="py-3.5 px-4 text-left w-20">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-stone-100 text-stone-800">
+          <tbody class="divide-y divide-sage-100 text-stone-800">
             <tr v-if="filteredHppList.length === 0">
-              <td colspan="9" class="py-12 text-center text-stone-400">
+              <td colspan="9" class="py-12 text-center text-sage-400">
                 <Receipt class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Belum ada rekaman data HPP. Klik "Hitung HPP Baru" untuk menghitung modal produksi botol parfum.
               </td>
@@ -107,8 +107,8 @@
             <tr
               v-for="item in filteredHppList"
               :key="item.id"
-              class="table-row-hover transition-colors"
-              :class="selectedForCompare.includes(item.id) ? 'bg-amber-50/60 font-medium' : ''"
+              class="hover:bg-sage-50/40 transition-colors"
+              :class="selectedForCompare.includes(item.id) ? 'bg-peach-50/60 font-medium' : ''"
             >
               <!-- Checkbox Compare -->
               <td class="py-3.5 px-4 text-left" @click.stop>
@@ -116,7 +116,7 @@
                   type="checkbox"
                   :value="item.id"
                   v-model="selectedForCompare"
-                  class="rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
+                  class="rounded border-sage-300 text-peach-500 focus:ring-peach-500 cursor-pointer"
                   title="Centang untuk bandingkan"
                 />
               </td>
@@ -149,7 +149,7 @@
 
               <!-- Grand Total HPP -->
               <td class="py-3.5 px-4 text-left">
-                <span class="font-mono font-bold text-amber-950 text-xs px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 inline-block">
+                <span class="font-mono font-bold text-peach-900 text-xs px-2.5 py-1 rounded-lg bg-peach-50 border border-peach-200 inline-block">
                   {{ formatRupiah(item.grandTotalHpp) }}
                 </span>
               </td>
@@ -167,24 +167,24 @@
               </td>
 
               <!-- Aksi Column (Positioned Right, Aligned Left, Lucide Icons) -->
-                <td class="py-3.5 px-4 text-left" @click.stop>
-                  <div class="flex items-center justify-start gap-1.5">
-                    <button
-                      @click="viewDetail(item)"
-                      class="p-1.5 rounded-md border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
-                      title="Lihat Detail HPP"
-                    >
-                      <Eye class="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      @click="confirmDelete(item)"
-                      class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
-                      title="Hapus Data HPP"
-                    >
-                      <Trash2 class="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </td>
+              <td class="py-3.5 px-4 text-left" @click.stop>
+                <div class="flex items-center justify-start gap-1.5">
+                  <button
+                    @click="viewDetail(item)"
+                    class="p-1.5 rounded-lg text-sage-600 hover:text-forest-900 hover:bg-sage-100 text-xs transition-colors"
+                    title="Lihat Detail HPP"
+                  >
+                    <Eye class="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    @click="confirmDelete(item)"
+                    class="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 text-xs transition-colors"
+                    title="Hapus Data HPP"
+                  >
+                    <Trash2 class="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -193,7 +193,7 @@
 
     <!-- VIEW 2: CARD VIEW -->
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <div v-if="filteredHppList.length === 0" class="col-span-full py-12 text-center text-stone-400 bg-white rounded-2xl border">
+      <div v-if="filteredHppList.length === 0" class="col-span-full py-12 text-center text-sage-400 bg-white rounded-[24px] border border-sage-100">
         <Receipt class="w-8 h-8 mx-auto mb-2 opacity-50" />
         Tidak ada data HPP ditemukan.
       </div>
@@ -201,22 +201,22 @@
       <div
         v-for="item in filteredHppList"
         :key="item.id"
-        class="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-sm space-y-4 hover:shadow-md transition-all flex flex-col justify-between"
+        class="bg-white rounded-[24px] border border-sage-100 p-5 shadow-sm space-y-4 hover:shadow-md transition-all flex flex-col justify-between"
       >
         <div>
-          <div class="flex items-start justify-between gap-2 border-b border-stone-100 pb-3">
+          <div class="flex items-start justify-between gap-2 border-b border-sage-100 pb-3">
             <div>
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 font-bold">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-peach-50 text-peach-800 border border-peach-200 font-bold">
                 Botol {{ item.targetBottleMl }} ml
               </span>
-              <h4 class="text-sm font-bold text-stone-900 mt-1 font-serif">{{ item.nama }}</h4>
+              <h4 class="text-sm font-bold text-stone-900 mt-1 font-rounded">{{ item.nama }}</h4>
             </div>
             
             <input
               type="checkbox"
               :value="item.id"
               v-model="selectedForCompare"
-              class="rounded border-stone-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
+              class="rounded border-sage-300 text-peach-500 focus:ring-peach-500 cursor-pointer"
               title="Centang untuk bandingkan"
             />
           </div>
@@ -231,9 +231,9 @@
               <span>📦 Modal Lainnya:</span>
               <span class="font-mono font-bold text-stone-900">{{ formatRupiah(item.subtotalPackaging) }}</span>
             </div>
-            <div class="flex justify-between text-stone-600 pt-1 border-t border-stone-100">
+            <div class="flex justify-between text-stone-600 pt-1 border-t border-sage-100">
               <span class="font-bold text-stone-900">Grand Total HPP:</span>
-              <span class="font-mono font-bold text-amber-950 text-sm">{{ formatRupiah(item.grandTotalHpp) }}</span>
+              <span class="font-mono font-bold text-peach-800 text-sm">{{ formatRupiah(item.grandTotalHpp) }}</span>
             </div>
             <div class="flex justify-between text-emerald-800 bg-emerald-50 p-2 rounded-xl border border-emerald-200">
               <span class="font-semibold text-[11px]">Rekomendasi Jual (Margin {{ item.targetMarginPercentage }}%):</span>
@@ -242,19 +242,19 @@
           </div>
         </div>
 
-        <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
+        <div class="pt-3 border-t border-sage-100 flex items-center justify-between">
           <span class="text-[10px] text-stone-400 font-mono">{{ formatDateIndo(item.createdAt) }}</span>
           <div class="flex items-center gap-1.5">
             <button
               @click="viewDetail(item)"
-              class="p-1.5 rounded-xl border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-600 hover:text-blue-700 text-xs transition-colors"
+              class="p-1.5 rounded-lg text-sage-600 hover:text-forest-900 hover:bg-sage-100 text-xs transition-colors"
               title="Lihat Detail HPP"
             >
               <Eye class="w-3.5 h-3.5" />
             </button>
             <button
               @click="confirmDelete(item)"
-              class="p-1.5 rounded-xl border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-rose-600 hover:text-rose-700 text-xs transition-colors"
+              class="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 text-xs transition-colors"
               title="Hapus Data HPP"
             >
               <Trash2 class="w-3.5 h-3.5" />
@@ -267,25 +267,25 @@
     <!-- ========================================================= -->
     <!-- COMPARE SECTION (Side-by-Side Comparison Cards at Bottom) -->
     <!-- ========================================================= -->
-    <div class="bg-stone-900 text-stone-100 rounded-3xl p-6 sm:p-8 border border-stone-800 shadow-xl space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-800 pb-5">
+    <div class="bg-forest-900 text-stone-100 rounded-[24px] p-6 sm:p-8 border border-forest-800 shadow-md space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-forest-800 pb-5">
         <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30 mb-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-950/80 text-sage-300 text-xs font-semibold border border-forest-700/80 mb-2">
             <Scale class="w-3.5 h-3.5" />
             <span>Fitur Komparasi HPP & Profit</span>
           </div>
-          <h3 class="text-xl font-bold font-serif text-white">Bandingkan Biaya HPP & Keuntungan (Side-by-Side)</h3>
-          <p class="text-xs text-stone-400 mt-1">Centang 2 atau lebih data HPP di atas untuk membandingkan margin dan struktur modal</p>
+          <h3 class="text-xl font-bold font-rounded text-white">Bandingkan Biaya HPP & Keuntungan (Side-by-Side)</h3>
+          <p class="text-xs text-sage-400 mt-1">Centang 2 atau lebih data HPP di atas untuk membandingkan margin dan struktur modal</p>
         </div>
 
         <div class="flex items-center gap-2">
-          <span class="text-xs text-stone-400 font-mono">
+          <span class="text-xs text-sage-400 font-mono">
             {{ selectedForCompare.length }} Analisis Dipilih
           </span>
           <button
             v-if="selectedForCompare.length > 0"
             @click="selectedForCompare = []"
-            class="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-medium border border-stone-700"
+            class="px-3.5 py-1.5 rounded-xl bg-forest-800 hover:bg-forest-700 text-sage-300 text-xs font-medium border border-forest-700 transition-colors"
           >
             Reset Pilihan
           </button>
@@ -293,7 +293,7 @@
       </div>
 
       <!-- Comparison Cards -->
-      <div v-if="compareList.length === 0" class="py-10 text-center text-stone-500 bg-stone-950/40 rounded-2xl border border-stone-800/80">
+      <div v-if="compareList.length === 0" class="py-10 text-center text-sage-400 bg-forest-950/40 rounded-2xl border border-forest-800/80">
         <Search class="w-8 h-8 mx-auto mb-2 opacity-50" />
         Pilih minimal 2 analisis HPP dari daftar di atas untuk melihat perbandingan side-by-side di sini.
       </div>
@@ -302,58 +302,49 @@
         <div
           v-for="item in compareList"
           :key="item.id"
-          class="bg-stone-800/90 rounded-2xl border border-stone-700/80 p-5 space-y-4 flex flex-col justify-between"
+          class="bg-forest-950/80 rounded-2xl border border-forest-800 p-5 space-y-4 flex flex-col justify-between"
         >
           <div>
-            <div class="flex items-start justify-between gap-2 border-b border-stone-700/60 pb-3">
+            <div class="flex items-start justify-between gap-2 border-b border-forest-800 pb-3">
               <div>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-peach-500/20 text-peach-300 border border-peach-500/30">
                   Botol {{ item.targetBottleMl }} ml
                 </span>
-                <h4 class="text-base font-bold text-white font-serif mt-1">{{ item.nama }}</h4>
+                <h4 class="text-base font-bold text-white font-rounded mt-1">{{ item.nama }}</h4>
               </div>
               <button
                 @click="removeFromCompare(item.id)"
-                class="text-stone-400 hover:text-stone-200 text-xs p-1"
+                class="text-sage-400 hover:text-white text-xs p-1"
                 title="Hapus dari perbandingan"
               >
                 <X class="w-4 h-4" />
               </button>
             </div>
-
-            <!-- Big Stat Badges -->
-            <div class="grid grid-cols-2 gap-2 mt-3">
-              <div class="p-2.5 rounded-xl bg-stone-900 border border-stone-700 text-center">
-                <span class="text-[9px] uppercase font-bold text-stone-400 block">Total HPP</span>
-                <span class="text-sm font-bold font-mono text-amber-400">{{ formatRupiah(item.grandTotalHpp) }}</span>
+            <!-- Metrics & Cost Progress -->
+            <div class="mt-3 space-y-2 text-xs">
+              <div class="flex justify-between text-sage-300">
+                <span>Modal Liquid:</span>
+                <span class="font-mono font-bold text-white">{{ formatRupiah(item.subtotalLiquid) }}</span>
               </div>
-              <div class="p-2.5 rounded-xl bg-stone-900 border border-stone-700 text-center">
-                <span class="text-[9px] uppercase font-bold text-stone-400 block">Harga Jual</span>
-                <span class="text-sm font-bold font-mono text-emerald-400">{{ formatRupiah(item.recommendedSellingPrice) }}</span>
+              <div class="flex justify-between text-sage-300">
+                <span>Modal Lainnya:</span>
+                <span class="font-mono font-bold text-white">{{ formatRupiah(item.subtotalPackaging) }}</span>
               </div>
-            </div>
-
-            <!-- Cost Proportion Progress Bar -->
-            <div class="mt-4 space-y-2">
-              <div class="flex justify-between text-[11px] text-stone-300">
-                <span>🧪 Liquid: {{ formatRupiah(item.subtotalLiquid) }}</span>
-                <span>📦 Modal Lainnya: {{ formatRupiah(item.subtotalPackaging) }}</span>
-              </div>
-              <div class="w-full bg-stone-900 h-2 rounded-full overflow-hidden flex border border-stone-700">
+              <div class="w-full bg-forest-950 h-2 rounded-full overflow-hidden flex border border-forest-800">
                 <div
-                  class="bg-amber-500 h-full"
+                  class="bg-peach-500 h-full"
                   :style="{ width: Math.round((item.subtotalLiquid / Math.max(item.grandTotalHpp, 1)) * 100) + '%' }"
                 ></div>
                 <div
-                  class="bg-indigo-500 h-full"
+                  class="bg-sage-400 h-full"
                   :style="{ width: Math.round((item.subtotalPackaging / Math.max(item.grandTotalHpp, 1)) * 100) + '%' }"
                 ></div>
               </div>
             </div>
 
             <!-- Profit Summary -->
-            <div class="mt-4 p-3 rounded-xl bg-stone-900/80 border border-stone-700/60 text-xs space-y-1">
-              <div class="flex justify-between text-stone-300">
+            <div class="mt-4 p-3 rounded-xl bg-forest-900 border border-forest-800 text-xs space-y-1">
+              <div class="flex justify-between text-sage-300">
                 <span>Target Margin:</span>
                 <span class="font-bold text-white font-mono">{{ item.targetMarginPercentage }}%</span>
               </div>
@@ -364,10 +355,10 @@
             </div>
           </div>
 
-          <div class="pt-3 border-t border-stone-700/60 flex items-center justify-end">
+          <div class="pt-3 border-t border-forest-800 flex items-center justify-end">
             <button
               @click="viewDetail(item)"
-              class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition-colors flex items-center gap-1"
+              class="px-3.5 py-1.5 rounded-xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1"
             >
               <span>Lihat Rincian Lengkap</span>
               <span>→</span>
@@ -388,44 +379,44 @@
       <div v-if="detailItem" class="space-y-5">
         <!-- Summary Badges -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="p-3 rounded-xl bg-stone-50 border border-stone-200 text-center">
-            <span class="text-[10px] text-stone-500 uppercase font-bold block">Ukuran Botol</span>
+          <div class="p-3 rounded-2xl bg-sage-50 border border-sage-200 text-center">
+            <span class="text-[10px] text-sage-600 uppercase font-bold block">Ukuran Botol</span>
             <span class="text-sm font-bold font-mono text-stone-900">{{ detailItem.targetBottleMl }} ml</span>
           </div>
-          <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-center">
-            <span class="text-[10px] text-amber-700 uppercase font-bold block">Modal Liquid</span>
-            <span class="text-sm font-bold font-mono text-amber-950">{{ formatRupiah(detailItem.subtotalLiquid) }}</span>
+          <div class="p-3 rounded-2xl bg-peach-50 border border-peach-200 text-center">
+            <span class="text-[10px] text-peach-700 uppercase font-bold block">Modal Liquid</span>
+            <span class="text-sm font-bold font-mono text-peach-900">{{ formatRupiah(detailItem.subtotalLiquid) }}</span>
           </div>
-          <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-center">
-            <span class="text-[10px] text-indigo-700 uppercase font-bold block">Modal Lainnya</span>
-            <span class="text-sm font-bold font-mono text-indigo-950">{{ formatRupiah(detailItem.subtotalPackaging) }}</span>
+          <div class="p-3 rounded-2xl bg-sage-50 border border-sage-200 text-center">
+            <span class="text-[10px] text-forest-700 uppercase font-bold block">Modal Lainnya</span>
+            <span class="text-sm font-bold font-mono text-forest-900">{{ formatRupiah(detailItem.subtotalPackaging) }}</span>
           </div>
-          <div class="p-3 rounded-xl bg-stone-900 border border-stone-800 text-center text-white">
-            <span class="text-[10px] text-amber-400 uppercase font-bold block">Grand Total HPP</span>
-            <span class="text-sm font-bold font-mono text-amber-400">{{ formatRupiah(detailItem.grandTotalHpp) }}</span>
+          <div class="p-3 rounded-2xl bg-forest-900 border border-forest-800 text-center text-white">
+            <span class="text-[10px] text-peach-300 uppercase font-bold block">Grand Total HPP</span>
+            <span class="text-sm font-bold font-mono text-peach-300">{{ formatRupiah(detailItem.grandTotalHpp) }}</span>
           </div>
         </div>
 
         <!-- Liquid Ingredients Breakdown -->
         <div class="space-y-2">
-          <h5 class="text-xs font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5">
+          <h5 class="text-xs font-bold text-forest-900 uppercase tracking-wider flex items-center gap-1.5">
             <span>Rincian Modal Cairan Formula Liquid</span>
           </h5>
-          <div class="overflow-x-auto border rounded-xl">
+          <div class="overflow-x-auto border border-sage-200/90 rounded-2xl">
             <table class="w-full text-xs text-left">
-              <thead class="bg-stone-100 text-[10px] uppercase font-bold text-stone-500">
+              <thead class="bg-sage-50/80 text-[10px] uppercase font-bold text-forest-700 border-b border-sage-200">
                 <tr>
-                  <th class="py-2 px-3 text-left">Bahan</th>
-                  <th class="py-2 px-3 text-left">Jenis</th>
-                  <th class="py-2 px-3 text-left">Volume (ml)</th>
-                  <th class="py-2 px-3 text-left">Biaya</th>
+                  <th class="py-2.5 px-3 text-left">Bahan</th>
+                  <th class="py-2.5 px-3 text-left">Jenis</th>
+                  <th class="py-2.5 px-3 text-left">Volume (ml)</th>
+                  <th class="py-2.5 px-3 text-left">Biaya</th>
                 </tr>
               </thead>
-              <tbody class="divide-y text-stone-800">
-                <tr v-for="(liq, idx) in detailItem.liquidDetails" :key="idx">
+              <tbody class="divide-y divide-sage-100 text-stone-800">
+                <tr v-for="(liq, idx) in detailItem.liquidDetails" :key="idx" class="hover:bg-sage-50/40">
                   <td class="py-2 px-3 text-left font-medium">{{ liq.nama }}</td>
                   <td class="py-2 px-3 text-left">
-                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold inline-block" :class="liq.jenis === 'FO' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'">
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold inline-block" :class="liq.jenis === 'FO' ? 'bg-peach-100 text-peach-800 border border-peach-200' : 'bg-sage-100 text-forest-800 border border-sage-200'">
                       {{ liq.jenis }}
                     </span>
                   </td>
@@ -439,21 +430,21 @@
 
         <!-- Packaging Items Breakdown -->
         <div class="space-y-2">
-          <h5 class="text-xs font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5">
+          <h5 class="text-xs font-bold text-forest-900 uppercase tracking-wider flex items-center gap-1.5">
             <span>Rincian Modal Lainnya (Packaging, Botol, Stiker, dll.)</span>
           </h5>
-          <div class="overflow-x-auto border rounded-xl">
+          <div class="overflow-x-auto border border-sage-200/90 rounded-2xl">
             <table class="w-full text-xs text-left">
-              <thead class="bg-stone-100 text-[10px] uppercase font-bold text-stone-500">
+              <thead class="bg-sage-50/80 text-[10px] uppercase font-bold text-forest-700 border-b border-sage-200">
                 <tr>
-                  <th class="py-2 px-3 text-left">Item / Kemasan / Operasional</th>
-                  <th class="py-2 px-3 text-left">Jumlah</th>
-                  <th class="py-2 px-3 text-left">Harga Satuan</th>
-                  <th class="py-2 px-3 text-left">Total</th>
+                  <th class="py-2.5 px-3 text-left">Item / Kemasan / Operasional</th>
+                  <th class="py-2.5 px-3 text-left">Jumlah</th>
+                  <th class="py-2.5 px-3 text-left">Harga Satuan</th>
+                  <th class="py-2.5 px-3 text-left">Total</th>
                 </tr>
               </thead>
-              <tbody class="divide-y text-stone-800">
-                <tr v-for="pkg in detailItem.packagingItems" :key="pkg.id">
+              <tbody class="divide-y divide-sage-100 text-stone-800">
+                <tr v-for="pkg in detailItem.packagingItems" :key="pkg.id" class="hover:bg-sage-50/40">
                   <td class="py-2 px-3 text-left font-medium">{{ pkg.namaItem }}</td>
                   <td class="py-2 px-3 text-left font-mono">{{ pkg.jumlah }} pcs</td>
                   <td class="py-2 px-3 text-left font-mono">{{ formatRupiah(pkg.hargaSatuan) }}</td>

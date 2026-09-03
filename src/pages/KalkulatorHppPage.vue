@@ -83,15 +83,15 @@
     </div>
 
     <!-- SECTION 1: HPP RESEP RACIKAN -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 p-5 sm:p-6 shadow-sm space-y-5">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-200 pb-4">
+    <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-sage-100 pb-4">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-sm">
+          <div class="w-9 h-9 rounded-2xl bg-peach-50 text-peach-700 border border-peach-200/80 flex items-center justify-center font-bold text-sm">
             <FlaskConical class="w-4 h-4" />
           </div>
           <div>
-            <h4 class="text-sm font-bold text-stone-900">1. HPP Resep Racikan</h4>
-            <p class="text-xs text-stone-500">Biaya konsentrat fragrance oil dan bahan pelarut campuran</p>
+            <h4 class="text-base font-extrabold text-forest-900 font-rounded">1. HPP Resep Racikan</h4>
+            <p class="text-xs text-sage-600">Biaya konsentrat fragrance oil dan bahan pelarut campuran</p>
           </div>
         </div>
 
@@ -118,9 +118,9 @@
 
       <!-- Formula Base & Racikan Selectors + Table Breakdown (Exact as in media_1788451316301.png) -->
       <div class="space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200/80">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-sage-50/50 p-4 rounded-2xl border border-sage-200/80">
           <div>
-            <label class="block text-xs font-bold text-amber-950 mb-1">1. Pilih Formula Base (Pelarut %)</label>
+            <label class="block text-xs font-bold text-forest-900 mb-1">1. Pilih Formula Base (Pelarut %)</label>
             <CustomSelect
               v-model="selectedBaseId"
               :options="baseOptions"
@@ -131,7 +131,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-amber-950 mb-1">2. Pilih Racikan Fragrance (Bibit FO)</label>
+            <label class="block text-xs font-bold text-forest-900 mb-1">2. Pilih Racikan Fragrance (Bibit FO)</label>
             <div v-if="mode === 'tambah_baru'">
               <button
                 type="button"
@@ -156,11 +156,11 @@
         </div>
 
         <!-- Liquid Ingredients Table Breakdown Container (Fixed Height with Fixed Header, Scrollable Body, and Fixed Footer at Bottom) -->
-        <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col h-[420px] overflow-hidden shadow-sm">
+        <div class="border border-sage-200/90 rounded-2xl bg-white flex flex-col h-[420px] overflow-hidden shadow-sm">
           <!-- 1. FIXED HEADER -->
-          <div class="bg-stone-100/90 border-b border-stone-200 flex-shrink-0">
+          <div class="bg-sage-50/80 border-b border-sage-200 flex-shrink-0">
             <table class="w-full text-xs text-left table-fixed">
-              <thead class="text-[10px] text-stone-500 uppercase font-bold">
+              <thead class="text-[10px] text-forest-700 uppercase font-bold">
                 <tr>
                   <th class="py-2.5 px-3 w-10 text-left">#</th>
                   <th class="py-2.5 px-3 text-left">Bahan Formula Liquid</th>
@@ -178,14 +178,14 @@
           <!-- 2. SCROLLABLE MIDDLE TBODY AREA -->
           <div class="overflow-y-auto overflow-x-hidden flex-1">
             <table class="w-full text-xs text-left table-fixed">
-              <tbody class="divide-y text-stone-800">
+              <tbody class="divide-y divide-sage-100 text-stone-800">
                 <tr v-if="liquidIngredients.length === 0">
-                  <td colspan="8" class="py-12 text-center text-stone-400 italic">
+                  <td colspan="8" class="py-12 text-center text-sage-400 italic">
                     Pilih Formula Base dan Racikan di atas untuk menghitung otomatis komposisi cairan.
                   </td>
                 </tr>
 
-                <tr v-for="(ing, idx) in liquidIngredients" :key="idx" class="hover:bg-stone-50 transition-colors">
+                <tr v-for="(ing, idx) in liquidIngredients" :key="idx" class="hover:bg-sage-50/40 transition-colors">
                   <td class="py-2.5 px-3 text-left text-stone-400 font-mono text-[11px] w-10">
                     {{ idx + 1 }}
                   </td>
@@ -210,7 +210,7 @@
                         :searchable="true"
                         @change="onSelectCampuranItem(ing)"
                       />
-                      <span v-if="!ing.stockCampuranId" class="text-[10px] text-amber-800 font-medium block">
+                      <span v-if="!ing.stockCampuranId" class="text-[10px] text-peach-800 font-medium block">
                         Pilih item dari stok bahan baku di atas untuk mengaitkan harga secara otomatis.
                       </span>
                     </div>
@@ -220,7 +220,7 @@
                   <td class="py-2.5 px-3 text-left w-24">
                     <span
                       class="px-1.5 py-0.5 rounded text-[10px] font-bold inline-block"
-                      :class="ing.jenis === 'FO' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-indigo-100 text-indigo-800 border border-indigo-200'"
+                      :class="ing.jenis === 'FO' ? 'bg-peach-100 text-peach-800 border border-peach-200' : 'bg-sage-100 text-forest-800 border border-sage-200'"
                     >
                       {{ ing.jenis }}
                     </span>
@@ -236,28 +236,34 @@
                       max="100"
                       step="0.5"
                       @input="onIngredientPercentChange(ing)"
-                      class="w-16 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
+                      class="w-16 px-1.5 py-1 text-xs border border-sage-200 rounded-lg text-left font-mono font-bold"
                     />
-                    <span v-else>{{ formatNumber(ing.percentage, 1) }}%</span>
+                    <span v-else class="text-xs font-semibold text-stone-700">
+                      {{ formatNumber(ing.percentage, 2) }}%
+                    </span>
                   </td>
 
                   <!-- Volume (ml) -->
-                  <td class="py-2.5 px-3 text-left font-mono font-bold w-28">
-                    {{ formatNumber(ing.volumeMl, 2) }} ml
+                  <td class="py-2.5 px-3 text-left font-mono w-28">
+                    <span class="text-xs font-semibold text-stone-700">
+                      {{ formatNumber(ing.volumeMl, 2) }} ml
+                    </span>
                   </td>
 
-                  <!-- Rata-rata Harga per ml -->
+                  <!-- Harga per ml -->
                   <td class="py-2.5 px-3 text-left font-mono text-stone-600 w-32">
                     <input
-                      v-if="ing.isCustomRow"
+                      v-if="ing.isCustomRow && !ing.stockCampuranId"
                       v-model.number="ing.pricePerMl"
                       type="number"
                       min="0"
-                      @input="onIngredientPriceChange(ing)"
-                      class="w-24 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
-                      title="Harga modal per 1 ml"
+                      placeholder="Rp/ml"
+                      @input="recalculateLiquidFromRecipe"
+                      class="w-24 px-1.5 py-1 text-xs border border-sage-200 rounded-lg text-left font-mono font-bold"
                     />
-                    <span v-else>{{ formatRupiah(ing.pricePerMl) }}/ml</span>
+                    <span v-else class="text-xs">
+                      {{ formatRupiah(ing.pricePerMl) }}
+                    </span>
                   </td>
 
                   <!-- Subtotal Biaya -->
@@ -265,14 +271,14 @@
                     {{ formatRupiah(ing.cost) }}
                   </td>
 
-                  <!-- Aksi Hapus (hanya untuk baris cairan kustom tambahan) -->
+                  <!-- Delete Custom Row -->
                   <td class="py-2.5 px-3 text-left w-16">
                     <button
                       v-if="ing.isCustomRow"
                       type="button"
                       @click="removeLiquidIngredient(idx)"
-                      class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
-                      title="Hapus baris cairan ini"
+                      class="p-1 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 transition-colors"
+                      title="Hapus Bahan"
                     >
                       <Trash2 class="w-3.5 h-3.5" />
                     </button>
@@ -283,17 +289,17 @@
             </table>
           </div>
 
-          <!-- 3. FIXED FOOTER AT THE BOTTOM -->
-          <div class="bg-stone-50 border-t border-stone-200 flex-shrink-0">
+          <!-- 3. FIXED FOOTER AT BOTTOM -->
+          <div class="bg-sage-50/90 border-t border-sage-200 flex-shrink-0">
             <table class="w-full text-xs text-left table-fixed">
               <tfoot>
-                <tr class="font-bold text-stone-900">
+                <tr class="font-bold text-forest-900">
                   <th class="py-2.5 px-3 w-10 text-left"></th>
                   <th class="py-2.5 px-3 text-left">
                     <button
                       type="button"
                       @click="addCustomLiquidRow"
-                      class="px-2.5 py-1 text-xs rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold transition-colors inline-flex items-center gap-1"
+                      class="px-3 py-1.5 text-xs rounded-xl bg-sage-100 hover:bg-sage-200 text-forest-900 font-bold border border-sage-200 transition-colors inline-flex items-center gap-1"
                     >
                       <Plus class="w-3.5 h-3.5" />
                       <span>Tambah Cairan / Pelarut Lainnya</span>
@@ -301,9 +307,9 @@
                   </th>
                   <th class="py-2.5 px-3 text-left w-24"></th>
                   <th class="py-2.5 px-3 text-left w-24"></th>
-                  <th class="py-2.5 px-3 text-left font-mono font-bold text-amber-950 w-28">{{ targetBottleMl }} ml</th>
+                  <th class="py-2.5 px-3 text-left font-mono font-bold text-forest-900 w-28">{{ targetBottleMl }} ml</th>
                   <th class="py-2.5 px-3 text-left w-32"></th>
-                  <th class="py-2.5 px-3 text-left font-mono text-amber-950 text-sm font-bold w-36">{{ formatRupiah(subtotalLiquid) }}</th>
+                  <th class="py-2.5 px-3 text-left font-mono text-forest-900 text-sm font-bold w-36">{{ formatRupiah(subtotalLiquid) }}</th>
                   <th class="py-2.5 px-3 text-left w-16"></th>
                 </tr>
               </tfoot>
@@ -314,15 +320,15 @@
     </div>
 
     <!-- SECTION 2: MODAL LAINNYA (PACKAGING, BOTOL, STIKER & OPERASIONAL) -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 p-5 sm:p-6 shadow-sm space-y-5">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-200 pb-4">
+    <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-sage-100 pb-4">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold text-sm">
+          <div class="w-9 h-9 rounded-2xl bg-forest-50 text-forest-700 border border-sage-200 flex items-center justify-center font-bold text-sm">
             <Package class="w-4 h-4" />
           </div>
           <div>
-            <h4 class="text-sm font-bold text-stone-900">2. Modal Lainnya (Packaging, Botol, Stiker & Operasional)</h4>
-            <p class="text-xs text-stone-500">
+            <h4 class="text-base font-extrabold text-forest-900 font-rounded">2. Modal Lainnya (Packaging, Botol, Stiker & Operasional)</h4>
+            <p class="text-xs text-sage-600">
               Bebas input kemasan & operasional (botol kaca, sprayer, hardbox, stiker label, packaging bubble wrap, dsb)
             </p>
           </div>
@@ -333,7 +339,7 @@
           <button
             type="button"
             @click="openStockCampuranPicker"
-            class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0"
+            class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5 flex-shrink-0"
           >
             <Layers class="w-3.5 h-3.5" />
             <span>Ambil dari Stok Campuran</span>
@@ -342,7 +348,7 @@
           <button
             type="button"
             @click="addManualPackagingRow"
-            class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 flex-shrink-0"
+            class="px-4 py-2.5 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-800 border border-sage-200 text-xs font-semibold transition-all flex items-center gap-1.5 flex-shrink-0"
           >
             <Plus class="w-3.5 h-3.5" />
             <span>Tambah Item Manual</span>
@@ -351,9 +357,9 @@
       </div>
 
       <!-- Packaging Items Table (Action on Right, Header text-left, Lucide Trash2) -->
-      <div class="overflow-x-auto border rounded-xl">
+      <div class="overflow-x-auto border border-sage-200/90 rounded-2xl">
         <table class="w-full text-xs text-left">
-          <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
+          <thead class="bg-sage-50/80 border-b border-sage-200 text-[10px] text-forest-700 uppercase font-bold">
             <tr>
               <th class="py-2.5 px-3 w-10 text-left">#</th>
               <th class="py-2.5 px-3 text-left">Nama Barang / Kemasan / Operasional</th>
@@ -363,14 +369,14 @@
               <th class="py-2.5 px-4 text-left w-20">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y text-stone-800">
+          <tbody class="divide-y divide-sage-100 text-stone-800">
             <tr v-if="packagingRows.length === 0">
-              <td colspan="6" class="py-6 text-center text-stone-400 italic">
+              <td colspan="6" class="py-6 text-center text-sage-400 italic">
                 Belum ada komponen modal lainnya. Klik "+ Tambah Item Manual" untuk memasukkan botol, box, atau stiker.
               </td>
             </tr>
 
-            <tr v-for="(row, idx) in packagingRows" :key="row.id" class="hover:bg-stone-50">
+            <tr v-for="(row, idx) in packagingRows" :key="row.id" class="hover:bg-sage-50/40 transition-colors">
               <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px]">
                 {{ idx + 1 }}
               </td>
@@ -380,7 +386,7 @@
                   v-model="row.namaItem"
                   type="text"
                   placeholder="Misal: Botol Kaca Kotak 50ml / Stiker Gold Foil"
-                  class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-300 font-medium"
+                  class="w-full px-2.5 py-1.5 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-1 focus:ring-sage-500 font-medium"
                 />
               </td>
               <td class="py-2 px-3 text-left">
@@ -388,7 +394,7 @@
                   v-model.number="row.jumlah"
                   type="number"
                   min="1"
-                  class="w-20 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold"
+                  class="w-20 px-2 py-1 text-xs border border-sage-200 rounded-lg text-left font-mono font-bold"
                 />
               </td>
               <td class="py-2 px-3 text-left">
@@ -396,7 +402,7 @@
                   v-model.number="row.hargaSatuan"
                   type="number"
                   min="0"
-                  class="w-28 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold"
+                  class="w-28 px-2 py-1 text-xs border border-sage-200 rounded-lg text-left font-mono font-bold"
                 />
               </td>
               <td class="py-2 px-3 text-left font-mono font-bold text-stone-900">
@@ -407,7 +413,7 @@
                 <button
                   type="button"
                   @click="removePackagingRow(idx)"
-                  class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
+                  class="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 transition-colors"
                   title="Hapus Item"
                 >
                   <Trash2 class="w-3.5 h-3.5" />
@@ -415,10 +421,10 @@
               </td>
             </tr>
           </tbody>
-          <tfoot class="bg-stone-50 border-t font-bold text-stone-900">
+          <tfoot class="bg-sage-50/90 border-t border-sage-200 font-bold text-forest-900">
             <tr>
-              <td colspan="4" class="py-2.5 px-3 text-left">Subtotal Modal Lainnya:</td>
-              <td class="py-2.5 px-3 text-left font-mono text-indigo-950 text-sm font-bold">{{ formatRupiah(subtotalPackaging) }}</td>
+              <td colspan="4" class="py-2.5 px-3 text-right">Subtotal Modal Lainnya:</td>
+              <td class="py-2.5 px-3 font-mono text-sm text-forest-900">{{ formatRupiah(subtotalPackaging) }}</td>
               <td></td>
             </tr>
           </tfoot>
@@ -426,91 +432,92 @@
       </div>
     </div>
 
-    <!-- GRAND TOTAL HPP & PROFIT SIMULATOR -->
-    <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-stone-800 pb-6">
+    <!-- SUMMARY SECTION: GRAND TOTAL HPP & PROFIT SIMULATION -->
+    <div class="bg-forest-900 rounded-[24px] p-6 text-white border border-forest-800 shadow-md space-y-5">
+      <!-- Grand Total Top Banner -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-forest-800 pb-5">
         <div>
-          <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold block mb-1">
-            ✨ Grand Total Analisis Biaya
+          <span class="text-xs uppercase font-bold text-sage-300 tracking-wider block mb-1">
+            Grand Total Biaya Pokok Produksi (HPP)
           </span>
-          <h3 class="text-2xl font-bold font-serif text-white">
-            {{ hppTitle || 'Perhitungan HPP Produk' }}
+          <h3 class="text-2xl sm:text-3xl font-extrabold font-mono text-peach-300">
+            {{ formatRupiah(grandTotalHpp) }}
+            <span class="text-xs font-normal text-sage-400">/ botol {{ targetBottleMl }}ml</span>
           </h3>
-          <p class="text-xs text-stone-300 mt-1">
-            Botol {{ targetBottleMl }} ml • Liquid: {{ formatRupiah(subtotalLiquid) }} • Modal Lainnya: {{ formatRupiah(subtotalPackaging) }}
+          <p class="text-xs text-sage-400 mt-1">
+            HPP per ml: <strong>{{ formatRupiah(grandTotalHpp / Math.max(targetBottleMl, 1)) }}</strong> / ml
           </p>
         </div>
 
-        <!-- Big HPP Badges -->
         <div class="flex items-center gap-3">
-          <div class="bg-stone-950/80 border border-stone-700/80 px-5 py-3 rounded-2xl text-center">
-            <span class="text-[10px] uppercase font-bold text-stone-400 block">Grand Total HPP / Botol</span>
-            <span class="text-2xl font-bold font-mono text-amber-400">{{ formatRupiah(grandTotalHpp) }}</span>
+          <div class="bg-forest-950/80 border border-forest-700/80 px-4 py-3 rounded-2xl text-center">
+            <span class="text-[10px] uppercase font-bold text-sage-400 block">Modal Cairan</span>
+            <span class="text-lg font-bold font-mono text-peach-400">{{ formatRupiah(subtotalLiquid) }}</span>
           </div>
 
-          <div class="bg-stone-950/80 border border-stone-700/80 px-4 py-3 rounded-2xl text-center">
-            <span class="text-[10px] uppercase font-bold text-stone-400 block">Biaya Modal</span>
-            <span class="text-lg font-bold font-mono text-white">{{ formatRupiah(hppPerMl) }}</span>
+          <div class="bg-forest-950/80 border border-forest-700/80 px-4 py-3 rounded-2xl text-center">
+            <span class="text-[10px] uppercase font-bold text-sage-400 block">Modal Lainnya</span>
+            <span class="text-lg font-bold font-mono text-sage-200">{{ formatRupiah(subtotalPackaging) }}</span>
           </div>
         </div>
       </div>
 
-      <!-- Cost Split Progress Bar -->
-      <div class="space-y-2">
-        <div class="flex justify-between text-xs text-stone-300">
-          <span>🧪 Porsi Modal Liquid: <strong>{{ Math.round((subtotalLiquid / Math.max(grandTotalHpp, 1)) * 100) }}%</strong> ({{ formatRupiah(subtotalLiquid) }})</span>
-          <span>📦 Porsi Modal Lainnya: <strong>{{ Math.round((subtotalPackaging / Math.max(grandTotalHpp, 1)) * 100) }}%</strong> ({{ formatRupiah(subtotalPackaging) }})</span>
+      <!-- Cost Proportion Progress Bar -->
+      <div class="space-y-1.5">
+        <div class="flex justify-between text-xs text-sage-300 font-semibold">
+          <span>Komposisi: Cairan {{ Math.round((subtotalLiquid / Math.max(grandTotalHpp, 1)) * 100) }}%</span>
+          <span>Modal Lainnya {{ Math.round((subtotalPackaging / Math.max(grandTotalHpp, 1)) * 100) }}%</span>
         </div>
-        <div class="w-full bg-stone-950 h-3 rounded-full overflow-hidden flex border border-stone-800">
+        <div class="w-full bg-forest-950 h-2.5 rounded-full overflow-hidden flex border border-forest-800">
           <div
-            class="bg-amber-500 h-full transition-all duration-300"
+            class="bg-peach-500 h-full transition-all duration-300"
             :style="{ width: Math.round((subtotalLiquid / Math.max(grandTotalHpp, 1)) * 100) + '%' }"
           ></div>
           <div
-            class="bg-indigo-500 h-full transition-all duration-300"
+            class="bg-sage-400 h-full transition-all duration-300"
             :style="{ width: Math.round((subtotalPackaging / Math.max(grandTotalHpp, 1)) * 100) + '%' }"
           ></div>
         </div>
       </div>
 
       <!-- Profit Margin Simulator -->
-      <div class="bg-stone-950/60 rounded-2xl p-5 border border-stone-800 space-y-4">
+      <div class="bg-forest-950/70 rounded-2xl p-5 border border-forest-800/80 space-y-4">
         <div class="flex items-center justify-between">
           <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
             <TrendingUp class="w-4 h-4" />
             <span>Simulasi Margin Keuntungan & Harga Jual Rekomendasi</span>
           </h4>
-          <span class="text-xs text-stone-400">Sesuaikan target profit margin</span>
+          <span class="text-xs text-sage-400">Sesuaikan target profit margin</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <!-- Margin Input -->
           <div>
-            <label class="block text-xs text-stone-300 mb-1">Target Profit Margin (%)</label>
+            <label class="block text-xs text-sage-300 mb-1">Target Profit Margin (%)</label>
             <div class="relative">
               <input
                 v-model.number="targetMarginPercentage"
                 type="number"
                 min="0"
                 step="5"
-                class="w-full px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 font-mono font-bold text-white pr-8 focus:ring-2 focus:ring-emerald-500/30"
+                class="w-full px-3.5 py-2 rounded-xl bg-forest-950 border border-forest-700 font-mono font-bold text-white pr-8 focus:ring-2 focus:ring-emerald-500/30"
               />
-              <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold">%</span>
+              <span class="absolute right-3 top-2.5 text-sage-400 text-xs font-bold">%</span>
             </div>
           </div>
 
           <!-- Recommended Selling Price -->
           <div>
-            <label class="block text-xs text-stone-300 mb-1">Rekomendasi Harga Jual (Rp)</label>
-            <div class="px-4 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 font-mono font-bold text-base text-emerald-300">
+            <label class="block text-xs text-sage-300 mb-1">Rekomendasi Harga Jual (Rp)</label>
+            <div class="px-4 py-2 rounded-xl bg-forest-950/90 border border-emerald-500/40 font-mono font-bold text-base text-emerald-300">
               {{ formatRupiah(recommendedSellingPrice) }}
             </div>
           </div>
 
           <!-- Net Profit per Bottle -->
           <div>
-            <label class="block text-xs text-stone-300 mb-1">Estimasi Laba Bersih / Botol</label>
-            <div class="px-4 py-2 rounded-xl bg-stone-900 border border-stone-700 font-mono font-bold text-base text-emerald-400">
+            <label class="block text-xs text-sage-300 mb-1">Estimasi Laba Bersih / Botol</label>
+            <div class="px-4 py-2 rounded-xl bg-forest-950/90 border border-forest-700 font-mono font-bold text-base text-emerald-400">
               +{{ formatRupiah(recommendedSellingPrice - grandTotalHpp) }}
             </div>
           </div>
@@ -521,7 +528,7 @@
       <div class="pt-2 flex justify-end gap-3">
         <button
           @click="saveHpp"
-          class="px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white text-sm font-bold shadow-lg shadow-amber-950/50 transition-all transform active:scale-95 flex items-center gap-2"
+          class="px-6 py-3 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-sm font-bold shadow-pill transition-all transform active:scale-95 flex items-center gap-2"
         >
           <Save class="w-4 h-4" />
           <span>Simpan Hasil ke Katalog HPP</span>
@@ -545,33 +552,33 @@
               v-model="campuranPickerSearch"
               type="text"
               placeholder="Cari nama barang / jenis / toko..."
-              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
             />
-            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
           </div>
 
-          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+          <div class="flex items-center gap-1 bg-sage-50 p-1 rounded-2xl text-xs font-semibold border border-sage-200/60">
             <button
               type="button"
               @click="campuranPickerFilterTipe = 'all'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="campuranPickerFilterTipe === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="campuranPickerFilterTipe === 'all' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Semua
             </button>
             <button
               type="button"
               @click="campuranPickerFilterTipe = 'packaging'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="campuranPickerFilterTipe === 'packaging' ? 'bg-indigo-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="campuranPickerFilterTipe === 'packaging' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Kemasan
             </button>
             <button
               type="button"
               @click="campuranPickerFilterTipe = 'bahan_baku'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="campuranPickerFilterTipe === 'bahan_baku' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="campuranPickerFilterTipe === 'bahan_baku' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Bahan Baku
             </button>
@@ -579,10 +586,10 @@
         </div>
 
         <!-- List of items -->
-        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+        <div class="border border-sage-200/90 rounded-2xl max-h-80 overflow-y-auto divide-y divide-sage-100">
           <div
             v-if="filteredCampuranPickerList.length === 0"
-            class="py-12 text-center text-stone-400 text-xs italic"
+            class="py-12 text-center text-sage-400 text-xs italic"
           >
             Tidak ada item stok campuran yang sesuai pencarian.
           </div>
@@ -590,14 +597,14 @@
           <div
             v-for="item in filteredCampuranPickerList"
             :key="item.id"
-            class="p-3 hover:bg-stone-50 flex items-center justify-between gap-3 transition-colors"
+            class="p-3 hover:bg-sage-50/40 flex items-center justify-between gap-3 transition-colors"
           >
             <div class="space-y-0.5 flex-1 min-w-0">
               <div class="flex items-center gap-2">
                 <span class="font-bold text-stone-900 text-xs truncate">{{ item.namaBarang }}</span>
                 <span
                   class="px-1.5 py-0.2 rounded text-[9px] font-bold"
-                  :class="item.isBahanBaku ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-indigo-100 text-indigo-800 border border-indigo-200'"
+                  :class="item.isBahanBaku ? 'bg-peach-100 text-peach-800 border border-peach-200' : 'bg-sage-100 text-forest-800 border border-sage-200'"
                 >
                   {{ item.isBahanBaku ? 'Bahan Baku' : 'Kemasan' }}
                 </span>
@@ -614,7 +621,7 @@
             <button
               type="button"
               @click="addCampuranItemToPackaging(item)"
-              class="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
+              class="px-3.5 py-1.5 rounded-xl bg-peach-500 hover:bg-peach-600 text-white shadow-pill text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
             >
               <Plus class="w-3.5 h-3.5" />
               <span>Tambah</span>
@@ -640,33 +647,33 @@
               v-model="racikanPickerSearch"
               type="text"
               placeholder="Cari nama racikan / notes / tanggal..."
-              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
             />
-            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
           </div>
 
-          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+          <div class="flex items-center gap-1 bg-sage-50 p-1 rounded-2xl text-xs font-semibold border border-sage-200/60">
             <button
               type="button"
               @click="racikanPickerFilter = 'all'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="racikanPickerFilter === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="racikanPickerFilter === 'all' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Semua ({{ racikanCatalog.length }})
             </button>
             <button
               type="button"
               @click="racikanPickerFilter = 'commission'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="racikanPickerFilter === 'commission' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="racikanPickerFilter === 'commission' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Commission
             </button>
             <button
               type="button"
               @click="racikanPickerFilter = 'standard'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="racikanPickerFilter === 'standard' ? 'bg-stone-800 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="racikanPickerFilter === 'standard' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Standar
             </button>
@@ -674,10 +681,10 @@
         </div>
 
         <!-- List of racikan items -->
-        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+        <div class="border border-sage-200/90 rounded-2xl max-h-80 overflow-y-auto divide-y divide-sage-100">
           <div
             v-if="filteredRacikanPickerList.length === 0"
-            class="py-12 text-center text-stone-400 text-xs italic"
+            class="py-12 text-center text-sage-400 text-xs italic"
           >
             Tidak ada data resep racikan yang sesuai pencarian.
           </div>
@@ -685,15 +692,15 @@
           <div
             v-for="item in filteredRacikanPickerList"
             :key="item.id"
-            class="p-3.5 hover:bg-stone-50 flex items-center justify-between gap-3 transition-colors"
-            :class="selectedRacikanId === item.id ? 'bg-amber-50/70 border-l-4 border-amber-600' : ''"
+            class="p-3.5 hover:bg-sage-50/40 flex items-center justify-between gap-3 transition-colors"
+            :class="selectedRacikanId === item.id ? 'bg-peach-50/70 border-l-4 border-peach-500' : ''"
           >
             <div class="space-y-1 flex-1 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="font-bold text-stone-900 text-xs truncate">{{ item.nama }}</span>
                 <span
                   v-if="item.isCommission"
-                  class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-300"
+                  class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-peach-100 text-peach-900 border border-peach-300"
                 >
                   Commission Order
                 </span>
@@ -714,7 +721,7 @@
               type="button"
               @click="selectRacikanFromPicker(item.id)"
               class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
-              :class="selectedRacikanId === item.id ? 'bg-emerald-600 text-white shadow-xs' : 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'"
+              :class="selectedRacikanId === item.id ? 'bg-emerald-600 text-white shadow-xs' : 'bg-peach-500 hover:bg-peach-600 text-white shadow-pill'"
             >
               <Check v-if="selectedRacikanId === item.id" class="w-3.5 h-3.5" />
               <Plus v-else class="w-3.5 h-3.5" />

@@ -174,10 +174,10 @@
 
     <!-- MAIN FORMULATION SECTION (Drops to ml Proportion Calculator) -->
     <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-sage-100 pb-4">
         <div>
-          <h4 class="text-sm font-bold text-stone-900 font-serif">Komposisi Fragrance Oil (Tetes & Persentase FO)</h4>
-          <p class="text-xs text-stone-500">
+          <h4 class="text-base font-extrabold text-forest-900 font-rounded">Komposisi Fragrance Oil (Tetes & Persentase FO)</h4>
+          <p class="text-xs text-sage-600">
             Input jumlah tetes bibit FO. Volume ml dan rasio % akan dihitung proporsional terhadap target {{ targetTotalFoMl }} ml
           </p>
         </div>
@@ -186,7 +186,7 @@
           v-if="mode === 'manual'"
           type="button"
           @click="openFoPickerModal()"
-          class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 self-start sm:self-auto"
+          class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5 self-start sm:self-auto"
         >
           <Plus class="w-3.5 h-3.5" />
           <span>Tambah Fragrance Oil</span>
@@ -194,11 +194,11 @@
       </div>
 
       <!-- Drops & Volume Table Container (Fixed Height with Fixed Header, Fixed Footer, and Scrollable Body) -->
-      <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col h-[260px] overflow-hidden shadow-sm">
+      <div class="border border-sage-200/90 rounded-2xl bg-white flex flex-col h-[280px] overflow-hidden shadow-sm">
         <!-- 1. FIXED HEADER -->
-        <div class="bg-stone-100/90 border-b border-stone-200 flex-shrink-0">
+        <div class="bg-sage-50/80 border-b border-sage-200 flex-shrink-0">
           <table class="w-full text-xs text-left table-fixed">
-            <thead class="text-[10px] text-stone-500 uppercase font-bold">
+            <thead class="text-[10px] text-forest-700 uppercase font-bold">
               <tr>
                 <th class="py-2.5 px-3 w-10 text-left">#</th>
                 <th class="py-2.5 px-3 text-left">Nama Fragrance Oil</th>
@@ -216,19 +216,19 @@
         <!-- 2. SCROLLABLE MIDDLE TBODY AREA -->
         <div class="overflow-y-auto overflow-x-hidden flex-1">
           <table class="w-full text-xs text-left table-fixed">
-            <tbody class="divide-y text-stone-800">
+            <tbody class="divide-y divide-sage-100 text-stone-800">
               <tr v-if="rows.length === 0">
-                <td colspan="8" class="py-12 text-center text-stone-400 italic">
+                <td colspan="8" class="py-12 text-center text-sage-400 italic">
                   <span v-if="mode === 'by_resep' && !selectedRacikanCatalogId">
                     Silakan pilih resep racikan dari katalog di atas terlebih dahulu untuk memuat komposisi Fragrance Oil.
                   </span>
                   <span v-else>
-                    Belum ada bahan Fragrance Oil. Klik "+ Ambil dari Stok FO" atau "+ Tambah FO" untuk menambahkan bibit parfum.
+                    Belum ada bahan Fragrance Oil. Klik "+ Tambah Fragrance Oil" untuk menambahkan bibit parfum.
                   </span>
                 </td>
               </tr>
 
-              <tr v-for="(row, idx) in rows" :key="row.id" class="hover:bg-stone-50 transition-colors">
+              <tr v-for="(row, idx) in rows" :key="row.id" class="hover:bg-sage-50/40 transition-colors">
                 <td class="py-2 px-3 text-left text-stone-400 font-mono text-[11px] w-10">
                   {{ idx + 1 }}
                 </td>
@@ -250,7 +250,7 @@
                       v-if="mode === 'manual'"
                       type="button"
                       @click="openFoPickerModal(row)"
-                      class="p-2 rounded-lg bg-stone-100 hover:bg-amber-100 text-stone-600 hover:text-amber-900 border border-stone-200 transition-colors flex-shrink-0"
+                      class="p-2 rounded-xl bg-sage-50 hover:bg-sage-100 text-forest-800 border border-sage-200 transition-colors flex-shrink-0"
                       title="Cari dari Stok Fragrance Oil"
                     >
                       <Search class="w-3.5 h-3.5" />
@@ -279,17 +279,17 @@
                     required
                     :disabled="mode === 'by_resep'"
                     class="w-20 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold transition-colors"
-                    :class="mode === 'by_resep' ? 'bg-stone-100 text-stone-500 cursor-not-allowed border-stone-200' : 'bg-white border-stone-300'"
+                    :class="mode === 'by_resep' ? 'bg-stone-100 text-stone-500 cursor-not-allowed border-stone-200' : 'bg-white border-sage-200'"
                   />
                 </td>
 
                 <!-- % FO -->
-                <td class="py-2 px-3 text-left font-mono font-semibold text-amber-950 w-24">
+                <td class="py-2 px-3 text-left font-mono font-semibold text-forest-900 w-24">
                   {{ formatNumber(getRowPercentage(row), 1) }}%
                 </td>
 
                 <!-- ml FO -->
-                <td class="py-2 px-3 text-left font-mono font-bold text-stone-900 bg-amber-50/50 w-28">
+                <td class="py-2 px-3 text-left font-mono font-bold text-stone-900 bg-sage-50/50 w-28">
                   {{ formatNumber(getRowMl(row), 2) }} ml
                 </td>
 
@@ -298,18 +298,18 @@
                   {{ formatRupiah(getRowCost(row)) }}
                 </td>
 
-                <!-- Delete Row Action -->
+                <!-- Delete Action -->
                 <td class="py-2 px-4 text-left w-16">
                   <button
-                    v-if="mode === 'manual'"
                     type="button"
                     @click="removeRow(idx)"
-                    class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
-                    title="Hapus Baris FO"
+                    :disabled="mode === 'by_resep'"
+                    class="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 transition-colors"
+                    :class="mode === 'by_resep' ? 'opacity-40 cursor-not-allowed' : ''"
+                    title="Hapus Baris"
                   >
                     <Trash2 class="w-3.5 h-3.5" />
                   </button>
-                  <span v-else class="text-stone-300 text-xs">-</span>
                 </td>
               </tr>
             </tbody>
@@ -317,18 +317,20 @@
         </div>
 
         <!-- 3. FIXED FOOTER AT THE BOTTOM -->
-        <div class="bg-stone-50 border-t border-stone-200 flex-shrink-0">
+        <div class="bg-sage-50/90 border-t border-sage-200 flex-shrink-0">
           <table class="w-full text-xs text-left table-fixed">
             <tfoot>
-              <tr class="font-bold text-stone-900">
-                <th class="py-3 px-3 w-10 text-left"></th>
-                <th class="py-3 px-3 text-left">Total Komposisi FO:</th>
-                <th class="py-3 px-3 text-left w-20"></th>
-                <th class="py-3 px-3 text-left font-mono text-amber-950 w-28">{{ totalDrops }} Tetes</th>
-                <th class="py-3 px-3 text-left font-mono text-amber-950 w-24">100%</th>
-                <th class="py-3 px-3 text-left font-mono text-amber-950 w-28">{{ formatNumber(targetTotalFoMl, 2) }} ml</th>
-                <th class="py-3 px-3 text-left font-mono text-amber-950 w-36">{{ formatRupiah(totalFoCost) }}</th>
-                <th class="py-3 px-4 text-left w-16"></th>
+              <tr class="font-bold text-forest-900">
+                <th class="py-2.5 px-3 w-10 text-left"></th>
+                <th class="py-2.5 px-3 text-left">
+                  <span class="text-xs">Total Komposisi Formula Fragrance Oil:</span>
+                </th>
+                <th class="py-2.5 px-3 text-left w-20"></th>
+                <th class="py-2.5 px-3 text-left font-mono font-bold text-forest-900 w-28">{{ totalDrops }} Tetes</th>
+                <th class="py-2.5 px-3 text-left font-mono text-forest-900 w-24">100%</th>
+                <th class="py-2.5 px-3 text-left font-mono font-bold text-peach-600 w-28">{{ targetTotalFoMl }} ml</th>
+                <th class="py-2.5 px-3 text-left font-mono text-forest-900 text-sm font-bold w-36">{{ formatRupiah(totalFoCost) }}</th>
+                <th class="py-2.5 px-4 text-left w-16"></th>
               </tr>
             </tfoot>
           </table>
@@ -336,29 +338,29 @@
       </div>
     </div>
 
-    <!-- SUMMARY CARD -->
-    <div class="bg-gradient-to-br from-stone-900 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-stone-800 pb-6">
+    <!-- SUMMARY SECTION -->
+    <div class="bg-forest-900 rounded-[24px] p-6 text-white border border-forest-800 shadow-md space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-forest-800 pb-4">
         <div>
-          <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold block mb-1">
-            🧪 Ringkasan Formula Botol {{ targetTotalMl }} ml
+          <span class="text-xs font-mono uppercase tracking-wider text-sage-300 font-bold block mb-1">
+            Ringkasan Formulasi Racikan
           </span>
-          <h3 class="text-2xl font-bold font-serif text-white">
-            {{ namaRacikan || 'Nama Racikan Baru' }}
+          <h3 class="text-2xl font-bold font-rounded text-white">
+            {{ namaRacikan || 'Racikan Fragrance Baru' }}
           </h3>
-          <p class="text-xs text-stone-300 mt-1">
-            Konsentrasi FO: {{ foConcentrationPercentage }}% ({{ targetTotalFoMl }} ml) • Pelarut Base: {{ targetTotalMl - targetTotalFoMl }} ml
+          <p class="text-xs text-sage-400 mt-1">
+            {{ rows.length }} Bahan Fragrance Oil • {{ totalDrops }} Total Tetes • {{ targetTotalFoMl }} ml Bibit Parfum
           </p>
         </div>
 
         <div class="flex items-center gap-3">
-          <div class="bg-stone-950/80 border border-stone-700/80 px-4 py-3 rounded-2xl text-center">
-            <span class="text-[10px] uppercase font-bold text-stone-400 block">Total Tetes FO</span>
-            <span class="text-xl font-bold font-mono text-amber-400">{{ totalDrops }} Tetes</span>
+          <div class="bg-forest-950/80 border border-forest-700/80 px-4 py-3 rounded-2xl text-center">
+            <span class="text-[10px] uppercase font-bold text-sage-400 block">Total Volume FO</span>
+            <span class="text-xl font-bold font-mono text-peach-300">{{ targetTotalFoMl }} ml</span>
           </div>
 
-          <div class="bg-stone-950/80 border border-stone-700/80 px-4 py-3 rounded-2xl text-center">
-            <span class="text-[10px] uppercase font-bold text-stone-400 block">Estimasi Modal FO</span>
+          <div class="bg-forest-950/80 border border-forest-700/80 px-4 py-3 rounded-2xl text-center">
+            <span class="text-[10px] uppercase font-bold text-sage-400 block">Estimasi Modal FO</span>
             <span class="text-xl font-bold font-mono text-white">{{ formatRupiah(totalFoCost) }}</span>
           </div>
         </div>
@@ -366,14 +368,14 @@
 
       <!-- Action Buttons -->
       <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
-        <div class="text-xs text-stone-400">
+        <div class="text-xs text-sage-400">
           💡 Data racikan dapat langsung disimpan atau diteruskan ke Kalkulator HPP untuk menghitung biaya botol & packaging.
         </div>
 
         <div class="flex items-center gap-3">
           <button
             @click="saveAndGoToHpp"
-            class="px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold border border-stone-700 transition-all flex items-center gap-1.5"
+            class="px-5 py-2.5 rounded-2xl bg-forest-800 hover:bg-forest-700 text-white text-xs font-bold border border-forest-700 transition-all flex items-center gap-1.5"
           >
             <DollarSign class="w-3.5 h-3.5" />
             <span>Lanjut Hitung HPP</span>
@@ -381,7 +383,7 @@
 
           <button
             @click="saveRacikan"
-            class="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-lg shadow-amber-950/50 transition-all flex items-center gap-1.5"
+            class="px-6 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
           >
             <Save class="w-4 h-4" />
             <span>Simpan ke Katalog</span>
@@ -406,41 +408,41 @@
               v-model="foPickerSearch"
               type="text"
               placeholder="Cari nama FO / aroma notes / supplier..."
-              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
             />
-            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
           </div>
 
-          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold flex-wrap">
+          <div class="flex items-center gap-1 bg-sage-50 p-1 rounded-2xl text-xs font-semibold border border-sage-200/60 flex-wrap">
             <button
               type="button"
               @click="foPickerPyramid = 'all'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="foPickerPyramid === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="foPickerPyramid === 'all' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Semua ({{ stockFragranceOil.length }})
             </button>
             <button
               type="button"
               @click="foPickerPyramid = 'Top'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="foPickerPyramid === 'Top' ? 'bg-orange-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="foPickerPyramid === 'Top' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Top
             </button>
             <button
               type="button"
               @click="foPickerPyramid = 'Middle'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="foPickerPyramid === 'Middle' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="foPickerPyramid === 'Middle' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Heart
             </button>
             <button
               type="button"
               @click="foPickerPyramid = 'Bottom'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="foPickerPyramid === 'Bottom' ? 'bg-fuchsia-700 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="foPickerPyramid === 'Bottom' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Base
             </button>
@@ -448,10 +450,10 @@
         </div>
 
         <!-- List of Fragrance Oils -->
-        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+        <div class="border border-sage-200/90 rounded-2xl max-h-80 overflow-y-auto divide-y divide-sage-100">
           <div
             v-if="filteredFoPickerList.length === 0"
-            class="py-12 text-center text-stone-400 text-xs italic"
+            class="py-12 text-center text-sage-400 text-xs italic"
           >
             Tidak ada Fragrance Oil yang sesuai pencarian.
           </div>
@@ -459,7 +461,7 @@
           <div
             v-for="fo in filteredFoPickerList"
             :key="fo.id"
-            class="p-3.5 hover:bg-stone-50 flex items-center justify-between gap-3 transition-colors"
+            class="p-3.5 hover:bg-sage-50/40 flex items-center justify-between gap-3 transition-colors"
           >
             <div class="space-y-1 flex-1 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
@@ -468,49 +470,28 @@
                   class="px-1.5 py-0.2 rounded text-[9px] font-bold border"
                   :class="PYRAMID_BADGE_MAP[fo.pyramid]?.bg"
                 >
-                  {{ fo.pyramid }} Note
-                </span>
-                <span
-                  class="px-1.5 py-0.2 rounded-full text-[9px] font-bold border inline-flex items-center gap-1"
-                  :class="STOCK_STATUS_MAP[fo.currentStock]?.bg"
-                >
-                  <span class="w-1.5 h-1.5 rounded-full" :class="STOCK_STATUS_MAP[fo.currentStock]?.dot"></span>
-                  {{ fo.currentStock }}
+                  {{ fo.pyramid }}
                 </span>
                 <span
                   v-if="getFoRowCount(fo.id) > 0"
-                  class="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1"
+                  class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-peach-100 text-peach-900 border border-peach-300"
                 >
-                  <Check class="w-2.5 h-2.5" />
                   Masuk Formula ({{ getFoRowCount(fo.id) }})
                 </span>
               </div>
               <div class="flex items-center gap-2 text-[11px] text-stone-500 flex-wrap">
-                <span>{{ fo.jenisLiquid }}</span>
-                <span>•</span>
                 <span>{{ fo.storeName }}</span>
                 <span>•</span>
-                <span>{{ fo.botolMl }} ml</span>
-                <span v-if="fo.priceTiers && fo.priceTiers.length > 0">
-                  • <strong class="font-mono font-semibold text-stone-800">{{ formatRupiah(fo.priceTiers[0].harga) }}</strong>
-                </span>
-              </div>
-              <div v-if="fo.notes && fo.notes.length > 0" class="flex flex-wrap gap-1 pt-0.5">
-                <span
-                  v-for="n in fo.notes"
-                  :key="n"
-                  class="px-1.5 py-0.2 rounded text-[9px] font-medium border"
-                  :class="[NOTE_COLOR_MAP[n]?.bg, NOTE_COLOR_MAP[n]?.text, NOTE_COLOR_MAP[n]?.border]"
-                >
-                  {{ n }}
-                </span>
+                <span class="font-mono font-semibold text-stone-800">{{ formatRupiah(store.getFoAveragePricePerMl(fo.id)) }} / ml</span>
+                <span>•</span>
+                <span>Stok: {{ fo.currentStock }}</span>
               </div>
             </div>
 
             <button
               type="button"
               @click="selectFoFromPicker(fo)"
-              class="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1 flex-shrink-0"
+              class="px-3.5 py-1.5 rounded-xl bg-peach-500 hover:bg-peach-600 text-white shadow-pill text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
             >
               <Plus class="w-3.5 h-3.5" />
               <span>{{ targetRowForFoPicker ? 'Pilih FO Ini' : 'Tambah' }}</span>
@@ -536,33 +517,33 @@
               v-model="racikanPickerSearch"
               type="text"
               placeholder="Cari nama racikan / notes / tanggal..."
-              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
             />
-            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
           </div>
 
-          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+          <div class="flex items-center gap-1 bg-sage-50 p-1 rounded-2xl text-xs font-semibold border border-sage-200/60">
             <button
               type="button"
               @click="racikanPickerFilter = 'all'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="racikanPickerFilter === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="racikanPickerFilter === 'all' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Semua ({{ racikanCatalog.length }})
             </button>
             <button
               type="button"
               @click="racikanPickerFilter = 'commission'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="racikanPickerFilter === 'commission' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="racikanPickerFilter === 'commission' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Commission
             </button>
             <button
               type="button"
               @click="racikanPickerFilter = 'standard'"
-              class="px-2.5 py-1 rounded-lg transition-all"
-              :class="racikanPickerFilter === 'standard' ? 'bg-stone-800 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+              class="px-3 py-1 rounded-xl transition-all"
+              :class="racikanPickerFilter === 'standard' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
             >
               Standar
             </button>
@@ -570,10 +551,10 @@
         </div>
 
         <!-- List of racikan items -->
-        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+        <div class="border border-sage-200/90 rounded-2xl max-h-80 overflow-y-auto divide-y divide-sage-100">
           <div
             v-if="filteredRacikanPickerList.length === 0"
-            class="py-12 text-center text-stone-400 text-xs italic"
+            class="py-12 text-center text-sage-400 text-xs italic"
           >
             Tidak ada data resep racikan yang sesuai pencarian.
           </div>
@@ -581,15 +562,15 @@
           <div
             v-for="item in filteredRacikanPickerList"
             :key="item.id"
-            class="p-3.5 hover:bg-stone-50 flex items-center justify-between gap-3 transition-colors"
-            :class="selectedRacikanCatalogId === item.id ? 'bg-amber-50/70 border-l-4 border-amber-600' : ''"
+            class="p-3.5 hover:bg-sage-50/40 flex items-center justify-between gap-3 transition-colors"
+            :class="selectedRacikanCatalogId === item.id ? 'bg-peach-50/70 border-l-4 border-peach-500' : ''"
           >
             <div class="space-y-1 flex-1 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="font-bold text-stone-900 text-xs truncate">{{ item.nama }}</span>
                 <span
                   v-if="item.isCommission"
-                  class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-300"
+                  class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-peach-100 text-peach-900 border border-peach-300"
                 >
                   Commission Order
                 </span>
@@ -612,7 +593,7 @@
               type="button"
               @click="selectRacikanFromPicker(item.id)"
               class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
-              :class="selectedRacikanCatalogId === item.id ? 'bg-emerald-600 text-white shadow-xs' : 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'"
+              :class="selectedRacikanCatalogId === item.id ? 'bg-emerald-600 text-white shadow-xs' : 'bg-peach-500 hover:bg-peach-600 text-white shadow-pill'"
             >
               <Check v-if="selectedRacikanCatalogId === item.id" class="w-3.5 h-3.5" />
               <Plus v-else class="w-3.5 h-3.5" />

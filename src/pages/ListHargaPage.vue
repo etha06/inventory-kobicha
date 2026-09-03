@@ -62,7 +62,7 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
-            <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
+            <tr class="bg-sage-50/80 border-b border-sage-200 text-forest-700 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-4 w-10 text-left">#</th>
               <th class="py-3.5 px-4 text-left">Nama Fragrance Oil</th>
               <th class="py-3.5 px-4 text-left">Jenis Liquid</th>
@@ -73,9 +73,9 @@
               <th class="py-3.5 px-4 text-left w-20">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-stone-100 text-stone-800">
+          <tbody class="divide-y divide-sage-100 text-stone-800">
             <tr v-if="processedFoList.length === 0">
-              <td colspan="8" class="py-12 text-center text-stone-400">
+              <td colspan="8" class="py-12 text-center text-sage-400">
                 <Tag class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Tidak ada data harga ditemukan.
               </td>
@@ -84,7 +84,7 @@
             <tr
               v-for="(item, idx) in processedFoList"
               :key="item.id"
-              class="table-row-hover transition-colors"
+              class="hover:bg-sage-50/40 transition-colors"
             >
               <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
                 {{ idx + 1 }}
@@ -107,7 +107,7 @@
               </td>
 
               <td class="py-3.5 px-4 text-left">
-                <span class="px-2 py-0.5 rounded bg-stone-100 text-stone-700 border text-[10px]">
+                <span class="px-2 py-0.5 rounded bg-sage-50 text-forest-800 border border-sage-200 text-[10px]">
                   {{ item.jenisLiquid }}
                 </span>
               </td>
@@ -115,7 +115,7 @@
               <!-- Pyramid (Without "Note" word) -->
               <td class="py-3.5 px-4 text-left">
                 <span
-                  class="px-2 py-0.5 rounded-md text-[10px] font-bold border inline-block"
+                  class="px-2 py-0.5 rounded text-[10px] font-bold border inline-block"
                   :class="PYRAMID_BADGE_MAP[item.pyramid].bg"
                 >
                   {{ item.pyramid }}
@@ -131,21 +131,21 @@
                   <div
                     v-for="tier in item.priceTiers"
                     :key="tier.id"
-                    class="text-[11px] flex items-center justify-between bg-stone-50 px-2 py-0.5 rounded border border-stone-200"
+                    class="text-[11px] flex items-center justify-between bg-sage-50/60 px-2 py-0.5 rounded-lg border border-sage-200/80"
                   >
-                    <span class="font-bold text-stone-700">{{ tier.ml }} ml</span>
+                    <span class="font-bold text-forest-900">{{ tier.ml }} ml</span>
                     <span class="text-stone-500 font-mono">{{ formatRupiah(tier.harga) }}</span>
-                    <span class="font-bold text-amber-800 font-mono">({{ formatRupiah(tier.hargaPerMl) }})</span>
+                    <span class="font-bold text-peach-800 font-mono">({{ formatRupiah(tier.hargaPerMl) }})</span>
                   </div>
                 </div>
               </td>
 
               <td class="py-3.5 px-4 text-left">
-                <div class="inline-block bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl text-left">
-                  <span class="text-sm font-bold text-amber-950 font-mono block">
+                <div class="inline-block bg-peach-50 border border-peach-200 px-3 py-1.5 rounded-xl text-left">
+                  <span class="text-sm font-bold text-peach-950 font-mono block">
                     {{ formatRupiah(item.avgPricePerMl) }}
                   </span>
-                  <span class="text-[9px] text-amber-700 uppercase font-bold tracking-wider">Rata-rata</span>
+                  <span class="text-[9px] text-peach-700 uppercase font-bold tracking-wider">Rata-rata</span>
                 </div>
               </td>
 
@@ -153,7 +153,7 @@
               <td class="py-3.5 px-4 text-left">
                 <button
                   @click="store.navigateTo('stock-fo')"
-                  class="p-1.5 rounded-md border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
+                  class="p-1.5 rounded-lg text-sage-600 hover:text-forest-900 hover:bg-sage-100 text-xs transition-colors"
                   title="Lihat di Stok FO"
                 >
                   <Eye class="w-3.5 h-3.5" />
