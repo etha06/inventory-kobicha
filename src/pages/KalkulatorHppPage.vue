@@ -136,10 +136,12 @@
               <button
                 type="button"
                 @click="openRacikanPickerModal"
-                class="w-full px-3.5 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition-colors flex items-center justify-between shadow-xs"
+                class="w-full bg-white text-left px-3.5 py-2 text-xs flex items-center justify-between border border-sage-200 hover:border-sage-300 rounded-xl cursor-pointer transition-all shadow-xs"
               >
-                <span class="truncate">{{ selectedRacikanName ? selectedRacikanName : '+ Pilih Racikan dari Katalog' }}</span>
-                <Layers class="w-3.5 h-3.5 text-amber-800 flex-shrink-0 ml-2" />
+                <span class="truncate" :class="!selectedRacikanId ? 'text-stone-400 font-normal' : 'text-stone-900 font-semibold'">
+                  {{ selectedRacikanName || '-- Pilih Racikan dari Katalog --' }}
+                </span>
+                <ChevronDown class="w-3.5 h-3.5 text-stone-400 flex-shrink-0 ml-2" />
               </button>
             </div>
             <div v-else>
@@ -731,7 +733,7 @@ import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { PackagingHppItem, HppLiquidIngredientDetail, StockCampuran } from '../types';
 import { formatRupiah, formatNumber } from '../utils/formatters';
-import { RotateCcw, Save, Plus, Trash2, FlaskConical, Package, TrendingUp, Menu, Layers, Search, Check } from 'lucide-vue-next';
+import { RotateCcw, Save, Plus, Trash2, FlaskConical, Package, TrendingUp, Menu, Layers, Search, Check, ChevronDown } from 'lucide-vue-next';
 import CustomSelect from '../components/common/CustomSelect.vue';
 import Modal from '../components/common/Modal.vue';
 

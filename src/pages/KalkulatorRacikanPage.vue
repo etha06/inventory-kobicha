@@ -76,22 +76,17 @@
       </div>
 
       <!-- Mode By Resep Selector -->
-      <div v-if="mode === 'by_resep'" class="p-4 rounded-xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="space-y-0.5">
-          <label class="block text-xs font-bold text-amber-950">Resep Racikan Terpilih:</label>
-          <div v-if="selectedRacikanCatalogId" class="text-xs font-bold text-stone-900 flex items-center gap-1.5">
-            <Check class="w-3.5 h-3.5 text-emerald-600" />
-            <span>{{ namaRacikan }}</span>
-          </div>
-          <span v-else class="text-xs text-stone-500 italic">Belum ada resep racikan yang dipilih dari katalog.</span>
-        </div>
+      <div v-if="mode === 'by_resep'" class="p-4 rounded-xl bg-amber-50 border border-amber-200 space-y-1.5">
+        <label class="block text-xs font-bold text-amber-950">Pilih Racikan dari Katalog Racikan Fragrance:</label>
         <button
           type="button"
           @click="openRacikanPickerModal"
-          class="px-4 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition-colors flex items-center gap-1.5 flex-shrink-0"
+          class="w-full bg-white text-left px-3.5 py-2 text-xs flex items-center justify-between border border-sage-200 hover:border-sage-300 rounded-xl cursor-pointer transition-all shadow-xs"
         >
-          <Layers class="w-3.5 h-3.5" />
-          <span>{{ selectedRacikanCatalogId ? 'Ganti Resep Racikan' : '+ Pilih Racikan dari Katalog' }}</span>
+          <span class="truncate" :class="!selectedRacikanCatalogId ? 'text-stone-400 font-normal' : 'text-stone-900 font-semibold'">
+            {{ selectedRacikanCatalogId ? namaRacikan : '-- Pilih Resep Racikan --' }}
+          </span>
+          <ChevronDown class="w-3.5 h-3.5 text-stone-400 flex-shrink-0 ml-2" />
         </button>
       </div>
 
@@ -637,7 +632,7 @@ import { storeToRefs } from 'pinia';
 import { RacikanItem, NotesEnum, PyramidEnum, StockFragranceOil } from '../types';
 import { PYRAMID_BADGE_MAP, STOCK_STATUS_MAP, NOTE_COLOR_MAP } from '../utils/constants';
 import { formatRupiah, formatNumber } from '../utils/formatters';
-import { Plus, RotateCcw, Save, Trash2, DollarSign, Menu, Info, Layers, Search, Check } from 'lucide-vue-next';
+import { Plus, RotateCcw, Save, Trash2, DollarSign, Menu, Info, Layers, Search, Check, ChevronDown } from 'lucide-vue-next';
 import CustomSelect from '../components/common/CustomSelect.vue';
 import Modal from '../components/common/Modal.vue';
 
