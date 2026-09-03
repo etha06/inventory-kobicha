@@ -80,8 +80,8 @@
           <tbody class="divide-y divide-stone-100 text-stone-800">
             <tr v-if="filteredRacikan.length === 0">
               <td colspan="7" class="py-12 text-center text-stone-400">
-                <Scroll class="w-8 h-8 mx-auto mb-2 opacity-50" />
-                Belum ada data racikan parfum. Gunakan kalkulator racikan untuk membuat dan menyimpan resep.
+                <FlaskConical class="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p class="text-xs text-stone-400">Belum ada data racikan parfum. Gunakan kalkulator racikan untuk membuat dan menyimpan resep.</p>
               </td>
             </tr>
 

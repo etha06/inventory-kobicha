@@ -33,10 +33,10 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       <div
         v-if="formulaBases.length === 0"
-        class="col-span-full py-16 text-center text-sage-400 bg-white rounded-[24px] border border-sage-200"
+        class="col-span-full py-12 text-center text-stone-400 bg-white rounded-2xl border border-stone-200/80 text-xs shadow-xs"
       >
-        <FlaskConical class="w-10 h-10 mx-auto mb-2 opacity-40 text-sage-700" />
-        Belum ada Formula Base. Buat formula base seperti EDT 10%, EDP 20%, atau Extrait 30%.
+        <FlaskConical class="w-8 h-8 mx-auto mb-2 opacity-50" />
+        <p class="text-xs text-stone-400">Belum ada Formula Base. Buat formula base seperti EDT 10%, EDP 20%, atau Extrait 30%.</p>
       </div>
 
       <div
