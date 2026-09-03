@@ -8,8 +8,8 @@
       class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between transition-all duration-150 select-none"
       :class="[
         dark
-          ? (isOpen ? 'bg-stone-900 border border-stone-700 ring-2 ring-emerald-500/30 rounded-xl text-white' : 'bg-stone-900 border border-stone-700 hover:border-stone-600 rounded-xl text-white')
-          : (isOpen ? 'bg-white border-2 border-stone-900 shadow-sm rounded-xl' : 'bg-white border border-sage-200 hover:border-sage-300 rounded-xl'),
+          ? (isOpen ? 'bg-stone-900 border border-stone-700 ring-2 ring-emerald-500/30 rounded-lg text-white' : 'bg-stone-900 border border-stone-700 hover:border-stone-600 rounded-lg text-white')
+          : (isOpen ? 'bg-white border-2 border-stone-900 shadow-sm rounded-lg' : 'bg-white border border-sage-200 hover:border-sage-300 rounded-lg'),
         disabled ? (dark ? 'bg-stone-950/80 text-stone-500 cursor-not-allowed border-stone-800 opacity-60 pointer-events-none' : 'bg-stone-100/80 text-stone-500 cursor-not-allowed border-stone-200/80 opacity-60 pointer-events-none') : 'cursor-pointer',
         buttonClass
       ]"
@@ -38,7 +38,7 @@
           v-if="isOpen"
           ref="dropdownRef"
           :style="dropdownStyle"
-          class="rounded-2xl shadow-2xl py-1.5 max-h-60 overflow-y-auto text-xs overflow-hidden"
+          class="rounded-xl shadow-2xl py-1.5 max-h-60 overflow-y-auto text-xs overflow-hidden"
           :class="[
             dark
               ? 'bg-stone-900 border border-stone-700 text-stone-200'
@@ -53,7 +53,7 @@
               v-model="searchTerm"
               type="text"
               placeholder="Cari..."
-              class="w-full px-2.5 py-1.5 text-xs rounded-xl focus:outline-none focus:ring-1"
+              class="w-full px-2.5 py-1.5 text-xs rounded-lg focus:outline-none focus:ring-1"
               :class="dark ? 'border border-stone-700 focus:border-stone-500 focus:ring-stone-500 bg-stone-950 text-white placeholder-stone-500' : 'border border-stone-200 focus:border-stone-900 focus:ring-stone-900 bg-stone-50/50'"
               @click.stop
             />

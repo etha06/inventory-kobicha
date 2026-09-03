@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-6">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-xl border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <!-- Mobile Burger Button -->
         <button
           @click="store.openMobileNav()"
-          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          class="lg:hidden w-9 h-9 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
           title="Buka Menu"
         >
           <Menu class="w-4 h-4" />
@@ -23,14 +23,14 @@
       <div class="flex items-center gap-2">
         <button
           @click="resetForm"
-          class="px-3.5 py-2 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-800 text-xs font-semibold border border-sage-200 transition-colors flex items-center gap-1.5"
+          class="px-3.5 py-2 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-800 text-xs font-semibold border border-sage-200 transition-colors flex items-center gap-1.5"
         >
           <RotateCcw class="w-3.5 h-3.5" />
           <span>Reset Form</span>
         </button>
         <button
           @click="saveRacikan"
-          class="px-5 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
+          class="px-5 py-2.5 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
         >
           <Save class="w-4 h-4" />
           <span>Simpan ke Katalog Racikan</span>
@@ -39,7 +39,7 @@
     </div>
 
     <!-- Yellow Info Alert (Not Bold) -->
-    <div class="bg-amber-50 border border-amber-200/90 rounded-2xl p-3.5 px-4 flex items-center gap-2.5 text-amber-900 text-xs shadow-xs">
+    <div class="bg-amber-50 border border-amber-200/90 rounded-xl p-3.5 px-4 flex items-center gap-2.5 text-amber-900 text-xs shadow-xs">
       <Info class="w-4 h-4 text-amber-600 flex-shrink-0" />
       <span class="font-normal text-amber-800">
         Formula Base sama Target total botol itu ga ke simpen di katalog, dia cuma buat bantu perhitungan aja.
@@ -47,7 +47,7 @@
     </div>
 
     <!-- Formula Mode Selector & General Configurations -->
-    <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-5">
+    <div class="bg-white rounded-xl border border-sage-100 p-5 sm:p-6 shadow-sm space-y-5">
       <!-- Mode Toggle -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-sage-100 pb-4">
         <div>
@@ -55,20 +55,20 @@
           <p class="text-xs text-sage-600">Pilih Racik Manual atau By Resep yang sudah tersimpan di Katalog</p>
         </div>
 
-        <div class="flex items-center gap-2 bg-sage-50 p-1 rounded-2xl text-xs font-semibold border border-sage-200/60">
+        <div class="flex items-center gap-2 bg-sage-50 p-1 rounded-xl text-xs font-semibold border border-sage-200/60">
           <button
             type="button"
             @click="setMode('manual')"
-            class="px-4 py-2 rounded-xl transition-all"
-            :class="mode === 'manual' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900'"
+            class="px-4 py-2 rounded-lg transition-all"
+            :class="mode === 'manual' ? 'bg-peach-500 text-white shadow-xs font-bold' : 'text-sage-700 hover:text-forest-900'"
           >
             Mode Manual (Bebas)
           </button>
           <button
             type="button"
             @click="setMode('by_resep')"
-            class="px-4 py-2 rounded-xl transition-all"
-            :class="mode === 'by_resep' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900'"
+            class="px-4 py-2 rounded-lg transition-all"
+            :class="mode === 'by_resep' ? 'bg-peach-500 text-white shadow-xs font-bold' : 'text-sage-700 hover:text-forest-900'"
           >
             Mode By Resep Katalog
           </button>
@@ -76,12 +76,12 @@
       </div>
 
       <!-- Mode By Resep Selector -->
-      <div v-if="mode === 'by_resep'" class="p-4 rounded-xl bg-amber-50 border border-amber-200 space-y-1.5">
+      <div v-if="mode === 'by_resep'" class="p-4 rounded-lg bg-amber-50 border border-amber-200 space-y-1.5">
         <label class="block text-xs font-bold text-amber-950">Pilih Racikan dari Katalog Racikan Fragrance:</label>
         <button
           type="button"
           @click="openRacikanPickerModal"
-          class="w-full bg-white text-left px-3.5 py-2 text-xs flex items-center justify-between border border-sage-200 hover:border-sage-300 rounded-xl cursor-pointer transition-all shadow-xs"
+          class="w-full bg-white text-left px-3.5 py-2 text-xs flex items-center justify-between border border-sage-200 hover:border-sage-300 rounded-lg cursor-pointer transition-all shadow-xs"
         >
           <span class="truncate" :class="!selectedRacikanCatalogId ? 'text-stone-400 font-normal' : 'text-stone-900 font-semibold'">
             {{ selectedRacikanCatalogId ? namaRacikan : '-- Pilih Resep Racikan --' }}
@@ -129,7 +129,7 @@
             type="text"
             required
             placeholder="Misal: Kobicha Velvet Rose Extrait"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-semibold"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-semibold"
           />
         </div>
 
@@ -141,7 +141,7 @@
               type="number"
               min="1"
               required
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono font-bold pr-8"
+              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono font-bold pr-8"
             />
             <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold">ml</span>
           </div>
@@ -157,7 +157,7 @@
               max="100"
               required
               :disabled="Boolean(selectedBaseId)"
-              class="w-full px-3.5 py-2 rounded-xl border text-sm font-mono font-bold pr-8 transition-colors"
+              class="w-full px-3.5 py-2 rounded-lg border text-sm font-mono font-bold pr-8 transition-colors"
               :class="selectedBaseId ? 'bg-stone-100/90 text-stone-500 cursor-not-allowed border-stone-200 select-none' : 'bg-white border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-stone-900'"
             />
             <span class="absolute right-3 top-2.5 text-xs font-bold" :class="selectedBaseId ? 'text-stone-400' : 'text-stone-500'">%</span>
@@ -173,7 +173,7 @@
     </div>
 
     <!-- MAIN FORMULATION SECTION (Drops to ml Proportion Calculator) -->
-    <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-4">
+    <div class="bg-white rounded-xl border border-sage-100 p-5 sm:p-6 shadow-sm space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-4">
         <div>
           <h4 class="text-sm font-bold text-stone-900 font-serif">Komposisi Fragrance Oil (Tetes & Persentase FO)</h4>
@@ -186,7 +186,7 @@
           v-if="mode === 'manual'"
           type="button"
           @click="openFoPickerModal()"
-          class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 self-start sm:self-auto"
+          class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 self-start sm:self-auto"
         >
           <Plus class="w-3.5 h-3.5" />
           <span>Tambah Fragrance Oil</span>
@@ -194,7 +194,7 @@
       </div>
 
       <!-- Drops & Volume Table Container (Fixed Height with Fixed Header, Fixed Footer, and Scrollable Body) -->
-      <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col h-[260px] overflow-hidden shadow-sm">
+      <div class="border border-stone-200/90 rounded-lg bg-white flex flex-col h-[260px] overflow-hidden shadow-xs">
         <!-- 1. FIXED HEADER -->
         <div class="bg-stone-100/90 border-b border-stone-200 flex-shrink-0">
           <table class="w-full text-xs text-left table-fixed">
@@ -245,7 +245,7 @@
                       v-if="mode === 'manual'"
                       type="button"
                       @click="openFoPickerModal(row)"
-                      class="p-2 rounded-lg bg-stone-100 hover:bg-amber-100 text-stone-600 hover:text-amber-900 border border-stone-200 transition-colors flex-shrink-0"
+                      class="p-2 rounded-md bg-stone-100 hover:bg-amber-100 text-stone-600 hover:text-amber-900 border border-stone-200 transition-colors flex-shrink-0"
                       title="Cari dari Stok Fragrance Oil"
                     >
                       <Search class="w-3.5 h-3.5" />
@@ -273,7 +273,7 @@
                     min="1"
                     required
                     :disabled="mode === 'by_resep'"
-                    class="w-20 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold transition-colors"
+                    class="w-20 px-2 py-1 text-xs border rounded-md text-left font-mono font-bold transition-colors"
                     :class="mode === 'by_resep' ? 'bg-stone-100 text-stone-500 cursor-not-allowed border-stone-200' : 'bg-white border-stone-300'"
                   />
                 </td>
@@ -332,7 +332,7 @@
     </div>
 
     <!-- SUMMARY CARD -->
-    <div class="bg-gradient-to-br from-stone-900 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+    <div class="bg-gradient-to-br from-stone-900 to-amber-950 text-white rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-stone-800 pb-6">
         <div>
           <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold block mb-1">
@@ -347,12 +347,12 @@
         </div>
 
         <div class="flex items-center gap-3">
-          <div class="bg-stone-950/80 border border-stone-700/80 px-4 py-3 rounded-2xl text-center">
+          <div class="bg-stone-950/80 border border-stone-700/80 px-4 py-3 rounded-xl text-center">
             <span class="text-[10px] uppercase font-bold text-stone-400 block">Total Tetes FO</span>
             <span class="text-xl font-bold font-mono text-amber-400">{{ totalDrops }} Tetes</span>
           </div>
 
-          <div class="bg-stone-950/80 border border-stone-700/80 px-4 py-3 rounded-2xl text-center">
+          <div class="bg-stone-950/80 border border-stone-700/80 px-4 py-3 rounded-xl text-center">
             <span class="text-[10px] uppercase font-bold text-stone-400 block">Estimasi Modal FO</span>
             <span class="text-xl font-bold font-mono text-white">{{ formatRupiah(totalFoCost) }}</span>
           </div>
@@ -368,7 +368,7 @@
         <div class="flex items-center gap-3">
           <button
             @click="saveAndGoToHpp"
-            class="px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold border border-stone-700 transition-all flex items-center gap-1.5"
+            class="px-5 py-2.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold border border-stone-700 transition-all flex items-center gap-1.5"
           >
             <DollarSign class="w-3.5 h-3.5" />
             <span>Lanjut Hitung HPP</span>
@@ -376,7 +376,7 @@
 
           <button
             @click="saveRacikan"
-            class="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-lg shadow-amber-950/50 transition-all flex items-center gap-1.5"
+            class="px-6 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-lg shadow-amber-950/50 transition-all flex items-center gap-1.5"
           >
             <Save class="w-4 h-4" />
             <span>Simpan ke Katalog</span>
@@ -401,16 +401,16 @@
               v-model="foPickerSearch"
               type="text"
               placeholder="Cari nama FO / aroma notes / supplier..."
-              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
             />
             <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
           </div>
 
-          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold flex-wrap">
+          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-lg text-xs font-semibold flex-wrap">
             <button
               type="button"
               @click="foPickerPyramid = 'all'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="foPickerPyramid === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Semua ({{ stockFragranceOil.length }})
@@ -418,7 +418,7 @@
             <button
               type="button"
               @click="foPickerPyramid = 'Top'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="foPickerPyramid === 'Top' ? 'bg-orange-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Top
@@ -426,7 +426,7 @@
             <button
               type="button"
               @click="foPickerPyramid = 'Middle'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="foPickerPyramid === 'Middle' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Heart
@@ -434,7 +434,7 @@
             <button
               type="button"
               @click="foPickerPyramid = 'Bottom'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="foPickerPyramid === 'Bottom' ? 'bg-fuchsia-700 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Base
@@ -443,7 +443,7 @@
         </div>
 
         <!-- List of Fragrance Oils -->
-        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+        <div class="border border-stone-200 rounded-lg max-h-80 overflow-y-auto divide-y divide-stone-100">
           <div
             v-if="filteredFoPickerList.length === 0"
             class="py-12 text-center text-stone-400 text-xs italic"
@@ -463,10 +463,10 @@
                   class="px-1.5 py-0.2 rounded text-[9px] font-bold border"
                   :class="PYRAMID_BADGE_MAP[fo.pyramid]?.bg"
                 >
-                  {{ fo.pyramid }} Note
+                  {{ fo.pyramid }}
                 </span>
                 <span
-                  class="px-1.5 py-0.2 rounded-full text-[9px] font-bold border inline-flex items-center gap-1"
+                  class="px-1.5 py-0.2 rounded text-[9px] font-bold border inline-flex items-center gap-1"
                   :class="STOCK_STATUS_MAP[fo.currentStock]?.bg"
                 >
                   <span class="w-1.5 h-1.5 rounded-full" :class="STOCK_STATUS_MAP[fo.currentStock]?.dot"></span>
@@ -474,7 +474,7 @@
                 </span>
                 <span
                   v-if="getFoRowCount(fo.id) > 0"
-                  class="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1"
+                  class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1"
                 >
                   <Check class="w-2.5 h-2.5" />
                   Masuk Formula ({{ getFoRowCount(fo.id) }})
@@ -505,7 +505,7 @@
             <button
               type="button"
               @click="selectFoFromPicker(fo)"
-              class="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1 flex-shrink-0"
+              class="px-3.5 py-1.5 rounded-md bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1 flex-shrink-0"
             >
               <Plus class="w-3.5 h-3.5" />
               <span>{{ targetRowForFoPicker ? 'Pilih FO Ini' : 'Tambah' }}</span>
@@ -531,16 +531,16 @@
               v-model="racikanPickerSearch"
               type="text"
               placeholder="Cari nama racikan / notes / tanggal..."
-              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
             />
             <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
           </div>
 
-          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-lg text-xs font-semibold">
             <button
               type="button"
               @click="racikanPickerFilter = 'all'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="racikanPickerFilter === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Semua ({{ racikanCatalog.length }})
@@ -548,7 +548,7 @@
             <button
               type="button"
               @click="racikanPickerFilter = 'commission'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="racikanPickerFilter === 'commission' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Commission
@@ -556,7 +556,7 @@
             <button
               type="button"
               @click="racikanPickerFilter = 'standard'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="racikanPickerFilter === 'standard' ? 'bg-stone-800 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Standar
@@ -565,7 +565,7 @@
         </div>
 
         <!-- List of racikan items -->
-        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+        <div class="border border-stone-200 rounded-lg max-h-80 overflow-y-auto divide-y divide-stone-100">
           <div
             v-if="filteredRacikanPickerList.length === 0"
             class="py-12 text-center text-stone-400 text-xs italic"
@@ -606,7 +606,7 @@
             <button
               type="button"
               @click="selectRacikanFromPicker(item.id)"
-              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
+              class="px-3.5 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
               :class="selectedRacikanCatalogId === item.id ? 'bg-emerald-600 text-white shadow-xs' : 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'"
             >
               <Check v-if="selectedRacikanCatalogId === item.id" class="w-3.5 h-3.5" />

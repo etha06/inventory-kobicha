@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-8">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-xl border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <!-- Mobile Burger Button -->
         <button
           @click="store.openMobileNav()"
-          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          class="lg:hidden w-9 h-9 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
           title="Buka Menu"
         >
           <Menu class="w-4 h-4" />
@@ -21,7 +21,7 @@
       <div class="flex items-center gap-3">
         <button
           @click="store.navigateTo('kalkulator-racikan')"
-          class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
+          class="px-4 py-2 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
         >
           <FlaskConical class="w-4 h-4" />
           <span>Racik Formula Baru di Kalkulator</span>
@@ -30,14 +30,14 @@
     </div>
 
     <!-- Search & Filter Bar -->
-    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="bg-white p-4 rounded-xl border border-sage-100 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
       <!-- Search -->
       <div class="relative">
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Cari nama racikan / bahan FO..."
-          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
+          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         />
         <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
       </div>
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Table Racikan -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-xl border border-stone-200/80 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
@@ -149,13 +149,13 @@
               <td class="py-3.5 px-4 text-left">
                 <span
                   v-if="racikan.isCommission"
-                  class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200 inline-block"
+                  class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200 inline-block"
                 >
                   Commission
                 </span>
                 <span
                   v-else
-                  class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-stone-100 text-stone-600 border border-stone-200 inline-block"
+                  class="px-2 py-0.5 rounded text-[10px] font-medium bg-stone-100 text-stone-600 border border-stone-200 inline-block"
                 >
                   Regular
                 </span>
@@ -189,10 +189,10 @@
     <!-- ========================================================= -->
     <!-- COMPARE SECTION (Side-by-Side Comparison Cards at Bottom) -->
     <!-- ========================================================= -->
-    <div class="bg-stone-900 text-stone-100 rounded-3xl p-6 sm:p-8 border border-stone-800 shadow-xl space-y-6">
+    <div class="bg-stone-900 text-stone-100 rounded-2xl p-6 sm:p-8 border border-stone-800 shadow-xl space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-800 pb-5">
         <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30 mb-2">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30 mb-2">
             <Scale class="w-3.5 h-3.5" />
             <span>Fitur Komparasi Formula</span>
           </div>
@@ -207,7 +207,7 @@
           <button
             v-if="selectedForCompare.length > 0"
             @click="selectedForCompare = []"
-            class="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-medium border border-stone-700"
+            class="px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-medium border border-stone-700"
           >
             Reset Pilihan
           </button>
@@ -215,16 +215,16 @@
       </div>
 
       <!-- Comparison Cards -->
-      <div v-if="compareList.length === 0" class="py-10 text-center text-stone-500 bg-stone-950/40 rounded-2xl border border-stone-800/80">
+      <div v-if="compareList.length === 0" class="py-10 text-center text-stone-500 bg-stone-950/40 rounded-xl border border-stone-800/80">
         <Search class="w-8 h-8 mx-auto mb-2 opacity-50" />
-        Pilih minimal 2 racikan dari tabel di atas untuk melihat perbandingan side-by-side di sini.
+        <p class="text-xs text-stone-400">Pilih minimal 2 racikan dari tabel di atas untuk melihat perbandingan side-by-side di sini.</p>
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <div
           v-for="r in compareList"
           :key="r.id"
-          class="bg-stone-800/90 rounded-2xl border border-stone-700/80 p-5 space-y-4 flex flex-col justify-between"
+          class="bg-stone-800/90 rounded-xl border border-stone-700/80 p-5 space-y-4 flex flex-col justify-between"
         >
           <div>
             <div class="flex items-start justify-between gap-2 border-b border-stone-700/60 pb-3">
@@ -269,7 +269,7 @@
                 <div
                   v-for="fo in r.fragranceOils"
                   :key="fo.id"
-                  class="bg-stone-900/80 p-2 rounded-xl border border-stone-700/50 space-y-1"
+                  class="bg-stone-900/80 p-2 rounded-lg border border-stone-700/50 space-y-1"
                 >
                   <div class="flex justify-between text-xs">
                     <span class="text-stone-200 font-medium truncate mr-2">{{ fo.fragranceOilName }}</span>
@@ -295,7 +295,7 @@
             </span>
             <button
               @click="openInCalculator(r.id)"
-              class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition-colors flex items-center gap-1"
+              class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition-colors flex items-center gap-1"
             >
               <span>Buka di Kalkulator</span>
               <span>→</span>

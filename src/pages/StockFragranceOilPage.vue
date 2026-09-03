@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-6">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-xl border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <!-- Mobile Burger Button -->
         <button
           @click="store.openMobileNav()"
-          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          class="lg:hidden w-9 h-9 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
           title="Buka Menu"
         >
           <Menu class="w-4 h-4" />
@@ -21,7 +21,7 @@
       <div class="flex items-center gap-3">
         <button
           @click="openAddModal"
-          class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
+          class="px-4 py-2 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
         >
           <Plus class="w-4 h-4" />
           <span>Tambah Fragrance Oil</span>
@@ -30,7 +30,7 @@
     </div>
 
     <!-- Search & Multi-Filter Bar -->
-    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm space-y-3">
+    <div class="bg-white p-4 rounded-xl border border-sage-100 shadow-sm space-y-3">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <!-- Search -->
         <div class="relative">
@@ -38,7 +38,7 @@
             v-model="searchQuery"
             type="text"
             placeholder="Cari nama FO / toko..."
-            class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
+            class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
           />
           <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
         </div>
@@ -78,14 +78,14 @@
           <span class="text-[11px] font-semibold text-stone-400 mr-1">Status Stok:</span>
           <button
             @click="filterStock = ''"
-            class="px-2.5 py-1 rounded-lg font-medium transition-all"
+            class="px-2.5 py-1 rounded-md font-medium transition-all"
             :class="filterStock === '' ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'"
           >
             Semua ({{ stockFragranceOil.length }})
           </button>
           <button
             @click="filterStock = 'Banyak'"
-            class="px-2.5 py-1 rounded-lg font-medium transition-all flex items-center gap-1"
+            class="px-2.5 py-1 rounded-md font-medium transition-all flex items-center gap-1"
             :class="filterStock === 'Banyak' ? 'bg-emerald-700 text-white' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
           >
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
@@ -93,7 +93,7 @@
           </button>
           <button
             @click="filterStock = 'Dikit'"
-            class="px-2.5 py-1 rounded-lg font-medium transition-all flex items-center gap-1"
+            class="px-2.5 py-1 rounded-md font-medium transition-all flex items-center gap-1"
             :class="filterStock === 'Dikit' ? 'bg-amber-700 text-white' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'"
           >
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
@@ -101,7 +101,7 @@
           </button>
           <button
             @click="filterStock = 'Habis'"
-            class="px-2.5 py-1 rounded-lg font-medium transition-all flex items-center gap-1"
+            class="px-2.5 py-1 rounded-md font-medium transition-all flex items-center gap-1"
             :class="filterStock === 'Habis' ? 'bg-rose-700 text-white' : 'bg-rose-50 text-rose-700 hover:bg-rose-100'"
           >
             <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
@@ -123,7 +123,7 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-xl border border-stone-200/80 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
@@ -144,7 +144,7 @@
             <tr v-if="filteredList.length === 0">
               <td colspan="10" class="py-12 text-center text-stone-400">
                 <Droplet class="w-8 h-8 mx-auto mb-2 opacity-50" />
-                Tidak ada data Fragrance Oil ditemukan.
+                <p class="text-xs text-stone-400">Tidak ada data Fragrance Oil ditemukan.</p>
               </td>
             </tr>
 
@@ -168,7 +168,7 @@
 
                 <!-- 2. Kolom Jenis Liquid -->
                 <td class="py-3.5 px-4 text-left">
-                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-medium whitespace-nowrap">
+                  <span class="px-2 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-medium whitespace-nowrap">
                     {{ item.jenisLiquid }}
                   </span>
                 </td>
@@ -185,7 +185,7 @@
 
                 <td class="py-3.5 px-4 text-left">
                   <span
-                    class="px-2 py-0.5 rounded-full text-[11px] font-bold border inline-flex items-center gap-1"
+                    class="px-2 py-0.5 rounded text-[11px] font-bold border inline-flex items-center gap-1"
                     :class="STOCK_STATUS_MAP[item.currentStock].bg"
                   >
                     <span class="w-1.5 h-1.5 rounded-full" :class="STOCK_STATUS_MAP[item.currentStock].dot"></span>
@@ -214,7 +214,7 @@
                 <!-- Pyramid (Without "Note" word) -->
                 <td class="py-3.5 px-4 text-left">
                   <span
-                    class="px-2 py-0.5 rounded-md text-[10px] font-bold border whitespace-nowrap"
+                    class="px-2 py-0.5 rounded text-[10px] font-bold border whitespace-nowrap"
                     :class="PYRAMID_BADGE_MAP[item.pyramid].bg"
                   >
                     {{ item.pyramid }}
@@ -248,8 +248,8 @@
 
               <!-- Expandable Inline Detail Sub-Row -->
               <tr v-if="expandedItemId === item.id" class="bg-amber-50/30 border-b border-amber-200/70">
-                <td colspan="10" class="p-5">
-                  <div class="bg-white rounded-xl p-5 border border-amber-200/80 shadow-sm space-y-4">
+                <td colspan="10" class="p-4 sm:p-5">
+                  <div class="bg-white rounded-lg p-4 sm:p-5 border border-amber-200/80 shadow-xs space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                       <div class="space-y-2 flex-1">
                         <div class="flex items-center gap-2">
@@ -275,7 +275,7 @@
                         </div>
                       </div>
 
-                      <div v-if="item.gambar" class="w-24 h-24 rounded-xl overflow-hidden border">
+                      <div v-if="item.gambar" class="w-20 h-20 rounded-lg overflow-hidden border">
                         <img :src="item.gambar" alt="Product" class="w-full h-full object-cover" />
                       </div>
                     </div>
@@ -289,7 +289,7 @@
                         <div
                           v-for="tier in item.priceTiers"
                           :key="tier.id"
-                          class="p-3 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-between"
+                          class="p-3 rounded-lg bg-stone-50 border border-stone-200 flex items-center justify-between"
                         >
                           <div>
                             <span class="text-xs font-bold text-stone-900 block">{{ tier.ml }} ml</span>
@@ -335,7 +335,7 @@
               type="text"
               required
               placeholder="Misal: Damask Rose Velvet Absolute"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
             />
           </div>
 
@@ -367,7 +367,7 @@
               type="number"
               min="1"
               required
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
             />
           </div>
 
@@ -394,14 +394,14 @@
 
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">Olfactory Notes (Enum - Bisa Multiple)</label>
-            <div class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-2 border border-stone-200 rounded-xl bg-stone-50/50">
+            <div class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-2 border border-stone-200 rounded-lg bg-stone-50/50">
               <button
                 v-for="note in NOTES_OPTIONS"
                 :key="note"
                 type="button"
                 @click="toggleNote(note)"
-                class="px-2 py-0.5 rounded-lg text-xs font-medium transition-all"
-                :class="form.notes.includes(note) ? 'bg-amber-600 text-white shadow-sm' : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-100'"
+                class="px-2 py-0.5 rounded-md text-xs font-medium transition-all"
+                :class="form.notes.includes(note) ? 'bg-amber-600 text-white shadow-xs' : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-100'"
               >
                 {{ note }}
               </button>
@@ -410,7 +410,7 @@
         </div>
 
         <!-- Multiple Price Tiers Section -->
-        <div class="p-4 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
+        <div class="p-4 rounded-lg bg-stone-50 border border-stone-200 space-y-3">
           <div class="flex items-center justify-between">
             <div>
               <h4 class="text-xs font-bold text-stone-900">Varian Harga Beli (Multiple Tiers)</h4>
@@ -419,7 +419,7 @@
             <button
               type="button"
               @click="addPriceTier"
-              class="px-2.5 py-1 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-800 text-xs font-semibold transition-colors"
+              class="px-2.5 py-1 rounded-md bg-stone-200 hover:bg-stone-300 text-stone-800 text-xs font-semibold transition-colors"
             >
               + Tambah Varian
             </button>
@@ -429,7 +429,7 @@
             <div
               v-for="(tier, idx) in form.priceTiers"
               :key="tier.id"
-              class="flex items-center gap-2 bg-white p-2.5 rounded-xl border border-stone-200 shadow-sm"
+              class="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-stone-200 shadow-xs"
             >
               <div class="w-28">
                 <span class="text-[10px] text-stone-500 block">Ukuran (ml)</span>
@@ -439,7 +439,7 @@
                   min="1"
                   required
                   @input="recalculateTier(tier)"
-                  class="w-full px-2 py-1 text-xs border rounded-lg font-mono"
+                  class="w-full px-2 py-1 text-xs border rounded-md font-mono"
                   placeholder="ml"
                 />
               </div>
@@ -451,13 +451,13 @@
                   min="0"
                   required
                   @input="recalculateTier(tier)"
-                  class="w-full px-2 py-1 text-xs border rounded-lg font-semibold"
+                  class="w-full px-2 py-1 text-xs border rounded-md font-semibold"
                   placeholder="Rp"
                 />
               </div>
-              <div class="w-32 text-right bg-amber-50/80 px-2.5 py-1 rounded-lg border border-amber-200">
+              <div class="w-32 text-right bg-amber-50/80 px-2.5 py-1 rounded-md border border-amber-200">
                 <span class="text-[9px] text-amber-700 block uppercase font-bold">Harga / ml</span>
-                <span class="text-xs font-bold text-amber-900">{{ formatRupiah(tier.hargaPerMl) }}</span>
+                <span class="text-xs font-bold text-amber-950">{{ formatRupiah(tier.hargaPerMl) }}</span>
               </div>
               <button
                 v-if="form.priceTiers.length > 1"
@@ -477,7 +477,7 @@
             v-model="form.deskripsi"
             rows="2"
             placeholder="Aroma opening, drydown, kombinasi yang cocok..."
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
           ></textarea>
         </div>
 
@@ -485,13 +485,13 @@
           <button
             type="button"
             @click="isModalOpen = false"
-            class="px-4 py-2 rounded-xl border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+            class="px-4 py-2 rounded-lg border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
           >
             Batal
           </button>
           <button
             type="submit"
-            class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-sm"
+            class="px-5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-xs"
           >
             Simpan Fragrance Oil
           </button>

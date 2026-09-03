@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-6">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-xl border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <!-- Mobile Burger Button -->
         <button
           @click="store.openMobileNav()"
-          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          class="lg:hidden w-9 h-9 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
           title="Buka Menu"
         >
           <Menu class="w-4 h-4" />
@@ -21,7 +21,7 @@
       <div class="flex items-center gap-3">
         <button
           @click="openAddModal"
-          class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
+          class="px-4 py-2 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
         >
           <Plus class="w-4 h-4" />
           <span>Buat Formula Base Baru</span>
@@ -33,7 +33,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       <div
         v-if="formulaBases.length === 0"
-        class="col-span-full py-12 text-center text-stone-400 bg-white rounded-2xl border border-stone-200/80 text-xs shadow-xs"
+        class="col-span-full py-12 text-center text-stone-400 bg-white rounded-xl border border-stone-200/80 text-xs shadow-xs"
       >
         <FlaskConical class="w-8 h-8 mx-auto mb-2 opacity-50" />
         <p class="text-xs text-stone-400">Belum ada Formula Base. Buat formula base seperti EDT 10%, EDP 20%, atau Extrait 30%.</p>
@@ -42,7 +42,7 @@
       <div
         v-for="base in formulaBases"
         :key="base.id"
-        class="bg-white rounded-[24px] border border-sage-100 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+        class="bg-white rounded-xl border border-sage-100 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
       >
         <div>
           <!-- Header -->
@@ -105,7 +105,7 @@
         <div class="pt-4 border-t border-stone-100 flex items-center justify-end">
           <button
             @click="useInCalculator(base.id)"
-            class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 font-semibold text-xs transition-colors border border-amber-200/80 flex items-center gap-1.5"
+            class="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 font-semibold text-xs transition-colors border border-amber-200/80 flex items-center gap-1.5"
           >
             <FlaskConical class="w-3.5 h-3.5" />
             <span>Racik dengan Base Ini</span>
@@ -130,7 +130,7 @@
             type="text"
             required
             placeholder="Misal: Eau de Parfum (EDP) 20% Standard"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
           />
         </div>
 
@@ -140,12 +140,12 @@
             v-model="form.deskripsi"
             rows="2"
             placeholder="Karakteristik ketahanan, panduan maturasi, rekomendasi penggunaan..."
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
           ></textarea>
         </div>
 
         <!-- 100% Progress Indicator -->
-        <div class="p-4 rounded-xl border transition-all" :class="totalCalcPercentage === 100 ? 'bg-emerald-50/80 border-emerald-300' : 'bg-amber-50 border-amber-300'">
+        <div class="p-4 rounded-lg border transition-all" :class="totalCalcPercentage === 100 ? 'bg-emerald-50/80 border-emerald-300' : 'bg-amber-50 border-amber-300'">
           <div class="flex items-center justify-between mb-1.5 text-xs font-bold">
             <span :class="totalCalcPercentage === 100 ? 'text-emerald-800' : 'text-amber-900'">
               Total Persentase: {{ totalCalcPercentage }}%
@@ -157,7 +157,7 @@
               {{ totalCalcPercentage < 100 ? `Kurang ${100 - totalCalcPercentage}%` : `Kelebihan ${totalCalcPercentage - 100}%` }}
             </span>
           </div>
-          <div class="w-full bg-stone-200 h-2.5 rounded-full overflow-hidden">
+          <div class="w-full bg-stone-200 h-2 rounded-full overflow-hidden">
             <div
               class="h-full transition-all duration-200"
               :class="totalCalcPercentage === 100 ? 'bg-emerald-600' : totalCalcPercentage > 100 ? 'bg-rose-600' : 'bg-amber-600'"
@@ -175,7 +175,7 @@
             <button
               type="button"
               @click="addIngredientRow"
-              class="px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold flex items-center gap-1"
+              class="px-2.5 py-1 rounded-md bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold flex items-center gap-1"
             >
               <Plus class="w-3 h-3" />
               <span>Tambah Bahan Campuran</span>
@@ -186,7 +186,7 @@
             <div
               v-for="(ing, idx) in form.ingredients"
               :key="ing.id"
-              class="flex items-center gap-2 p-2.5 rounded-xl border bg-stone-50/50"
+              class="flex items-center gap-2 p-2.5 rounded-lg border bg-stone-50/50"
               :class="ing.isFragranceOilConcentrate ? 'border-amber-300 bg-amber-50/40' : 'border-stone-200'"
             >
               <div class="flex-1">
@@ -194,7 +194,7 @@
                   {{ ing.isFragranceOilConcentrate ? 'Slot Konsentrat Minyak Wangi' : 'Pilih Bahan dari Stok Campuran' }}
                 </span>
                 
-                <div v-if="ing.isFragranceOilConcentrate" class="px-3 py-1.5 rounded-lg bg-amber-100/70 border border-amber-300 text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                <div v-if="ing.isFragranceOilConcentrate" class="px-3 py-1.5 rounded-md bg-amber-100/70 border border-amber-300 text-xs font-bold text-amber-900 flex items-center gap-1.5">
                   <span>Fragrance Oil Concentrate</span>
                 </div>
                 <CustomSelect
@@ -217,7 +217,7 @@
                     max="100"
                     step="0.5"
                     required
-                    class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-300 font-bold font-mono text-stone-900 pr-6"
+                    class="w-full px-2.5 py-1.5 text-xs rounded-md border border-stone-300 font-bold font-mono text-stone-900 pr-6"
                   />
                   <span class="absolute right-2 top-1.5 text-stone-400 text-xs font-bold">%</span>
                 </div>
@@ -241,14 +241,14 @@
           <button
             type="button"
             @click="isModalOpen = false"
-            class="px-4 py-2 rounded-xl border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+            class="px-4 py-2 rounded-lg border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
           >
             Batal
           </button>
           <button
             type="submit"
             :disabled="totalCalcPercentage !== 100"
-            class="px-5 py-2 rounded-xl text-white text-xs font-semibold shadow-sm transition-all"
+            class="px-5 py-2 rounded-lg text-white text-xs font-semibold shadow-xs transition-all"
             :class="totalCalcPercentage === 100 ? 'bg-amber-600 hover:bg-amber-700 cursor-pointer' : 'bg-stone-400 cursor-not-allowed opacity-60'"
           >
             Simpan Formula Base

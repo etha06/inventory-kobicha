@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-6">
     <!-- Header Card -->
-    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-xl border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <!-- Mobile Burger Button -->
         <button
           @click="store.openMobileNav()"
-          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          class="lg:hidden w-9 h-9 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
           title="Buka Menu"
         >
           <Menu class="w-4 h-4" />
@@ -23,14 +23,14 @@
       <div class="flex items-center gap-2">
         <button
           @click="resetForm"
-          class="px-3.5 py-2 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-800 text-xs font-semibold border border-sage-200 transition-colors flex items-center gap-1.5"
+          class="px-3.5 py-2 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-800 text-xs font-semibold border border-sage-200 transition-colors flex items-center gap-1.5"
         >
           <RotateCcw class="w-3.5 h-3.5" />
           <span>Reset Form</span>
         </button>
         <button
           @click="saveHpp"
-          class="px-5 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
+          class="px-5 py-2.5 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
         >
           <Save class="w-4 h-4" />
           <span>Simpan ke Katalog HPP</span>
@@ -39,7 +39,7 @@
     </div>
 
     <!-- General Title & Bottle Size Configuration -->
-    <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm">
+    <div class="bg-white rounded-xl border border-sage-100 p-5 sm:p-6 shadow-sm">
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="sm:col-span-2">
           <label class="block text-xs font-semibold text-forest-800 mb-1">Nama Produk</label>
@@ -60,7 +60,7 @@
               type="text"
               required
               placeholder="Misal: Kobicha Velvet Wood"
-              class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm font-semibold bg-white"
+              class="w-full px-3.5 py-2 rounded-lg border border-sage-200 focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm font-semibold bg-white"
             />
           </div>
         </div>
@@ -74,7 +74,7 @@
               min="1"
               required
               @input="onBottleSizeChange"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-bold font-mono pr-8 text-stone-900"
+              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-bold font-mono pr-8 text-stone-900"
             />
             <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold">ml</span>
           </div>
@@ -83,10 +83,10 @@
     </div>
 
     <!-- SECTION 1: HPP RESEP RACIKAN -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 p-5 sm:p-6 shadow-sm space-y-5">
+    <div class="bg-white rounded-xl border border-stone-200/80 p-5 sm:p-6 shadow-sm space-y-5">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-200 pb-4">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-sm">
+          <div class="w-8 h-8 rounded-md bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-sm">
             <FlaskConical class="w-4 h-4" />
           </div>
           <div>
@@ -96,20 +96,20 @@
         </div>
 
         <!-- Mode Toggle (Tambah Baru on Left, Detail & Update on Right) -->
-        <div class="flex items-center gap-1.5 bg-sage-50 p-1 rounded-2xl text-xs font-semibold border border-sage-200/60">
+        <div class="flex items-center gap-1.5 bg-sage-50 p-1 rounded-xl text-xs font-semibold border border-sage-200/60">
           <button
             type="button"
             @click="setMode('tambah_baru')"
-            class="px-4 py-2 rounded-xl transition-all"
-            :class="mode === 'tambah_baru' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
+            class="px-4 py-2 rounded-lg transition-all"
+            :class="mode === 'tambah_baru' ? 'bg-peach-500 text-white shadow-xs font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
           >
             Tambah Baru
           </button>
           <button
             type="button"
             @click="setMode('detail_update')"
-            class="px-4 py-2 rounded-xl transition-all"
-            :class="mode === 'detail_update' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
+            class="px-4 py-2 rounded-lg transition-all"
+            :class="mode === 'detail_update' ? 'bg-peach-500 text-white shadow-xs font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
           >
             Detail & Update
           </button>
@@ -118,7 +118,7 @@
 
       <!-- Formula Base & Racikan Selectors + Table Breakdown (Exact as in media_1788451316301.png) -->
       <div class="space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200/80">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-amber-50/50 p-4 rounded-lg border border-amber-200/80">
           <div>
             <label class="block text-xs font-bold text-amber-950 mb-1">1. Pilih Formula Base (Pelarut %)</label>
             <CustomSelect
@@ -136,7 +136,7 @@
               <button
                 type="button"
                 @click="openRacikanPickerModal"
-                class="w-full bg-white text-left px-3.5 py-2 text-xs flex items-center justify-between border border-sage-200 hover:border-sage-300 rounded-xl cursor-pointer transition-all shadow-xs"
+                class="w-full bg-white text-left px-3.5 py-2 text-xs flex items-center justify-between border border-sage-200 hover:border-sage-300 rounded-lg cursor-pointer transition-all shadow-xs"
               >
                 <span class="truncate" :class="!selectedRacikanId ? 'text-stone-400 font-normal' : 'text-stone-900 font-semibold'">
                   {{ selectedRacikanName || '-- Pilih Racikan dari Katalog --' }}
@@ -149,14 +149,14 @@
                 type="text"
                 :value="selectedRacikanName || '-'"
                 disabled
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-stone-100/80 border border-stone-200 text-stone-700 font-semibold cursor-not-allowed opacity-60"
+                class="w-full px-3.5 py-2 text-xs rounded-lg bg-stone-100/80 border border-stone-200 text-stone-700 font-semibold cursor-not-allowed opacity-60"
               />
             </div>
           </div>
         </div>
 
         <!-- Liquid Ingredients Table Breakdown Container (Fixed Height with Fixed Header, Scrollable Body, and Fixed Footer at Bottom) -->
-        <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col h-[420px] overflow-hidden shadow-sm">
+        <div class="border border-stone-200/90 rounded-lg bg-white flex flex-col h-[420px] overflow-hidden shadow-xs">
           <!-- 1. FIXED HEADER -->
           <div class="bg-stone-100/90 border-b border-stone-200 flex-shrink-0">
             <table class="w-full text-xs text-left table-fixed">
@@ -231,7 +231,7 @@
                       max="100"
                       step="0.5"
                       @input="onIngredientPercentChange(ing)"
-                      class="w-16 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
+                      class="w-16 px-1.5 py-1 text-xs border rounded-md text-left font-mono font-bold"
                     />
                     <span v-else>{{ formatNumber(ing.percentage, 1) }}%</span>
                   </td>
@@ -249,7 +249,7 @@
                       type="number"
                       min="0"
                       @input="onIngredientPriceChange(ing)"
-                      class="w-24 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
+                      class="w-24 px-1.5 py-1 text-xs border rounded-md text-left font-mono font-bold"
                       title="Harga modal per 1 ml"
                     />
                     <span v-else>{{ formatRupiah(ing.pricePerMl) }}/ml</span>
@@ -288,7 +288,7 @@
                     <button
                       type="button"
                       @click="addCustomLiquidRow"
-                      class="px-2.5 py-1 text-xs rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold transition-colors inline-flex items-center gap-1"
+                      class="px-2.5 py-1 text-xs rounded-md bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold transition-colors inline-flex items-center gap-1"
                     >
                       <Plus class="w-3.5 h-3.5" />
                       <span>Tambah Cairan / Pelarut Lainnya</span>
@@ -309,10 +309,10 @@
     </div>
 
     <!-- SECTION 2: MODAL LAINNYA (PACKAGING, BOTOL, STIKER & OPERASIONAL) -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 p-5 sm:p-6 shadow-sm space-y-5">
+    <div class="bg-white rounded-xl border border-stone-200/80 p-5 sm:p-6 shadow-sm space-y-5">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-200 pb-4">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold text-sm">
+          <div class="w-8 h-8 rounded-md bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold text-sm">
             <Package class="w-4 h-4" />
           </div>
           <div>
@@ -328,7 +328,7 @@
           <button
             type="button"
             @click="openStockCampuranPicker"
-            class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0"
+            class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 flex-shrink-0"
           >
             <Layers class="w-3.5 h-3.5" />
             <span>Ambil dari Stok Campuran</span>
@@ -337,7 +337,7 @@
           <button
             type="button"
             @click="addManualPackagingRow"
-            class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 flex-shrink-0"
+            class="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 flex-shrink-0"
           >
             <Plus class="w-3.5 h-3.5" />
             <span>Tambah Item Manual</span>
@@ -346,7 +346,7 @@
       </div>
 
       <!-- Packaging Items Table (Action on Right, Header text-left, Lucide Trash2) -->
-      <div class="overflow-x-auto border rounded-xl">
+      <div class="overflow-x-auto border rounded-lg">
         <table class="w-full text-xs text-left">
           <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
             <tr>
@@ -370,7 +370,7 @@
                   v-model="row.namaItem"
                   type="text"
                   placeholder="Misal: Botol Kaca Kotak 50ml / Stiker Gold Foil"
-                  class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-stone-300 font-medium"
+                  class="w-full px-2.5 py-1.5 text-xs rounded-md border border-stone-300 font-medium"
                 />
               </td>
               <td class="py-2 px-3 text-left">
@@ -378,7 +378,7 @@
                   v-model.number="row.jumlah"
                   type="number"
                   min="1"
-                  class="w-20 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold"
+                  class="w-20 px-2 py-1 text-xs border rounded-md text-left font-mono font-bold"
                 />
               </td>
               <td class="py-2 px-3 text-left">
@@ -386,7 +386,7 @@
                   v-model.number="row.hargaSatuan"
                   type="number"
                   min="0"
-                  class="w-28 px-2 py-1 text-xs border rounded-lg text-left font-mono font-bold"
+                  class="w-28 px-2 py-1 text-xs border rounded-md text-left font-mono font-bold"
                 />
               </td>
               <td class="py-2 px-3 text-left font-mono font-bold text-stone-900">
@@ -432,16 +432,16 @@
               v-model="campuranPickerSearch"
               type="text"
               placeholder="Cari nama barang / jenis / toko..."
-              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
             />
             <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
           </div>
 
-          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-lg text-xs font-semibold">
             <button
               type="button"
               @click="campuranPickerFilterTipe = 'all'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="campuranPickerFilterTipe === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Semua
@@ -449,7 +449,7 @@
             <button
               type="button"
               @click="campuranPickerFilterTipe = 'packaging'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="campuranPickerFilterTipe === 'packaging' ? 'bg-indigo-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Kemasan
@@ -457,7 +457,7 @@
             <button
               type="button"
               @click="campuranPickerFilterTipe = 'bahan_baku'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="campuranPickerFilterTipe === 'bahan_baku' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Bahan Baku
@@ -466,7 +466,7 @@
         </div>
 
         <!-- List of items -->
-        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+        <div class="border border-stone-200 rounded-lg max-h-80 overflow-y-auto divide-y divide-stone-100">
           <div
             v-if="filteredCampuranPickerList.length === 0"
             class="py-12 text-center text-stone-400 text-xs italic"
@@ -501,7 +501,7 @@
             <button
               type="button"
               @click="addCampuranItemToPackaging(item)"
-              class="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
+              class="px-3 py-1.5 rounded-md bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
             >
               <Plus class="w-3.5 h-3.5" />
               <span>Tambah</span>
@@ -527,16 +527,16 @@
               v-model="racikanPickerSearch"
               type="text"
               placeholder="Cari nama racikan / notes / tanggal..."
-              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
             />
             <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
           </div>
 
-          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-lg text-xs font-semibold">
             <button
               type="button"
               @click="racikanPickerFilter = 'all'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="racikanPickerFilter === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Semua ({{ racikanCatalog.length }})
@@ -544,7 +544,7 @@
             <button
               type="button"
               @click="racikanPickerFilter = 'commission'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="racikanPickerFilter === 'commission' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Commission
@@ -552,7 +552,7 @@
             <button
               type="button"
               @click="racikanPickerFilter = 'standard'"
-              class="px-2.5 py-1 rounded-lg transition-all"
+              class="px-2.5 py-1 rounded-md transition-all"
               :class="racikanPickerFilter === 'standard' ? 'bg-stone-800 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
             >
               Standar
@@ -561,7 +561,7 @@
         </div>
 
         <!-- List of racikan items -->
-        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+        <div class="border border-stone-200 rounded-lg max-h-80 overflow-y-auto divide-y divide-stone-100">
           <div
             v-if="filteredRacikanPickerList.length === 0"
             class="py-12 text-center text-stone-400 text-xs italic"
@@ -600,7 +600,7 @@
             <button
               type="button"
               @click="selectRacikanFromPicker(item.id)"
-              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
+              class="px-3.5 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
               :class="selectedRacikanId === item.id ? 'bg-emerald-600 text-white shadow-xs' : 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'"
             >
               <Check v-if="selectedRacikanId === item.id" class="w-3.5 h-3.5" />

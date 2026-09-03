@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-6">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-xl border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <!-- Mobile Burger Button -->
         <button
           @click="store.openMobileNav()"
-          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          class="lg:hidden w-9 h-9 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
           title="Buka Menu"
         >
           <Menu class="w-4 h-4" />
@@ -21,7 +21,7 @@
       <div class="flex items-center gap-3">
         <button
           @click="openAddModal"
-          class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
+          class="px-4 py-2 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
         >
           <Plus class="w-4 h-4" />
           <span>Tambah Toko</span>
@@ -30,14 +30,14 @@
     </div>
 
     <!-- Search, Filter & Sort Bar -->
-    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="bg-white p-4 rounded-xl border border-sage-100 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
       <!-- Search -->
       <div class="relative">
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Cari nama toko / jenis barang..."
-          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
+          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         />
         <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
       </div>
@@ -62,7 +62,7 @@
     </div>
 
     <!-- Stores Table -->
-    <div class="bg-white rounded-[24px] border border-sage-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-xl border border-sage-100 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
@@ -78,7 +78,7 @@
             <tr v-if="filteredStores.length === 0">
               <td colspan="5" class="py-12 text-center text-stone-400">
                 <Store class="w-8 h-8 mx-auto mb-2 opacity-50" />
-                Tidak ada data toko ditemukan.
+                <p class="text-xs text-stone-400">Tidak ada data toko ditemukan.</p>
               </td>
             </tr>
 
@@ -100,7 +100,7 @@
                 </td>
 
                 <td class="py-3.5 px-4 text-left text-stone-600">
-                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium">
+                  <span class="px-2 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium">
                     {{ store.jenisBarang }}
                   </span>
                 </td>
@@ -111,7 +111,7 @@
                     :href="store.linkToko"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200 font-medium text-[11px] transition-colors"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200 font-medium text-[11px] transition-colors"
                   >
                     <span>Kunjungi Toko</span>
                     <ExternalLink class="w-3 h-3" />
@@ -146,8 +146,8 @@
 
               <!-- Expandable Inline Detail Sub-Row -->
               <tr v-if="expandedStoreId === store.id" class="bg-amber-50/30 border-b border-amber-200/70">
-                <td colspan="5" class="p-5">
-                  <div class="bg-white rounded-xl p-4 border border-amber-200/80 shadow-sm space-y-3">
+                <td colspan="5" class="p-4 sm:p-5">
+                  <div class="bg-white rounded-lg p-4 border border-amber-200/80 shadow-xs space-y-3">
                     <div class="flex items-start justify-between">
                       <div>
                         <h4 class="font-bold text-stone-900 text-xs flex items-center gap-2">
@@ -162,7 +162,7 @@
                         </p>
                       </div>
 
-                      <div v-if="store.gambar" class="w-16 h-16 rounded-xl overflow-hidden border">
+                      <div v-if="store.gambar" class="w-16 h-16 rounded-lg overflow-hidden border">
                         <img :src="store.gambar" alt="Store logo" class="w-full h-full object-cover" />
                       </div>
                     </div>
@@ -176,7 +176,7 @@
                         <div
                           v-for="fo in getLinkedFo(store.id)"
                           :key="fo.id"
-                          class="p-2 rounded-lg bg-stone-50 border border-stone-200 text-xs flex items-center justify-between"
+                          class="p-2 rounded-md bg-stone-50 border border-stone-200 text-xs flex items-center justify-between"
                         >
                           <span class="font-medium text-stone-800">{{ fo.nama }}</span>
                           <span class="text-[10px] text-stone-500 font-mono">{{ fo.botolMl }}ml • {{ fo.currentStock }}</span>
@@ -185,7 +185,7 @@
                         <div
                           v-for="c in getLinkedCampuran(store.id)"
                           :key="c.id"
-                          class="p-2 rounded-lg bg-stone-50 border border-stone-200 text-xs flex items-center justify-between"
+                          class="p-2 rounded-md bg-stone-50 border border-stone-200 text-xs flex items-center justify-between"
                         >
                           <span class="font-medium text-stone-800">{{ c.namaBarang }}</span>
                           <span class="text-[10px] text-stone-500 font-mono">Stok: {{ c.jumlahStok }} pcs</span>
@@ -235,7 +235,7 @@
             type="text"
             required
             placeholder="Misal: Aromatics Botanica ID / Kimia Farma"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
           />
         </div>
 
@@ -253,7 +253,7 @@
               required
               list="jenisBarangDatalist"
               placeholder="Ketik atau pilih jenis barang..."
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
+              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
             />
             <datalist id="jenisBarangDatalist">
               <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
@@ -261,14 +261,14 @@
           </div>
 
           <!-- Quick Suggestion Badges -->
-          <div class="flex flex-wrap gap-1.5 mt-2 max-h-24 overflow-y-auto p-1.5 bg-stone-50 rounded-xl border border-stone-100">
+          <div class="flex flex-wrap gap-1.5 mt-2 max-h-24 overflow-y-auto p-1.5 bg-stone-50 rounded-lg border border-stone-100">
             <button
               v-for="j in allJenisBarangList"
               :key="j"
               type="button"
               @click="form.jenisBarang = j"
-              class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border"
-              :class="form.jenisBarang === j ? 'bg-peach-500 text-white border-peach-500 shadow-sm' : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-100'"
+              class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all border"
+              :class="form.jenisBarang === j ? 'bg-peach-500 text-white border-peach-500 shadow-xs' : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-100'"
             >
               {{ j }}
             </button>
@@ -281,7 +281,7 @@
             v-model="form.linkToko"
             type="url"
             placeholder="https://shopee.co.id/nama_toko atau https://tokopedia.com/..."
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
           />
         </div>
 
@@ -291,7 +291,7 @@
             v-model="form.gambar"
             type="url"
             placeholder="https://... (URL gambar)"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
           />
         </div>
 
@@ -301,7 +301,7 @@
             v-model="form.deskripsi"
             rows="3"
             placeholder="Kualitas barang, kontak WhatsApp, ketentuan minimal order, dsb..."
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
           ></textarea>
         </div>
 
@@ -309,13 +309,13 @@
           <button
             type="button"
             @click="isModalOpen = false"
-            class="px-4 py-2 rounded-xl border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+            class="px-4 py-2 rounded-lg border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
           >
             Batal
           </button>
           <button
             type="submit"
-            class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-sm"
+            class="px-5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-xs"
           >
             Simpan Toko
           </button>
@@ -334,7 +334,7 @@
         leave-to-class="opacity-0"
       >
         <div v-if="showCascadeRenameModal" class="fixed inset-0 z-50 bg-stone-950/50 flex items-center justify-center p-4">
-          <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-stone-200 transition-all transform duration-150">
+          <div class="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl border border-stone-200 transition-all transform duration-150">
             <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center mx-auto mb-3">
               <AlertTriangle class="w-6 h-6" />
             </div>
@@ -346,13 +346,13 @@
             <div class="flex items-center justify-center gap-2.5">
               <button
                 @click="cancelCascadeRename"
-                class="px-4 py-2 rounded-xl border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+                class="px-4 py-2 rounded-lg border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
               >
                 Hanya Ubah Toko Ini
               </button>
               <button
                 @click="confirmCascadeRename"
-                class="px-5 py-2 rounded-xl bg-amber-600 text-white text-xs font-semibold hover:bg-amber-700 shadow-sm"
+                class="px-5 py-2 rounded-lg bg-amber-600 text-white text-xs font-semibold hover:bg-amber-700 shadow-xs"
               >
                 Ya, Ubah Semua Terkait
               </button>

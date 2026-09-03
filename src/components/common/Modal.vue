@@ -14,13 +14,13 @@
         @click.self="closeOnBackdrop && $emit('close')"
       >
         <div
-          class="bg-white rounded-[24px] shadow-2xl border border-stone-200 w-full overflow-hidden flex flex-col max-h-[90vh] transition-all transform duration-150"
+          class="bg-white rounded-xl shadow-2xl border border-stone-200 w-full overflow-hidden flex flex-col max-h-[90vh] transition-all transform duration-150"
           :class="maxWidthClass"
         >
           <!-- Modal Header -->
           <div class="px-6 py-4 border-b border-stone-100 flex items-center justify-between bg-stone-50/70">
             <div class="flex items-center gap-3">
-              <div v-if="$slots.icon" class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+              <div v-if="$slots.icon" class="w-9 h-9 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
                 <slot name="icon" />
               </div>
               <div>
@@ -30,7 +30,7 @@
             </div>
             <button
               @click="$emit('close')"
-              class="w-8 h-8 rounded-xl text-stone-400 hover:text-stone-900 hover:bg-stone-100 flex items-center justify-center transition-colors"
+              class="w-7 h-7 rounded-md text-stone-400 hover:text-stone-900 hover:bg-stone-100 flex items-center justify-center transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>

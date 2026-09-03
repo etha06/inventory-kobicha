@@ -1,9 +1,9 @@
 <template>
   <div class="space-y-6">
     <!-- Page Header (Kobicha Green / Forest styling) -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-stone-200/80 shadow-xs">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-stone-200/80 shadow-xs">
       <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-700 shadow-xs">
+        <div class="w-11 h-11 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-700 shadow-xs">
           <ShoppingBag class="w-5 h-5" />
         </div>
         <div>
@@ -17,7 +17,7 @@
       <div class="flex items-center gap-2">
         <button
           @click="openAddModal"
-          class="px-4 py-2.5 rounded-xl bg-peach-500 hover:bg-peach-600 text-white font-bold text-xs shadow-pill flex items-center gap-2 transition-all transform active:scale-95"
+          class="px-4 py-2.5 rounded-lg bg-peach-500 hover:bg-peach-600 text-white font-bold text-xs shadow-xs flex items-center gap-2 transition-all transform active:scale-95"
         >
           <Plus class="w-4 h-4" />
           <span>Tambah Produk</span>
@@ -27,7 +27,7 @@
 
     <!-- Summary / Stats Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="p-4 rounded-2xl bg-white border border-stone-200/80 shadow-xs">
+      <div class="p-4 rounded-xl bg-white border border-stone-200/80 shadow-xs">
         <div class="flex items-center justify-between text-stone-400 mb-1">
           <span class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Total Varian</span>
           <Boxes class="w-4 h-4 text-amber-600" />
@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div class="p-4 rounded-2xl bg-white border border-stone-200/80 shadow-xs">
+      <div class="p-4 rounded-xl bg-white border border-stone-200/80 shadow-xs">
         <div class="flex items-center justify-between text-stone-400 mb-1">
           <span class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Total Stok Fisik</span>
           <PackageCheck class="w-4 h-4 text-emerald-600" />
@@ -49,7 +49,7 @@
         </div>
       </div>
 
-      <div class="p-4 rounded-2xl bg-white border border-stone-200/80 shadow-xs">
+      <div class="p-4 rounded-xl bg-white border border-stone-200/80 shadow-xs">
         <div class="flex items-center justify-between text-stone-400 mb-1">
           <span class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Estimasi Omset Stok</span>
           <DollarSign class="w-4 h-4 text-amber-600" />
@@ -59,7 +59,7 @@
         </div>
       </div>
 
-      <div class="p-4 rounded-2xl bg-white border border-stone-200/80 shadow-xs">
+      <div class="p-4 rounded-xl bg-white border border-stone-200/80 shadow-xs">
         <div class="flex items-center justify-between text-stone-400 mb-1">
           <span class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Paket Bundle</span>
           <Gift class="w-4 h-4 text-indigo-600" />
@@ -72,14 +72,14 @@
     </div>
 
     <!-- Search & Filter Controls -->
-    <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-stone-200/80 shadow-xs">
+    <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-stone-200/80 shadow-xs">
       <div class="relative flex-1">
         <Search class="w-4 h-4 absolute left-3.5 top-3 text-stone-400" />
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Cari nama produk, series, atau isi bundle..."
-          class="w-full pl-9 pr-4 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-medium"
+          class="w-full pl-9 pr-4 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-medium"
         />
         <button
           v-if="searchQuery"
@@ -92,24 +92,24 @@
 
       <div class="flex flex-wrap items-center gap-2">
         <!-- Filter Type Tabs -->
-        <div class="bg-stone-100 p-1 rounded-xl flex items-center text-xs font-semibold text-stone-600">
+        <div class="bg-stone-100 p-1 rounded-lg flex items-center text-xs font-semibold text-stone-600">
           <button
             @click="filterType = 'all'"
-            class="px-3 py-1.5 rounded-lg transition-all"
+            class="px-3 py-1.5 rounded-md transition-all"
             :class="filterType === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'hover:text-stone-900'"
           >
             Semua ({{ readyToSellProducts.length }})
           </button>
           <button
             @click="filterType = 'single'"
-            class="px-3 py-1.5 rounded-lg transition-all"
+            class="px-3 py-1.5 rounded-md transition-all"
             :class="filterType === 'single' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'hover:text-stone-900'"
           >
             Single ({{ totalSingleCount }})
           </button>
           <button
             @click="filterType = 'bundle'"
-            class="px-3 py-1.5 rounded-lg transition-all"
+            class="px-3 py-1.5 rounded-md transition-all"
             :class="filterType === 'bundle' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'hover:text-stone-900'"
           >
             Bundle ({{ totalBundleCount }})
@@ -128,7 +128,7 @@
     </div>
 
     <!-- Products Table -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-xl border border-stone-200/80 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
@@ -165,13 +165,13 @@
               <td class="py-3.5 px-4 text-left">
                 <span
                   v-if="item.isBundle"
-                  class="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold"
+                  class="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold"
                 >
                   Bundle
                 </span>
                 <span
                   v-else
-                  class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-semibold"
+                  class="px-2 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-semibold"
                 >
                   Single
                 </span>
@@ -201,7 +201,7 @@
               <td class="py-3.5 px-4 text-left">
                 <span
                   v-if="item.series"
-                  class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-medium whitespace-nowrap"
+                  class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-medium whitespace-nowrap"
                 >
                   {{ item.series }}
                 </span>
@@ -232,7 +232,7 @@
 
               <!-- Harga Jual -->
               <td class="py-3.5 px-4 text-left">
-                <span class="font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 inline-block text-xs">
+                <span class="font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 inline-block text-xs">
                   {{ formatRupiah(item.hargaJual) }}
                 </span>
               </td>
@@ -284,7 +284,7 @@
     <!-- ========================================================= -->
     <!-- GRAND TOTAL ANALISIS BIAYA & PROFIT SIMULATOR (Ready to Sell) -->
     <!-- ========================================================= -->
-    <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
+    <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5">
       <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800/80 pb-4">
         <div>
@@ -300,7 +300,7 @@
       </div>
 
       <!-- Alert Rumus Perhitungan (Di Bawah Header) -->
-      <div class="p-3.5 bg-stone-950/80 rounded-2xl border border-stone-800 flex items-start gap-3 text-stone-300">
+      <div class="p-3.5 bg-stone-950/80 rounded-xl border border-stone-800 flex items-start gap-3 text-stone-300">
         <Info class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
         <div class="space-y-1 text-xs leading-relaxed">
           <p>
@@ -316,7 +316,7 @@
       </div>
 
       <!-- Profit Margin Simulator / Calculator -->
-      <div class="bg-stone-950/60 rounded-2xl p-5 border border-stone-800 space-y-4">
+      <div class="bg-stone-950/60 rounded-xl p-5 border border-stone-800 space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-5 gap-3.5">
           <!-- 1. Pilih Produk untuk Disimulasikan (Dark Themed Dropdown) -->
           <div class="sm:col-span-1">
@@ -334,7 +334,7 @@
           <!-- 2. Modal HPP / Unit -->
           <div>
             <label class="block text-xs text-stone-300 mb-1">Modal HPP / Unit</label>
-            <div class="px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-bold text-amber-300 truncate flex items-center h-[38px]">
+            <div class="px-3.5 py-2 rounded-lg bg-stone-900 border border-stone-700 text-xs font-bold text-amber-300 truncate flex items-center h-[38px]">
               <span v-if="simulatedProductId">
                 {{ formatRupiah(simulatedProductHpp) }}
               </span>
@@ -354,7 +354,7 @@
                 :disabled="!simulatedProductId"
                 placeholder="0"
                 @input="onSellingPriceInput"
-                class="w-full px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-semibold text-white pl-8 focus:ring-2 focus:ring-emerald-500/30 disabled:opacity-40 disabled:cursor-not-allowed"
+                class="w-full px-3.5 py-2 rounded-lg bg-stone-900 border border-stone-700 text-xs font-semibold text-white pl-8 focus:ring-2 focus:ring-emerald-500/30 disabled:opacity-40 disabled:cursor-not-allowed"
               />
               <span class="absolute left-3 top-2 text-stone-400 text-xs font-bold pointer-events-none">Rp</span>
             </div>
@@ -371,7 +371,7 @@
                 :disabled="!simulatedProductId || simulatedProductHpp <= 0"
                 placeholder="0"
                 @input="onMarginInput"
-                class="w-full px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-semibold text-white pr-8 focus:ring-2 focus:ring-emerald-500/30 disabled:opacity-40 disabled:cursor-not-allowed"
+                class="w-full px-3.5 py-2 rounded-lg bg-stone-900 border border-stone-700 text-xs font-semibold text-white pr-8 focus:ring-2 focus:ring-emerald-500/30 disabled:opacity-40 disabled:cursor-not-allowed"
               />
               <span class="absolute right-3 top-2 text-stone-400 text-xs font-bold pointer-events-none">%</span>
             </div>
@@ -380,7 +380,7 @@
           <!-- 5. Estimasi Laba Bersih / Unit -->
           <div>
             <label class="block text-xs text-stone-300 mb-1">Estimasi Laba / Unit</label>
-            <div class="px-3.5 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 truncate flex items-center h-[38px]">
+            <div class="px-3.5 py-2 rounded-lg bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 truncate flex items-center h-[38px]">
               <span v-if="simulatedProductId">
                 +{{ formatRupiah(simulatedProfitPerUnit) }}
               </span>
@@ -396,29 +396,29 @@
               <span>📋 Rincian Modal HPP Produk:</span>
               <span class="text-white normal-case font-semibold">{{ simulatedProduct.nama }}</span>
             </span>
-            <span class="text-xs font-bold font-mono text-amber-300 bg-stone-900 px-3 py-1 rounded-lg border border-stone-700">
+            <span class="text-xs font-bold font-mono text-amber-300 bg-stone-900 px-3 py-1 rounded-md border border-stone-700">
               Total Modal HPP: {{ formatRupiah(simulatedProductHpp) }}
             </span>
           </div>
 
           <!-- Single Product Breakdown -->
           <div v-if="!simulatedProduct.isBundle && simulatedLinkedHpp" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
-            <div class="bg-stone-900/90 p-3 rounded-xl border border-stone-800">
+            <div class="bg-stone-900/90 p-3 rounded-lg border border-stone-800">
               <span class="text-[10px] uppercase font-bold text-stone-400 block mb-0.5">Katalog HPP Terkait</span>
               <span class="font-semibold text-stone-200 truncate block">{{ simulatedLinkedHpp.nama }} ({{ simulatedLinkedHpp.targetBottleMl }}ml)</span>
             </div>
-            <div class="bg-stone-900/90 p-3 rounded-xl border border-stone-800">
+            <div class="bg-stone-900/90 p-3 rounded-lg border border-stone-800">
               <span class="text-[10px] uppercase font-bold text-amber-400/90 block mb-0.5">Modal Resep Racikan</span>
               <span class="font-bold font-mono text-amber-300 text-sm">{{ formatRupiah(simulatedLinkedHpp.subtotalLiquid || 0) }}</span>
             </div>
-            <div class="bg-stone-900/90 p-3 rounded-xl border border-stone-800">
+            <div class="bg-stone-900/90 p-3 rounded-lg border border-stone-800">
               <span class="text-[10px] uppercase font-bold text-indigo-400/90 block mb-0.5">Modal Kemasan & Lainnya</span>
               <span class="font-bold font-mono text-indigo-300 text-sm">{{ formatRupiah(simulatedLinkedHpp.subtotalPackaging || 0) }}</span>
             </div>
           </div>
 
           <!-- Bundle Items Breakdown -->
-          <div v-else-if="simulatedProduct.isBundle && simulatedProduct.bundleItems && simulatedProduct.bundleItems.length > 0" class="border border-stone-800 rounded-xl overflow-hidden">
+          <div v-else-if="simulatedProduct.isBundle && simulatedProduct.bundleItems && simulatedProduct.bundleItems.length > 0" class="border border-stone-800 rounded-lg overflow-hidden">
             <table class="w-full text-xs text-left">
               <thead class="bg-stone-900 text-[10px] font-bold text-stone-400 uppercase">
                 <tr>
@@ -460,11 +460,11 @@
             <button
               type="button"
               @click="form.isBundle = false"
-              class="p-3.5 rounded-2xl border text-left flex items-start gap-3 transition-all"
+              class="p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all"
               :class="!form.isBundle ? 'bg-amber-50/70 border-amber-400 ring-2 ring-amber-500/20 shadow-xs' : 'bg-white border-stone-200 hover:bg-stone-50'"
             >
               <div
-                class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                 :class="!form.isBundle ? 'bg-amber-500 text-white' : 'bg-stone-100 text-stone-500'"
               >
                 <ShoppingBag class="w-4 h-4" />
@@ -478,11 +478,11 @@
             <button
               type="button"
               @click="form.isBundle = true"
-              class="p-3.5 rounded-2xl border text-left flex items-start gap-3 transition-all"
+              class="p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all"
               :class="form.isBundle ? 'bg-indigo-50/70 border-indigo-400 ring-2 ring-indigo-500/20 shadow-xs' : 'bg-white border-stone-200 hover:bg-stone-50'"
             >
               <div
-                class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                 :class="form.isBundle ? 'bg-indigo-600 text-white' : 'bg-stone-100 text-stone-500'"
               >
                 <Gift class="w-4 h-4" />
@@ -507,7 +507,7 @@
               type="text"
               required
               placeholder="Misal: Kobicha Velvet Rose Extrait 50ml"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-semibold text-stone-900"
+              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-semibold text-stone-900"
             />
           </div>
 
@@ -537,12 +537,12 @@
               type="text"
               required
               placeholder="Misal: Duo Discovery Extrait Set (2x 50ml)"
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 text-xs font-semibold text-stone-900"
+              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 text-xs font-semibold text-stone-900"
             />
           </div>
 
           <!-- Multiple Product Picker in Bundle -->
-          <div class="space-y-3 bg-stone-50/80 p-4 rounded-2xl border border-stone-200/80">
+          <div class="space-y-3 bg-stone-50/80 p-4 rounded-xl border border-stone-200/80">
             <div class="flex items-center justify-between">
               <div>
                 <h5 class="text-xs font-bold text-stone-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -555,14 +555,14 @@
               <button
                 type="button"
                 @click="addBundleItemRow"
-                class="px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 text-xs font-bold transition-all flex items-center gap-1"
+                class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 text-xs font-bold transition-all flex items-center gap-1"
               >
                 <Plus class="w-3.5 h-3.5" />
                 <span>Tambah Item</span>
               </button>
             </div>
 
-            <div v-if="form.bundleItems.length === 0" class="py-6 text-center text-stone-400 text-xs bg-white rounded-xl border border-dashed">
+            <div v-if="form.bundleItems.length === 0" class="py-6 text-center text-stone-400 text-xs bg-white rounded-lg border border-dashed">
               Belum ada produk dimasukkan. Klik "+ Tambah Item" untuk memilih produk dari katalog HPP.
             </div>
 
@@ -570,7 +570,7 @@
               <div
                 v-for="(bItem, idx) in form.bundleItems"
                 :key="bItem.id"
-                class="p-3 bg-white rounded-xl border border-stone-200 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shadow-xs"
+                class="p-3 bg-white rounded-lg border border-stone-200 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shadow-xs"
               >
                 <div class="flex-1">
                   <CustomSelect
@@ -589,14 +589,14 @@
                       min="1"
                       required
                       placeholder="Qty"
-                      class="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 text-xs font-semibold text-center text-stone-900"
+                      class="w-full px-2.5 py-1.5 rounded-md border border-stone-200 text-xs font-semibold text-center text-stone-900"
                     />
                   </div>
 
                   <button
                     type="button"
                     @click="removeBundleItemRow(idx)"
-                    class="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-colors"
+                    class="p-1.5 rounded-md text-rose-500 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-colors"
                     title="Hapus baris item"
                   >
                     <Trash2 class="w-4 h-4" />
@@ -620,7 +620,7 @@
                 type="number"
                 min="0"
                 required
-                class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-semibold pr-12 text-stone-900"
+                class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-semibold pr-12 text-stone-900"
               />
               <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold pointer-events-none">pcs</span>
             </div>
@@ -638,7 +638,7 @@
                 min="0"
                 step="500"
                 required
-                class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-xs font-semibold text-emerald-800 pl-8"
+                class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-xs font-semibold text-emerald-800 pl-8"
               />
               <span class="absolute left-3 top-2.5 text-stone-400 text-xs font-bold pointer-events-none">Rp</span>
             </div>
@@ -655,7 +655,7 @@
                 type="text"
                 list="seriesDatalist"
                 placeholder="Ketik atau pilih series (misal: Signature Wood Collection, Discovery Series)..."
-                class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-medium text-stone-900"
+                class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-medium text-stone-900"
               />
               <datalist id="seriesDatalist">
                 <option v-for="s in allReadyToSellSeries" :key="s" :value="s">{{ s }}</option>
@@ -663,13 +663,13 @@
             </div>
 
             <!-- Quick Suggestion Badges -->
-            <div v-if="allReadyToSellSeries.length > 0" class="flex flex-wrap gap-1.5 mt-2 max-h-20 overflow-y-auto p-1.5 bg-stone-50 rounded-xl border border-stone-100">
+            <div v-if="allReadyToSellSeries.length > 0" class="flex flex-wrap gap-1.5 mt-2 max-h-20 overflow-y-auto p-1.5 bg-stone-50 rounded-lg border border-stone-100">
               <button
                 v-for="s in allReadyToSellSeries"
                 :key="s"
                 type="button"
                 @click="form.series = s"
-                class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border"
+                class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all border"
                 :class="form.series === s ? 'bg-peach-500 text-white border-peach-500 shadow-xs' : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-100'"
               >
                 {{ s }}
@@ -686,7 +686,7 @@
               v-model="form.pertamaKaliDijual"
               type="date"
               required
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-medium text-stone-900"
+              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-medium text-stone-900"
             />
           </div>
 
@@ -700,9 +700,9 @@
                 v-model="form.gambar"
                 type="text"
                 placeholder="https://... atau pilih file"
-                class="flex-1 px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-medium"
+                class="flex-1 px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-medium"
               />
-              <label class="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold cursor-pointer border border-stone-200 flex items-center gap-1">
+              <label class="px-3 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold cursor-pointer border border-stone-200 flex items-center gap-1">
                 <Upload class="w-3.5 h-3.5" />
                 <span class="hidden sm:inline">Upload</span>
                 <input type="file" accept="image/*" class="hidden" @change="handleImageUpload" />
@@ -711,8 +711,8 @@
           </div>
 
           <!-- Image Preview Thumbnail if available -->
-          <div v-if="form.gambar" class="sm:col-span-2 flex items-center gap-3 p-2 bg-stone-50 rounded-xl border">
-            <div class="w-12 h-12 rounded-lg overflow-hidden border bg-white flex-shrink-0">
+          <div v-if="form.gambar" class="sm:col-span-2 flex items-center gap-3 p-2 bg-stone-50 rounded-lg border">
+            <div class="w-12 h-12 rounded-md overflow-hidden border bg-white flex-shrink-0">
               <img :src="form.gambar" alt="Preview" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1 min-w-0">
@@ -738,7 +738,7 @@
               v-model="form.deskripsi"
               rows="2"
               placeholder="Catatan kemasan, packaging sleeve, notes aroma, target pasar..."
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs"
+              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs"
             ></textarea>
           </div>
         </div>
@@ -748,13 +748,13 @@
           <button
             type="button"
             @click="isModalOpen = false"
-            class="px-4 py-2 rounded-xl border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+            class="px-4 py-2 rounded-lg border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
           >
             Batal
           </button>
           <button
             type="submit"
-            class="px-5 py-2 rounded-xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill"
+            class="px-5 py-2 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs"
           >
             {{ isEditing ? 'Simpan Perubahan' : 'Tambah Produk' }}
           </button>
@@ -772,8 +772,8 @@
     >
       <div v-if="detailItem" class="space-y-5">
         <!-- Image & Main Overview -->
-        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-4 rounded-2xl bg-stone-50 border border-stone-200">
-          <div class="w-24 h-24 rounded-2xl overflow-hidden border border-stone-200 bg-white flex items-center justify-center flex-shrink-0 shadow-xs">
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-4 rounded-xl bg-stone-50 border border-stone-200">
+          <div class="w-24 h-24 rounded-lg overflow-hidden border border-stone-200 bg-white flex items-center justify-center flex-shrink-0 shadow-xs">
             <img
               v-if="detailItem.gambar"
               :src="detailItem.gambar"
@@ -788,19 +788,19 @@
             <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
               <span
                 v-if="detailItem.isBundle"
-                class="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold text-[10px]"
+                class="px-2.5 py-0.5 rounded-md bg-indigo-100 text-indigo-800 font-bold text-[10px]"
               >
                 Paket Bundle
               </span>
               <span
                 v-else
-                class="px-2.5 py-0.5 rounded-full bg-stone-200 text-stone-800 font-semibold text-[10px]"
+                class="px-2.5 py-0.5 rounded-md bg-stone-200 text-stone-800 font-semibold text-[10px]"
               >
                 Single Product
               </span>
               <span
                 v-if="detailItem.series"
-                class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-semibold text-[10px]"
+                class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-900 font-semibold text-[10px]"
               >
                 {{ detailItem.series }}
               </span>
@@ -815,17 +815,17 @@
 
         <!-- Metric Badges -->
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <div class="p-3.5 rounded-xl bg-white border border-stone-200 text-center">
+          <div class="p-3.5 rounded-lg bg-white border border-stone-200 text-center">
             <span class="text-[10px] uppercase font-bold text-stone-400 block">Current Stock</span>
             <span class="text-base font-extrabold font-mono text-stone-900">{{ detailItem.jumlahStok }} pcs</span>
           </div>
 
-          <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-center">
+          <div class="p-3.5 rounded-lg bg-emerald-50 border border-emerald-200 text-center">
             <span class="text-[10px] uppercase font-bold text-emerald-700 block">Harga Jual</span>
             <span class="text-base font-extrabold font-mono text-emerald-900">{{ formatRupiah(detailItem.hargaJual) }}</span>
           </div>
 
-          <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-center col-span-2 sm:col-span-1">
+          <div class="p-3.5 rounded-lg bg-amber-50 border border-amber-200 text-center col-span-2 sm:col-span-1">
             <span class="text-[10px] uppercase font-bold text-amber-700 block">First Time Sell</span>
             <span class="text-base font-extrabold font-mono text-amber-950">{{ formatDate(detailItem.pertamaKaliDijual) }}</span>
           </div>
@@ -836,7 +836,7 @@
           <h5 class="text-xs font-bold text-stone-800 uppercase tracking-wider">
             Rincian Produk dalam Paket Bundle:
           </h5>
-          <div class="border rounded-xl overflow-hidden">
+          <div class="border rounded-lg overflow-hidden">
             <table class="w-full text-xs text-left">
               <thead class="bg-stone-100 text-[10px] font-bold text-stone-600 uppercase">
                 <tr>
@@ -860,13 +860,13 @@
         <div class="pt-3 border-t border-stone-100 flex justify-end gap-2">
           <button
             @click="isDetailModalOpen = false"
-            class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold"
+            class="px-4 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold"
           >
             Tutup
           </button>
           <button
             @click="isDetailModalOpen = false; openEditModal(detailItem)"
-            class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center gap-1.5"
+            class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center gap-1.5"
           >
             <Pencil class="w-3.5 h-3.5" />
             <span>Edit Produk</span>

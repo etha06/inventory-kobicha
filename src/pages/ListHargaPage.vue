@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-6">
     <!-- Top Card -->
-    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-xl border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <!-- Mobile Burger Button -->
         <button
           @click="store.openMobileNav()"
-          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          class="lg:hidden w-9 h-9 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
           title="Buka Menu"
         >
           <Menu class="w-4 h-4" />
@@ -19,21 +19,21 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-sage-50 text-forest-800 border border-sage-200">
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-sage-50 text-forest-800 border border-sage-200">
           Rata-rata digunakan otomatis di Kalkulator
         </span>
       </div>
     </div>
 
     <!-- Search & Filter Bar -->
-    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="bg-white p-4 rounded-xl border border-sage-100 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-3">
       <!-- Search -->
       <div class="relative">
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Cari nama fragrance oil..."
-          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
+          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
         />
         <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
       </div>
@@ -58,7 +58,7 @@
     </div>
 
     <!-- List Harga Table -->
-    <div class="bg-white rounded-[24px] border border-sage-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-xl border border-sage-100 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
@@ -76,7 +76,7 @@
             <tr v-if="processedFoList.length === 0">
               <td colspan="7" class="py-12 text-center text-stone-400">
                 <Tag class="w-8 h-8 mx-auto mb-2 opacity-50" />
-                Tidak ada data harga ditemukan.
+                <p class="text-xs text-stone-400">Tidak ada data harga ditemukan.</p>
               </td>
             </tr>
 
@@ -110,7 +110,7 @@
               <!-- Pyramid (Without "Note" word) -->
               <td class="py-3.5 px-4 text-left">
                 <span
-                  class="px-2 py-0.5 rounded-md text-[10px] font-bold border inline-block"
+                  class="px-2 py-0.5 rounded text-[10px] font-bold border inline-block"
                   :class="PYRAMID_BADGE_MAP[item.pyramid].bg"
                 >
                   {{ item.pyramid }}
@@ -136,7 +136,7 @@
               </td>
 
               <td class="py-3.5 px-4 text-left">
-                <div class="inline-block bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl text-left">
+                <div class="inline-block bg-amber-50 border border-amber-200 px-2.5 py-1.5 rounded-lg text-left">
                   <span class="text-sm font-bold text-amber-950 font-mono block">
                     {{ formatRupiah(item.avgPricePerMl) }}
                   </span>

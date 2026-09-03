@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-6">
     <!-- Top Action Card -->
-    <div class="bg-white p-5 rounded-[24px] border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-xl border border-sage-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <!-- Mobile Burger Button -->
         <button
           @click="store.openMobileNav()"
-          class="lg:hidden w-9 h-9 rounded-2xl bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
+          class="lg:hidden w-9 h-9 rounded-lg bg-sage-50 hover:bg-sage-100 text-forest-900 flex items-center justify-center transition-all border border-sage-200/80 shadow-sm flex-shrink-0 active:scale-95"
           title="Buka Menu"
         >
           <Menu class="w-4 h-4" />
@@ -21,7 +21,7 @@
       <div class="flex items-center gap-3">
         <button
           @click="openAddModal"
-          class="px-4 py-2.5 rounded-2xl bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-pill transition-all flex items-center gap-1.5"
+          class="px-4 py-2 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
         >
           <Plus class="w-4 h-4" />
           <span>Tambah Barang Campuran</span>
@@ -30,7 +30,7 @@
     </div>
 
     <!-- Search, Filter & Sort Bar -->
-    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm space-y-3">
+    <div class="bg-white p-4 rounded-xl border border-sage-100 shadow-sm space-y-3">
       <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
         <!-- Search -->
         <div class="relative sm:col-span-1">
@@ -38,7 +38,7 @@
             v-model="searchQuery"
             type="text"
             placeholder="Cari nama barang / toko..."
-            class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
+            class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
           />
           <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
         </div>
@@ -77,14 +77,14 @@
           <span class="text-stone-400 font-semibold text-[11px] mr-1">Status Stok Bahan Baku:</span>
           <button
             @click="filterStockStatus = ''"
-            class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all"
+            class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all"
             :class="filterStockStatus === '' ? 'bg-stone-800 text-white shadow-xs' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'"
           >
             Semua
           </button>
           <button
             @click="filterStockStatus = 'Banyak'"
-            class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1"
+            class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all flex items-center gap-1"
             :class="filterStockStatus === 'Banyak' ? 'bg-emerald-700 text-white' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
           >
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
@@ -92,7 +92,7 @@
           </button>
           <button
             @click="filterStockStatus = 'Dikit'"
-            class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1"
+            class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all flex items-center gap-1"
             :class="filterStockStatus === 'Dikit' ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'"
           >
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
@@ -100,7 +100,7 @@
           </button>
           <button
             @click="filterStockStatus = 'Habis'"
-            class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1"
+            class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all flex items-center gap-1"
             :class="filterStockStatus === 'Habis' ? 'bg-rose-700 text-white' : 'bg-rose-50 text-rose-700 hover:bg-rose-100'"
           >
             <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
@@ -111,7 +111,7 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-xl border border-stone-200/80 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
@@ -131,7 +131,7 @@
             <tr v-if="filteredList.length === 0">
               <td colspan="9" class="py-12 text-center text-stone-400">
                 <Package class="w-8 h-8 mx-auto mb-2 opacity-50" />
-                Tidak ada data barang campuran ditemukan.
+                <p class="text-xs text-stone-400">Tidak ada data barang campuran ditemukan.</p>
               </td>
             </tr>
 
@@ -157,13 +157,13 @@
                 <td class="py-3.5 px-4 text-left">
                   <span
                     v-if="isItemBahanBaku(item)"
-                    class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300 whitespace-nowrap inline-flex items-center gap-1"
+                    class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300 whitespace-nowrap inline-flex items-center gap-1"
                   >
                     Bahan Baku
                   </span>
                   <span
                     v-else
-                    class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-medium border border-indigo-200 whitespace-nowrap inline-flex items-center gap-1"
+                    class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 text-[10px] font-medium border border-indigo-200 whitespace-nowrap inline-flex items-center gap-1"
                   >
                     Kemasan
                   </span>
@@ -171,7 +171,7 @@
 
                 <!-- 3. Kolom Jenis Barang -->
                 <td class="py-3.5 px-4 text-left">
-                  <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium whitespace-nowrap">
+                  <span class="px-2 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium whitespace-nowrap">
                     {{ item.jenis }}
                   </span>
                 </td>
@@ -191,7 +191,7 @@
                 <td class="py-3.5 px-4 text-left">
                   <span
                     v-if="isItemBahanBaku(item)"
-                    class="px-2 py-0.5 rounded-full text-[11px] font-bold border inline-flex items-center gap-1"
+                    class="px-2 py-0.5 rounded text-[11px] font-bold border inline-flex items-center gap-1"
                     :class="STOCK_STATUS_MAP[item.currentStock || (item.jumlahStok <= 0 ? 'Habis' : (item.jumlahStok <= 5 ? 'Dikit' : 'Banyak'))]?.bg"
                   >
                     <span
@@ -242,8 +242,8 @@
 
               <!-- Expandable Inline Detail Sub-Row -->
               <tr v-if="expandedItemId === item.id" class="bg-amber-50/30 border-b border-amber-200/70">
-                <td colspan="9" class="p-5">
-                  <div class="bg-white rounded-xl p-4 border border-amber-200/80 shadow-sm space-y-3">
+                <td colspan="9" class="p-4 sm:p-5">
+                  <div class="bg-white rounded-lg p-4 border border-amber-200/80 shadow-xs space-y-3">
                     <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                       <div class="space-y-1.5 flex-1">
                         <h4 class="font-bold text-stone-900 text-xs flex items-center gap-2">
@@ -267,7 +267,7 @@
                         </div>
                       </div>
 
-                      <div v-if="item.gambar" class="w-20 h-20 rounded-xl overflow-hidden border">
+                      <div v-if="item.gambar" class="w-20 h-20 rounded-lg overflow-hidden border">
                         <img :src="item.gambar" alt="Product" class="w-full h-full object-cover" />
                       </div>
                     </div>
@@ -297,12 +297,12 @@
     >
       <form @submit.prevent="saveItem" class="space-y-4">
         <!-- Tipe Barang (Bahan Baku vs Kemasan) -->
-        <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-2">
+        <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 space-y-2">
           <label class="block text-xs font-bold text-stone-800">Kategori Tipe Barang:</label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <label
-              class="flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer transition-all"
-              :class="form.isBahanBaku ? 'bg-amber-50 border-amber-400 shadow-sm' : 'bg-white border-stone-200 hover:bg-stone-100'"
+              class="flex items-start gap-2.5 p-2.5 rounded-md border cursor-pointer transition-all"
+              :class="form.isBahanBaku ? 'bg-amber-50 border-amber-400 shadow-xs' : 'bg-white border-stone-200 hover:bg-stone-100'"
             >
               <input
                 type="radio"
@@ -317,8 +317,8 @@
             </label>
 
             <label
-              class="flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer transition-all"
-              :class="!form.isBahanBaku ? 'bg-indigo-50 border-indigo-400 shadow-sm' : 'bg-white border-stone-200 hover:bg-stone-100'"
+              class="flex items-start gap-2.5 p-2.5 rounded-md border cursor-pointer transition-all"
+              :class="!form.isBahanBaku ? 'bg-indigo-50 border-indigo-400 shadow-xs' : 'bg-white border-stone-200 hover:bg-stone-100'"
             >
               <input
                 type="radio"
@@ -341,7 +341,7 @@
             type="text"
             required
             placeholder="Misal: Ethanol Absolute 96% Super Fine Grade"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
           />
         </div>
 
@@ -360,7 +360,7 @@
                 required
                 list="campuranJenisDatalist"
                 placeholder="Ketik atau pilih jenis barang..."
-                class="w-full px-3.5 py-2 rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm font-medium bg-white"
+                class="w-full px-3.5 py-2 rounded-lg border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm font-medium bg-white"
               />
               <datalist id="campuranJenisDatalist">
                 <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
@@ -368,14 +368,14 @@
             </div>
 
             <!-- Quick Suggestion Badges -->
-            <div v-if="allJenisBarangList.length > 0" class="flex flex-wrap gap-1.5 mt-2 max-h-28 overflow-y-auto p-1.5 bg-sage-50/60 rounded-xl border border-sage-200/60">
+            <div v-if="allJenisBarangList.length > 0" class="flex flex-wrap gap-1.5 mt-2 max-h-28 overflow-y-auto p-1.5 bg-sage-50/60 rounded-lg border border-sage-200/60">
               <button
                 v-for="j in allJenisBarangList"
                 :key="j"
                 type="button"
                 @click="form.jenis = j"
-                class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border"
-                :class="form.jenis === j ? 'bg-peach-500 text-white border-peach-500 shadow-sm' : 'bg-white text-forest-800 border-sage-200 hover:border-peach-300 hover:bg-peach-50/40'"
+                class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all border"
+                :class="form.jenis === j ? 'bg-peach-500 text-white border-peach-500 shadow-xs' : 'bg-white text-forest-800 border-sage-200 hover:border-peach-300 hover:bg-peach-50/40'"
               >
                 {{ j }}
               </button>
@@ -404,7 +404,7 @@
                 min="1"
                 required
                 placeholder="1000"
-                class="w-full px-3.5 py-2 rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono font-bold pr-8"
+                class="w-full px-3.5 py-2 rounded-lg border border-amber-300 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono font-bold pr-8"
               />
               <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold">ml</span>
             </div>
@@ -418,7 +418,7 @@
               type="number"
               min="0"
               required
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-semibold font-mono"
+              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-semibold font-mono"
             />
           </div>
 
@@ -429,7 +429,7 @@
               <label
                 v-for="status in CURRENT_STOCK_OPTIONS"
                 :key="status"
-                class="flex items-center justify-center gap-1 p-2 rounded-xl border text-[11px] font-bold cursor-pointer transition-all select-none"
+                class="flex items-center justify-center gap-1 p-2 rounded-lg border text-[11px] font-bold cursor-pointer transition-all select-none"
                 :class="form.currentStock === status ? STOCK_STATUS_MAP[status].bg + ' border-2 shadow-xs' : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'"
               >
                 <input
@@ -453,7 +453,7 @@
                 type="number"
                 min="0"
                 required
-                class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono font-bold pr-10"
+                class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono font-bold pr-10"
               />
               <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold">pcs</span>
             </div>
@@ -461,7 +461,7 @@
         </div>
 
         <!-- Live Price per ml Preview if Bahan Baku -->
-        <div v-if="form.isBahanBaku && form.ukuranMl > 0" class="p-3 bg-amber-50 rounded-xl border border-amber-200 flex items-center justify-between">
+        <div v-if="form.isBahanBaku && form.ukuranMl > 0" class="p-3 bg-amber-50 rounded-lg border border-amber-200 flex items-center justify-between">
           <div>
             <span class="text-xs font-bold text-amber-950 block">✨ Estimasi Rata-rata Biaya per 1 ml:</span>
             <span class="text-[11px] text-amber-700">{{ formatRupiah(form.hargaPerPcs) }} / {{ form.ukuranMl }} ml</span>
@@ -477,7 +477,7 @@
             v-model="form.gambar"
             type="url"
             placeholder="https://... (URL gambar)"
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
           />
         </div>
 
@@ -487,7 +487,7 @@
             v-model="form.deskripsi"
             rows="2"
             placeholder="Spesifikasi, grade kebersihan, tanggal expired, dsb..."
-            class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
+            class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm"
           ></textarea>
         </div>
 
@@ -495,15 +495,15 @@
           <button
             type="button"
             @click="isModalOpen = false"
-            class="px-4 py-2 rounded-xl border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+            class="px-4 py-2 rounded-lg border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
           >
             Batal
           </button>
           <button
             type="submit"
-            class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-sm"
+            class="px-5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-xs"
           >
-            Simpan Barang Campuran
+            Simpan Barang
           </button>
         </div>
       </form>

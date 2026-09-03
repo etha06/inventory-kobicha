@@ -1,5 +1,5 @@
 <template>
-  <div v-if="totalItems > 0" class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-t border-stone-100 text-xs text-stone-500 bg-white rounded-b-2xl select-none">
+  <div v-if="totalItems > 0" class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-t border-stone-100 text-xs text-stone-500 bg-white rounded-b-xl select-none">
     <!-- Info Data Range -->
     <div>
       Menampilkan
