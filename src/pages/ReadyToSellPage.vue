@@ -334,22 +334,6 @@
 
         <!-- 2. Form Fields for Single Product -->
         <div v-if="!form.isBundle" class="space-y-4 pt-2 border-t border-stone-100">
-          <!-- Pilih Produk dari Katalog HPP (Autocomplete / Dropdown) -->
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <label class="block text-xs font-semibold text-stone-700">
-                Pilih dari Katalog HPP (Opsional):
-              </label>
-              <span class="text-[11px] text-stone-400">Otomatis isi nama & rekomendasi harga</span>
-            </div>
-            <CustomSelect
-              v-model="form.hppCalculationId"
-              :options="hppSelectOptions"
-              placeholder="-- Input Bebas / Tanpa Link HPP --"
-              @change="onSelectHppForSingle"
-            />
-          </div>
-
           <!-- Nama Produk -->
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">
@@ -361,6 +345,19 @@
               required
               placeholder="Misal: Kobicha Velvet Rose Extrait 50ml"
               class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-xs font-semibold text-stone-900"
+            />
+          </div>
+
+          <!-- Pilih Produk dari Katalog HPP -->
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">
+              Pilih Produk dari Katalog HPP <span class="text-rose-500">*</span>
+            </label>
+            <CustomSelect
+              v-model="form.hppCalculationId"
+              :options="hppSelectOptions"
+              placeholder="-- Pilih Produk HPP --"
+              @change="onSelectHppForSingle"
             />
           </div>
         </div>
@@ -772,16 +769,10 @@ const seriesOptions = computed(() => {
 });
 
 const hppSelectOptions = computed(() => {
-  const opts: { value: string; label: string }[] = [
-    { value: '', label: '-- Input Bebas / Tanpa Link HPP --' }
-  ];
-  hppCatalog.value.forEach(h => {
-    opts.push({
-      value: h.id,
-      label: `${h.nama} (${h.targetBottleMl}ml • HPP: ${formatRupiah(h.grandTotalHpp)})`
-    });
-  });
-  return opts;
+  return hppCatalog.value.map(h => ({
+    value: h.id,
+    label: `${h.nama} (${h.targetBottleMl}ml • HPP: ${formatRupiah(h.grandTotalHpp)})`
+  }));
 });
 
 const bundleHppOptions = computed(() => {
@@ -935,6 +926,16 @@ function handleImageUpload(e: Event) {
 function handleSubmit() {
   if (!form.value.nama.trim()) {
     store.showToast('Nama produk wajib diisi', 'warning');
+    return;
+  }
+
+  if (!form.value.isBundle && !form.value.hppCalculationId) {
+    store.showToast('Silakan pilih produk dari Katalog HPP', 'warning');
+    return;
+  }
+
+  if (form.value.isBundle && form.value.bundleItems.length === 0) {
+    store.showToast('Paket bundle harus memiliki minimal 1 produk', 'warning');
     return;
   }
 
