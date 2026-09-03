@@ -13,7 +13,7 @@
         </button>
 
         <div>
-          <h3 class="text-base font-extrabold text-forest-900 font-rounded">Stock Barang Campuran & Kemasan</h3>
+          <h3 class="text-base font-extrabold text-forest-900 font-rounded">Stock Barang Lainnya & Kemasan</h3>
           <p class="text-xs text-sage-600">Stock alkohol, fixative DPG, pelarut bahan baku dengan kalkulasi harga/ml serta botol packaging</p>
         </div>
       </div>
@@ -24,7 +24,7 @@
           class="px-4 py-2 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
         >
           <Plus class="w-4 h-4" />
-          <span>Tambah Barang Campuran</span>
+          <span>Tambah Barang Lainnya</span>
         </button>
       </div>
     </div>
@@ -131,7 +131,7 @@
             <tr v-if="filteredList.length === 0">
               <td colspan="9" class="py-12 text-center text-stone-400">
                 <Package class="w-8 h-8 mx-auto mb-2 opacity-50" />
-                <p class="text-xs text-stone-400">Tidak ada data barang campuran ditemukan.</p>
+                <p class="text-xs text-stone-400">Tidak ada data barang lainnya ditemukan.</p>
               </td>
             </tr>
 
@@ -290,7 +290,7 @@
     <!-- Modal Form (Add / Edit) -->
     <Modal
       :isOpen="isModalOpen"
-      :title="isEditing ? 'Edit Barang Campuran' : 'Tambah Barang Campuran'"
+      :title="isEditing ? 'Edit Barang Lainnya' : 'Tambah Barang Lainnya'"
       subtitle="Input stock pelarut, DPG, botol, pipet, atau packaging"
       maxWidth="2xl"
       @close="isModalOpen = false"
@@ -512,7 +512,7 @@
     <!-- Delete Confirm Modal -->
     <ConfirmModal
       :isOpen="isDeleteModalOpen"
-      title="Hapus Barang Campuran?"
+      title="Hapus Barang Lainnya?"
       :message="`Apakah Anda yakin ingin menghapus '${itemToDelete?.namaBarang}' dari stock?`"
       @confirm="doDelete"
       @cancel="isDeleteModalOpen = false"

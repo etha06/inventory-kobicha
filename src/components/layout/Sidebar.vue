@@ -117,7 +117,7 @@
                 : 'text-white/85 hover:bg-white/15 hover:text-white'"
             >
               <Boxes class="w-4 h-4 flex-shrink-0" />
-              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Barang Campuran</span>
+              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Barang Lainnya</span>
               <span
                 v-show="!isCollapsed && totalCampuranCount > 0"
                 class="text-xs px-2 py-0.5 rounded-full bg-black/20 text-white/90"

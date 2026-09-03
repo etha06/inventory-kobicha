@@ -341,7 +341,7 @@
             <h3 class="text-base font-bold text-center text-stone-900 mb-2">Kamu yakin ubah jenis barang ini?</h3>
             <p class="text-xs text-stone-600 text-center mb-4 leading-relaxed">
               Anda mengubah jenis barang dari <strong>"{{ originalJenisBarang }}"</strong> menjadi <strong>"{{ form.jenisBarang }}"</strong>.
-              Jika diubah, semua toko dan stock barang campuran yang menggunakan jenis barang ini akan otomatis diperbarui ke nama baru.
+              Jika diubah, semua toko dan stock barang lainnya yang menggunakan jenis barang ini akan otomatis diperbarui ke nama baru.
             </p>
             <div class="flex items-center justify-center gap-2.5">
               <button

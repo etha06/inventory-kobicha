@@ -95,7 +95,7 @@
     <!-- 2. Quick Add Campuran Modal -->
     <Modal
       :isOpen="isQuickAddCampuranOpen"
-      title="Tambah Barang Campuran Cepat"
+      title="Tambah Barang Lainnya Cepat"
       subtitle="Input cepat pelarut alkohol, DPG, atau packaging"
       maxWidth="lg"
       @close="isQuickAddCampuranOpen = false"

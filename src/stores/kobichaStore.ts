@@ -368,7 +368,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
       }
     });
 
-    showToast(`Jenis barang '${oldName}' berhasil diubah menjadi '${newName}' (${storeCount} toko, ${campCount} barang campuran diperbarui)!`, 'success');
+    showToast(`Jenis barang '${oldName}' berhasil diubah menjadi '${newName}' (${storeCount} toko, ${campCount} barang lainnya diperbarui)!`, 'success');
   }
 
   const totalStoresCount = computed(() => stores.value.length);
