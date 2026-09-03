@@ -152,21 +152,32 @@
             </tr>
 
             <tr
-              v-for="item in filteredProducts"
+              v-for="item in paginatedProducts"
               :key="item.id"
-              class="hover:bg-amber-50/40 transition-colors"
+              class="table-row-hover transition-colors"
             >
-              <!-- Nama Produk -->
-              <td class="py-3.5 px-4 text-left">
-                <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
-                  <span>{{ item.nama }}</span>
-                </div>
-                <div v-if="item.deskripsi" class="text-[10px] text-stone-500 mt-0.5 line-clamp-1 max-w-xs">
-                  {{ item.deskripsi }}
+              <!-- Foto Produk (Small Thumbnail) -->
+              <td class="py-3 px-4 text-left">
+                <div class="w-10 h-10 rounded-xl bg-stone-100 border border-stone-200 overflow-hidden flex items-center justify-center flex-shrink-0">
+                  <img
+                    v-if="item.gambar"
+                    :src="item.gambar"
+                    :alt="item.nama"
+                    class="w-full h-full object-cover"
+                  />
+                  <PackageCheck v-else-if="!item.isBundle" class="w-5 h-5 text-stone-400" />
+                  <Gift v-else class="w-5 h-5 text-indigo-400" />
                 </div>
               </td>
 
-              <!-- Tipe (Single / Bundle) -->
+              <!-- Nama Produk -->
+              <td class="py-3.5 px-4 text-left">
+                <div class="font-bold text-stone-900 text-xs flex items-center gap-1.5">
+                  <span class="truncate max-w-[220px]">{{ item.nama }}</span>
+                </div>
+              </td>
+
+              <!-- Tipe Badge -->
               <td class="py-3.5 px-4 text-left">
                 <span
                   v-if="item.isBundle"
@@ -277,6 +288,13 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination for Table -->
+      <Pagination
+        v-model:currentPage="currentPage"
+        :totalItems="filteredProducts.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
 
     <!-- ========================================================= -->
@@ -929,6 +947,7 @@ import { formatRupiah } from '../utils/formatters';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 import CustomSelect from '../components/common/CustomSelect.vue';
+import Pagination from '../components/common/Pagination.vue';
 import {
   ShoppingBag,
   Plus,
@@ -1102,6 +1121,19 @@ const filteredProducts = computed(() => {
 
     return true;
   });
+});
+
+// Pagination State (Max 10 rows per page)
+const currentPage = ref(1);
+const itemsPerPage = 10;
+
+const paginatedProducts = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filteredProducts.value.slice(start, start + itemsPerPage);
+});
+
+watch([searchQuery, filterType, filterSeries], () => {
+  currentPage.value = 1;
 });
 
 // Modal Form State

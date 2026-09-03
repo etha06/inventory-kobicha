@@ -136,7 +136,7 @@
               </td>
             </tr>
 
-            <template v-for="(item, idx) in filteredList" :key="item.id">
+            <template v-for="(item, idx) in paginatedList" :key="item.id">
               <!-- Main Row (Click to expand) -->
               <tr
                 @click="toggleRow(item.id)"
@@ -144,7 +144,7 @@
                 :class="expandedItemId === item.id ? 'bg-amber-50/60 font-medium' : ''"
               >
                 <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
-                  {{ idx + 1 }}
+                  {{ (currentPage - 1) * itemsPerPage + idx + 1 }}
                 </td>
 
                 <!-- 1. Kolom Nama Barang (Setelah No) -->
@@ -283,6 +283,13 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination for Table -->
+      <Pagination
+        v-model:currentPage="currentPage"
+        :totalItems="filteredList.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
 
     <!-- Modal Form (Add / Edit) -->
@@ -519,7 +526,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { StockCampuran, CurrentStockEnum } from '../types';
@@ -529,6 +536,7 @@ import { Plus, Search, Pencil, Trash2, ChevronRight, Package, Menu } from 'lucid
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 import CustomSelect from '../components/common/CustomSelect.vue';
+import Pagination from '../components/common/Pagination.vue';
 
 const store = useKobichaStore();
 const { stockCampuran, stores, allJenisBarangList } = storeToRefs(store);
@@ -539,6 +547,10 @@ const filterJenis = ref('');
 const filterStockStatus = ref('');
 const sortBy = ref('name_asc');
 const expandedItemId = ref<string | null>(null);
+
+// Pagination State (Max 10 rows per page)
+const currentPage = ref(1);
+const itemsPerPage = 10;
 
 const tipeOptions = [
   { value: '', label: 'Semua Tipe Barang' },
@@ -631,6 +643,15 @@ const filteredList = computed(() => {
   });
 
   return list;
+});
+
+const paginatedList = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filteredList.value.slice(start, start + itemsPerPage);
+});
+
+watch([searchQuery, filterTipe, filterJenis, filterStockStatus, sortBy], () => {
+  currentPage.value = 1;
 });
 
 // Modal State

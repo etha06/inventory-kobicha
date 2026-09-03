@@ -83,7 +83,7 @@
               </td>
             </tr>
 
-            <template v-for="(store, idx) in filteredStores" :key="store.id">
+            <template v-for="(store, idx) in paginatedStores" :key="store.id">
               <!-- Main Row (Clickable to expand) -->
               <tr
                 @click="toggleRow(store.id)"
@@ -91,7 +91,7 @@
                 :class="expandedStoreId === store.id ? 'bg-amber-50/60 font-medium' : ''"
               >
                 <td class="py-3.5 px-4 text-left text-stone-400 font-mono">
-                  <span class="text-[11px]">{{ idx + 1 }}</span>
+                  <span class="text-[11px]">{{ (currentPage - 1) * itemsPerPage + idx + 1 }}</span>
                 </td>
 
                 <td class="py-3.5 px-4 text-left">
@@ -216,6 +216,13 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination for Table -->
+      <Pagination
+        v-model:currentPage="currentPage"
+        :totalItems="filteredStores.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
 
     <!-- Modal Form (Add / Edit) -->
@@ -372,7 +379,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { StoreSupplier } from '../types';
@@ -381,6 +388,7 @@ import { Plus, Search, Pencil, Trash2, ExternalLink, ChevronRight, Store, AlertT
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 import CustomSelect from '../components/common/CustomSelect.vue';
+import Pagination from '../components/common/Pagination.vue';
 
 const store = useKobichaStore();
 const { stores, stockFragranceOil, stockCampuran, allJenisBarangList } = storeToRefs(store);
@@ -389,6 +397,10 @@ const searchQuery = ref('');
 const filterJenis = ref('');
 const sortBy = ref('name_asc');
 const expandedStoreId = ref<string | null>(null);
+
+// Pagination State (Max 10 rows per page)
+const currentPage = ref(1);
+const itemsPerPage = 10;
 
 const jenisOptions = computed(() => [
   { value: '', label: 'Semua Jenis Barang' },
@@ -429,6 +441,15 @@ const filteredStores = computed(() => {
   });
 
   return list;
+});
+
+const paginatedStores = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filteredStores.value.slice(start, start + itemsPerPage);
+});
+
+watch([searchQuery, filterJenis, sortBy], () => {
+  currentPage.value = 1;
 });
 
 function getLinkedProductsCount(storeId: string): number {

@@ -105,7 +105,7 @@
             </tr>
 
             <tr
-              v-for="item in filteredHppList"
+              v-for="item in paginatedHppList"
               :key="item.id"
               class="table-row-hover transition-colors"
               :class="selectedForCompare.includes(item.id) ? 'bg-amber-50/60 font-medium' : ''"
@@ -185,20 +185,28 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination Component for Table View -->
+      <Pagination
+        v-model:currentPage="currentPage"
+        :totalItems="filteredHppList.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
 
     <!-- VIEW 2: CARD VIEW -->
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <div v-if="filteredHppList.length === 0" class="col-span-full py-12 text-center text-stone-400 bg-white rounded-2xl border">
+    <div v-else class="space-y-4">
+      <div v-if="filteredHppList.length === 0" class="py-12 text-center text-stone-400 bg-white rounded-2xl border">
         <Receipt class="w-8 h-8 mx-auto mb-2 opacity-50" />
         Tidak ada data HPP ditemukan.
       </div>
 
-      <div
-        v-for="item in filteredHppList"
-        :key="item.id"
-        class="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-sm space-y-4 hover:shadow-md transition-all flex flex-col justify-between"
-      >
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div
+          v-for="item in paginatedHppList"
+          :key="item.id"
+          class="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-sm space-y-4 hover:shadow-md transition-all flex flex-col justify-between"
+        >
         <div>
           <div class="flex items-start justify-between gap-2 border-b border-stone-100 pb-3">
             <div>
@@ -361,6 +369,15 @@
           </div>
         </div>
       </div>
+      </div>
+
+      <!-- Pagination for Card View -->
+      <Pagination
+        v-if="filteredHppList.length > 0"
+        v-model:currentPage="currentPage"
+        :totalItems="filteredHppList.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
 
     <!-- Detail Breakdown Modal -->
@@ -441,7 +458,7 @@
               <tbody class="divide-y text-stone-800">
                 <tr v-for="pkg in detailItem.packagingItems" :key="pkg.id">
                   <td class="py-2 px-3 text-left font-medium">{{ pkg.namaItem }}</td>
-                  <td class="py-2 px-3 text-left font-mono">{{ pkg.jumlah }} pcs</td>
+                  <td class="py-2 px-3 text-left font-mono">{{ pkg.jumlah }}x</td>
                   <td class="py-2 px-3 text-left font-mono">{{ formatRupiah(pkg.hargaSatuan) }}</td>
                   <td class="py-2 px-3 text-left font-mono font-bold">{{ formatRupiah(pkg.total) }}</td>
                 </tr>
@@ -453,7 +470,7 @@
         <div class="pt-3 border-t flex justify-end">
           <button
             @click="isDetailModalOpen = false"
-            class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold"
+            class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold"
           >
             Tutup
           </button>
@@ -473,7 +490,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { HppCalculation } from '../types';
@@ -482,6 +499,7 @@ import { Calculator, Search, Eye, Trash2, Scale, Receipt, X, Menu } from 'lucide
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 import CustomSelect from '../components/common/CustomSelect.vue';
+import Pagination from '../components/common/Pagination.vue';
 
 const store = useKobichaStore();
 const { hppCatalog } = storeToRefs(store);
@@ -491,6 +509,10 @@ const searchQuery = ref('');
 const filterBottleSize = ref<number | ''>('');
 const sortBy = ref('newest');
 const selectedForCompare = ref<string[]>([]);
+
+// Pagination state (Max 10 rows per page)
+const currentPage = ref(1);
+const itemsPerPage = 10;
 
 const bottleSizeOptions = [
   { value: '', label: 'Semua Ukuran Botol' },
@@ -531,6 +553,15 @@ const filteredHppList = computed(() => {
   });
 
   return list;
+});
+
+const paginatedHppList = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filteredHppList.value.slice(start, start + itemsPerPage);
+});
+
+watch([searchQuery, filterBottleSize, sortBy], () => {
+  currentPage.value = 1;
 });
 
 const compareList = computed(() => {
