@@ -143,142 +143,160 @@
           </div>
         </div>
 
-        <!-- Liquid Ingredients Table Breakdown -->
-        <div class="overflow-x-auto border rounded-xl min-h-[320px] pb-24">
-          <table class="w-full text-xs text-left">
-            <thead class="bg-stone-100/70 border-b text-[10px] text-stone-500 uppercase font-bold">
-              <tr>
-                <th class="py-2.5 px-3 w-10 text-left">#</th>
-                <th class="py-2.5 px-3 text-left">Bahan Formula Liquid</th>
-                <th class="py-2.5 px-3 text-left w-24">Tipe</th>
-                <th class="py-2.5 px-3 text-left w-24">Porsi (%)</th>
-                <th class="py-2.5 px-3 text-left w-28">Volume (ml)</th>
-                <th class="py-2.5 px-3 text-left w-32">Rata-rata Harga</th>
-                <th class="py-2.5 px-3 text-left w-36">Subtotal Biaya</th>
-                <th class="py-2.5 px-3 text-left w-16">Aksi</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y text-stone-800">
-              <tr v-if="liquidIngredients.length === 0">
-                <td colspan="8" class="py-6 text-center text-stone-400 italic">
-                  Pilih Formula Base dan Racikan di atas untuk menghitung otomatis komposisi cairan.
-                </td>
-              </tr>
+        <!-- Liquid Ingredients Table Breakdown Container (Fixed Height with Fixed Header, Scrollable Body, and Fixed Footer at Bottom) -->
+        <div class="border border-stone-200/90 rounded-xl bg-white flex flex-col h-[300px] overflow-hidden shadow-sm">
+          <!-- 1. FIXED HEADER -->
+          <div class="bg-stone-100/90 border-b border-stone-200 flex-shrink-0">
+            <table class="w-full text-xs text-left table-fixed">
+              <thead class="text-[10px] text-stone-500 uppercase font-bold">
+                <tr>
+                  <th class="py-2.5 px-3 w-10 text-left">#</th>
+                  <th class="py-2.5 px-3 text-left">Bahan Formula Liquid</th>
+                  <th class="py-2.5 px-3 text-left w-24">Tipe</th>
+                  <th class="py-2.5 px-3 text-left w-24">Porsi (%)</th>
+                  <th class="py-2.5 px-3 text-left w-28">Volume (ml)</th>
+                  <th class="py-2.5 px-3 text-left w-32">Rata-rata Harga</th>
+                  <th class="py-2.5 px-3 text-left w-36">Subtotal Biaya</th>
+                  <th class="py-2.5 px-3 text-left w-16">Aksi</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
 
-              <tr v-for="(ing, idx) in liquidIngredients" :key="idx" class="hover:bg-stone-50">
-                <td class="py-2.5 px-3 text-left text-stone-400 font-mono text-[11px]">
-                  {{ idx + 1 }}
-                </td>
+          <!-- 2. SCROLLABLE MIDDLE TBODY AREA -->
+          <div class="overflow-y-auto overflow-x-hidden flex-1">
+            <table class="w-full text-xs text-left table-fixed">
+              <tbody class="divide-y text-stone-800">
+                <tr v-if="liquidIngredients.length === 0">
+                  <td colspan="8" class="py-12 text-center text-stone-400 italic">
+                    Pilih Formula Base dan Racikan di atas untuk menghitung otomatis komposisi cairan.
+                  </td>
+                </tr>
 
-                <!-- Nama & Dropdown Selector (Plain text for FO and Base items, Dropdown only for custom added rows) -->
-                <td class="py-2.5 px-3 text-left">
-                  <div v-if="ing.jenis === 'FO'" class="space-y-0.5">
-                    <span class="font-bold text-stone-900 block">{{ ing.nama }}</span>
-                    <span class="text-[10px] text-stone-500">Konsentrat Bibit Fragrance Oil</span>
-                  </div>
-                  
-                  <div v-else-if="!ing.isCustomRow" class="space-y-0.5">
-                    <span class="font-bold text-stone-900 block">{{ ing.nama }}</span>
-                    <span class="text-[10px] text-stone-500">Pelarut Formula Base</span>
-                  </div>
+                <tr v-for="(ing, idx) in liquidIngredients" :key="idx" class="hover:bg-stone-50 transition-colors">
+                  <td class="py-2.5 px-3 text-left text-stone-400 font-mono text-[11px] w-10">
+                    {{ idx + 1 }}
+                  </td>
 
-                  <div v-else class="space-y-1.5">
-                    <CustomSelect
-                      v-model="ing.stockCampuranId"
-                      :options="bahanBakuOptions"
-                      placeholder="-- Pilih Cairan dari Stok Bahan Baku --"
-                      :searchable="true"
-                      @change="onSelectCampuranItem(ing)"
-                    />
-                    <span v-if="!ing.stockCampuranId" class="text-[10px] text-amber-800 font-medium block">
-                      Pilih item dari stok bahan baku di atas untuk mengaitkan harga secara otomatis.
+                  <!-- Nama & Dropdown Selector (Plain text for FO and Base items, Dropdown only for custom added rows) -->
+                  <td class="py-2.5 px-3 text-left">
+                    <div v-if="ing.jenis === 'FO'" class="space-y-0.5">
+                      <span class="font-bold text-stone-900 block truncate">{{ ing.nama }}</span>
+                      <span class="text-[10px] text-stone-500">Konsentrat Bibit Fragrance Oil</span>
+                    </div>
+                    
+                    <div v-else-if="!ing.isCustomRow" class="space-y-0.5">
+                      <span class="font-bold text-stone-900 block truncate">{{ ing.nama }}</span>
+                      <span class="text-[10px] text-stone-500">Pelarut Formula Base</span>
+                    </div>
+
+                    <div v-else class="space-y-1.5">
+                      <CustomSelect
+                        v-model="ing.stockCampuranId"
+                        :options="bahanBakuOptions"
+                        placeholder="-- Pilih Cairan dari Stok Bahan Baku --"
+                        :searchable="true"
+                        @change="onSelectCampuranItem(ing)"
+                      />
+                      <span v-if="!ing.stockCampuranId" class="text-[10px] text-amber-800 font-medium block">
+                        Pilih item dari stok bahan baku di atas untuk mengaitkan harga secara otomatis.
+                      </span>
+                    </div>
+                  </td>
+
+                  <!-- Tipe Badge -->
+                  <td class="py-2.5 px-3 text-left w-24">
+                    <span
+                      class="px-1.5 py-0.5 rounded text-[10px] font-bold inline-block"
+                      :class="ing.jenis === 'FO' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-indigo-100 text-indigo-800 border border-indigo-200'"
+                    >
+                      {{ ing.jenis }}
                     </span>
-                  </div>
-                </td>
+                  </td>
 
-                <!-- Tipe Badge -->
-                <td class="py-2.5 px-3 text-left">
-                  <span
-                    class="px-1.5 py-0.5 rounded text-[10px] font-bold inline-block"
-                    :class="ing.jenis === 'FO' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-indigo-100 text-indigo-800 border border-indigo-200'"
-                  >
-                    {{ ing.jenis }}
-                  </span>
-                </td>
+                  <!-- Persentase (%) -->
+                  <td class="py-2.5 px-3 text-left font-mono w-24">
+                    <input
+                      v-if="ing.isCustomRow"
+                      v-model.number="ing.percentage"
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.5"
+                      @input="onIngredientPercentChange(ing)"
+                      class="w-16 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
+                    />
+                    <span v-else>{{ formatNumber(ing.percentage, 1) }}%</span>
+                  </td>
 
-                <!-- Persentase (%) -->
-                <td class="py-2.5 px-3 text-left font-mono">
-                  <input
-                    v-if="ing.isCustomRow"
-                    v-model.number="ing.percentage"
-                    type="number"
-                    min="0"
-                    max="100"
-                    step="0.5"
-                    @input="onIngredientPercentChange(ing)"
-                    class="w-16 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
-                  />
-                  <span v-else>{{ formatNumber(ing.percentage, 1) }}%</span>
-                </td>
+                  <!-- Volume (ml) -->
+                  <td class="py-2.5 px-3 text-left font-mono font-bold w-28">
+                    {{ formatNumber(ing.volumeMl, 2) }} ml
+                  </td>
 
-                <!-- Volume (ml) -->
-                <td class="py-2.5 px-3 text-left font-mono font-bold">
-                  {{ formatNumber(ing.volumeMl, 2) }} ml
-                </td>
+                  <!-- Rata-rata Harga per ml -->
+                  <td class="py-2.5 px-3 text-left font-mono text-stone-600 w-32">
+                    <input
+                      v-if="ing.isCustomRow"
+                      v-model.number="ing.pricePerMl"
+                      type="number"
+                      min="0"
+                      @input="onIngredientPriceChange(ing)"
+                      class="w-24 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
+                      title="Harga modal per 1 ml"
+                    />
+                    <span v-else>{{ formatRupiah(ing.pricePerMl) }}/ml</span>
+                  </td>
 
-                <!-- Rata-rata Harga per ml -->
-                <td class="py-2.5 px-3 text-left font-mono text-stone-600">
-                  <input
-                    v-if="ing.isCustomRow"
-                    v-model.number="ing.pricePerMl"
-                    type="number"
-                    min="0"
-                    @input="onIngredientPriceChange(ing)"
-                    class="w-24 px-1.5 py-1 text-xs border rounded text-left font-mono font-bold"
-                    title="Harga modal per 1 ml"
-                  />
-                  <span v-else>{{ formatRupiah(ing.pricePerMl) }}/ml</span>
-                </td>
+                  <!-- Subtotal Biaya -->
+                  <td class="py-2.5 px-3 text-left font-mono font-bold text-stone-900 w-36">
+                    {{ formatRupiah(ing.cost) }}
+                  </td>
 
-                <!-- Subtotal Biaya -->
-                <td class="py-2.5 px-3 text-left font-mono font-bold text-stone-900">
-                  {{ formatRupiah(ing.cost) }}
-                </td>
+                  <!-- Aksi Hapus (hanya untuk baris cairan kustom tambahan) -->
+                  <td class="py-2.5 px-3 text-left w-16">
+                    <button
+                      v-if="ing.isCustomRow"
+                      type="button"
+                      @click="removeLiquidIngredient(idx)"
+                      class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
+                      title="Hapus baris cairan ini"
+                    >
+                      <Trash2 class="w-3.5 h-3.5" />
+                    </button>
+                    <span v-else class="text-stone-300 text-xs">-</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-                <!-- Aksi Hapus (hanya untuk baris cairan kustom tambahan) -->
-                <td class="py-2.5 px-3 text-left">
-                  <button
-                    v-if="ing.isCustomRow"
-                    type="button"
-                    @click="removeLiquidIngredient(idx)"
-                    class="p-1.5 rounded-md border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
-                    title="Hapus baris cairan ini"
-                  >
-                    <Trash2 class="w-3.5 h-3.5" />
-                  </button>
-                  <span v-else class="text-stone-300 text-xs">-</span>
-                </td>
-              </tr>
-            </tbody>
-            <tfoot class="bg-stone-50 border-t font-bold text-stone-900">
-              <tr>
-                <td colspan="4" class="py-2.5 px-3 text-left">
-                  <button
-                    type="button"
-                    @click="addCustomLiquidRow"
-                    class="px-2.5 py-1 text-xs rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold transition-colors inline-flex items-center gap-1"
-                  >
-                    <Plus class="w-3.5 h-3.5" />
-                    <span>Tambah Cairan / Pelarut Lainnya</span>
-                  </button>
-                </td>
-                <td class="py-2.5 px-3 text-left font-mono font-bold text-amber-950">{{ targetBottleMl }} ml</td>
-                <td></td>
-                <td class="py-2.5 px-3 text-left font-mono text-amber-950 text-sm font-bold">{{ formatRupiah(subtotalLiquid) }}</td>
-                <td></td>
-              </tr>
-            </tfoot>
-          </table>
+          <!-- 3. FIXED FOOTER AT THE BOTTOM -->
+          <div class="bg-stone-50 border-t border-stone-200 flex-shrink-0">
+            <table class="w-full text-xs text-left table-fixed">
+              <tfoot>
+                <tr class="font-bold text-stone-900">
+                  <th class="py-2.5 px-3 w-10 text-left"></th>
+                  <th class="py-2.5 px-3 text-left">
+                    <button
+                      type="button"
+                      @click="addCustomLiquidRow"
+                      class="px-2.5 py-1 text-xs rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold transition-colors inline-flex items-center gap-1"
+                    >
+                      <Plus class="w-3.5 h-3.5" />
+                      <span>Tambah Cairan / Pelarut Lainnya</span>
+                    </button>
+                  </th>
+                  <th class="py-2.5 px-3 text-left w-24"></th>
+                  <th class="py-2.5 px-3 text-left w-24"></th>
+                  <th class="py-2.5 px-3 text-left font-mono font-bold text-amber-950 w-28">{{ targetBottleMl }} ml</th>
+                  <th class="py-2.5 px-3 text-left w-32"></th>
+                  <th class="py-2.5 px-3 text-left font-mono text-amber-950 text-sm font-bold w-36">{{ formatRupiah(subtotalLiquid) }}</th>
+                  <th class="py-2.5 px-3 text-left w-16"></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </div>
     </div>
