@@ -88,7 +88,7 @@
               <th class="py-3.5 px-3 w-10 text-left"></th>
               <th class="py-3.5 px-4 text-left">Nama Produk</th>
               <th class="py-3.5 px-4 text-left">Ukuran Botol</th>
-              <th class="py-3.5 px-4 text-left">Modal Liquid</th>
+              <th class="py-3.5 px-4 text-left">Modal Resep</th>
               <th class="py-3.5 px-4 text-left">Modal Lainnya</th>
               <th class="py-3.5 px-4 text-left">Grand Total HPP</th>
               <th class="py-3.5 px-4 text-left">HPP</th>
@@ -137,7 +137,7 @@
                 {{ item.targetBottleMl }} ml
               </td>
 
-              <!-- Modal Liquid -->
+              <!-- Modal Resep -->
               <td class="py-3.5 px-4 text-left font-mono text-stone-700">
                 {{ formatRupiah(item.subtotalLiquid) }}
               </td>
@@ -161,7 +161,7 @@
 
               <!-- Rekomendasi Jual -->
               <td class="py-3.5 px-4 text-left">
-                <span class="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-block">
+                <span class="font-mono font-bold text-emerald-800 text-xs px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 inline-block">
                   {{ formatRupiah(item.recommendedSellingPrice) }}
                 </span>
               </td>
@@ -179,7 +179,7 @@
                   <button
                     @click="confirmDelete(item)"
                     class="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 text-xs transition-colors"
-                    title="Hapus Data HPP"
+                    title="Hapus Rekaman HPP"
                   >
                     <Trash2 class="w-3.5 h-3.5" />
                   </button>
@@ -224,7 +224,7 @@
           <!-- Cost Breakdown List -->
           <div class="mt-3 space-y-2 text-xs">
             <div class="flex justify-between text-stone-600">
-              <span>🧪 Modal Formula Liquid:</span>
+              <span>🧪 Modal Resep:</span>
               <span class="font-mono font-bold text-stone-900">{{ formatRupiah(item.subtotalLiquid) }}</span>
             </div>
             <div class="flex justify-between text-stone-600">
@@ -323,7 +323,7 @@
             <!-- Metrics & Cost Progress -->
             <div class="mt-3 space-y-2 text-xs">
               <div class="flex justify-between text-sage-300">
-                <span>Modal Liquid:</span>
+                <span>Modal Resep:</span>
                 <span class="font-mono font-bold text-white">{{ formatRupiah(item.subtotalLiquid) }}</span>
               </div>
               <div class="flex justify-between text-sage-300">
@@ -372,7 +372,7 @@
     <Modal
       :isOpen="isDetailModalOpen"
       :title="`Rincian HPP: ${detailItem?.nama || ''}`"
-      subtitle="Breakdown modal cairan formula liquid dan modal lainnya"
+      subtitle="Breakdown modal resep formula dan modal lainnya"
       maxWidth="3xl"
       @close="isDetailModalOpen = false"
     >
@@ -384,7 +384,7 @@
             <span class="text-sm font-bold font-mono text-stone-900">{{ detailItem.targetBottleMl }} ml</span>
           </div>
           <div class="p-3 rounded-2xl bg-peach-50 border border-peach-200 text-center">
-            <span class="text-[10px] text-peach-700 uppercase font-bold block">Modal Liquid</span>
+            <span class="text-[10px] text-peach-700 uppercase font-bold block">Modal Resep</span>
             <span class="text-sm font-bold font-mono text-peach-900">{{ formatRupiah(detailItem.subtotalLiquid) }}</span>
           </div>
           <div class="p-3 rounded-2xl bg-sage-50 border border-sage-200 text-center">
@@ -400,7 +400,7 @@
         <!-- Liquid Ingredients Breakdown -->
         <div class="space-y-2">
           <h5 class="text-xs font-bold text-forest-900 uppercase tracking-wider flex items-center gap-1.5">
-            <span>Rincian Modal Cairan Formula Liquid</span>
+            <span>Rincian Modal Resep Formula</span>
           </h5>
           <div class="overflow-x-auto border border-sage-200/90 rounded-2xl">
             <table class="w-full text-xs text-left">

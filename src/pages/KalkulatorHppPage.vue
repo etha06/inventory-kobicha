@@ -15,7 +15,7 @@
         <div>
           <h3 class="text-base font-extrabold text-forest-900 font-rounded">Kalkulator Harga Modal & HPP Parfum</h3>
           <p class="text-xs text-sage-600">
-            Perhitungan terpisah modal cairan formula liquid dan kemasan packaging dengan input manual bebas
+            Perhitungan terpisah modal resep formula dan kemasan packaging dengan input manual bebas
           </p>
         </div>
       </div>
@@ -451,7 +451,7 @@
 
         <div class="flex items-center gap-3">
           <div class="bg-forest-950/80 border border-forest-700/80 px-4 py-3 rounded-2xl text-center">
-            <span class="text-[10px] uppercase font-bold text-sage-400 block">Modal Cairan</span>
+            <span class="text-[10px] uppercase font-bold text-sage-400 block">Modal Resep</span>
             <span class="text-lg font-bold font-mono text-peach-400">{{ formatRupiah(subtotalLiquid) }}</span>
           </div>
 
@@ -465,7 +465,7 @@
       <!-- Cost Proportion Progress Bar -->
       <div class="space-y-1.5">
         <div class="flex justify-between text-xs text-sage-300 font-semibold">
-          <span>Komposisi: Cairan {{ Math.round((subtotalLiquid / Math.max(grandTotalHpp, 1)) * 100) }}%</span>
+          <span>Komposisi: Resep {{ Math.round((subtotalLiquid / Math.max(grandTotalHpp, 1)) * 100) }}%</span>
           <span>Modal Lainnya {{ Math.round((subtotalPackaging / Math.max(grandTotalHpp, 1)) * 100) }}%</span>
         </div>
         <div class="w-full bg-forest-950 h-2.5 rounded-full overflow-hidden flex border border-forest-800">
