@@ -876,9 +876,6 @@ function onSelectHppForSingle() {
   if (!form.value.hppCalculationId) return;
   const hpp = hppCatalog.value.find(h => h.id === form.value.hppCalculationId);
   if (hpp) {
-    if (!form.value.nama || !isEditing.value) {
-      form.value.nama = `${hpp.nama} (${hpp.targetBottleMl}ml)`;
-    }
     if (form.value.hargaJual === 0 && hpp.recommendedSellingPrice > 0) {
       form.value.hargaJual = hpp.recommendedSellingPrice;
     }
