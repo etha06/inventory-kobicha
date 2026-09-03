@@ -267,6 +267,61 @@
 
       <!-- Database Tools & Footer -->
       <div class="p-3 border-t border-white/10 bg-black/10 space-y-2">
+        <!-- Cloud Firestore Sync Status Badge -->
+        <div class="pt-2 border-t border-white/15">
+          <div v-if="!isCollapsed" class="bg-black/20 rounded-xl p-2.5 space-y-1.5 border border-white/10">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="relative flex h-2 w-2">
+                  <span
+                    v-if="cloudSyncStatus === 'connected'"
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
+                  ></span>
+                  <span
+                    class="relative inline-flex rounded-full h-2 w-2"
+                    :class="{
+                      'bg-emerald-400': cloudSyncStatus === 'connected',
+                      'bg-amber-400': cloudSyncStatus === 'syncing',
+                      'bg-rose-400': cloudSyncStatus === 'offline' || cloudSyncStatus === 'error'
+                    }"
+                  ></span>
+                </span>
+                <span class="text-xs font-semibold text-white/90">
+                  {{ cloudSyncStatus === 'connected' ? 'Firebase Realtime' : cloudSyncStatus === 'syncing' ? 'Menyinkronkan...' : 'Mode Offline' }}
+                </span>
+              </div>
+
+              <button
+                @click="store.forceCloudSync()"
+                class="p-1 rounded-md text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                title="Sinkronkan Cloud Sekarang"
+              >
+                <RefreshCw class="w-3 h-3" :class="cloudSyncStatus === 'syncing' ? 'animate-spin' : ''" />
+              </button>
+            </div>
+            <p class="text-[10px] text-sage-200/70 leading-tight">
+              {{ cloudSyncStatus === 'connected' ? 'Data otomatis sinkron realtime antar perangkat' : 'Tersimpan lokal di browser' }}
+            </p>
+          </div>
+
+          <div v-else class="flex justify-center py-1" :title="cloudSyncStatus === 'connected' ? 'Firebase Realtime Connected' : 'Offline Mode'">
+            <span class="relative flex h-2.5 w-2.5">
+              <span
+                v-if="cloudSyncStatus === 'connected'"
+                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
+              ></span>
+              <span
+                class="relative inline-flex rounded-full h-2.5 w-2.5"
+                :class="{
+                  'bg-emerald-400': cloudSyncStatus === 'connected',
+                  'bg-amber-400': cloudSyncStatus === 'syncing',
+                  'bg-rose-400': cloudSyncStatus === 'offline' || cloudSyncStatus === 'error'
+                }"
+              ></span>
+            </span>
+          </div>
+        </div>
+
         <div v-show="!isCollapsed">
           <button
             @click="isConfirmClearOpen = true"
@@ -280,7 +335,7 @@
 
         <div class="flex items-center justify-between px-2 pt-1 text-[11px] text-sage-200">
           <span v-show="!isCollapsed">v1.1 Kobicha</span>
-          <span class="font-mono">Offline-ready</span>
+          <span class="font-mono">Cloud-Ready</span>
         </div>
       </div>
     </aside>
@@ -320,7 +375,9 @@ import {
   Menu,
   X,
   Calendar,
-  Trash2
+  Trash2,
+  Cloud,
+  RefreshCw
 } from 'lucide-vue-next';
 
 defineProps<{
@@ -334,7 +391,7 @@ const emit = defineEmits<{
 }>();
 
 const store = useKobichaStore();
-const { activeTab, stores, stockCampuran, stockFragranceOil, racikanCatalog, hppCatalog, totalReadyToSellCount } = storeToRefs(store);
+const { activeTab, stores, stockCampuran, stockFragranceOil, racikanCatalog, hppCatalog, totalReadyToSellCount, cloudSyncStatus } = storeToRefs(store);
 
 const isConfirmClearOpen = ref(false);
 

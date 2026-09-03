@@ -22,6 +22,7 @@ import {
   INITIAL_DEADLINES,
   INITIAL_READY_TO_SELL
 } from './sampleData';
+import { saveStateToFirestore, subscribeToFirestore, CloudSyncStatus } from '../firebase/firestoreService';
 
 const STORAGE_KEY = 'kobicha_parfume_app_v1';
 
@@ -46,6 +47,13 @@ export const useKobichaStore = defineStore('kobicha', () => {
   const prefilledFormulaBaseId = ref<string | null>(null);
   const prefilledHppRacikanId = ref<string | null>(null);
   const prefilledHppBaseId = ref<string | null>(null);
+
+  // Cloud Sync States
+  const cloudSyncStatus = ref<CloudSyncStatus>('offline');
+  const isRemoteSync = ref(false);
+  const lastSyncedAt = ref<string | null>(null);
+  let unsubscribeFirestore: (() => void) | null = null;
+  let saveDebounceTimer: any = null;
 
   function openMobileNav() {
     isMobileNavOpen.value = true;
@@ -87,35 +95,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
     toasts.value = toasts.value.filter(t => t.id !== id);
   }
 
-  // Load from LocalStorage or initialize with Empty Data
-  function loadDatabase() {
-    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
-      clearAllData(false);
-      return;
-    }
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        stores.value = parsed.stores || [];
-        stockCampuran.value = parsed.stockCampuran || [];
-        stockFragranceOil.value = parsed.stockFragranceOil || [];
-        formulaBases.value = parsed.formulaBases || [];
-        racikanCatalog.value = parsed.racikanCatalog || [];
-        hppCatalog.value = parsed.hppCatalog || [];
-        readyToSellProducts.value = parsed.readyToSellProducts || [];
-        quickNotes.value = parsed.quickNotes || [];
-        deadlines.value = parsed.deadlines || [];
-      } else {
-        clearAllData(false);
-      }
-    } catch (e) {
-      console.error('Error loading database from localStorage:', e);
-      clearAllData(false);
-    }
-  }
-
-  function saveDatabase() {
+  // Save to LocalStorage cache
+  function saveDatabaseLocal() {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') return;
     try {
       const payload = {
@@ -134,6 +115,130 @@ export const useKobichaStore = defineStore('kobicha', () => {
     } catch (e) {
       console.error('Error saving database to localStorage:', e);
     }
+  }
+
+  // Sync to Cloud Firestore with debounce
+  function syncToCloud() {
+    if (isRemoteSync.value) return;
+    cloudSyncStatus.value = 'syncing';
+    if (saveDebounceTimer) clearTimeout(saveDebounceTimer);
+
+    saveDebounceTimer = setTimeout(async () => {
+      try {
+        await saveStateToFirestore({
+          stores: stores.value,
+          stockCampuran: stockCampuran.value,
+          stockFragranceOil: stockFragranceOil.value,
+          formulaBases: formulaBases.value,
+          racikanCatalog: racikanCatalog.value,
+          hppCatalog: hppCatalog.value,
+          readyToSellProducts: readyToSellProducts.value,
+          quickNotes: quickNotes.value,
+          deadlines: deadlines.value,
+        });
+        cloudSyncStatus.value = 'connected';
+        lastSyncedAt.value = new Date().toISOString();
+      } catch (e) {
+        console.warn('Firestore sync failed, saved in local cache:', e);
+        cloudSyncStatus.value = 'offline';
+      }
+    }, 400);
+  }
+
+  async function forceCloudSync() {
+    cloudSyncStatus.value = 'syncing';
+    try {
+      await saveStateToFirestore({
+        stores: stores.value,
+        stockCampuran: stockCampuran.value,
+        stockFragranceOil: stockFragranceOil.value,
+        formulaBases: formulaBases.value,
+        racikanCatalog: racikanCatalog.value,
+        hppCatalog: hppCatalog.value,
+        readyToSellProducts: readyToSellProducts.value,
+        quickNotes: quickNotes.value,
+        deadlines: deadlines.value,
+      });
+      cloudSyncStatus.value = 'connected';
+      lastSyncedAt.value = new Date().toISOString();
+      showToast('Data berhasil disinkronkan ke Cloud Firestore!', 'success');
+    } catch (e) {
+      cloudSyncStatus.value = 'error';
+      showToast('Gagal menyinkronkan ke Cloud. Cek koneksi internet.', 'error');
+    }
+  }
+
+  // Initialize Real-time Firestore Sync
+  function initFirebaseSync() {
+    if (unsubscribeFirestore) return;
+    cloudSyncStatus.value = 'syncing';
+
+    try {
+      unsubscribeFirestore = subscribeToFirestore(
+        (remoteData) => {
+          if (remoteData) {
+            isRemoteSync.value = true;
+            if (Array.isArray(remoteData.stores)) stores.value = remoteData.stores;
+            if (Array.isArray(remoteData.stockCampuran)) stockCampuran.value = remoteData.stockCampuran;
+            if (Array.isArray(remoteData.stockFragranceOil)) stockFragranceOil.value = remoteData.stockFragranceOil;
+            if (Array.isArray(remoteData.formulaBases)) formulaBases.value = remoteData.formulaBases;
+            if (Array.isArray(remoteData.racikanCatalog)) racikanCatalog.value = remoteData.racikanCatalog;
+            if (Array.isArray(remoteData.hppCatalog)) hppCatalog.value = remoteData.hppCatalog;
+            if (Array.isArray(remoteData.readyToSellProducts)) readyToSellProducts.value = remoteData.readyToSellProducts;
+            if (Array.isArray(remoteData.quickNotes)) quickNotes.value = remoteData.quickNotes;
+            if (Array.isArray(remoteData.deadlines)) deadlines.value = remoteData.deadlines;
+            if (remoteData.updatedAt) lastSyncedAt.value = remoteData.updatedAt;
+
+            saveDatabaseLocal();
+            cloudSyncStatus.value = 'connected';
+            setTimeout(() => {
+              isRemoteSync.value = false;
+            }, 100);
+          } else {
+            // First time remote init -> push local data to Firestore
+            syncToCloud();
+          }
+        },
+        (err) => {
+          console.warn('Firestore subscription inactive, working in local mode:', err);
+          cloudSyncStatus.value = 'offline';
+        }
+      );
+    } catch (e) {
+      console.warn('Failed to initialize Firebase Sync:', e);
+      cloudSyncStatus.value = 'offline';
+    }
+  }
+
+  // Load from LocalStorage or initialize with Empty Data
+  function loadDatabase() {
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          stores.value = parsed.stores || [];
+          stockCampuran.value = parsed.stockCampuran || [];
+          stockFragranceOil.value = parsed.stockFragranceOil || [];
+          formulaBases.value = parsed.formulaBases || [];
+          racikanCatalog.value = parsed.racikanCatalog || [];
+          hppCatalog.value = parsed.hppCatalog || [];
+          readyToSellProducts.value = parsed.readyToSellProducts || [];
+          quickNotes.value = parsed.quickNotes || [];
+          deadlines.value = parsed.deadlines || [];
+        }
+      } catch (e) {
+        console.error('Error loading database from localStorage:', e);
+      }
+    }
+
+    // Connect real-time Firebase Firestore
+    initFirebaseSync();
+  }
+
+  function saveDatabase() {
+    saveDatabaseLocal();
+    syncToCloud();
   }
 
   function clearAllData(notify = true) {
@@ -794,6 +899,11 @@ export const useKobichaStore = defineStore('kobicha', () => {
     addDeadline,
     toggleDeadline,
     deleteDeadline,
+
+    // Cloud Sync
+    cloudSyncStatus,
+    lastSyncedAt,
+    forceCloudSync,
 
     // Persistence & Backup
     exportDatabase,
