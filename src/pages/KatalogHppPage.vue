@@ -87,20 +87,18 @@
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-3 w-10 text-left"></th>
               <th class="py-3.5 px-4 text-left">Nama Produk</th>
-              <th class="py-3.5 px-4 text-left">Resep</th>
+              <th class="py-3.5 px-4 text-left">Racikan</th>
               <th class="py-3.5 px-4 text-left">Jenis Produk</th>
               <th class="py-3.5 px-4 text-left">Ukuran Botol</th>
-              <th class="py-3.5 px-4 text-left">Modal Produk</th>
+              <th class="py-3.5 px-4 text-left">Modal Racikan</th>
               <th class="py-3.5 px-4 text-left">Modal Lainnya</th>
               <th class="py-3.5 px-4 text-left">Grand Total HPP</th>
-              <th class="py-3.5 px-4 text-left">HPP</th>
-              <th class="py-3.5 px-4 text-left">Rekomendasi Jual</th>
               <th class="py-3.5 px-4 text-left w-20">Aksi</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-stone-100 text-stone-800">
             <tr v-if="filteredHppList.length === 0">
-              <td colspan="11" class="py-12 text-center text-stone-400">
+              <td colspan="9" class="py-12 text-center text-stone-400">
                 <Receipt class="w-8 h-8 mx-auto mb-2 opacity-50" />
                 Belum ada rekaman data HPP. Klik "Hitung HPP Baru" untuk menghitung modal produksi botol parfum.
               </td>
@@ -128,7 +126,7 @@
                 <span class="font-bold text-stone-900 text-xs">{{ item.nama }}</span>
               </td>
 
-              <!-- Resep (Racikan) -->
+              <!-- Racikan -->
               <td class="py-3.5 px-4 text-left">
                 <span v-if="item.racikanName" class="font-semibold text-stone-800 text-xs">{{ item.racikanName }}</span>
                 <span v-else class="text-stone-400 text-xs italic">Manual</span>
@@ -147,7 +145,7 @@
                 {{ item.targetBottleMl }} ml
               </td>
 
-              <!-- Modal Produk -->
+              <!-- Modal Racikan -->
               <td class="py-3.5 px-4 text-left font-mono text-stone-700">
                 {{ formatRupiah(item.subtotalLiquid) }}
               </td>
@@ -161,18 +159,6 @@
               <td class="py-3.5 px-4 text-left">
                 <span class="font-mono font-bold text-amber-950 text-xs px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 inline-block">
                   {{ formatRupiah(item.grandTotalHpp) }}
-                </span>
-              </td>
-
-              <!-- HPP (Tanpa / ml) -->
-              <td class="py-3.5 px-4 text-left font-mono text-stone-600">
-                {{ formatRupiah(item.hppPerMl) }}
-              </td>
-
-              <!-- Rekomendasi Jual -->
-              <td class="py-3.5 px-4 text-left">
-                <span class="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-block">
-                  {{ formatRupiah(item.recommendedSellingPrice) }}
                 </span>
               </td>
 
@@ -234,7 +220,7 @@
           <!-- Cost Breakdown List -->
           <div class="mt-3 space-y-2 text-xs">
             <div class="flex justify-between text-stone-600">
-              <span>🧪 Modal Produk:</span>
+              <span>🧪 Modal Racikan:</span>
               <span class="font-mono font-bold text-stone-900">{{ formatRupiah(item.subtotalLiquid) }}</span>
             </div>
             <div class="flex justify-between text-stone-600">
@@ -339,7 +325,7 @@
             <!-- Cost Proportion Progress Bar -->
             <div class="mt-4 space-y-2">
               <div class="flex justify-between text-[11px] text-stone-300">
-                <span>🧪 Modal Produk: {{ formatRupiah(item.subtotalLiquid) }}</span>
+                <span>🧪 Modal Racikan: {{ formatRupiah(item.subtotalLiquid) }}</span>
                 <span>📦 Modal Lainnya: {{ formatRupiah(item.subtotalPackaging) }}</span>
               </div>
               <div class="w-full bg-stone-900 h-2 rounded-full overflow-hidden flex border border-stone-700">
@@ -384,7 +370,7 @@
     <Modal
       :isOpen="isDetailModalOpen"
       :title="`Rincian HPP: ${detailItem?.nama || ''}`"
-      subtitle="Breakdown modal produk dan modal lainnya"
+      subtitle="Breakdown modal racikan dan modal lainnya"
       maxWidth="3xl"
       @close="isDetailModalOpen = false"
     >
@@ -396,7 +382,7 @@
             <span class="text-sm font-bold font-mono text-stone-900">{{ detailItem.targetBottleMl }} ml</span>
           </div>
           <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-center">
-            <span class="text-[10px] text-amber-700 uppercase font-bold block">Modal Produk</span>
+            <span class="text-[10px] text-amber-700 uppercase font-bold block">Modal Racikan</span>
             <span class="text-sm font-bold font-mono text-amber-950">{{ formatRupiah(detailItem.subtotalLiquid) }}</span>
           </div>
           <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-center">
@@ -412,7 +398,7 @@
         <!-- Liquid Ingredients Breakdown -->
         <div class="space-y-2">
           <h5 class="text-xs font-bold text-stone-900 uppercase tracking-wider flex items-center gap-1.5">
-            <span>Rincian Modal Produk (Bahan Formula Resep)</span>
+            <span>Rincian Modal Racikan</span>
           </h5>
           <div class="overflow-x-auto border rounded-xl">
             <table class="w-full text-xs text-left">

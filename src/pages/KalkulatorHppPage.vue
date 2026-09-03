@@ -15,7 +15,7 @@
         <div>
           <h3 class="text-base font-extrabold text-forest-900 font-rounded">Kalkulator Harga Modal & HPP Parfum</h3>
           <p class="text-xs text-stone-500">
-            Perhitungan terpisah modal produk dan kemasan packaging dengan input manual bebas
+            Perhitungan terpisah modal racikan dan kemasan packaging dengan input manual bebas
           </p>
         </div>
       </div>
@@ -437,7 +437,7 @@
             {{ hppTitle || 'Perhitungan HPP Produk' }}
           </h3>
           <p class="text-xs text-stone-300 mt-1">
-            Botol {{ targetBottleMl }} ml • Modal Produk: {{ formatRupiah(subtotalLiquid) }} • Modal Lainnya: {{ formatRupiah(subtotalPackaging) }}
+            Botol {{ targetBottleMl }} ml • Modal Racikan: {{ formatRupiah(subtotalLiquid) }} • Modal Lainnya: {{ formatRupiah(subtotalPackaging) }}
           </p>
         </div>
 
@@ -458,7 +458,7 @@
       <!-- Cost Split Progress Bar -->
       <div class="space-y-2">
         <div class="flex justify-between text-xs text-stone-300">
-          <span>🧪 Porsi Modal Produk: <strong>{{ Math.round((subtotalLiquid / Math.max(grandTotalHpp, 1)) * 100) }}%</strong> ({{ formatRupiah(subtotalLiquid) }})</span>
+          <span>🧪 Porsi Modal Racikan: <strong>{{ Math.round((subtotalLiquid / Math.max(grandTotalHpp, 1)) * 100) }}%</strong> ({{ formatRupiah(subtotalLiquid) }})</span>
           <span>📦 Porsi Modal Lainnya: <strong>{{ Math.round((subtotalPackaging / Math.max(grandTotalHpp, 1)) * 100) }}%</strong> ({{ formatRupiah(subtotalPackaging) }})</span>
         </div>
         <div class="w-full bg-stone-950 h-3 rounded-full overflow-hidden flex border border-stone-800">
