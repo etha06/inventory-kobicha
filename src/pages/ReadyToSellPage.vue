@@ -364,32 +364,55 @@
                 step="500"
                 :disabled="!simulatedProductId"
                 placeholder="0"
+                @input="onSellingPriceInput"
                 class="w-full px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-semibold text-white pl-8 focus:ring-2 focus:ring-emerald-500/30 disabled:opacity-40 disabled:cursor-not-allowed"
               />
               <span class="absolute left-3 top-2 text-stone-400 text-xs font-bold pointer-events-none">Rp</span>
             </div>
           </div>
 
-          <!-- 3. Profit Margin (%) -->
+          <!-- 3. Profit Margin (%) (Bisa Diedit) -->
           <div>
             <label class="block text-xs text-stone-300 mb-1">Profit Margin (%)</label>
-            <div class="px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-bold text-white truncate">
-              <span v-if="simulatedProductId && simulatedProductHpp > 0" :class="calculatedMarginPercentage >= 0 ? 'text-emerald-400' : 'text-rose-400'">
-                {{ calculatedMarginPercentage >= 0 ? '+' : '' }}{{ calculatedMarginPercentage }}%
-              </span>
-              <span v-else class="text-stone-500">-</span>
+            <div class="relative">
+              <input
+                v-model.number="simulatedMargin"
+                type="number"
+                step="5"
+                :disabled="!simulatedProductId || simulatedProductHpp <= 0"
+                placeholder="0"
+                @input="onMarginInput"
+                class="w-full px-3.5 py-2 rounded-xl bg-stone-900 border border-stone-700 text-xs font-semibold text-white pr-8 focus:ring-2 focus:ring-emerald-500/30 disabled:opacity-40 disabled:cursor-not-allowed"
+              />
+              <span class="absolute right-3 top-2 text-stone-400 text-xs font-bold pointer-events-none">%</span>
             </div>
           </div>
 
           <!-- 4. Estimasi Laba Bersih / Unit -->
           <div>
             <label class="block text-xs text-stone-300 mb-1">Estimasi Laba / Unit</label>
-            <div class="px-3.5 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 truncate">
+            <div class="px-3.5 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 truncate flex items-center h-[38px]">
               <span v-if="simulatedProductId">
                 +{{ formatRupiah(simulatedProfitPerUnit) }}
               </span>
               <span v-else class="text-stone-500">-</span>
             </div>
+          </div>
+        </div>
+
+        <!-- Alert Rumus Perhitungan -->
+        <div class="p-3 bg-stone-900/90 rounded-xl border border-stone-800 flex items-start gap-2.5 text-stone-300">
+          <Info class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+          <div class="space-y-1 text-[11px] leading-relaxed">
+            <p>
+              <strong class="text-amber-300 font-semibold">Rumus Profit Margin (%):</strong>
+              <span class="font-mono text-stone-200 ml-1">((Harga Jual - Modal HPP) / Modal HPP) &times; 100%</span>
+            </p>
+            <p>
+              <strong class="text-emerald-300 font-semibold">Rumus Laba Bersih / Unit:</strong>
+              <span class="font-mono text-stone-200 ml-1">Harga Jual - Modal HPP</span>
+              <span class="text-stone-400 ml-1.5">(Anda dapat mengedit Harga Jual maupun Profit Margin untuk simulasi 2 arah).</span>
+            </p>
           </div>
         </div>
       </div>
@@ -897,7 +920,8 @@ import {
   Pencil,
   Trash2,
   Upload,
-  TrendingUp
+  TrendingUp,
+  Info
 } from 'lucide-vue-next';
 
 const store = useKobichaStore();
@@ -930,9 +954,10 @@ const totalPotentialProfit = computed(() => {
   return Math.max(0, totalReadyToSellValue.value - totalInventoryHppCost.value);
 });
 
-// Profit Margin Simulation State
+// Profit Margin Simulation State (2-Way Interactive)
 const simulatedProductId = ref<string>('');
 const simulatedSellingPrice = ref<number>(0);
+const simulatedMargin = ref<number>(0);
 
 const simulationProductOptions = computed(() => {
   return readyToSellProducts.value.map(p => ({
@@ -941,17 +966,6 @@ const simulationProductOptions = computed(() => {
   }));
 });
 
-function onSimulatedProductChange() {
-  if (!simulatedProductId.value) {
-    simulatedSellingPrice.value = 0;
-    return;
-  }
-  const p = readyToSellProducts.value.find(item => item.id === simulatedProductId.value);
-  if (p) {
-    simulatedSellingPrice.value = p.hargaJual || 0;
-  }
-}
-
 const simulatedProduct = computed(() => {
   return readyToSellProducts.value.find(p => p.id === simulatedProductId.value) || null;
 });
@@ -959,6 +973,41 @@ const simulatedProduct = computed(() => {
 const simulatedProductHpp = computed(() => {
   return simulatedProduct.value ? getItemHpp(simulatedProduct.value) : 0;
 });
+
+function onSimulatedProductChange() {
+  if (!simulatedProductId.value) {
+    simulatedSellingPrice.value = 0;
+    simulatedMargin.value = 0;
+    return;
+  }
+  const p = readyToSellProducts.value.find(item => item.id === simulatedProductId.value);
+  if (p) {
+    simulatedSellingPrice.value = p.hargaJual || 0;
+    const hpp = getItemHpp(p);
+    if (hpp > 0) {
+      simulatedMargin.value = Math.round(((p.hargaJual - hpp) / hpp) * 100);
+    } else {
+      simulatedMargin.value = 0;
+    }
+  }
+}
+
+function onSellingPriceInput() {
+  const hpp = simulatedProductHpp.value;
+  if (hpp > 0) {
+    simulatedMargin.value = Math.round(((simulatedSellingPrice.value - hpp) / hpp) * 100);
+  } else {
+    simulatedMargin.value = 0;
+  }
+}
+
+function onMarginInput() {
+  const hpp = simulatedProductHpp.value;
+  if (hpp > 0) {
+    const rawPrice = hpp * (1 + (simulatedMargin.value || 0) / 100);
+    simulatedSellingPrice.value = Math.round(rawPrice / 500) * 500;
+  }
+}
 
 const calculatedMarginPercentage = computed(() => {
   if (!simulatedProduct.value || simulatedProductHpp.value <= 0) return 0;
