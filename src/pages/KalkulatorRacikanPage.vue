@@ -194,7 +194,7 @@
           class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition-colors flex items-center gap-1.5 self-start sm:self-auto shadow-xs"
         >
           <Plus class="w-3.5 h-3.5" />
-          <span>+ Tambah FO dari Stok</span>
+          <span>Tambah Fragrance Oil</span>
         </button>
       </div>
 
