@@ -77,14 +77,36 @@
 
       <!-- Mode By Resep Selector -->
       <div v-if="mode === 'by_resep'" class="p-4 rounded-xl bg-amber-50 border border-amber-200 space-y-2">
-        <label class="block text-xs font-bold text-amber-950">Pilih Racikan dari Katalog Racikan Fragrance:</label>
-        <CustomSelect
-          v-model="selectedRacikanCatalogId"
-          :options="racikanCatalogOptions"
-          placeholder="-- Pilih Resep Racikan --"
-          :searchable="true"
-          @change="loadRecipeFromCatalog"
-        />
+        <div class="flex items-center justify-between">
+          <label class="block text-xs font-bold text-amber-950">Pilih Racikan dari Katalog Racikan Fragrance:</label>
+          <button
+            type="button"
+            @click="openRacikanPickerModal"
+            class="text-[11px] font-bold text-amber-800 hover:text-amber-900 underline inline-flex items-center gap-1"
+          >
+            <Layers class="w-3 h-3" />
+            <span>Buka Modal Katalog</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            <CustomSelect
+              v-model="selectedRacikanCatalogId"
+              :options="racikanCatalogOptions"
+              placeholder="-- Pilih Resep Racikan --"
+              :searchable="true"
+              @change="loadRecipeFromCatalog"
+            />
+          </div>
+          <button
+            type="button"
+            @click="openRacikanPickerModal"
+            class="p-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 transition-colors flex-shrink-0"
+            title="Buka Modal Pemilih Racikan"
+          >
+            <Search class="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       <!-- Formula Base Template & Commission Toggle (Positioned on Top) -->
@@ -169,9 +191,9 @@
       </div>
     </div>
 
-    <!-- INGREDIENTS TABLE (Fragrance Oils Drops Input) -->
-    <div class="bg-white rounded-2xl border border-stone-200/80 p-5 sm:p-6 shadow-sm space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-3">
+    <!-- MAIN FORMULATION SECTION (Drops to ml Proportion Calculator) -->
+    <div class="bg-white rounded-[24px] border border-sage-100 p-5 sm:p-6 shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-4">
         <div>
           <h4 class="text-sm font-bold text-stone-900 font-serif">Komposisi Fragrance Oil (Tetes & Persentase FO)</h4>
           <p class="text-xs text-stone-500">
@@ -179,15 +201,26 @@
           </p>
         </div>
 
-        <button
-          v-if="mode === 'manual'"
-          type="button"
-          @click="addRow"
-          class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 self-start sm:self-auto"
-        >
-          <Plus class="w-3.5 h-3.5" />
-          <span>Tambah FO</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button
+            v-if="mode === 'manual'"
+            type="button"
+            @click="openFoPickerModal()"
+            class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition-colors flex items-center gap-1.5 self-start sm:self-auto"
+          >
+            <Layers class="w-3.5 h-3.5" />
+            <span>+ Ambil dari Stok FO</span>
+          </button>
+          <button
+            v-if="mode === 'manual'"
+            type="button"
+            @click="addRow"
+            class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 self-start sm:self-auto"
+          >
+            <Plus class="w-3.5 h-3.5" />
+            <span>Tambah FO</span>
+          </button>
+        </div>
       </div>
 
       <!-- Drops & Volume Table Container (Fixed Height with Fixed Header, Fixed Footer, and Scrollable Body) -->
@@ -220,7 +253,7 @@
                     Silakan pilih resep racikan dari katalog di atas terlebih dahulu untuk memuat komposisi Fragrance Oil.
                   </span>
                   <span v-else>
-                    Belum ada bahan Fragrance Oil. Klik "+ Tambah Baris FO" untuk menambahkan bibit parfum.
+                    Belum ada bahan Fragrance Oil. Klik "+ Ambil dari Stok FO" atau "+ Tambah FO" untuk menambahkan bibit parfum.
                   </span>
                 </td>
               </tr>
@@ -232,14 +265,27 @@
 
                 <!-- Select Fragrance Oil -->
                 <td class="py-2 px-3 text-left">
-                  <CustomSelect
-                    v-model="row.fragranceOilId"
-                    :options="foOptions"
-                    placeholder="-- Pilih Fragrance Oil --"
-                    :searchable="true"
-                    :disabled="mode === 'by_resep'"
-                    @change="onFoSelect(row)"
-                  />
+                  <div class="flex items-center gap-1.5">
+                    <div class="flex-1 min-w-0">
+                      <CustomSelect
+                        v-model="row.fragranceOilId"
+                        :options="foOptions"
+                        placeholder="-- Pilih Fragrance Oil --"
+                        :searchable="true"
+                        :disabled="mode === 'by_resep'"
+                        @change="onFoSelect(row)"
+                      />
+                    </div>
+                    <button
+                      v-if="mode === 'manual'"
+                      type="button"
+                      @click="openFoPickerModal(row)"
+                      class="p-2 rounded-lg bg-stone-100 hover:bg-amber-100 text-stone-600 hover:text-amber-900 border border-stone-200 transition-colors flex-shrink-0"
+                      title="Cari dari Stok Fragrance Oil"
+                    >
+                      <Search class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </td>
 
                 <!-- Pyramid Badge -->
@@ -373,6 +419,252 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal Picker: Pilih Fragrance Oil dari Stok -->
+    <Modal
+      :isOpen="isFoPickerModalOpen"
+      title="Pilih Fragrance Oil dari Stok"
+      subtitle="Cari dan pilih bibit parfum (FO/EO) untuk ditambahkan ke racikan"
+      maxWidth="2xl"
+      @close="isFoPickerModalOpen = false"
+    >
+      <div class="space-y-4">
+        <!-- Search & Filter Bar inside modal -->
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <div class="relative flex-1">
+            <input
+              v-model="foPickerSearch"
+              type="text"
+              placeholder="Cari nama FO / aroma notes / supplier..."
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+            />
+            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+          </div>
+
+          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold flex-wrap">
+            <button
+              type="button"
+              @click="foPickerPyramid = 'all'"
+              class="px-2.5 py-1 rounded-lg transition-all"
+              :class="foPickerPyramid === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+            >
+              Semua ({{ stockFragranceOil.length }})
+            </button>
+            <button
+              type="button"
+              @click="foPickerPyramid = 'Top'"
+              class="px-2.5 py-1 rounded-lg transition-all"
+              :class="foPickerPyramid === 'Top' ? 'bg-orange-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+            >
+              Top ☁️
+            </button>
+            <button
+              type="button"
+              @click="foPickerPyramid = 'Middle'"
+              class="px-2.5 py-1 rounded-lg transition-all"
+              :class="foPickerPyramid === 'Middle' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+            >
+              Heart 🌸
+            </button>
+            <button
+              type="button"
+              @click="foPickerPyramid = 'Bottom'"
+              class="px-2.5 py-1 rounded-lg transition-all"
+              :class="foPickerPyramid === 'Bottom' ? 'bg-fuchsia-700 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+            >
+              Base 🪵
+            </button>
+          </div>
+        </div>
+
+        <!-- List of Fragrance Oils -->
+        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+          <div
+            v-if="filteredFoPickerList.length === 0"
+            class="py-12 text-center text-stone-400 text-xs italic"
+          >
+            Tidak ada Fragrance Oil yang sesuai pencarian.
+          </div>
+
+          <div
+            v-for="fo in filteredFoPickerList"
+            :key="fo.id"
+            class="p-3.5 hover:bg-stone-50 flex items-center justify-between gap-3 transition-colors"
+          >
+            <div class="space-y-1 flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-bold text-stone-900 text-xs truncate">{{ fo.nama }}</span>
+                <span
+                  class="px-1.5 py-0.2 rounded text-[9px] font-bold border"
+                  :class="PYRAMID_BADGE_MAP[fo.pyramid]?.bg"
+                >
+                  {{ fo.pyramid }} Note
+                </span>
+                <span
+                  class="px-1.5 py-0.2 rounded-full text-[9px] font-bold border inline-flex items-center gap-1"
+                  :class="STOCK_STATUS_MAP[fo.currentStock]?.bg"
+                >
+                  <span class="w-1.5 h-1.5 rounded-full" :class="STOCK_STATUS_MAP[fo.currentStock]?.dot"></span>
+                  {{ fo.currentStock }}
+                </span>
+              </div>
+              <div class="flex items-center gap-2 text-[11px] text-stone-500 flex-wrap">
+                <span>{{ fo.jenisLiquid }}</span>
+                <span>•</span>
+                <span>{{ fo.storeName }}</span>
+                <span>•</span>
+                <span>{{ fo.botolMl }} ml</span>
+                <span v-if="fo.priceTiers && fo.priceTiers.length > 0">
+                  • <strong class="font-mono font-semibold text-stone-800">{{ formatRupiah(fo.priceTiers[0].harga) }}</strong>
+                </span>
+              </div>
+              <div v-if="fo.notes && fo.notes.length > 0" class="flex flex-wrap gap-1 pt-0.5">
+                <span
+                  v-for="n in fo.notes"
+                  :key="n"
+                  class="px-1.5 py-0.2 rounded text-[9px] font-medium border"
+                  :class="[NOTE_COLOR_MAP[n]?.bg, NOTE_COLOR_MAP[n]?.text, NOTE_COLOR_MAP[n]?.border]"
+                >
+                  {{ n }}
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              @click="selectFoFromPicker(fo)"
+              class="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1 flex-shrink-0"
+            >
+              <Plus class="w-3.5 h-3.5" />
+              <span>{{ targetRowForFoPicker ? 'Pilih FO Ini' : 'Tambah' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button
+            type="button"
+            @click="isFoPickerModalOpen = false"
+            class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition-colors"
+          >
+            Selesai / Tutup
+          </button>
+        </div>
+      </div>
+    </Modal>
+
+    <!-- Modal Picker: Pilih Racikan dari Katalog -->
+    <Modal
+      :isOpen="isRacikanPickerModalOpen"
+      title="Pilih Resep Racikan dari Katalog"
+      subtitle="Pilih racikan fragrance yang sudah tersimpan untuk dimuat komposisi formulanya"
+      maxWidth="2xl"
+      @close="isRacikanPickerModalOpen = false"
+    >
+      <div class="space-y-4">
+        <!-- Search & Filter Bar inside modal -->
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <div class="relative flex-1">
+            <input
+              v-model="racikanPickerSearch"
+              type="text"
+              placeholder="Cari nama racikan / notes / tanggal..."
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+            />
+            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+          </div>
+
+          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+            <button
+              type="button"
+              @click="racikanPickerFilter = 'all'"
+              class="px-2.5 py-1 rounded-lg transition-all"
+              :class="racikanPickerFilter === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+            >
+              Semua ({{ racikanCatalog.length }})
+            </button>
+            <button
+              type="button"
+              @click="racikanPickerFilter = 'commission'"
+              class="px-2.5 py-1 rounded-lg transition-all"
+              :class="racikanPickerFilter === 'commission' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+            >
+              Commission
+            </button>
+            <button
+              type="button"
+              @click="racikanPickerFilter = 'standard'"
+              class="px-2.5 py-1 rounded-lg transition-all"
+              :class="racikanPickerFilter === 'standard' ? 'bg-stone-800 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+            >
+              Standar
+            </button>
+          </div>
+        </div>
+
+        <!-- List of racikan items -->
+        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+          <div
+            v-if="filteredRacikanPickerList.length === 0"
+            class="py-12 text-center text-stone-400 text-xs italic"
+          >
+            Tidak ada data resep racikan yang sesuai pencarian.
+          </div>
+
+          <div
+            v-for="item in filteredRacikanPickerList"
+            :key="item.id"
+            class="p-3.5 hover:bg-stone-50 flex items-center justify-between gap-3 transition-colors"
+            :class="selectedRacikanCatalogId === item.id ? 'bg-amber-50/70 border-l-4 border-amber-600' : ''"
+          >
+            <div class="space-y-1 flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-bold text-stone-900 text-xs truncate">{{ item.nama }}</span>
+                <span
+                  v-if="item.isCommission"
+                  class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-300"
+                >
+                  Commission Order
+                </span>
+                <span v-if="selectedRacikanCatalogId === item.id" class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  Sedang Dimuat
+                </span>
+              </div>
+              <div class="flex items-center gap-2 text-[11px] text-stone-500 flex-wrap">
+                <span>{{ item.fragranceOils.length }} Komposisi Bibit FO</span>
+                <span>•</span>
+                <span>{{ item.targetTotalMl }} ml</span>
+                <span>•</span>
+                <span>{{ item.foConcentrationPercentage }}% FO</span>
+                <span>•</span>
+                <span>Dibuat: {{ item.tanggalDibuat }}</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              @click="selectRacikanFromPicker(item.id)"
+              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
+              :class="selectedRacikanCatalogId === item.id ? 'bg-emerald-600 text-white shadow-xs' : 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'"
+            >
+              <Check v-if="selectedRacikanCatalogId === item.id" class="w-3.5 h-3.5" />
+              <Plus v-else class="w-3.5 h-3.5" />
+              <span>{{ selectedRacikanCatalogId === item.id ? 'Dimuat' : 'Pilih Resep' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button
+            type="button"
+            @click="isRacikanPickerModalOpen = false"
+            class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition-colors"
+          >
+            Tutup
+          </button>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -380,11 +672,12 @@
 import { ref, computed, onMounted } from 'vue';
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
-import { RacikanItem, NotesEnum, PyramidEnum } from '../types';
-import { PYRAMID_BADGE_MAP } from '../utils/constants';
+import { RacikanItem, NotesEnum, PyramidEnum, StockFragranceOil } from '../types';
+import { PYRAMID_BADGE_MAP, STOCK_STATUS_MAP, NOTE_COLOR_MAP } from '../utils/constants';
 import { formatRupiah, formatNumber } from '../utils/formatters';
-import { Plus, RotateCcw, Save, Trash2, DollarSign, Menu, Info } from 'lucide-vue-next';
+import { Plus, RotateCcw, Save, Trash2, DollarSign, Menu, Info, Layers, Search, Check } from 'lucide-vue-next';
 import CustomSelect from '../components/common/CustomSelect.vue';
+import Modal from '../components/common/Modal.vue';
 
 const store = useKobichaStore();
 const { stockFragranceOil, formulaBases, racikanCatalog, prefilledRacikanId } = storeToRefs(store);
@@ -523,6 +816,95 @@ function onFoSelect(row: FormFoRow) {
   if (fo) {
     row.fragranceOilName = fo.nama;
     row.pyramid = fo.pyramid;
+  }
+}
+
+// FO Modal Picker State & Methods
+const isFoPickerModalOpen = ref(false);
+const foPickerSearch = ref('');
+const foPickerPyramid = ref<'all' | PyramidEnum>('all');
+const targetRowForFoPicker = ref<FormFoRow | null>(null);
+
+const filteredFoPickerList = computed(() => {
+  let list = [...stockFragranceOil.value];
+  if (foPickerPyramid.value !== 'all') {
+    list = list.filter(f => f.pyramid === foPickerPyramid.value);
+  }
+  if (foPickerSearch.value.trim()) {
+    const q = foPickerSearch.value.toLowerCase();
+    list = list.filter(f =>
+      f.nama.toLowerCase().includes(q) ||
+      f.storeName.toLowerCase().includes(q) ||
+      f.jenisLiquid.toLowerCase().includes(q) ||
+      (f.notes && f.notes.some(n => n.toLowerCase().includes(q)))
+    );
+  }
+  return list;
+});
+
+function openFoPickerModal(row?: FormFoRow) {
+  targetRowForFoPicker.value = row || null;
+  foPickerSearch.value = '';
+  foPickerPyramid.value = 'all';
+  isFoPickerModalOpen.value = true;
+}
+
+function selectFoFromPicker(fo: StockFragranceOil) {
+  if (targetRowForFoPicker.value) {
+    targetRowForFoPicker.value.fragranceOilId = fo.id;
+    targetRowForFoPicker.value.fragranceOilName = fo.nama;
+    targetRowForFoPicker.value.pyramid = fo.pyramid;
+    store.showToast(`"${fo.nama}" dipilih untuk baris formula!`, 'success');
+  } else {
+    rows.value.push({
+      id: 'row-' + Date.now(),
+      fragranceOilId: fo.id,
+      fragranceOilName: fo.nama,
+      pyramid: fo.pyramid,
+      tetes: 5
+    });
+    store.showToast(`"${fo.nama}" ditambahkan ke racikan!`, 'success');
+  }
+  isFoPickerModalOpen.value = false;
+  targetRowForFoPicker.value = null;
+}
+
+// Racikan Modal Picker State & Methods
+const isRacikanPickerModalOpen = ref(false);
+const racikanPickerSearch = ref('');
+const racikanPickerFilter = ref<'all' | 'commission' | 'standard'>('all');
+
+const filteredRacikanPickerList = computed(() => {
+  let list = [...racikanCatalog.value];
+  if (racikanPickerFilter.value === 'commission') {
+    list = list.filter(r => r.isCommission);
+  } else if (racikanPickerFilter.value === 'standard') {
+    list = list.filter(r => !r.isCommission);
+  }
+  if (racikanPickerSearch.value.trim()) {
+    const q = racikanPickerSearch.value.toLowerCase();
+    list = list.filter(r =>
+      r.nama.toLowerCase().includes(q) ||
+      (r.deskripsi && r.deskripsi.toLowerCase().includes(q)) ||
+      r.tanggalDibuat.toLowerCase().includes(q)
+    );
+  }
+  return list;
+});
+
+function openRacikanPickerModal() {
+  racikanPickerSearch.value = '';
+  racikanPickerFilter.value = 'all';
+  isRacikanPickerModalOpen.value = true;
+}
+
+function selectRacikanFromPicker(id: string) {
+  selectedRacikanCatalogId.value = id;
+  loadRecipeFromCatalog();
+  isRacikanPickerModalOpen.value = false;
+  const racikan = racikanCatalog.value.find(r => r.id === id);
+  if (racikan) {
+    store.showToast(`Resep "${racikan.nama}" berhasil dimuat!`, 'success');
   }
 }
 
