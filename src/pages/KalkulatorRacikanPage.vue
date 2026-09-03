@@ -157,7 +157,7 @@
               max="100"
               required
               :disabled="Boolean(selectedBaseId)"
-              class="w-full px-3.5 py-2 rounded-xl text-sm font-mono font-bold pr-8 transition-colors"
+              class="w-full px-3.5 py-2 rounded-xl border text-sm font-mono font-bold pr-8 transition-colors"
               :class="selectedBaseId ? 'bg-stone-100/90 text-stone-500 cursor-not-allowed border-stone-200 select-none' : 'bg-white border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-stone-900'"
             />
             <span class="absolute right-3 top-2.5 text-xs font-bold" :class="selectedBaseId ? 'text-stone-400' : 'text-stone-500'">%</span>
