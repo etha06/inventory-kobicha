@@ -149,7 +149,7 @@
                 <button
                   @click="store.navigateTo('stock-fo')"
                   class="p-1.5 rounded-md border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-colors"
-                  title="Lihat di Stok FO"
+                  title="Lihat di Stock FO"
                 >
                   <Eye class="w-3.5 h-3.5" />
                 </button>

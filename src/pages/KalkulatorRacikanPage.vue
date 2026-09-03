@@ -222,7 +222,7 @@
                     Silakan pilih resep racikan dari katalog di atas terlebih dahulu untuk memuat komposisi Fragrance Oil.
                   </span>
                   <span v-else>
-                    Belum ada bahan Fragrance Oil. Klik "+ Ambil dari Stok FO" atau "+ Tambah FO" untuk menambahkan bibit parfum.
+                    Belum ada bahan Fragrance Oil. Klik "+ Ambil dari Stock FO" atau "+ Tambah FO" untuk menambahkan bibit parfum.
                   </span>
                 </td>
               </tr>
@@ -246,7 +246,7 @@
                       type="button"
                       @click="openFoPickerModal(row)"
                       class="p-2 rounded-md bg-stone-100 hover:bg-amber-100 text-stone-600 hover:text-amber-900 border border-stone-200 transition-colors flex-shrink-0"
-                      title="Cari dari Stok Fragrance Oil"
+                      title="Cari dari Stock Fragrance Oil"
                     >
                       <Search class="w-3.5 h-3.5" />
                     </button>
@@ -385,10 +385,10 @@
       </div>
     </div>
 
-    <!-- Modal Picker: Pilih Fragrance Oil dari Stok -->
+    <!-- Modal Picker: Pilih Fragrance Oil dari Stock -->
     <Modal
       :isOpen="isFoPickerModalOpen"
-      title="Pilih Fragrance Oil dari Stok"
+      title="Pilih Fragrance Oil dari Stock"
       subtitle="Cari dan pilih bibit parfum (FO/EO) untuk ditambahkan ke racikan"
       maxWidth="2xl"
       @close="isFoPickerModalOpen = false"

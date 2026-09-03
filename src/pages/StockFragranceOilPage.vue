@@ -75,7 +75,7 @@
       <!-- Quick Filter Stock Status & Sort By -->
       <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-stone-100">
         <div class="flex items-center gap-1.5 overflow-x-auto text-xs">
-          <span class="text-[11px] font-semibold text-stone-400 mr-1">Status Stok:</span>
+          <span class="text-[11px] font-semibold text-stone-400 mr-1">Status Stock:</span>
           <button
             @click="filterStock = ''"
             class="px-2.5 py-1 rounded-md font-medium transition-all"
@@ -372,11 +372,11 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Status Stok</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Status Stock</label>
             <CustomSelect
               v-model="form.currentStock"
               :options="currentStockOptions"
-              placeholder="Pilih Status Stok"
+              placeholder="Pilih Status Stock"
             />
           </div>
         </div>
@@ -503,7 +503,7 @@
     <ConfirmModal
       :isOpen="isDeleteModalOpen"
       title="Hapus Fragrance Oil?"
-      :message="`Apakah Anda yakin ingin menghapus '${itemToDelete?.nama}' dari stok?`"
+      :message="`Apakah Anda yakin ingin menghapus '${itemToDelete?.nama}' dari stock?`"
       @confirm="doDelete"
       @cancel="isDeleteModalOpen = false"
     />
@@ -563,7 +563,7 @@ const notesOptions = [
 const sortOptions = [
   { value: 'name_asc', label: 'Nama FO (A - Z)' },
   { value: 'name_desc', label: 'Nama FO (Z - A)' },
-  { value: 'stock_status', label: 'Status Stok (Habis -> Banyak)' },
+  { value: 'stock_status', label: 'Status Stock (Habis -> Banyak)' },
   { value: 'usage_desc', label: 'Paling Sering Digunakan di Formula' },
   { value: 'bottle_desc', label: 'Ukuran Botol Terbesar' },
   { value: 'updated_at', label: 'Terakhir Diperbarui' }
@@ -575,7 +575,7 @@ const storeOptions = computed(() => [
 ]);
 
 const currentStockOptions = [
-  { value: 'Banyak', label: 'Banyak', badge: 'Stok Aman' },
+  { value: 'Banyak', label: 'Banyak', badge: 'Stock Aman' },
   { value: 'Dikit', label: 'Dikit (Menipis)', badge: 'Perlu Restock' },
   { value: 'Habis', label: 'Habis', badge: 'Kosong' }
 ];

@@ -475,7 +475,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
     };
     stockCampuran.value.push(newItem);
     saveDatabase();
-    showToast(`Barang '${newItem.namaBarang}' berhasil ditambahkan ke stok!`);
+    showToast(`Barang '${newItem.namaBarang}' berhasil ditambahkan ke stock!`);
     return newItem;
   }
 
@@ -512,7 +512,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
     };
     stockFragranceOil.value.push(newFo);
     saveDatabase();
-    showToast(`Fragrance Oil '${newFo.nama}' berhasil ditambahkan ke stok!`);
+    showToast(`Fragrance Oil '${newFo.nama}' berhasil ditambahkan ke stock!`);
     return newFo;
   }
 

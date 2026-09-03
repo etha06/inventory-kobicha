@@ -4,7 +4,7 @@
     <Modal
       :isOpen="isQuickAddFoOpen"
       title="Tambah Fragrance Oil Cepat"
-      subtitle="Input cepat konsentrat aroma ke stok gudang"
+      subtitle="Input cepat konsentrat aroma ke stock gudang"
       maxWidth="2xl"
       @close="isQuickAddFoOpen = false"
     >
@@ -69,7 +69,7 @@
             <CustomSelect
               v-model="foForm.currentStock"
               :options="currentStockOptions"
-              placeholder="Pilih Status Stok"
+              placeholder="Pilih Status Stock"
             />
           </div>
         </div>
@@ -159,7 +159,7 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Jumlah Stok (pcs)</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Jumlah Stock (pcs)</label>
             <input
               v-model.number="campuranForm.jumlahStok"
               type="number"

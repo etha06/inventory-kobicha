@@ -138,7 +138,7 @@
               <span
                 v-show="!isCollapsed && lowStockFoCount > 0"
                 class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-rose-400 text-white shadow-sm"
-                title="Stok menipis / habis"
+                title="Stock menipis / habis"
               >
                 {{ lowStockFoCount }} alert
               </span>
@@ -351,7 +351,7 @@
     <ConfirmModal
       :isOpen="isConfirmClearOpen"
       title="Kosongkan Semua Data?"
-      message="Tindakan ini akan menghapus seluruh data Stok, Racikan, HPP, Produk Siap Jual, Notes, dan Kalender sehingga database benar-benar kosong (mulai dari 0). Pastikan Anda sudah mengekspor backup jika ada data penting."
+      message="Tindakan ini akan menghapus seluruh data Stock, Racikan, HPP, Produk Siap Jual, Notes, dan Kalender sehingga database benar-benar kosong (mulai dari 0). Pastikan Anda sudah mengekspor backup jika ada data penting."
       confirmText="Ya, Kosongkan Semua"
       type="danger"
       @confirm="executeClearData"

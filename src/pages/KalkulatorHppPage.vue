@@ -201,12 +201,12 @@
                       <CustomSelect
                         v-model="ing.stockCampuranId"
                         :options="bahanBakuOptions"
-                        placeholder="-- Pilih Cairan dari Stok Bahan Baku --"
+                        placeholder="-- Pilih Cairan dari Stock Bahan Baku --"
                         :searchable="true"
                         @change="onSelectCampuranItem(ing)"
                       />
                       <span v-if="!ing.stockCampuranId" class="text-[10px] text-amber-800 font-medium block">
-                        Pilih item dari stok bahan baku di atas untuk mengaitkan harga secara otomatis.
+                        Pilih item dari stock bahan baku di atas untuk mengaitkan harga secara otomatis.
                       </span>
                     </div>
                   </td>
@@ -324,14 +324,14 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <!-- Button Ambil dari Stok Campuran -->
+          <!-- Button Ambil dari Stock Campuran -->
           <button
             type="button"
             @click="openStockCampuranPicker"
             class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 flex-shrink-0"
           >
             <Layers class="w-3.5 h-3.5" />
-            <span>Ambil dari Stok Campuran</span>
+            <span>Ambil dari Stock Campuran</span>
           </button>
 
           <button
@@ -416,10 +416,10 @@
       </div>
     </div>
 
-    <!-- Modal Picker: Ambil dari Stok Campuran & Kemasan -->
+    <!-- Modal Picker: Ambil dari Stock Campuran & Kemasan -->
     <Modal
       :isOpen="isCampuranPickerModalOpen"
-      title="Ambil Item dari Stok Campuran & Kemasan"
+      title="Ambil Item dari Stock Campuran & Kemasan"
       subtitle="Pilih botol, sprayer, box, stiker, atau pelarut untuk dimasukkan ke rincian modal"
       maxWidth="2xl"
       @close="isCampuranPickerModalOpen = false"
@@ -471,7 +471,7 @@
             v-if="filteredCampuranPickerList.length === 0"
             class="py-12 text-center text-stone-400 text-xs italic"
           >
-            Tidak ada item stok campuran yang sesuai pencarian.
+            Tidak ada item stock campuran yang sesuai pencarian.
           </div>
 
           <div
@@ -740,7 +740,7 @@ const racikanOptions = computed(() => [
 ]);
 
 const bahanBakuOptions = computed(() => [
-  { value: '', label: '-- Pilih Cairan dari Stok Bahan Baku --' },
+  { value: '', label: '-- Pilih Cairan dari Stock Bahan Baku --' },
   ...bahanBakuCampuranList.value.map(c => ({
     value: c.id,
     label: `${c.namaBarang} — (${formatRupiah(store.getCampuranAveragePricePerMl(c.id))}/ml)`

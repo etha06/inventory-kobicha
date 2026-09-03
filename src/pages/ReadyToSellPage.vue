@@ -9,7 +9,7 @@
         <div>
           <h3 class="text-base font-extrabold text-forest-900 font-rounded">Ready to Sell (Produk Siap Jual)</h3>
           <p class="text-xs text-stone-500">
-            Manajemen stok produk parfum retail dan paket bundling siap kirim
+            Manajemen stock produk parfum retail dan paket bundling siap kirim
           </p>
         </div>
       </div>
@@ -40,7 +40,7 @@
 
       <div class="p-4 rounded-xl bg-white border border-stone-200/80 shadow-xs">
         <div class="flex items-center justify-between text-stone-400 mb-1">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Total Stok Fisik</span>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Total Stock Fisik</span>
           <PackageCheck class="w-4 h-4 text-emerald-600" />
         </div>
         <div class="text-xl font-extrabold font-mono text-emerald-700">
@@ -51,7 +51,7 @@
 
       <div class="p-4 rounded-xl bg-white border border-stone-200/80 shadow-xs">
         <div class="flex items-center justify-between text-stone-400 mb-1">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Estimasi Omset Stok</span>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Estimasi Omset Stock</span>
           <DollarSign class="w-4 h-4 text-amber-600" />
         </div>
         <div class="text-xl font-extrabold font-mono text-amber-900">
@@ -137,7 +137,7 @@
               <th class="py-3.5 px-4 text-left">Tipe</th>
               <th class="py-3.5 px-4 text-left">Isi / Komponen</th>
               <th class="py-3.5 px-4 text-left">Series</th>
-              <th class="py-3.5 px-4 text-left">Stok Unit</th>
+              <th class="py-3.5 px-4 text-left">Stock Unit</th>
               <th class="py-3.5 px-4 text-left">Harga Jual</th>
               <th class="py-3.5 px-4 text-left">Pertama Dijual</th>
               <th class="py-3.5 px-4 text-left w-24">Aksi</th>
@@ -609,10 +609,10 @@
 
         <!-- 4. Shared Common Inputs: Stock, Price, Series, Image, Date -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-stone-100">
-          <!-- Jumlah Stok -->
+          <!-- Jumlah Stock -->
           <div>
             <label class="block text-xs font-semibold text-stone-700 mb-1">
-              Jumlah Stok Siap Jual <span class="text-rose-500">*</span>
+              Jumlah Stock Siap Jual <span class="text-rose-500">*</span>
             </label>
             <div class="relative">
               <input
@@ -766,7 +766,7 @@
     <Modal
       :isOpen="isDetailModalOpen"
       :title="detailItem?.nama || 'Detail Produk'"
-      subtitle="Rincian spesifikasi produk siap jual, stok, dan harga"
+      subtitle="Rincian spesifikasi produk siap jual, stock, dan harga"
       maxWidth="2xl"
       @close="isDetailModalOpen = false"
     >

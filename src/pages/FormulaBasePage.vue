@@ -191,7 +191,7 @@
             >
               <div class="flex-1">
                 <span class="text-[10px] text-stone-500 block mb-0.5">
-                  {{ ing.isFragranceOilConcentrate ? 'Slot Konsentrat Minyak Wangi' : 'Pilih Bahan dari Stok Campuran' }}
+                  {{ ing.isFragranceOilConcentrate ? 'Slot Konsentrat Minyak Wangi' : 'Pilih Bahan dari Stock Campuran' }}
                 </span>
                 
                 <div v-if="ing.isFragranceOilConcentrate" class="px-3 py-1.5 rounded-md bg-amber-100/70 border border-amber-300 text-xs font-bold text-amber-900 flex items-center gap-1.5">

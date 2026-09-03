@@ -14,7 +14,7 @@
 
         <div>
           <h3 class="text-base font-extrabold text-forest-900 font-rounded">Stock Barang Campuran & Kemasan</h3>
-          <p class="text-xs text-sage-600">Stok alkohol, fixative DPG, pelarut bahan baku dengan kalkulasi harga/ml serta botol packaging</p>
+          <p class="text-xs text-sage-600">Stock alkohol, fixative DPG, pelarut bahan baku dengan kalkulasi harga/ml serta botol packaging</p>
         </div>
       </div>
 
@@ -74,7 +74,7 @@
       <!-- Quick Filter Pills: Current Stock Level -->
       <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-stone-100 text-xs">
         <div class="flex items-center gap-1.5 flex-wrap">
-          <span class="text-stone-400 font-semibold text-[11px] mr-1">Status Stok Bahan Baku:</span>
+          <span class="text-stone-400 font-semibold text-[11px] mr-1">Status Stock Bahan Baku:</span>
           <button
             @click="filterStockStatus = ''"
             class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all"
@@ -291,7 +291,7 @@
     <Modal
       :isOpen="isModalOpen"
       :title="isEditing ? 'Edit Barang Campuran' : 'Tambah Barang Campuran'"
-      subtitle="Input stok pelarut, DPG, botol, pipet, atau packaging"
+      subtitle="Input stock pelarut, DPG, botol, pipet, atau packaging"
       maxWidth="2xl"
       @close="isModalOpen = false"
     >
@@ -444,9 +444,9 @@
             </div>
           </div>
 
-          <!-- Jumlah Stok Pcs for Kemasan -->
+          <!-- Jumlah Stock Pcs for Kemasan -->
           <div v-else>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Jumlah Stok Kemasan (Pcs)</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Jumlah Stock Kemasan (Pcs)</label>
             <div class="relative">
               <input
                 v-model.number="form.jumlahStok"
@@ -491,19 +491,19 @@
           ></textarea>
         </div>
 
-        <div class="pt-3 border-t flex justify-end gap-2">
+        <div class="pt-4 border-t border-stone-100 flex items-center justify-end gap-2.5">
           <button
             type="button"
             @click="isModalOpen = false"
-            class="px-4 py-2 rounded-lg border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+            class="px-4 py-2 rounded-lg border border-stone-200 text-stone-700 hover:bg-stone-50 font-semibold text-xs"
           >
             Batal
           </button>
           <button
             type="submit"
-            class="px-5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-xs"
+            class="px-5 py-2 rounded-lg bg-peach-500 hover:bg-peach-600 text-white font-bold text-xs shadow-xs"
           >
-            Simpan Barang
+            {{ isEditing ? 'Simpan Perubahan' : 'Tambah ke Stock' }}
           </button>
         </div>
       </form>
@@ -513,7 +513,7 @@
     <ConfirmModal
       :isOpen="isDeleteModalOpen"
       title="Hapus Barang Campuran?"
-      :message="`Apakah Anda yakin ingin menghapus '${itemToDelete?.namaBarang}' dari stok?`"
+      :message="`Apakah Anda yakin ingin menghapus '${itemToDelete?.namaBarang}' dari stock?`"
       @confirm="doDelete"
       @cancel="isDeleteModalOpen = false"
     />
@@ -561,8 +561,8 @@ const jenisOptions = computed(() => [
 const sortOptions = [
   { value: 'name_asc', label: 'Nama Barang (A - Z)' },
   { value: 'name_desc', label: 'Nama Barang (Z - A)' },
-  { value: 'stock_desc', label: 'Stok Terbanyak' },
-  { value: 'stock_asc', label: 'Stok Tersedikit (Alert)' },
+  { value: 'stock_desc', label: 'Stock Terbanyak' },
+  { value: 'stock_asc', label: 'Stock Tersedikit (Alert)' },
   { value: 'price_desc', label: 'Harga Tertinggi' },
   { value: 'price_asc', label: 'Harga Termurah' },
   { value: 'updated_at', label: 'Terakhir Diperbarui' }

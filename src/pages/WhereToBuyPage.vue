@@ -70,7 +70,7 @@
               <th class="py-3.5 px-4 text-left">Nama Toko</th>
               <th class="py-3.5 px-4 text-left">Jenis Barang</th>
               <th class="py-3.5 px-4 text-left">Link Toko</th>
-              <th class="py-3.5 px-4 text-left">Stok Terkait</th>
+              <th class="py-3.5 px-4 text-left">Stock Terkait</th>
               <th class="py-3.5 px-4 text-left w-24">Aksi</th>
             </tr>
           </thead>
@@ -188,14 +188,14 @@
                           class="p-2 rounded-md bg-stone-50 border border-stone-200 text-xs flex items-center justify-between"
                         >
                           <span class="font-medium text-stone-800">{{ c.namaBarang }}</span>
-                          <span class="text-[10px] text-stone-500 font-mono">Stok: {{ c.jumlahStok }} pcs</span>
+                          <span class="text-[10px] text-stone-500 font-mono">Stock: {{ c.jumlahStok }} pcs</span>
                         </div>
 
                         <div
                           v-if="getLinkedFo(store.id).length === 0 && getLinkedCampuran(store.id).length === 0"
                           class="col-span-2 text-stone-400 text-xs italic"
                         >
-                          Belum ada stok barang yang ditautkan ke toko ini.
+                          Belum ada stock barang yang ditautkan ke toko ini.
                         </div>
                       </div>
                     </div>
@@ -341,7 +341,7 @@
             <h3 class="text-base font-bold text-center text-stone-900 mb-2">Kamu yakin ubah jenis barang ini?</h3>
             <p class="text-xs text-stone-600 text-center mb-4 leading-relaxed">
               Anda mengubah jenis barang dari <strong>"{{ originalJenisBarang }}"</strong> menjadi <strong>"{{ form.jenisBarang }}"</strong>.
-              Jika diubah, semua toko dan stok barang campuran yang menggunakan jenis barang ini akan otomatis diperbarui ke nama baru.
+              Jika diubah, semua toko dan stock barang campuran yang menggunakan jenis barang ini akan otomatis diperbarui ke nama baru.
             </p>
             <div class="flex items-center justify-center gap-2.5">
               <button

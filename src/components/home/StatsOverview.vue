@@ -92,13 +92,13 @@
 
         <div class="relative z-10 text-center space-y-1">
           <span class="text-[11px] font-semibold text-[#5e2323]/80 block uppercase tracking-wider">
-            Stok Alert
+            Stock Alert
           </span>
           <div class="text-3xl sm:text-4xl font-extrabold font-rounded text-[#481717] leading-none py-1">
             {{ lowStockFoCount }}
           </div>
           <span class="text-[11px] text-[#5e2323]/70 font-medium block">
-            {{ lowStockFoCount > 0 ? 'Perlu Restock' : 'Semua Stok Aman' }}
+            {{ lowStockFoCount > 0 ? 'Perlu Restock' : 'Semua Stock Aman' }}
           </span>
         </div>
       </div>
