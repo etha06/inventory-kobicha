@@ -267,25 +267,6 @@
 
       <!-- Database Tools & Footer -->
       <div class="p-3 border-t border-white/10 bg-black/10 space-y-2">
-        <div v-show="!isCollapsed" class="flex items-center gap-1.5">
-          <button
-            @click="store.exportDatabase()"
-            class="flex-1 px-2.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
-            title="Export Database JSON"
-          >
-            <Download class="w-3.5 h-3.5" />
-            <span>Export</span>
-          </button>
-          <label
-            class="flex-1 px-2.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-            title="Import Database JSON"
-          >
-            <Upload class="w-3.5 h-3.5" />
-            <span>Import</span>
-            <input type="file" accept=".json" class="hidden" @change="handleFileImport" />
-          </label>
-        </div>
-
         <div v-show="!isCollapsed">
           <button
             @click="isConfirmClearOpen = true"
@@ -334,8 +315,6 @@ import {
   Receipt,
   Calculator,
   ShoppingBag,
-  Download,
-  Upload,
   ChevronLeft,
   ChevronRight,
   Menu,
@@ -387,25 +366,5 @@ const totalHppCount = computed(() => hppCatalog.value.length);
 function handleNav(tab: any) {
   store.navigateTo(tab);
   emit('close-mobile');
-}
-
-function handleFileImport(e: Event) {
-  const target = e.target as HTMLInputElement;
-  const file = target.files?.[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = (evt) => {
-    try {
-      const content = evt.target?.result as string;
-      const success = store.importDatabase(content);
-      if (success) {
-        target.value = '';
-      }
-    } catch {
-      store.showToast('Gagal membaca file backup', 'error');
-    }
-  };
-  reader.readAsText(file);
 }
 </script>
