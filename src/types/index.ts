@@ -174,3 +174,29 @@ export interface CalendarDeadline {
   notes?: string;
   createdAt: string;
 }
+
+export interface BundleProductItem {
+  id: string;
+  hppCalculationId: string;
+  namaProduk: string;
+  qty: number;
+  ukuranBotolMl?: number;
+  hppPerItem?: number;
+}
+
+export interface ReadyToSellProduct {
+  id: string;
+  isBundle: boolean;
+  nama: string;
+  hppCalculationId?: string; // Jika produk tunggal, terhubung ke katalog HPP
+  bundleItems?: BundleProductItem[]; // Jika paket bundle
+  jumlahStok: number;
+  hargaJual: number;
+  series: string;
+  gambar?: string;
+  pertamaKaliDijual: string; // YYYY-MM-DD
+  deskripsi?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+

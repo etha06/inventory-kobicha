@@ -63,6 +63,9 @@
             <!-- 5. Harga Modal / HPP Submenus -->
             <KatalogHppPage v-else-if="activeTab === 'katalog-hpp'" />
             <KalkulatorHppPage v-else-if="activeTab === 'kalkulator-hpp'" />
+
+            <!-- 6. Ready to Sell Page -->
+            <ReadyToSellPage v-else-if="activeTab === 'ready-to-sell'" />
           </Transition>
         </main>
       </div>
@@ -91,6 +94,7 @@ import KatalogRacikanPage from './pages/KatalogRacikanPage.vue';
 import KalkulatorRacikanPage from './pages/KalkulatorRacikanPage.vue';
 import KatalogHppPage from './pages/KatalogHppPage.vue';
 import KalkulatorHppPage from './pages/KalkulatorHppPage.vue';
+import ReadyToSellPage from './pages/ReadyToSellPage.vue';
 
 const store = useKobichaStore();
 const { activeTab, isMobileNavOpen } = storeToRefs(store);

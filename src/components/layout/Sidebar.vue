@@ -238,6 +238,31 @@
             </button>
           </div>
         </div>
+
+        <!-- 6. Produk & Penjualan Section -->
+        <div class="space-y-1">
+          <div v-show="!isCollapsed" class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-sage-200/75">
+            Produk & Penjualan
+          </div>
+          <div class="space-y-1">
+            <button
+              @click="handleNav('ready-to-sell')"
+              class="w-full flex items-center gap-3.5 px-3.5 py-2 rounded-2xl text-sm font-medium transition-all duration-200 group"
+              :class="activeTab === 'ready-to-sell' 
+                ? 'bg-peach-500 text-white shadow-pill font-bold transform translate-x-0.5' 
+                : 'text-white/85 hover:bg-white/15 hover:text-white'"
+            >
+              <ShoppingBag class="w-4 h-4 flex-shrink-0" />
+              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Ready to Sell</span>
+              <span
+                v-show="!isCollapsed && totalReadyToSellCount > 0"
+                class="text-xs px-2 py-0.5 rounded-full bg-black/20 text-white/90"
+              >
+                {{ totalReadyToSellCount }}
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Database Tools & Footer -->
@@ -285,6 +310,7 @@ import {
   FlaskConical,
   Receipt,
   Calculator,
+  ShoppingBag,
   Download,
   Upload,
   ChevronLeft,
@@ -305,7 +331,7 @@ const emit = defineEmits<{
 }>();
 
 const store = useKobichaStore();
-const { activeTab, stores, stockCampuran, stockFragranceOil, racikanCatalog, hppCatalog } = storeToRefs(store);
+const { activeTab, stores, stockCampuran, stockFragranceOil, racikanCatalog, hppCatalog, totalReadyToSellCount } = storeToRefs(store);
 
 const todayFormatted = computed(() => {
   const now = new Date();

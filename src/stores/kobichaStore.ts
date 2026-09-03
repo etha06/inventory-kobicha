@@ -8,7 +8,8 @@ import {
   RacikanFragrance,
   HppCalculation,
   QuickNote,
-  CalendarDeadline
+  CalendarDeadline,
+  ReadyToSellProduct
 } from '../types';
 import {
   INITIAL_STORES,
@@ -18,7 +19,8 @@ import {
   INITIAL_RACIKAN,
   INITIAL_HPP,
   INITIAL_QUICK_NOTES,
-  INITIAL_DEADLINES
+  INITIAL_DEADLINES,
+  INITIAL_READY_TO_SELL
 } from './sampleData';
 
 const STORAGE_KEY = 'kobicha_parfume_app_v1';
@@ -33,7 +35,8 @@ export type NavigationTab =
   | 'katalog-racikan'
   | 'kalkulator-racikan'
   | 'katalog-hpp'
-  | 'kalkulator-hpp';
+  | 'kalkulator-hpp'
+  | 'ready-to-sell';
 
 export const useKobichaStore = defineStore('kobicha', () => {
   // Navigation & UI States
@@ -65,6 +68,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
   const formulaBases = ref<FormulaBase[]>([]);
   const racikanCatalog = ref<RacikanFragrance[]>([]);
   const hppCatalog = ref<HppCalculation[]>([]);
+  const readyToSellProducts = ref<ReadyToSellProduct[]>([]);
   const quickNotes = ref<QuickNote[]>([]);
   const deadlines = ref<CalendarDeadline[]>([]);
 
@@ -95,6 +99,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
         formulaBases.value = parsed.formulaBases || INITIAL_FORMULA_BASES;
         racikanCatalog.value = parsed.racikanCatalog || INITIAL_RACIKAN;
         hppCatalog.value = parsed.hppCatalog || INITIAL_HPP;
+        readyToSellProducts.value = parsed.readyToSellProducts || INITIAL_READY_TO_SELL;
         quickNotes.value = parsed.quickNotes || INITIAL_QUICK_NOTES;
         deadlines.value = parsed.deadlines || INITIAL_DEADLINES;
       } else {
@@ -115,6 +120,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
         formulaBases: formulaBases.value,
         racikanCatalog: racikanCatalog.value,
         hppCatalog: hppCatalog.value,
+        readyToSellProducts: readyToSellProducts.value,
         quickNotes: quickNotes.value,
         deadlines: deadlines.value,
         version: '1.0'
@@ -132,6 +138,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
     formulaBases.value = JSON.parse(JSON.stringify(INITIAL_FORMULA_BASES));
     racikanCatalog.value = JSON.parse(JSON.stringify(INITIAL_RACIKAN));
     hppCatalog.value = JSON.parse(JSON.stringify(INITIAL_HPP));
+    readyToSellProducts.value = JSON.parse(JSON.stringify(INITIAL_READY_TO_SELL));
     quickNotes.value = JSON.parse(JSON.stringify(INITIAL_QUICK_NOTES));
     deadlines.value = JSON.parse(JSON.stringify(INITIAL_DEADLINES));
     saveDatabase();
@@ -140,7 +147,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
 
   // Auto-save on every state change
   watch(
-    [stores, stockCampuran, stockFragranceOil, formulaBases, racikanCatalog, hppCatalog, quickNotes, deadlines],
+    [stores, stockCampuran, stockFragranceOil, formulaBases, racikanCatalog, hppCatalog, readyToSellProducts, quickNotes, deadlines],
     () => {
       saveDatabase();
     },
@@ -254,6 +261,21 @@ export const useKobichaStore = defineStore('kobicha', () => {
   const totalFoCount = computed(() => stockFragranceOil.value.length);
   const totalRacikanCount = computed(() => racikanCatalog.value.length);
   const totalHppCount = computed(() => hppCatalog.value.length);
+  const totalReadyToSellCount = computed(() => readyToSellProducts.value.length);
+  const totalReadyToSellStock = computed(() => 
+    readyToSellProducts.value.reduce((acc, p) => acc + (p.jumlahStok || 0), 0)
+  );
+  const totalReadyToSellValue = computed(() => 
+    readyToSellProducts.value.reduce((acc, p) => acc + ((p.jumlahStok || 0) * (p.hargaJual || 0)), 0)
+  );
+
+  const allReadyToSellSeries = computed(() => {
+    const set = new Set<string>();
+    readyToSellProducts.value.forEach(p => {
+      if (p.series && p.series.trim()) set.add(p.series.trim());
+    });
+    return Array.from(set).sort();
+  });
 
   const lowStockFoCount = computed(() => {
     return stockFragranceOil.value.filter(fo => fo.currentStock === 'Dikit' || fo.currentStock === 'Habis').length;
@@ -289,16 +311,19 @@ export const useKobichaStore = defineStore('kobicha', () => {
     navigateTo('kalkulator-hpp');
   }
 
-  // --- CRUD STORES ---
+  // 1. Store Supplier CRUD
   function addStore(store: Omit<StoreSupplier, 'id' | 'createdAt' | 'updatedAt'>) {
+    const id = 'store-' + Date.now().toString(36);
+    const now = new Date().toISOString();
     const newStore: StoreSupplier = {
       ...store,
-      id: 'store-' + Date.now(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      id,
+      createdAt: now,
+      updatedAt: now
     };
-    stores.value.unshift(newStore);
-    showToast(`Toko "${newStore.namaToko}" berhasil ditambahkan!`);
+    stores.value.push(newStore);
+    saveDatabase();
+    showToast(`Toko '${newStore.namaToko}' berhasil ditambahkan!`);
     return newStore;
   }
 
@@ -310,66 +335,70 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      showToast('Data toko berhasil diperbarui!');
+      saveDatabase();
+      showToast(`Toko '${stores.value[idx].namaToko}' berhasil diperbarui!`);
     }
   }
 
   function deleteStore(id: string) {
     const store = stores.value.find(s => s.id === id);
+    const name = store ? store.namaToko : 'Toko';
     stores.value = stores.value.filter(s => s.id !== id);
-    showToast(`Toko "${store?.namaToko || ''}" berhasil dihapus`, 'info');
+    saveDatabase();
+    showToast(`Toko '${name}' berhasil dihapus`, 'info');
   }
 
-  // --- CRUD STOCK CAMPURAN ---
+  // 2. Stock Campuran CRUD
   function addStockCampuran(item: Omit<StockCampuran, 'id' | 'createdAt' | 'updatedAt'>) {
-    const hargaPerMl = item.isBahanBaku && item.ukuranMl && item.ukuranMl > 0
-      ? Math.round(item.hargaPerPcs / item.ukuranMl)
-      : item.hargaPerMl;
-
+    const id = 'camp-' + Date.now().toString(36);
+    const now = new Date().toISOString();
     const newItem: StockCampuran = {
       ...item,
-      hargaPerMl,
-      id: 'camp-' + Date.now(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      id,
+      createdAt: now,
+      updatedAt: now
     };
-    stockCampuran.value.unshift(newItem);
-    showToast(`Bahan campuran "${newItem.namaBarang}" berhasil ditambahkan!`);
+    stockCampuran.value.push(newItem);
+    saveDatabase();
+    showToast(`Barang '${newItem.namaBarang}' berhasil ditambahkan ke stok!`);
     return newItem;
   }
 
   function updateStockCampuran(id: string, updates: Partial<StockCampuran>) {
     const idx = stockCampuran.value.findIndex(c => c.id === id);
     if (idx !== -1) {
-      const merged = { ...stockCampuran.value[idx], ...updates };
-      if (merged.isBahanBaku && merged.ukuranMl && merged.ukuranMl > 0) {
-        merged.hargaPerMl = Math.round(merged.hargaPerPcs / merged.ukuranMl);
-      }
       stockCampuran.value[idx] = {
-        ...merged,
+        ...stockCampuran.value[idx],
+        ...updates,
         updatedAt: new Date().toISOString()
       };
-      showToast('Data bahan campuran berhasil diperbarui!');
+      saveDatabase();
+      showToast(`Barang '${stockCampuran.value[idx].namaBarang}' berhasil diperbarui!`);
     }
   }
 
   function deleteStockCampuran(id: string) {
     const item = stockCampuran.value.find(c => c.id === id);
+    const name = item ? item.namaBarang : 'Barang';
     stockCampuran.value = stockCampuran.value.filter(c => c.id !== id);
-    showToast(`Bahan "${item?.namaBarang || ''}" berhasil dihapus`, 'info');
+    saveDatabase();
+    showToast(`Barang '${name}' berhasil dihapus`, 'info');
   }
 
-  // --- CRUD STOCK FRAGRANCE OIL ---
-  function addStockFragranceOil(item: Omit<StockFragranceOil, 'id' | 'createdAt' | 'updatedAt'>) {
-    const newItem: StockFragranceOil = {
-      ...item,
-      id: 'fo-' + Date.now(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+  // 3. Stock Fragrance Oil CRUD
+  function addStockFragranceOil(fo: Omit<StockFragranceOil, 'id' | 'createdAt' | 'updatedAt'>) {
+    const id = 'fo-' + Date.now().toString(36);
+    const now = new Date().toISOString();
+    const newFo: StockFragranceOil = {
+      ...fo,
+      id,
+      createdAt: now,
+      updatedAt: now
     };
-    stockFragranceOil.value.unshift(newItem);
-    showToast(`Fragrance oil "${newItem.nama}" berhasil ditambahkan!`);
-    return newItem;
+    stockFragranceOil.value.push(newFo);
+    saveDatabase();
+    showToast(`Fragrance Oil '${newFo.nama}' berhasil ditambahkan ke stok!`);
+    return newFo;
   }
 
   function updateStockFragranceOil(id: string, updates: Partial<StockFragranceOil>) {
@@ -380,26 +409,32 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      showToast('Data fragrance oil berhasil diperbarui!');
+      saveDatabase();
+      showToast(`Fragrance Oil '${stockFragranceOil.value[idx].nama}' berhasil diperbarui!`);
     }
   }
 
   function deleteStockFragranceOil(id: string) {
     const fo = stockFragranceOil.value.find(f => f.id === id);
+    const name = fo ? fo.nama : 'Fragrance Oil';
     stockFragranceOil.value = stockFragranceOil.value.filter(f => f.id !== id);
-    showToast(`Fragrance oil "${fo?.nama || ''}" berhasil dihapus`, 'info');
+    saveDatabase();
+    showToast(`Fragrance Oil '${name}' berhasil dihapus`, 'info');
   }
 
-  // --- CRUD FORMULA BASE ---
+  // 4. Formula Base CRUD
   function addFormulaBase(base: Omit<FormulaBase, 'id' | 'createdAt' | 'updatedAt'>) {
+    const id = 'base-' + Date.now().toString(36);
+    const now = new Date().toISOString();
     const newBase: FormulaBase = {
       ...base,
-      id: 'base-' + Date.now(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      id,
+      createdAt: now,
+      updatedAt: now
     };
-    formulaBases.value.unshift(newBase);
-    showToast(`Formula Base "${newBase.nama}" berhasil disimpan!`);
+    formulaBases.value.push(newBase);
+    saveDatabase();
+    showToast(`Formula Base '${newBase.nama}' berhasil disimpan!`);
     return newBase;
   }
 
@@ -411,26 +446,32 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      showToast('Formula Base berhasil diperbarui!');
+      saveDatabase();
+      showToast(`Formula Base '${formulaBases.value[idx].nama}' berhasil diperbarui!`);
     }
   }
 
   function deleteFormulaBase(id: string) {
-    const b = formulaBases.value.find(x => x.id === id);
-    formulaBases.value = formulaBases.value.filter(x => x.id !== id);
-    showToast(`Formula Base "${b?.nama || ''}" berhasil dihapus`, 'info');
+    const base = formulaBases.value.find(b => b.id === id);
+    const name = base ? base.nama : 'Formula Base';
+    formulaBases.value = formulaBases.value.filter(b => b.id !== id);
+    saveDatabase();
+    showToast(`Formula Base '${name}' berhasil dihapus`, 'info');
   }
 
-  // --- CRUD RACIKAN FRAGRANCE ---
+  // 5. Racikan Fragrance CRUD
   function addRacikanFragrance(racikan: Omit<RacikanFragrance, 'id' | 'createdAt' | 'updatedAt'>) {
+    const id = 'racik-' + Date.now().toString(36);
+    const now = new Date().toISOString();
     const newRacikan: RacikanFragrance = {
       ...racikan,
-      id: 'racikan-' + Date.now(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      id,
+      createdAt: now,
+      updatedAt: now
     };
     racikanCatalog.value.unshift(newRacikan);
-    showToast(`Racikan "${newRacikan.nama}" berhasil disimpan ke Katalog!`);
+    saveDatabase();
+    showToast(`Racikan Parfum '${newRacikan.nama}' berhasil disimpan ke Katalog! 🧪`);
     return newRacikan;
   }
 
@@ -442,26 +483,32 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      showToast('Data racikan berhasil diperbarui!');
+      saveDatabase();
+      showToast(`Racikan '${racikanCatalog.value[idx].nama}' berhasil diperbarui!`);
     }
   }
 
   function deleteRacikanFragrance(id: string) {
-    const r = racikanCatalog.value.find(x => x.id === id);
-    racikanCatalog.value = racikanCatalog.value.filter(x => x.id !== id);
-    showToast(`Racikan "${r?.nama || ''}" berhasil dihapus`, 'info');
+    const r = racikanCatalog.value.find(item => item.id === id);
+    const name = r ? r.nama : 'Racikan';
+    racikanCatalog.value = racikanCatalog.value.filter(item => item.id !== id);
+    saveDatabase();
+    showToast(`Racikan '${name}' berhasil dihapus`, 'info');
   }
 
-  // --- CRUD HPP CALCULATION ---
+  // 6. HPP Calculation CRUD
   function addHppCalculation(hpp: Omit<HppCalculation, 'id' | 'createdAt' | 'updatedAt'>) {
+    const id = 'hpp-' + Date.now().toString(36);
+    const now = new Date().toISOString();
     const newHpp: HppCalculation = {
       ...hpp,
-      id: 'hpp-' + Date.now(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      id,
+      createdAt: now,
+      updatedAt: now
     };
     hppCatalog.value.unshift(newHpp);
-    showToast(`Kalkulasi HPP "${newHpp.nama}" berhasil disimpan ke Katalog HPP!`);
+    saveDatabase();
+    showToast(`Perhitungan HPP '${newHpp.nama}' berhasil disimpan ke Katalog! 💰`);
     return newHpp;
   }
 
@@ -473,26 +520,71 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      showToast('Kalkulasi HPP berhasil diperbarui!');
+      saveDatabase();
+      showToast(`HPP '${hppCatalog.value[idx].nama}' berhasil diperbarui!`);
     }
   }
 
   function deleteHppCalculation(id: string) {
-    const h = hppCatalog.value.find(x => x.id === id);
-    hppCatalog.value = hppCatalog.value.filter(x => x.id !== id);
-    showToast(`Perhitungan HPP "${h?.nama || ''}" berhasil dihapus`, 'info');
+    const h = hppCatalog.value.find(item => item.id === id);
+    const name = h ? h.nama : 'HPP';
+    hppCatalog.value = hppCatalog.value.filter(item => item.id !== id);
+    saveDatabase();
+    showToast(`Perhitungan HPP '${name}' berhasil dihapus`, 'info');
   }
 
-  // --- CRUD QUICK NOTES ---
+  // 7. Ready To Sell CRUD
+  function addReadyToSellProduct(product: Omit<ReadyToSellProduct, 'id' | 'createdAt' | 'updatedAt'>) {
+    const id = 'rts-' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
+    const now = new Date().toISOString();
+    const newProduct: ReadyToSellProduct = {
+      ...product,
+      id,
+      createdAt: now,
+      updatedAt: now
+    };
+    readyToSellProducts.value.unshift(newProduct);
+    saveDatabase();
+    showToast(`Produk '${newProduct.nama}' berhasil ditambahkan ke Ready to Sell! 🎉`, 'success');
+    return newProduct;
+  }
+
+  function updateReadyToSellProduct(id: string, updates: Partial<ReadyToSellProduct>) {
+    const idx = readyToSellProducts.value.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      readyToSellProducts.value[idx] = {
+        ...readyToSellProducts.value[idx],
+        ...updates,
+        updatedAt: new Date().toISOString()
+      };
+      saveDatabase();
+      showToast(`Produk '${readyToSellProducts.value[idx].nama}' berhasil diperbarui!`, 'success');
+      return true;
+    }
+    return false;
+  }
+
+  function deleteReadyToSellProduct(id: string) {
+    const p = readyToSellProducts.value.find(item => item.id === id);
+    const name = p ? p.nama : 'Produk';
+    readyToSellProducts.value = readyToSellProducts.value.filter(item => item.id !== id);
+    saveDatabase();
+    showToast(`Produk '${name}' berhasil dihapus`, 'info');
+  }
+
+  // 8. Quick Notes CRUD
   function addQuickNote(note: Omit<QuickNote, 'id' | 'createdAt' | 'updatedAt'>) {
+    const id = 'note-' + Date.now().toString(36);
+    const now = new Date().toISOString();
     const newNote: QuickNote = {
       ...note,
-      id: 'note-' + Date.now(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      id,
+      createdAt: now,
+      updatedAt: now
     };
     quickNotes.value.unshift(newNote);
-    showToast('Catatan berhasil ditambahkan!');
+    saveDatabase();
+    showToast('Catatan baru berhasil ditambahkan! 📝');
     return newNote;
   }
 
@@ -504,23 +596,28 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
+      saveDatabase();
+      showToast('Catatan diperbarui');
     }
   }
 
   function deleteQuickNote(id: string) {
     quickNotes.value = quickNotes.value.filter(n => n.id !== id);
+    saveDatabase();
     showToast('Catatan dihapus', 'info');
   }
 
-  // --- CRUD CALENDAR DEADLINES ---
-  function addDeadline(deadline: Omit<CalendarDeadline, 'id' | 'createdAt'>) {
+  // 9. Calendar Deadlines CRUD
+  function addDeadline(dl: Omit<CalendarDeadline, 'id' | 'createdAt'>) {
+    const id = 'dl-' + Date.now().toString(36);
     const newDeadline: CalendarDeadline = {
-      ...deadline,
-      id: 'dl-' + Date.now(),
+      ...dl,
+      id,
       createdAt: new Date().toISOString()
     };
     deadlines.value.push(newDeadline);
-    showToast('Target deadline & pengingat berhasil dibuat!');
+    saveDatabase();
+    showToast('Agenda / reminder berhasil ditambahkan ke kalender! 📅');
     return newDeadline;
   }
 
@@ -528,12 +625,14 @@ export const useKobichaStore = defineStore('kobicha', () => {
     const dl = deadlines.value.find(d => d.id === id);
     if (dl) {
       dl.isCompleted = !dl.isCompleted;
+      saveDatabase();
       showToast(dl.isCompleted ? 'Deadline ditandai selesai! 🎉' : 'Deadline dibuka kembali');
     }
   }
 
   function deleteDeadline(id: string) {
     deadlines.value = deadlines.value.filter(d => d.id !== id);
+    saveDatabase();
     showToast('Deadline dihapus', 'info');
   }
 
@@ -546,6 +645,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
       formulaBases: formulaBases.value,
       racikanCatalog: racikanCatalog.value,
       hppCatalog: hppCatalog.value,
+      readyToSellProducts: readyToSellProducts.value,
       quickNotes: quickNotes.value,
       deadlines: deadlines.value,
       exportedAt: new Date().toISOString(),
@@ -567,13 +667,14 @@ export const useKobichaStore = defineStore('kobicha', () => {
   function importDatabase(jsonString: string): boolean {
     try {
       const parsed = JSON.parse(jsonString);
-      if (parsed.stockFragranceOil || parsed.stockCampuran || parsed.stores) {
+      if (parsed.stockFragranceOil || parsed.stockCampuran || parsed.stores || parsed.readyToSellProducts) {
         if (Array.isArray(parsed.stores)) stores.value = parsed.stores;
         if (Array.isArray(parsed.stockCampuran)) stockCampuran.value = parsed.stockCampuran;
         if (Array.isArray(parsed.stockFragranceOil)) stockFragranceOil.value = parsed.stockFragranceOil;
         if (Array.isArray(parsed.formulaBases)) formulaBases.value = parsed.formulaBases;
         if (Array.isArray(parsed.racikanCatalog)) racikanCatalog.value = parsed.racikanCatalog;
         if (Array.isArray(parsed.hppCatalog)) hppCatalog.value = parsed.hppCatalog;
+        if (Array.isArray(parsed.readyToSellProducts)) readyToSellProducts.value = parsed.readyToSellProducts;
         if (Array.isArray(parsed.quickNotes)) quickNotes.value = parsed.quickNotes;
         if (Array.isArray(parsed.deadlines)) deadlines.value = parsed.deadlines;
         saveDatabase();
@@ -617,6 +718,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
     formulaBases,
     racikanCatalog,
     hppCatalog,
+    readyToSellProducts,
     quickNotes,
     deadlines,
     toasts,
@@ -632,12 +734,16 @@ export const useKobichaStore = defineStore('kobicha', () => {
     getCampuranAveragePricePerMl,
     bahanBakuCampuranList,
     allJenisBarangList,
+    allReadyToSellSeries,
     renameJenisBarangCascade,
     totalStoresCount,
     totalCampuranCount,
     totalFoCount,
     totalRacikanCount,
     totalHppCount,
+    totalReadyToSellCount,
+    totalReadyToSellStock,
+    totalReadyToSellValue,
     lowStockFoCount,
     lowStockCampuranCount,
     pendingDeadlinesCount,
@@ -666,6 +772,10 @@ export const useKobichaStore = defineStore('kobicha', () => {
     addHppCalculation,
     updateHppCalculation,
     deleteHppCalculation,
+
+    addReadyToSellProduct,
+    updateReadyToSellProduct,
+    deleteReadyToSellProduct,
 
     addQuickNote,
     updateQuickNote,

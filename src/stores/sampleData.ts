@@ -6,7 +6,8 @@ import {
   RacikanFragrance,
   HppCalculation,
   QuickNote,
-  CalendarDeadline
+  CalendarDeadline,
+  ReadyToSellProduct
 } from '../types';
 
 export const INITIAL_STORES: StoreSupplier[] = [
@@ -376,3 +377,44 @@ export const INITIAL_DEADLINES: CalendarDeadline[] = [
     createdAt: new Date().toISOString()
   }
 ];
+
+export const INITIAL_READY_TO_SELL: ReadyToSellProduct[] = [
+  {
+    id: 'rts-1',
+    isBundle: false,
+    nama: 'Kobicha Signature No. 1 Velvet Wood Extrait (50ml)',
+    hppCalculationId: 'hpp-1',
+    jumlahStok: 24,
+    hargaJual: 185000,
+    series: 'Signature Wood Collection',
+    gambar: '',
+    pertamaKaliDijual: '2026-08-01',
+    deskripsi: 'Parfum extrait de parfum 50ml dengan aroma woody hangat dan sentuhan mawar lembut.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'rts-2',
+    isBundle: true,
+    nama: 'Duo Extrait Discovery Bundle (2x 50ml)',
+    bundleItems: [
+      {
+        id: 'bundle-item-1',
+        hppCalculationId: 'hpp-1',
+        namaProduk: 'Kobicha Signature No. 1 (Botol 50ml Amber)',
+        qty: 2,
+        ukuranBotolMl: 50,
+        hppPerItem: 38850
+      }
+    ],
+    jumlahStok: 8,
+    hargaJual: 335000,
+    series: 'Gift & Holiday Edition',
+    gambar: '',
+    pertamaKaliDijual: '2026-08-15',
+    deskripsi: 'Paket bundling 2 botol edisi spesial lengkap dengan luxury sleeve & gift card.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+];
+
