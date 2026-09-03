@@ -109,15 +109,7 @@
             <tr v-if="filteredHppList.length === 0">
               <td colspan="9" class="py-12 text-center text-stone-400">
                 <Receipt class="w-8 h-8 mx-auto mb-2 opacity-50" />
-                <p class="text-xs text-stone-500 mb-3">Belum ada rekaman data HPP.</p>
-                <button
-                  type="button"
-                  @click="store.navigateTo('kalkulator-hpp')"
-                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-bold transition-all shadow-xs"
-                >
-                  <Calculator class="w-3.5 h-3.5" />
-                  <span>Hitung HPP Baru</span>
-                </button>
+                <p class="text-xs text-stone-400">Belum ada rekaman data HPP.</p>
               </td>
             </tr>
 
