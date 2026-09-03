@@ -317,21 +317,20 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <!-- Shortcut add from stock campuran -->
-          <div class="w-60">
-            <CustomSelect
-              v-model="selectedCampuranToAdd"
-              :options="stockCampuranOptions"
-              placeholder="+ Ambil dari Stok Campuran"
-              :searchable="true"
-              @change="onSelectAddCampuranStock"
-            />
-          </div>
+          <!-- Button Ambil dari Stok Campuran -->
+          <button
+            type="button"
+            @click="openStockCampuranPicker"
+            class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-bold transition-colors flex items-center gap-1.5 flex-shrink-0"
+          >
+            <Layers class="w-3.5 h-3.5" />
+            <span>+ Ambil dari Stok Campuran</span>
+          </button>
 
           <button
             type="button"
             @click="addManualPackagingRow"
-            class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors flex items-center gap-1 flex-shrink-0"
+            class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 flex-shrink-0"
           >
             <Plus class="w-3.5 h-3.5" />
             <span>Tambah Item Manual</span>
@@ -517,6 +516,111 @@
         </button>
       </div>
     </div>
+
+    <!-- Modal Picker: Ambil dari Stok Campuran & Kemasan -->
+    <Modal
+      :isOpen="isCampuranPickerModalOpen"
+      title="Ambil Item dari Stok Campuran & Kemasan"
+      subtitle="Pilih botol, sprayer, box, stiker, atau pelarut untuk dimasukkan ke rincian modal"
+      maxWidth="2xl"
+      @close="isCampuranPickerModalOpen = false"
+    >
+      <div class="space-y-4">
+        <!-- Search & Filter Bar inside modal -->
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <div class="relative flex-1">
+            <input
+              v-model="campuranPickerSearch"
+              type="text"
+              placeholder="Cari nama barang / jenis / toko..."
+              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white"
+            />
+            <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-stone-400" />
+          </div>
+
+          <div class="flex items-center gap-1 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+            <button
+              type="button"
+              @click="campuranPickerFilterTipe = 'all'"
+              class="px-2.5 py-1 rounded-lg transition-all"
+              :class="campuranPickerFilterTipe === 'all' ? 'bg-white text-stone-900 shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+            >
+              Semua
+            </button>
+            <button
+              type="button"
+              @click="campuranPickerFilterTipe = 'packaging'"
+              class="px-2.5 py-1 rounded-lg transition-all"
+              :class="campuranPickerFilterTipe === 'packaging' ? 'bg-indigo-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+            >
+              Kemasan
+            </button>
+            <button
+              type="button"
+              @click="campuranPickerFilterTipe = 'bahan_baku'"
+              class="px-2.5 py-1 rounded-lg transition-all"
+              :class="campuranPickerFilterTipe === 'bahan_baku' ? 'bg-amber-600 text-white shadow-xs font-bold' : 'text-stone-600 hover:text-stone-900'"
+            >
+              Bahan Baku
+            </button>
+          </div>
+        </div>
+
+        <!-- List of items -->
+        <div class="border border-stone-200 rounded-xl max-h-80 overflow-y-auto divide-y divide-stone-100">
+          <div
+            v-if="filteredCampuranPickerList.length === 0"
+            class="py-12 text-center text-stone-400 text-xs italic"
+          >
+            Tidak ada item stok campuran yang sesuai pencarian.
+          </div>
+
+          <div
+            v-for="item in filteredCampuranPickerList"
+            :key="item.id"
+            class="p-3 hover:bg-stone-50 flex items-center justify-between gap-3 transition-colors"
+          >
+            <div class="space-y-0.5 flex-1 min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-stone-900 text-xs truncate">{{ item.namaBarang }}</span>
+                <span
+                  class="px-1.5 py-0.2 rounded text-[9px] font-bold"
+                  :class="item.isBahanBaku ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-indigo-100 text-indigo-800 border border-indigo-200'"
+                >
+                  {{ item.isBahanBaku ? 'Bahan Baku' : 'Kemasan' }}
+                </span>
+              </div>
+              <div class="flex items-center gap-2 text-[11px] text-stone-500">
+                <span>{{ item.jenis }}</span>
+                <span>•</span>
+                <span>{{ item.storeName }}</span>
+                <span>•</span>
+                <span class="font-mono font-semibold text-stone-800">{{ formatRupiah(item.hargaPerPcs) }} / pcs</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              @click="addCampuranItemToPackaging(item)"
+              class="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 text-xs font-bold transition-all flex items-center gap-1 flex-shrink-0"
+            >
+              <Plus class="w-3.5 h-3.5" />
+              <span>Tambah</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button
+            type="button"
+            @click="isCampuranPickerModalOpen = false"
+            class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition-colors"
+          >
+            Selesai / Tutup
+          </button>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -524,10 +628,11 @@
 import { ref, computed, onMounted } from 'vue';
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
-import { PackagingHppItem, HppLiquidIngredientDetail } from '../types';
+import { PackagingHppItem, HppLiquidIngredientDetail, StockCampuran } from '../types';
 import { formatRupiah, formatNumber } from '../utils/formatters';
-import { RotateCcw, Save, Plus, Trash2, FlaskConical, Package, TrendingUp, Menu } from 'lucide-vue-next';
+import { RotateCcw, Save, Plus, Trash2, FlaskConical, Package, TrendingUp, Menu, Layers, Search } from 'lucide-vue-next';
 import CustomSelect from '../components/common/CustomSelect.vue';
+import Modal from '../components/common/Modal.vue';
 
 const store = useKobichaStore();
 const { formulaBases, racikanCatalog, stockCampuran, bahanBakuCampuranList, hppCatalog, prefilledHppRacikanId, prefilledHppBaseId } = storeToRefs(store);
@@ -541,7 +646,45 @@ const targetBottleMl = ref(50);
 
 const selectedBaseId = ref('');
 const selectedRacikanId = ref('');
-const selectedCampuranToAdd = ref('');
+
+const isCampuranPickerModalOpen = ref(false);
+const campuranPickerSearch = ref('');
+const campuranPickerFilterTipe = ref<'all' | 'packaging' | 'bahan_baku'>('all');
+
+const filteredCampuranPickerList = computed(() => {
+  let list = [...stockCampuran.value];
+  if (campuranPickerFilterTipe.value === 'packaging') {
+    list = list.filter(c => !c.isBahanBaku);
+  } else if (campuranPickerFilterTipe.value === 'bahan_baku') {
+    list = list.filter(c => c.isBahanBaku);
+  }
+  if (campuranPickerSearch.value.trim()) {
+    const q = campuranPickerSearch.value.toLowerCase();
+    list = list.filter(c =>
+      c.namaBarang.toLowerCase().includes(q) ||
+      c.jenis.toLowerCase().includes(q) ||
+      c.storeName.toLowerCase().includes(q)
+    );
+  }
+  return list;
+});
+
+function openStockCampuranPicker() {
+  campuranPickerSearch.value = '';
+  campuranPickerFilterTipe.value = 'all';
+  isCampuranPickerModalOpen.value = true;
+}
+
+function addCampuranItemToPackaging(item: StockCampuran) {
+  packagingRows.value.push({
+    id: 'pkg-' + Date.now() + '-' + Math.random().toString(36).substring(2, 5),
+    namaItem: item.namaBarang,
+    jumlah: 1,
+    hargaSatuan: item.hargaPerPcs,
+    total: item.hargaPerPcs
+  });
+  store.showToast(`"${item.namaBarang}" ditambahkan ke rincian modal!`, 'success');
+}
 
 const targetMarginPercentage = ref(150);
 
@@ -568,14 +711,6 @@ const bahanBakuOptions = computed(() => [
   ...bahanBakuCampuranList.value.map(c => ({
     value: c.id,
     label: `${c.namaBarang} — (${formatRupiah(store.getCampuranAveragePricePerMl(c.id))}/ml)`
-  }))
-]);
-
-const stockCampuranOptions = computed(() => [
-  { value: '', label: '+ Ambil dari Stok Campuran' },
-  ...stockCampuran.value.map(c => ({
-    value: c.id,
-    label: `${c.namaBarang} (${formatRupiah(c.hargaPerPcs)})`
   }))
 ]);
 
@@ -636,21 +771,6 @@ function onSelectHppFromCatalog() {
       total: p.total
     }));
   }
-}
-
-function onSelectAddCampuranStock(campId: string) {
-  if (!campId) return;
-  const item = stockCampuran.value.find(c => c.id === campId);
-  if (item) {
-    packagingRows.value.push({
-      id: 'pkg-' + Date.now(),
-      namaItem: item.namaBarang,
-      jumlah: 1,
-      hargaSatuan: item.hargaPerPcs,
-      total: item.hargaPerPcs
-    });
-  }
-  selectedCampuranToAdd.value = '';
 }
 
 // Section 2: Packaging Items

@@ -37,6 +37,7 @@ export interface StockCampuran {
   jenis: string;
   namaBarang: string;
   isBahanBaku?: boolean; // true = Bahan Baku Cairan / Pelarut / Aditif, false = Packaging / Lainnya
+  currentStock?: CurrentStockEnum; // 'Banyak' | 'Dikit' | 'Habis' khusus Bahan Baku
   ukuranMl?: number; // Volume kemasan dalam ml (misal 1000 ml = 1 liter)
   hargaPerMl?: number; // Auto: hargaPerPcs / (ukuranMl || 1)
   jumlahStok: number;

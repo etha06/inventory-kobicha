@@ -30,43 +30,83 @@
     </div>
 
     <!-- Search, Filter & Sort Bar -->
-    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm grid grid-cols-1 sm:grid-cols-4 gap-3">
-      <!-- Search -->
-      <div class="relative sm:col-span-1">
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Cari nama barang / toko..."
-          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
-        />
-        <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
+    <div class="bg-white p-4 rounded-[20px] border border-sage-100 shadow-sm space-y-3">
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+        <!-- Search -->
+        <div class="relative sm:col-span-1">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Cari nama barang / toko..."
+            class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 bg-white"
+          />
+          <Search class="w-3.5 h-3.5 absolute left-3 top-2.5 text-sage-400" />
+        </div>
+
+        <!-- Filter Tipe (Semua / Bahan Baku / Packaging) -->
+        <div>
+          <CustomSelect
+            v-model="filterTipe"
+            :options="tipeOptions"
+            placeholder="Semua Tipe Barang"
+          />
+        </div>
+
+        <!-- Filter Jenis Barang (from allJenisBarangList) -->
+        <div>
+          <CustomSelect
+            v-model="filterJenis"
+            :options="jenisOptions"
+            placeholder="Semua Jenis Barang"
+          />
+        </div>
+
+        <!-- Sort By -->
+        <div>
+          <CustomSelect
+            v-model="sortBy"
+            :options="sortOptions"
+            placeholder="Urutkan..."
+          />
+        </div>
       </div>
 
-      <!-- Filter Tipe (Semua / Bahan Baku / Packaging) -->
-      <div>
-        <CustomSelect
-          v-model="filterTipe"
-          :options="tipeOptions"
-          placeholder="Semua Tipe Barang"
-        />
-      </div>
-
-      <!-- Filter Jenis Barang (from allJenisBarangList) -->
-      <div>
-        <CustomSelect
-          v-model="filterJenis"
-          :options="jenisOptions"
-          placeholder="Semua Jenis Barang"
-        />
-      </div>
-
-      <!-- Sort By -->
-      <div>
-        <CustomSelect
-          v-model="sortBy"
-          :options="sortOptions"
-          placeholder="Urutkan..."
-        />
+      <!-- Quick Filter Pills: Current Stock Level -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-stone-100 text-xs">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="text-stone-400 font-semibold text-[11px] mr-1">Status Stok Bahan Baku:</span>
+          <button
+            @click="filterStockStatus = ''"
+            class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all"
+            :class="filterStockStatus === '' ? 'bg-stone-800 text-white shadow-xs' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'"
+          >
+            Semua
+          </button>
+          <button
+            @click="filterStockStatus = 'Banyak'"
+            class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1"
+            :class="filterStockStatus === 'Banyak' ? 'bg-emerald-700 text-white' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span>Banyak</span>
+          </button>
+          <button
+            @click="filterStockStatus = 'Dikit'"
+            class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1"
+            :class="filterStockStatus === 'Dikit' ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+            <span>Dikit</span>
+          </button>
+          <button
+            @click="filterStockStatus = 'Habis'"
+            class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1"
+            :class="filterStockStatus === 'Habis' ? 'bg-rose-700 text-white' : 'bg-rose-50 text-rose-700 hover:bg-rose-100'"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+            <span>Habis</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -152,8 +192,22 @@
                   <span v-else class="text-stone-400 text-xs">-</span>
                 </td>
 
-                <td class="py-3.5 px-4 text-left font-mono font-bold text-stone-800 text-xs">
-                  {{ item.jumlahStok }} pcs
+                <!-- Current Stock (Bahan Baku = Banyak/Dikit/Habis badge, Kemasan = Pcs) -->
+                <td class="py-3.5 px-4 text-left">
+                  <span
+                    v-if="isItemBahanBaku(item)"
+                    class="px-2 py-0.5 rounded-full text-[11px] font-bold border inline-flex items-center gap-1"
+                    :class="STOCK_STATUS_MAP[item.currentStock || (item.jumlahStok <= 0 ? 'Habis' : (item.jumlahStok <= 5 ? 'Dikit' : 'Banyak'))]?.bg"
+                  >
+                    <span
+                      class="w-1.5 h-1.5 rounded-full"
+                      :class="STOCK_STATUS_MAP[item.currentStock || (item.jumlahStok <= 0 ? 'Habis' : (item.jumlahStok <= 5 ? 'Dikit' : 'Banyak'))]?.dot"
+                    ></span>
+                    {{ item.currentStock || (item.jumlahStok <= 0 ? 'Habis' : (item.jumlahStok <= 5 ? 'Dikit' : 'Banyak')) }}
+                  </span>
+                  <span v-else class="font-mono font-bold text-stone-800 text-xs">
+                    {{ item.jumlahStok }} pcs
+                  </span>
                 </td>
 
                 <td class="py-3.5 px-4 text-left text-stone-600">
@@ -337,7 +391,7 @@
           </div>
         </div>
 
-        <!-- Volume ml (Hanya jika Bahan Baku) & Harga -->
+        <!-- Volume ml / Current Stock (Bahan Baku) vs Jumlah Stok Pcs (Kemasan) & Harga -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div v-if="form.isBahanBaku">
             <label class="block text-xs font-semibold text-amber-950 mb-1">Volume Kemasan Beli (ml)</label>
@@ -356,7 +410,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Harga per Kemasan (Rp)</label>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Harga Beli per Kemasan (Rp)</label>
             <input
               v-model.number="form.hargaPerPcs"
               type="number"
@@ -366,15 +420,41 @@
             />
           </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Jumlah Stok (pcs / botol)</label>
-            <input
-              v-model.number="form.jumlahStok"
-              type="number"
-              min="0"
-              required
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono"
-            />
+          <!-- Current Stock Radio for Bahan Baku -->
+          <div v-if="form.isBahanBaku">
+            <label class="block text-xs font-semibold text-amber-950 mb-1">Current Stock Bahan Baku</label>
+            <div class="grid grid-cols-3 gap-1.5 pt-0.5">
+              <label
+                v-for="status in CURRENT_STOCK_OPTIONS"
+                :key="status"
+                class="flex items-center justify-center gap-1 p-2 rounded-xl border text-[11px] font-bold cursor-pointer transition-all select-none"
+                :class="form.currentStock === status ? STOCK_STATUS_MAP[status].bg + ' border-2 shadow-xs' : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-50'"
+              >
+                <input
+                  type="radio"
+                  :value="status"
+                  v-model="form.currentStock"
+                  class="sr-only"
+                />
+                <span class="w-1.5 h-1.5 rounded-full" :class="STOCK_STATUS_MAP[status].dot"></span>
+                <span>{{ status }}</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Jumlah Stok Pcs for Kemasan -->
+          <div v-else>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">Jumlah Stok Kemasan (Pcs)</label>
+            <div class="relative">
+              <input
+                v-model.number="form.jumlahStok"
+                type="number"
+                min="0"
+                required
+                class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-mono font-bold pr-10"
+              />
+              <span class="absolute right-3 top-2.5 text-stone-400 text-xs font-bold">pcs</span>
+            </div>
           </div>
         </div>
 
@@ -442,7 +522,8 @@
 import { ref, computed } from 'vue';
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
-import { StockCampuran } from '../types';
+import { StockCampuran, CurrentStockEnum } from '../types';
+import { CURRENT_STOCK_OPTIONS, STOCK_STATUS_MAP } from '../utils/constants';
 import { formatRupiah, formatDateIndo } from '../utils/formatters';
 import { Plus, Search, Pencil, Trash2, ChevronRight, Package, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
@@ -455,6 +536,7 @@ const { stockCampuran, stores, allJenisBarangList } = storeToRefs(store);
 const searchQuery = ref('');
 const filterTipe = ref('');
 const filterJenis = ref('');
+const filterStockStatus = ref('');
 const sortBy = ref('name_asc');
 const expandedItemId = ref<string | null>(null);
 
@@ -527,6 +609,16 @@ const filteredList = computed(() => {
     list = list.filter(c => c.jenis === filterJenis.value);
   }
 
+  if (filterStockStatus.value) {
+    list = list.filter(c => {
+      if (isItemBahanBaku(c)) {
+        const status = c.currentStock || (c.jumlahStok <= 0 ? 'Habis' : (c.jumlahStok <= 5 ? 'Dikit' : 'Banyak'));
+        return status === filterStockStatus.value;
+      }
+      return true;
+    });
+  }
+
   list.sort((a, b) => {
     if (sortBy.value === 'name_asc') return a.namaBarang.localeCompare(b.namaBarang);
     if (sortBy.value === 'name_desc') return b.namaBarang.localeCompare(a.namaBarang);
@@ -550,6 +642,7 @@ const form = ref({
   namaBarang: '',
   jenis: 'Pelarut / Solvent',
   isBahanBaku: true,
+  currentStock: 'Banyak' as CurrentStockEnum,
   ukuranMl: 1000,
   storeId: '',
   jumlahStok: 10,
@@ -565,6 +658,7 @@ function openAddModal() {
     namaBarang: '',
     jenis: allJenisBarangList.value[0] || 'Pelarut / Solvent',
     isBahanBaku: true,
+    currentStock: 'Banyak',
     ukuranMl: 1000,
     storeId: '',
     jumlahStok: 10,
@@ -578,10 +672,12 @@ function openAddModal() {
 function openEditModal(c: StockCampuran) {
   isEditing.value = true;
   editingId.value = c.id;
+  const isBahan = isItemBahanBaku(c);
   form.value = {
     namaBarang: c.namaBarang,
     jenis: c.jenis,
-    isBahanBaku: isItemBahanBaku(c),
+    isBahanBaku: isBahan,
+    currentStock: c.currentStock || (c.jumlahStok <= 0 ? 'Habis' : (c.jumlahStok <= 5 ? 'Dikit' : 'Banyak')),
     ukuranMl: c.ukuranMl || 1000,
     storeId: c.storeId || '',
     jumlahStok: c.jumlahStok,
@@ -597,20 +693,27 @@ function saveItem() {
   const selectedStore = stores.value.find(s => s.id === form.value.storeId);
   const storeName = selectedStore?.namaToko || 'Toko Lainnya';
 
-  const hargaPerMl = form.value.isBahanBaku && form.value.ukuranMl > 0
+  const isBahan = form.value.isBahanBaku;
+  const hargaPerMl = isBahan && form.value.ukuranMl > 0
     ? Math.round(form.value.hargaPerPcs / form.value.ukuranMl)
     : undefined;
+
+  const currentStock = isBahan ? form.value.currentStock : undefined;
+  const jumlahStok = isBahan
+    ? (form.value.currentStock === 'Habis' ? 0 : (form.value.currentStock === 'Dikit' ? 3 : 20))
+    : form.value.jumlahStok;
 
   if (isEditing.value && editingId.value) {
     store.updateStockCampuran(editingId.value, {
       namaBarang: form.value.namaBarang,
       jenis: form.value.jenis,
-      isBahanBaku: form.value.isBahanBaku,
-      ukuranMl: form.value.isBahanBaku ? form.value.ukuranMl : undefined,
+      isBahanBaku: isBahan,
+      currentStock,
+      ukuranMl: isBahan ? form.value.ukuranMl : undefined,
       hargaPerMl,
       storeId: form.value.storeId || undefined,
       storeName,
-      jumlahStok: form.value.jumlahStok,
+      jumlahStok,
       hargaPerPcs: form.value.hargaPerPcs,
       gambar: form.value.gambar || undefined,
       deskripsi: form.value.deskripsi || undefined
@@ -619,12 +722,13 @@ function saveItem() {
     store.addStockCampuran({
       namaBarang: form.value.namaBarang,
       jenis: form.value.jenis,
-      isBahanBaku: form.value.isBahanBaku,
-      ukuranMl: form.value.isBahanBaku ? form.value.ukuranMl : undefined,
+      isBahanBaku: isBahan,
+      currentStock,
+      ukuranMl: isBahan ? form.value.ukuranMl : undefined,
       hargaPerMl,
       storeId: form.value.storeId || undefined,
       storeName,
-      jumlahStok: form.value.jumlahStok,
+      jumlahStok,
       hargaPerPcs: form.value.hargaPerPcs,
       gambar: form.value.gambar || undefined,
       deskripsi: form.value.deskripsi || undefined

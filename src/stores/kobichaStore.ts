@@ -260,7 +260,12 @@ export const useKobichaStore = defineStore('kobicha', () => {
   });
 
   const lowStockCampuranCount = computed(() => {
-    return stockCampuran.value.filter(c => c.jumlahStok <= 5).length;
+    return stockCampuran.value.filter(c => {
+      if (c.isBahanBaku) {
+        return c.currentStock === 'Dikit' || c.currentStock === 'Habis';
+      }
+      return c.jumlahStok <= 5;
+    }).length;
   });
 
   const pendingDeadlinesCount = computed(() => {
