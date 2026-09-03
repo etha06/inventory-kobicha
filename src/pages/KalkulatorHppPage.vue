@@ -96,20 +96,20 @@
         </div>
 
         <!-- Mode Toggle (Tambah Baru on Left, Detail & Update on Right) -->
-        <div class="flex items-center gap-1.5 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+        <div class="flex items-center gap-1.5 bg-sage-50 p-1 rounded-2xl text-xs font-semibold border border-sage-200/60">
           <button
             type="button"
             @click="setMode('tambah_baru')"
-            class="px-3.5 py-1.5 rounded-lg transition-all"
-            :class="mode === 'tambah_baru' ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-stone-600 hover:text-stone-900'"
+            class="px-4 py-2 rounded-xl transition-all"
+            :class="mode === 'tambah_baru' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
           >
             Tambah Baru
           </button>
           <button
             type="button"
             @click="setMode('detail_update')"
-            class="px-3.5 py-1.5 rounded-lg transition-all"
-            :class="mode === 'detail_update' ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-stone-600 hover:text-stone-900'"
+            class="px-4 py-2 rounded-xl transition-all"
+            :class="mode === 'detail_update' ? 'bg-peach-500 text-white shadow-pill font-bold' : 'text-sage-700 hover:text-forest-900 font-semibold'"
           >
             Detail & Update
           </button>
