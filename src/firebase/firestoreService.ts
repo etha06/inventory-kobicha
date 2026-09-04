@@ -44,7 +44,7 @@ export async function saveStateToFirestore(state: AppStateData): Promise<void> {
  * Subscribe to real-time changes from Cloud Firestore
  */
 export function subscribeToFirestore(
-  onData: (data: AppStateData) => void,
+  onData: (data: AppStateData | null) => void,
   onError?: (err: any) => void
 ): Unsubscribe {
   const docRef = doc(db, COLLECTION_NAME, 'app_state');
@@ -54,6 +54,9 @@ export function subscribeToFirestore(
     (snapshot) => {
       if (snapshot.exists()) {
         onData(snapshot.data() as AppStateData);
+      } else {
+        // Document does not exist in Firestore yet (First time initialization)
+        onData(null);
       }
     },
     (err) => {

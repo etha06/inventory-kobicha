@@ -50,6 +50,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
 
   // Cloud Sync States
   const cloudSyncStatus = ref<CloudSyncStatus>('offline');
+  const cloudSyncError = ref<string | null>(null);
   const isRemoteSync = ref(false);
   const lastSyncedAt = ref<string | null>(null);
   let unsubscribeFirestore: (() => void) | null = null;
@@ -137,10 +138,16 @@ export const useKobichaStore = defineStore('kobicha', () => {
           deadlines: deadlines.value,
         });
         cloudSyncStatus.value = 'connected';
+        cloudSyncError.value = null;
         lastSyncedAt.value = new Date().toISOString();
-      } catch (e) {
+      } catch (e: any) {
         console.warn('Firestore sync failed, saved in local cache:', e);
         cloudSyncStatus.value = 'offline';
+        if (e?.code === 'permission-denied') {
+          cloudSyncError.value = 'Firestore Permission Denied. Pastikan Rules di Firebase Console diatur ke test mode (allow read, write: if true;).';
+        } else {
+          cloudSyncError.value = e?.message || 'Gagal tersambung ke Firestore';
+        }
       }
     }, 400);
   }
@@ -160,11 +167,18 @@ export const useKobichaStore = defineStore('kobicha', () => {
         deadlines: deadlines.value,
       });
       cloudSyncStatus.value = 'connected';
+      cloudSyncError.value = null;
       lastSyncedAt.value = new Date().toISOString();
       showToast('Data berhasil disinkronkan ke Cloud Firestore!', 'success');
-    } catch (e) {
+    } catch (e: any) {
       cloudSyncStatus.value = 'error';
-      showToast('Gagal menyinkronkan ke Cloud. Cek koneksi internet.', 'error');
+      if (e?.code === 'permission-denied') {
+        cloudSyncError.value = 'Izin ditolak Firebase (permission-denied). Periksa Firestore Security Rules di Firebase Console!';
+        showToast('Izin ditolak Firebase. Cek Firestore Security Rules di Firebase Console!', 'error');
+      } else {
+        cloudSyncError.value = e?.message || 'Gagal menyinkronkan ke Cloud';
+        showToast('Gagal menyinkronkan ke Cloud. Cek koneksi internet.', 'error');
+      }
     }
   }
 
@@ -191,22 +205,33 @@ export const useKobichaStore = defineStore('kobicha', () => {
 
             saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
+            cloudSyncError.value = null;
             setTimeout(() => {
               isRemoteSync.value = false;
             }, 100);
           } else {
             // First time remote init -> push local data to Firestore
+            cloudSyncStatus.value = 'connected';
+            cloudSyncError.value = null;
             syncToCloud();
           }
         },
-        (err) => {
+        (err: any) => {
           console.warn('Firestore subscription inactive, working in local mode:', err);
           cloudSyncStatus.value = 'offline';
+          if (err && err.code === 'permission-denied') {
+            cloudSyncError.value = 'Izin ditolak Firebase (permission-denied). Periksa Firestore Security Rules di Firebase Console!';
+          } else if (err && err.message) {
+            cloudSyncError.value = err.message;
+          } else {
+            cloudSyncError.value = 'Koneksi ke Firebase gagal. Bekerja dalam mode offline.';
+          }
         }
       );
-    } catch (e) {
+    } catch (e: any) {
       console.warn('Failed to initialize Firebase Sync:', e);
       cloudSyncStatus.value = 'offline';
+      cloudSyncError.value = e?.message || 'Gagal inisialisasi Firebase';
     }
   }
 
@@ -902,6 +927,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
 
     // Cloud Sync
     cloudSyncStatus,
+    cloudSyncError,
     lastSyncedAt,
     forceCloudSync,
 

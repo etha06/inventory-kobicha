@@ -301,17 +301,20 @@
               <button
                 @click="store.forceCloudSync()"
                 class="p-1 rounded-md text-white/60 hover:text-white hover:bg-white/10 transition-colors"
-                title="Sinkronkan Cloud Sekarang"
+                :title="cloudSyncError ? `Error: ${cloudSyncError}. Klik untuk coba sinkron ulang` : 'Sinkronkan Cloud Sekarang'"
               >
                 <RefreshCw class="w-3 h-3" :class="cloudSyncStatus === 'syncing' ? 'animate-spin' : ''" />
               </button>
             </div>
-            <p class="text-[10px] text-sage-200/70 leading-tight">
-              {{ cloudSyncStatus === 'connected' ? 'Data otomatis sinkron realtime antar perangkat' : 'Tersimpan lokal di browser' }}
+            <p
+              class="text-[10px] text-sage-200/70 leading-tight truncate"
+              :title="cloudSyncError || (cloudSyncStatus === 'connected' ? 'Data otomatis sinkron realtime antar perangkat' : 'Tersimpan lokal di browser')"
+            >
+              {{ cloudSyncError ? cloudSyncError : (cloudSyncStatus === 'connected' ? 'Data otomatis sinkron realtime antar perangkat' : 'Tersimpan lokal di browser') }}
             </p>
           </div>
 
-          <div v-else class="flex justify-center py-1" :title="cloudSyncStatus === 'connected' ? 'Firebase Realtime Connected' : 'Offline Mode'">
+          <div v-else class="flex justify-center py-1" :title="cloudSyncError || (cloudSyncStatus === 'connected' ? 'Firebase Realtime Connected' : 'Offline Mode')">
             <span class="relative flex h-2.5 w-2.5">
               <span
                 v-if="cloudSyncStatus === 'connected'"
@@ -398,7 +401,7 @@ const emit = defineEmits<{
 }>();
 
 const store = useKobichaStore();
-const { activeTab, stores, stockCampuran, stockFragranceOil, racikanCatalog, hppCatalog, totalReadyToSellCount, cloudSyncStatus } = storeToRefs(store);
+const { activeTab, stores, stockCampuran, stockFragranceOil, racikanCatalog, hppCatalog, totalReadyToSellCount, cloudSyncStatus, cloudSyncError } = storeToRefs(store);
 
 const isConfirmClearOpen = ref(false);
 
