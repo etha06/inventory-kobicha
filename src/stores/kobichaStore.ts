@@ -107,11 +107,12 @@ export const useKobichaStore = defineStore('kobicha', () => {
   const toasts = ref<{ id: string; message: string; type: 'success' | 'info' | 'warning' | 'error' }[]>([]);
 
   function showToast(message: string, type: 'success' | 'info' | 'warning' | 'error' = 'success') {
+    if (!message) return;
     // Prevent duplicate toast if the exact same message is already visible
     if (toasts.value.some(t => t.message === message)) return;
 
-    // Limit maximum active toasts on screen to 3
-    if (toasts.value.length >= 3) {
+    // Limit maximum active toasts on screen to 2
+    while (toasts.value.length >= 2) {
       toasts.value.shift();
     }
 
@@ -119,7 +120,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
     toasts.value.push({ id, message, type });
     setTimeout(() => {
       toasts.value = toasts.value.filter(t => t.id !== id);
-    }, 3500);
+    }, 3000);
   }
 
   function removeToast(id: string) {
@@ -193,85 +194,64 @@ export const useKobichaStore = defineStore('kobicha', () => {
         {
           onStores: (items) => {
             if (isRemoteSync.value) return;
-            if (items.length > 0 || stores.value.length === 0) {
-              stores.value = items;
-              saveDatabaseLocal();
-            } else if (stores.value.length > 0 && items.length === 0) {
-              // Upload local stores to firestore
-              forceCloudSync();
-            }
+            stores.value = items;
+            saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
           },
           onStockCampuran: (items) => {
             if (isRemoteSync.value) return;
-            if (items.length > 0 || stockCampuran.value.length === 0) {
-              stockCampuran.value = items;
-              saveDatabaseLocal();
-            }
+            stockCampuran.value = items;
+            saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
           },
           onStockFo: (items) => {
             if (isRemoteSync.value) return;
-            if (items.length > 0 || stockFragranceOil.value.length === 0) {
-              stockFragranceOil.value = items;
-              saveDatabaseLocal();
-            }
+            stockFragranceOil.value = items;
+            saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
           },
           onFormulaBases: (items) => {
             if (isRemoteSync.value) return;
-            if (items.length > 0 || formulaBases.value.length === 0) {
-              formulaBases.value = items;
-              saveDatabaseLocal();
-            }
+            formulaBases.value = items;
+            saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
           },
           onRacikan: (items) => {
             if (isRemoteSync.value) return;
-            if (items.length > 0 || racikanCatalog.value.length === 0) {
-              racikanCatalog.value = items;
-              saveDatabaseLocal();
-            }
+            racikanCatalog.value = items;
+            saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
           },
           onHpp: (items) => {
             if (isRemoteSync.value) return;
-            if (items.length > 0 || hppCatalog.value.length === 0) {
-              hppCatalog.value = items;
-              saveDatabaseLocal();
-            }
+            hppCatalog.value = items;
+            saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
           },
           onReadyToSell: (items) => {
             if (isRemoteSync.value) return;
-            if (items.length > 0 || readyToSellProducts.value.length === 0) {
-              readyToSellProducts.value = items;
-              saveDatabaseLocal();
-            }
+            readyToSellProducts.value = items;
+            saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
           },
           onQuickNotes: (items) => {
             if (isRemoteSync.value) return;
-            if (items.length > 0 || quickNotes.value.length === 0) {
-              quickNotes.value = items;
-              saveDatabaseLocal();
-            }
+            quickNotes.value = items;
+            saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
           },
           onDeadlines: (items) => {
             if (isRemoteSync.value) return;
-            if (items.length > 0 || deadlines.value.length === 0) {
-              deadlines.value = items;
-              saveDatabaseLocal();
-            }
+            deadlines.value = items;
+            saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
           }
@@ -351,11 +331,11 @@ export const useKobichaStore = defineStore('kobicha', () => {
     if (notify) showToast('Database telah di-reset (Kosong)', 'info');
   }
 
-  // Auto-save on every state change
+  // Auto-save on every state change (local only)
   watch(
     [stores, stockCampuran, stockFragranceOil, formulaBases, racikanCatalog, hppCatalog, readyToSellProducts, quickNotes, deadlines],
     () => {
-      saveDatabase();
+      saveDatabaseLocal();
     },
     { deep: true }
   );
