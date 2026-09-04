@@ -89,6 +89,20 @@ export const useKobichaStore = defineStore('kobicha', () => {
   const quickNotes = ref<QuickNote[]>([]);
   const deadlines = ref<CalendarDeadline[]>([]);
 
+  // Category Management State
+  const DEFAULT_PRESET_CATEGORIES = [
+    'Fragrance Oil',
+    'Essential Oil',
+    'Bibit Parfum',
+    'Kimia Sintetis',
+    'Pelarut / Solvent',
+    'Fixative / Pengikat',
+    'Botol & Packaging',
+    'Sprayer & Cap'
+  ];
+  const customCategories = ref<string[]>([...DEFAULT_PRESET_CATEGORIES]);
+  const deletedCategories = ref<string[]>([]);
+
   // Toast Notification System
   const toasts = ref<{ id: string; message: string; type: 'success' | 'info' | 'warning' | 'error' }[]>([]);
 
@@ -118,7 +132,9 @@ export const useKobichaStore = defineStore('kobicha', () => {
         readyToSellProducts: readyToSellProducts.value,
         quickNotes: quickNotes.value,
         deadlines: deadlines.value,
-        version: '1.1'
+        customCategories: customCategories.value,
+        deletedCategories: deletedCategories.value,
+        version: '1.2'
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch (e) {
@@ -285,6 +301,12 @@ export const useKobichaStore = defineStore('kobicha', () => {
           readyToSellProducts.value = parsed.readyToSellProducts || [];
           quickNotes.value = parsed.quickNotes || [];
           deadlines.value = parsed.deadlines || [];
+          if (Array.isArray(parsed.customCategories)) {
+            customCategories.value = parsed.customCategories;
+          }
+          if (Array.isArray(parsed.deletedCategories)) {
+            deletedCategories.value = parsed.deletedCategories;
+          }
         }
       } catch (e) {
         console.error('Error loading database from localStorage:', e);
@@ -385,37 +407,120 @@ export const useKobichaStore = defineStore('kobicha', () => {
     });
   });
 
-  // Dynamic unified list of Jenis Barang purely derived from existing items
+  // Dynamic unified list of Jenis Barang purely derived from existing items & custom categories
   const allJenisBarangList = computed(() => {
     const set = new Set<string>();
+
+    // 1. Add custom & default preset categories
+    customCategories.value.forEach(c => {
+      if (c && c.trim()) set.add(c.trim());
+    });
+
+    // 2. Add categories from stockCampuran
     stockCampuran.value.forEach(c => {
       if (c.jenis && c.jenis.trim()) set.add(c.jenis.trim());
     });
+
+    // 3. Add categories from stores
     stores.value.forEach(s => {
       const arr = normalizeJenisBarang(s.jenisBarang);
       arr.forEach(j => {
-        if (j.trim()) set.add(j.trim());
+        if (j && j.trim()) set.add(j.trim());
       });
     });
-    // Add standard preset suggestions
-    const presets = [
-      'Fragrance Oil',
-      'Essential Oil',
-      'Bibit Parfum',
-      'Kimia Sintetis',
-      'Pelarut / Solvent',
-      'Fixative / Pengikat',
-      'Botol & Packaging',
-      'Sprayer & Cap'
-    ];
-    presets.forEach(p => set.add(p));
-    return Array.from(set).sort((a, b) => a.localeCompare(b));
+
+    // 4. Filter out deleted categories (unless still actively used by a store or stock item)
+    const result: string[] = [];
+    set.forEach(cat => {
+      const isDeleted = deletedCategories.value.includes(cat);
+      const isUsedInStore = stores.value.some(s => normalizeJenisBarang(s.jenisBarang).includes(cat));
+      const isUsedInCampuran = stockCampuran.value.some(c => c.jenis === cat);
+      if (!isDeleted || isUsedInStore || isUsedInCampuran) {
+        result.push(cat);
+      }
+    });
+
+    return result.sort((a, b) => a.localeCompare(b));
   });
+
+  function getStoreCountUsingJenis(jenis: string): number {
+    return stores.value.filter(s => normalizeJenisBarang(s.jenisBarang).includes(jenis)).length;
+  }
+
+  function getStockCampuranCountUsingJenis(jenis: string): number {
+    return stockCampuran.value.filter(c => c.jenis === jenis).length;
+  }
+
+  function canDeleteJenisBarang(jenis: string): { canDelete: boolean; storeCount: number; stockCount: number; reason?: string } {
+    const storeCount = getStoreCountUsingJenis(jenis);
+    const stockCount = getStockCampuranCountUsingJenis(jenis);
+    if (storeCount > 0) {
+      return {
+        canDelete: false,
+        storeCount,
+        stockCount,
+        reason: `Jenis barang '${jenis}' tidak dapat dihapus karena masih digunakan oleh ${storeCount} toko supplier.`
+      };
+    }
+    if (stockCount > 0) {
+      return {
+        canDelete: false,
+        storeCount,
+        stockCount,
+        reason: `Jenis barang '${jenis}' tidak dapat dihapus karena masih digunakan oleh ${stockCount} stock barang lainnya.`
+      };
+    }
+    return {
+      canDelete: true,
+      storeCount: 0,
+      stockCount: 0
+    };
+  }
+
+  function addJenisBarang(jenis: string): boolean {
+    const trimmed = jenis.trim();
+    if (!trimmed) {
+      showToast('Nama jenis barang tidak boleh kosong', 'warning');
+      return false;
+    }
+    deletedCategories.value = deletedCategories.value.filter(d => d.toLowerCase() !== trimmed.toLowerCase());
+    if (!customCategories.value.some(c => c.toLowerCase() === trimmed.toLowerCase())) {
+      customCategories.value.push(trimmed);
+    }
+    saveDatabaseLocal();
+    showToast(`Jenis barang '${trimmed}' berhasil ditambahkan! ✨`, 'success');
+    return true;
+  }
+
+  function deleteJenisBarang(jenis: string): boolean {
+    const trimmed = jenis.trim();
+    const check = canDeleteJenisBarang(trimmed);
+    if (!check.canDelete) {
+      showToast(check.reason || 'Tidak dapat menghapus jenis barang yang masih terikat', 'warning');
+      return false;
+    }
+    
+    customCategories.value = customCategories.value.filter(c => c.toLowerCase() !== trimmed.toLowerCase());
+    if (!deletedCategories.value.some(d => d.toLowerCase() === trimmed.toLowerCase())) {
+      deletedCategories.value.push(trimmed);
+    }
+    saveDatabaseLocal();
+    showToast(`Jenis barang '${trimmed}' berhasil dihapus.`, 'info');
+    return true;
+  }
 
   function renameJenisBarangCascade(oldName: string, newName: string) {
     if (!oldName || !newName || oldName === newName) return;
     let storeCount = 0;
     let campCount = 0;
+
+    // Update in customCategories
+    const catIdx = customCategories.value.findIndex(c => c.toLowerCase() === oldName.toLowerCase());
+    if (catIdx !== -1) {
+      customCategories.value[catIdx] = newName;
+    } else {
+      customCategories.value.push(newName);
+    }
 
     stores.value.forEach(s => {
       const arr = normalizeJenisBarang(s.jenisBarang);
@@ -435,6 +540,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
       }
     });
 
+    saveDatabaseLocal();
     showToast(`Jenis barang '${oldName}' berhasil diubah menjadi '${newName}' (${storeCount} toko, ${campCount} barang lainnya diperbarui)!`, 'success');
   }
 
@@ -857,8 +963,10 @@ export const useKobichaStore = defineStore('kobicha', () => {
       readyToSellProducts: readyToSellProducts.value,
       quickNotes: quickNotes.value,
       deadlines: deadlines.value,
+      customCategories: customCategories.value,
+      deletedCategories: deletedCategories.value,
       exportedAt: new Date().toISOString(),
-      version: '1.0'
+      version: '1.2'
     };
     const jsonStr = JSON.stringify(data, null, 2);
     const blob = new Blob([jsonStr], { type: 'application/json' });
@@ -886,6 +994,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
         if (Array.isArray(parsed.readyToSellProducts)) readyToSellProducts.value = parsed.readyToSellProducts;
         if (Array.isArray(parsed.quickNotes)) quickNotes.value = parsed.quickNotes;
         if (Array.isArray(parsed.deadlines)) deadlines.value = parsed.deadlines;
+        if (Array.isArray(parsed.customCategories)) customCategories.value = parsed.customCategories;
+        if (Array.isArray(parsed.deletedCategories)) deletedCategories.value = parsed.deletedCategories;
         saveDatabase();
         showToast('Database berhasil di-import dan diperbarui! 🚀');
         return true;
@@ -930,6 +1040,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
     readyToSellProducts,
     quickNotes,
     deadlines,
+    customCategories,
+    deletedCategories,
     toasts,
 
     // Toast
@@ -944,6 +1056,11 @@ export const useKobichaStore = defineStore('kobicha', () => {
     bahanBakuCampuranList,
     allJenisBarangList,
     allReadyToSellSeries,
+    getStoreCountUsingJenis,
+    getStockCampuranCountUsingJenis,
+    canDeleteJenisBarang,
+    addJenisBarang,
+    deleteJenisBarang,
     renameJenisBarangCascade,
     totalStoresCount,
     totalCampuranCount,

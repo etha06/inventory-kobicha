@@ -18,7 +18,16 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <button
+          @click="isManageCategoriesModalOpen = true"
+          class="px-3.5 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition-all border border-stone-200 flex items-center gap-1.5 shadow-2xs"
+          title="Kelola & Hapus Jenis Barang"
+        >
+          <Tag class="w-3.5 h-3.5 text-stone-600" />
+          <span>Kelola Jenis Barang</span>
+        </button>
+
         <button
           @click="openAddModal"
           class="px-4 py-2 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
@@ -298,7 +307,17 @@
 
           <!-- Quick Suggestion Badges -->
           <div class="mt-2.5">
-            <span class="text-[10px] font-bold text-stone-400 block mb-1">Klik untuk tambah / hapus cepat:</span>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[10px] font-bold text-stone-400 block">Klik untuk tambah / hapus cepat:</span>
+              <button
+                type="button"
+                @click="isManageCategoriesModalOpen = true"
+                class="text-[10px] text-amber-700 hover:text-amber-800 font-semibold underline flex items-center gap-1"
+              >
+                <Tag class="w-2.5 h-2.5" />
+                <span>Kelola Kategori</span>
+              </button>
+            </div>
             <div class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-1.5 bg-stone-50 rounded-lg border border-stone-100">
               <button
                 v-for="j in allJenisBarangList"
@@ -362,6 +381,136 @@
       </form>
     </Modal>
 
+    <!-- Modal Kelola Jenis Barang -->
+    <Modal
+      :isOpen="isManageCategoriesModalOpen"
+      title="Kelola Jenis Barang / Kategori"
+      subtitle="Tambah kategori baru atau hapus jenis barang yang tidak terikat toko"
+      @close="isManageCategoriesModalOpen = false"
+    >
+      <div class="space-y-4">
+        <!-- Input Tambah Kategori Baru -->
+        <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-2">
+          <label class="block text-xs font-bold text-stone-800">Tambah Jenis Barang Baru</label>
+          <div class="flex gap-2">
+            <input
+              v-model="newCategoryInput"
+              type="text"
+              placeholder="Misal: Pipet Tetes / Kemasan Kardus..."
+              @keydown.enter.prevent="handleAddNewCategory"
+              class="flex-1 px-3 py-1.5 text-xs rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 bg-white font-medium"
+            />
+            <button
+              type="button"
+              @click="handleAddNewCategory"
+              class="px-3.5 py-1.5 bg-stone-800 hover:bg-stone-900 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1 flex-shrink-0"
+            >
+              <Plus class="w-3.5 h-3.5" />
+              <span>Tambah</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Info Card -->
+        <div class="p-2.5 bg-amber-50/70 border border-amber-200/80 rounded-lg text-xs text-amber-900 flex items-start gap-2">
+          <AlertTriangle class="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
+          <p class="text-[11px] leading-relaxed">
+            <span class="font-bold">Ketentuan Hapus:</span> Jenis barang hanya bisa dihapus jika <strong>tidak ada toko supplier</strong> yang sedang terikat menggunakannya.
+          </p>
+        </div>
+
+        <!-- Daftar Kategori -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-xs font-bold text-stone-700 px-1">
+            <span>Daftar Kategori ({{ allJenisBarangList.length }})</span>
+            <span class="text-[10px] text-stone-400 font-normal">Status & Aksi</span>
+          </div>
+
+          <div class="max-h-72 overflow-y-auto divide-y divide-stone-100 border border-stone-200 rounded-xl bg-white">
+            <div
+              v-for="cat in allJenisBarangList"
+              :key="cat"
+              class="p-3 flex items-center justify-between hover:bg-stone-50/80 transition-colors gap-3"
+            >
+              <div class="min-w-0">
+                <div class="font-bold text-stone-800 text-xs truncate">{{ cat }}</div>
+                <div class="flex items-center gap-1.5 mt-0.5">
+                  <span
+                    v-if="store.getStoreCountUsingJenis(cat) > 0"
+                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200"
+                  >
+                    <Store class="w-2.5 h-2.5" />
+                    {{ store.getStoreCountUsingJenis(cat) }} Toko Terikat
+                  </span>
+                  <span
+                    v-else
+                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"
+                  >
+                    ✓ 0 Toko (Bisa Dihapus)
+                  </span>
+
+                  <span
+                    v-if="store.getStockCampuranCountUsingJenis(cat) > 0"
+                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200"
+                  >
+                    {{ store.getStockCampuranCountUsingJenis(cat) }} Stock Terkait
+                  </span>
+                </div>
+              </div>
+
+              <!-- Action Button -->
+              <div class="flex-shrink-0">
+                <button
+                  v-if="store.getStoreCountUsingJenis(cat) > 0 || store.getStockCampuranCountUsingJenis(cat) > 0"
+                  type="button"
+                  @click="handleAttemptDeleteLockedCategory(cat)"
+                  class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-400 border border-stone-200 flex items-center gap-1 cursor-not-allowed hover:bg-stone-200/60"
+                  title="Tidak bisa dihapus karena masih digunakan"
+                >
+                  <Lock class="w-3 h-3 text-stone-400" />
+                  <span>Terkunci</span>
+                </button>
+
+                <button
+                  v-else
+                  type="button"
+                  @click="confirmDeleteCategory(cat)"
+                  class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 flex items-center gap-1 transition-colors active:scale-95 shadow-2xs"
+                  title="Hapus Kategori"
+                >
+                  <Trash2 class="w-3 h-3" />
+                  <span>Hapus</span>
+                </button>
+              </div>
+            </div>
+
+            <div v-if="allJenisBarangList.length === 0" class="p-6 text-center text-xs text-stone-400">
+              Belum ada jenis barang.
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 border-t flex justify-end">
+          <button
+            type="button"
+            @click="isManageCategoriesModalOpen = false"
+            class="px-4 py-2 rounded-lg bg-stone-800 hover:bg-stone-900 text-white text-xs font-semibold"
+          >
+            Selesai
+          </button>
+        </div>
+      </div>
+    </Modal>
+
+    <!-- Category Delete Confirm Modal -->
+    <ConfirmModal
+      :isOpen="isDeleteCategoryModalOpen"
+      title="Hapus Jenis Barang?"
+      :message="`Apakah Anda yakin ingin menghapus jenis barang '${categoryToDelete}'? Jenis barang ini tidak terikat dengan toko manapun.`"
+      @confirm="doDeleteCategory"
+      @cancel="isDeleteCategoryModalOpen = false"
+    />
+
     <!-- Delete Confirm Modal -->
     <ConfirmModal
       :isOpen="isDeleteModalOpen"
@@ -379,7 +528,7 @@ import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { StoreSupplier } from '../types';
 import { formatDateIndo, normalizeJenisBarang } from '../utils/formatters';
-import { Plus, Search, Pencil, Trash2, ExternalLink, ChevronRight, Store, AlertTriangle, Menu } from 'lucide-vue-next';
+import { Plus, Search, Pencil, Trash2, ExternalLink, ChevronRight, Store, AlertTriangle, Menu, Tag, Lock } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 import CustomSelect from '../components/common/CustomSelect.vue';
@@ -579,5 +728,48 @@ function doDelete() {
     store.deleteStore(storeToDelete.value.id);
   }
   isDeleteModalOpen.value = false;
+}
+
+// Manage Categories State & Handlers
+const isManageCategoriesModalOpen = ref(false);
+const newCategoryInput = ref('');
+const isDeleteCategoryModalOpen = ref(false);
+const categoryToDelete = ref('');
+
+function handleAddNewCategory() {
+  const val = newCategoryInput.value.trim();
+  if (!val) {
+    store.showToast('Masukkan nama jenis barang', 'warning');
+    return;
+  }
+  const success = store.addJenisBarang(val);
+  if (success) {
+    newCategoryInput.value = '';
+  }
+}
+
+function handleAttemptDeleteLockedCategory(cat: string) {
+  const check = store.canDeleteJenisBarang(cat);
+  if (!check.canDelete) {
+    store.showToast(check.reason || 'Kategori tidak dapat dihapus karena masih terikat', 'warning');
+  }
+}
+
+function confirmDeleteCategory(cat: string) {
+  const check = store.canDeleteJenisBarang(cat);
+  if (!check.canDelete) {
+    store.showToast(check.reason || 'Kategori tidak dapat dihapus', 'warning');
+    return;
+  }
+  categoryToDelete.value = cat;
+  isDeleteCategoryModalOpen.value = true;
+}
+
+function doDeleteCategory() {
+  if (categoryToDelete.value) {
+    store.deleteJenisBarang(categoryToDelete.value);
+  }
+  isDeleteCategoryModalOpen.value = false;
+  categoryToDelete.value = '';
 }
 </script>
