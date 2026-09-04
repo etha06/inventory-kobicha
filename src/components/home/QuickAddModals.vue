@@ -115,22 +115,15 @@
         <div>
           <div class="flex items-center justify-between mb-1">
             <label class="block text-xs font-semibold text-stone-700">Jenis Barang</label>
-            <span class="text-[10px] text-stone-400">Pilih yang sudah ada atau ketik baru</span>
+            <span class="text-[10px] text-stone-400">Pilih kategori Where to Buy</span>
           </div>
 
-          <div class="relative">
-            <input
-              v-model="campuranForm.jenis"
-              type="text"
-              required
-              list="quickCampuranJenisDatalist"
-              placeholder="Ketik atau pilih jenis barang..."
-              class="w-full px-3.5 py-2 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium bg-white"
-            />
-            <datalist id="quickCampuranJenisDatalist">
-              <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
-            </datalist>
-          </div>
+          <CustomSelect
+            v-model="campuranForm.jenis"
+            :options="jenisQuickOptions"
+            placeholder="-- Pilih Jenis Barang --"
+            :searchable="true"
+          />
 
           <!-- Quick Suggestion Badges -->
           <div v-if="allJenisBarangList.length > 0" class="flex flex-wrap gap-1.5 mt-2 max-h-24 overflow-y-auto p-1.5 bg-stone-50 rounded-xl border border-stone-100">
@@ -216,6 +209,10 @@ const { isQuickAddFoOpen, isQuickAddCampuranOpen, stores, allJenisBarangList } =
 const storeOptions = computed(() => [
   { value: '', label: '-- Pilih Toko Supplier --' },
   ...stores.value.map(s => ({ value: s.id, label: s.namaToko }))
+]);
+
+const jenisQuickOptions = computed(() => [
+  ...allJenisBarangList.value.map(j => ({ value: j, label: j }))
 ]);
 
 const currentStockOptions = [

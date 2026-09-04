@@ -397,21 +397,16 @@ export const useKobichaStore = defineStore('kobicha', () => {
     });
   });
 
-  // Dynamic unified list of Jenis Barang purely derived from existing items & custom categories
+  // Dynamic unified list of Jenis Barang strictly derived from Where to Buy (customCategories & stores)
   const allJenisBarangList = computed(() => {
     const set = new Set<string>();
 
-    // 1. Add custom & default preset categories
+    // 1. Add custom & default preset categories managed in Where to Buy
     customCategories.value.forEach(c => {
       if (c && c.trim()) set.add(c.trim());
     });
 
-    // 2. Add categories from stockCampuran
-    stockCampuran.value.forEach(c => {
-      if (c.jenis && c.jenis.trim()) set.add(c.jenis.trim());
-    });
-
-    // 3. Add categories from stores
+    // 2. Add categories from stores in Where to Buy
     stores.value.forEach(s => {
       const arr = normalizeJenisBarang(s.jenisBarang);
       arr.forEach(j => {
@@ -419,13 +414,12 @@ export const useKobichaStore = defineStore('kobicha', () => {
       });
     });
 
-    // 4. Filter out deleted categories (unless still actively used by a store or stock item)
+    // 3. Filter out deleted categories (unless still actively used by a store)
     const result: string[] = [];
     set.forEach(cat => {
       const isDeleted = deletedCategories.value.includes(cat);
       const isUsedInStore = stores.value.some(s => normalizeJenisBarang(s.jenisBarang).includes(cat));
-      const isUsedInCampuran = stockCampuran.value.some(c => c.jenis === cat);
-      if (!isDeleted || isUsedInStore || isUsedInCampuran) {
+      if (!isDeleted || isUsedInStore) {
         result.push(cat);
       }
     });

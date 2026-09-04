@@ -350,22 +350,15 @@
           <div>
             <div class="flex items-center justify-between mb-1">
               <label class="block text-xs font-semibold text-forest-800">Jenis Barang</label>
-              <span class="text-[10px] text-sage-500">Pilih yang sudah ada atau ketik baru</span>
+              <span class="text-[10px] text-sage-500">Pilih dari kategori Where to Buy</span>
             </div>
 
-            <div class="relative">
-              <input
-                v-model="form.jenis"
-                type="text"
-                required
-                list="campuranJenisDatalist"
-                placeholder="Ketik atau pilih jenis barang..."
-                class="w-full px-3.5 py-2 rounded-lg border border-sage-200 focus:outline-none focus:ring-2 focus:ring-sage-500/20 focus:border-sage-600 text-sm font-medium bg-white"
-              />
-              <datalist id="campuranJenisDatalist">
-                <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
-              </datalist>
-            </div>
+            <CustomSelect
+              v-model="form.jenis"
+              :options="jenisFormOptions"
+              placeholder="-- Pilih Jenis Barang --"
+              :searchable="true"
+            />
 
             <!-- Quick Suggestion Badges -->
             <div v-if="allJenisBarangList.length > 0" class="flex flex-wrap gap-1.5 mt-2 max-h-28 overflow-y-auto p-1.5 bg-sage-50/60 rounded-lg border border-sage-200/60">
@@ -555,6 +548,10 @@ const tipeOptions = [
 
 const jenisOptions = computed(() => [
   { value: '', label: 'Semua Jenis Barang' },
+  ...allJenisBarangList.value.map(j => ({ value: j, label: j }))
+]);
+
+const jenisFormOptions = computed(() => [
   ...allJenisBarangList.value.map(j => ({ value: j, label: j }))
 ]);
 
