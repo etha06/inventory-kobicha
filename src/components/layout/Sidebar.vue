@@ -299,7 +299,7 @@
               </div>
 
               <button
-                @click="store.forceCloudSync()"
+                @click="store.forceCloudSync(true)"
                 class="p-1 rounded-md text-white/60 hover:text-white hover:bg-white/10 transition-colors"
                 :title="cloudSyncError ? `Error: ${cloudSyncError}. Klik untuk coba sinkron ulang` : 'Sinkronkan Cloud Sekarang'"
               >

@@ -107,6 +107,14 @@ export const useKobichaStore = defineStore('kobicha', () => {
   const toasts = ref<{ id: string; message: string; type: 'success' | 'info' | 'warning' | 'error' }[]>([]);
 
   function showToast(message: string, type: 'success' | 'info' | 'warning' | 'error' = 'success') {
+    // Prevent duplicate toast if the exact same message is already visible
+    if (toasts.value.some(t => t.message === message)) return;
+
+    // Limit maximum active toasts on screen to 3
+    if (toasts.value.length >= 3) {
+      toasts.value.shift();
+    }
+
     const id = Math.random().toString(36).substring(2, 9);
     toasts.value.push({ id, message, type });
     setTimeout(() => {
@@ -143,7 +151,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
   }
 
   // Sync all local data to Cloud Firestore collections
-  async function forceCloudSync() {
+  async function forceCloudSync(notify = false) {
     cloudSyncStatus.value = 'syncing';
     try {
       await bulkSyncAllCollections({
@@ -160,15 +168,17 @@ export const useKobichaStore = defineStore('kobicha', () => {
       cloudSyncStatus.value = 'connected';
       cloudSyncError.value = null;
       lastSyncedAt.value = new Date().toISOString();
-      showToast('Data berhasil disinkronkan ke Cloud Firestore!', 'success');
+      if (notify) {
+        showToast('Data berhasil disinkronkan ke Cloud Firestore!', 'success');
+      }
     } catch (e: any) {
       cloudSyncStatus.value = 'error';
       if (e?.code === 'permission-denied') {
         cloudSyncError.value = 'Izin ditolak Firebase (permission-denied). Periksa Firestore Security Rules di Firebase Console!';
-        showToast('Izin ditolak Firebase. Cek Firestore Security Rules di Firebase Console!', 'error');
+        if (notify) showToast('Izin ditolak Firebase. Cek Firestore Security Rules di Firebase Console!', 'error');
       } else {
         cloudSyncError.value = e?.message || 'Gagal menyinkronkan ke Cloud';
-        showToast('Gagal menyinkronkan ke Cloud. Cek koneksi internet.', 'error');
+        if (notify) showToast('Gagal menyinkronkan ke Cloud. Cek koneksi internet.', 'error');
       }
     }
   }
