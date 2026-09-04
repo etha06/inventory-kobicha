@@ -526,7 +526,7 @@ import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { StockCampuran, CurrentStockEnum } from '../types';
 import { CURRENT_STOCK_OPTIONS, STOCK_STATUS_MAP } from '../utils/constants';
-import { formatRupiah, formatDateIndo } from '../utils/formatters';
+import { formatRupiah, formatDateIndo, normalizeJenisBarang } from '../utils/formatters';
 import { Plus, Search, Pencil, Trash2, ChevronRight, Package, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
@@ -568,10 +568,27 @@ const sortOptions = [
   { value: 'updated_at', label: 'Terakhir Diperbarui' }
 ];
 
-const storeOptions = computed(() => [
-  { value: '', label: '-- Pilih Toko Supplier --' },
-  ...stores.value.map(s => ({ value: s.id, label: s.namaToko }))
-]);
+const storeOptions = computed(() => {
+  const selectedJenis = form.value.jenis ? form.value.jenis.trim().toLowerCase() : '';
+  let list = stores.value;
+  if (selectedJenis) {
+    const matching = list.filter(s => {
+      const items = normalizeJenisBarang(s.jenisBarang).map(x => x.toLowerCase());
+      return items.some(x => x.includes(selectedJenis) || selectedJenis.includes(x));
+    });
+    if (matching.length > 0) {
+      list = matching;
+    }
+  }
+  if (form.value.storeId && !list.some(s => s.id === form.value.storeId)) {
+    const curr = stores.value.find(s => s.id === form.value.storeId);
+    if (curr) list = [curr, ...list];
+  }
+  return [
+    { value: '', label: '-- Pilih Toko Supplier --' },
+    ...list.map(s => ({ value: s.id, label: s.namaToko }))
+  ];
+});
 
 function isItemBahanBaku(c: StockCampuran): boolean {
   if (c.isBahanBaku === true) return true;

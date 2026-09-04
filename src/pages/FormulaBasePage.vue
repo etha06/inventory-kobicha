@@ -118,7 +118,7 @@
     <Modal
       :isOpen="isModalOpen"
       :title="isEditing ? 'Edit Formula Base' : 'Buat Formula Base Baru'"
-      subtitle="Tentukan komposisi bahan campuran dan porsi konsentrat FO (Wajib tepat 100%)"
+      subtitle="Tentukan komposisi bahan lainnya dan porsi konsentrat FO (Wajib tepat 100%)"
       maxWidth="2xl"
       @close="isModalOpen = false"
     >
@@ -296,7 +296,7 @@ const store = useKobichaStore();
 const { formulaBases, stockCampuran } = storeToRefs(store);
 
 const campuranOptions = computed(() => [
-  { value: '', label: '-- Pilih Bahan Campuran --' },
+  { value: '', label: '-- Pilih Bahan Lainnya --' },
   ...stockCampuran.value.map(c => ({
     value: c.id,
     label: `${c.namaBarang} (${c.jenis})`

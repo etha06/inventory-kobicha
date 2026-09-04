@@ -21,6 +21,18 @@
           </p>
         </div>
       </div>
+
+      <!-- Action Button: Riwayat Penambahan Stock -->
+      <div class="flex items-center gap-2">
+        <button
+          @click="isStockHistoryModalOpen = true"
+          class="px-4 py-2 rounded-xl bg-white hover:bg-sage-50 text-forest-900 border border-sage-200 text-xs font-bold shadow-xs transition-all flex items-center gap-2 active:scale-95"
+        >
+          <History class="w-4 h-4 text-amber-700" />
+          <span class="hidden sm:inline">Riwayat Penambahan Stock</span>
+          <span class="sm:hidden">Riwayat Stock</span>
+        </button>
+      </div>
     </div>
 
     <!-- 4 Pastel Wave Stat Cards (Image 1 Style) -->
@@ -139,21 +151,30 @@
 
     <!-- Quick Add Modals -->
     <QuickAddModals />
+
+    <!-- Stock Addition History Modal -->
+    <StockHistoryModal
+      :isOpen="isStockHistoryModalOpen"
+      @close="isStockHistoryModalOpen = false"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import StatsOverview from '../components/home/StatsOverview.vue';
 import QuickNotes from '../components/home/QuickNotes.vue';
 import InteractiveCalendar from '../components/home/InteractiveCalendar.vue';
 import QuickAddModals from '../components/home/QuickAddModals.vue';
-import { Menu } from 'lucide-vue-next';
+import StockHistoryModal from '../components/home/StockHistoryModal.vue';
+import { Menu, History } from 'lucide-vue-next';
 
 const store = useKobichaStore();
 const { stockFragranceOil, racikanCatalog } = storeToRefs(store);
+
+const isStockHistoryModalOpen = ref(false);
 
 // Dynamic greeting based on current hour
 const greetingTime = computed(() => {

@@ -72,7 +72,7 @@
               <th class="py-3.5 px-4 text-left">Nama Racikan</th>
               <th class="py-3.5 px-4 text-left">Fragrance Oil yang Dipakai</th>
               <th class="py-3.5 px-4 text-left">Notes (Labels)</th>
-              <th class="py-3.5 px-4 text-left">Tanggal Dibuat</th>
+              <th class="py-3.5 px-4 text-left">Updated At</th>
               <th class="py-3.5 px-4 text-left">Tipe</th>
               <th class="py-3.5 px-4 text-left w-28">Aksi</th>
             </tr>
@@ -140,9 +140,9 @@
                 </div>
               </td>
 
-              <!-- Tanggal Dibuat (Bulan Tahun) -->
-              <td class="py-3.5 px-4 text-left font-medium text-stone-700 whitespace-nowrap">
-                {{ racikan.tanggalDibuat }}
+              <!-- Updated At -->
+              <td class="py-3.5 px-4 text-left font-medium text-stone-700 whitespace-nowrap text-[11px]">
+                {{ formatDateIndo(racikan.updatedAt || racikan.createdAt) }}
               </td>
 
               <!-- Commission Badge -->
@@ -230,7 +230,7 @@
             <div class="flex items-start justify-between gap-2 border-b border-stone-700/60 pb-3">
               <div>
                 <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                  {{ r.tanggalDibuat }}
+                  {{ formatDateIndo(r.updatedAt || r.createdAt) }}
                 </span>
                 <h4 class="text-base font-bold text-white font-serif mt-1">{{ r.nama }}</h4>
                 <p v-if="r.formulaBaseName" class="text-xs text-stone-400">{{ r.formulaBaseName }}</p>
@@ -322,6 +322,7 @@ import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { RacikanFragrance, NotesEnum } from '../types';
 import { NOTES_OPTIONS, NOTE_COLOR_MAP } from '../utils/constants';
+import { formatDateIndo } from '../utils/formatters';
 import { FlaskConical, Search, Trash2, Scale, Scroll, X, Menu } from 'lucide-vue-next';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 import CustomSelect from '../components/common/CustomSelect.vue';

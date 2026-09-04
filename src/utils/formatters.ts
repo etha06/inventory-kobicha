@@ -31,3 +31,23 @@ export function formatDateIndo(dateStr: string): string {
 export function formatMonthYear(date: Date = new Date()): string {
   return format(date, 'MMMM yyyy', { locale: id });
 }
+
+export function normalizeJenisBarang(val: string | string[] | undefined | null): string[] {
+  if (!val) return [];
+  if (Array.isArray(val)) {
+    return val.map(s => String(s).trim()).filter(Boolean);
+  }
+  if (typeof val === 'string') {
+    if (val.includes(',')) {
+      return val.split(',').map(s => s.trim()).filter(Boolean);
+    }
+    const trimmed = val.trim();
+    return trimmed ? [trimmed] : [];
+  }
+  return [];
+}
+
+export function formatJenisBarang(val: string | string[] | undefined | null): string {
+  const items = normalizeJenisBarang(val);
+  return items.length > 0 ? items.join(', ') : '-';
+}

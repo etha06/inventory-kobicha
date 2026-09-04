@@ -100,9 +100,16 @@
                 </td>
 
                 <td class="py-3.5 px-4 text-left text-stone-600">
-                  <span class="px-2 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium">
-                    {{ store.jenisBarang }}
-                  </span>
+                  <div class="flex flex-wrap gap-1">
+                    <span
+                      v-for="j in normalizeJenisBarang(store.jenisBarang)"
+                      :key="j"
+                      class="px-2 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-medium"
+                    >
+                      {{ j }}
+                    </span>
+                    <span v-if="normalizeJenisBarang(store.jenisBarang).length === 0" class="text-stone-400 text-xs">-</span>
+                  </div>
                 </td>
 
                 <td class="py-3.5 px-4 text-left" @click.stop>
@@ -239,39 +246,71 @@
           />
         </div>
 
-        <!-- Smart Combobox Jenis Barang -->
+        <!-- Multi-Select / Multi-Tags Jenis Barang -->
         <div>
           <div class="flex items-center justify-between mb-1">
-            <label class="block text-xs font-semibold text-stone-700">Jenis Barang</label>
-            <span class="text-[10px] text-stone-400">Pilih yang sudah ada atau ketik baru</span>
+            <label class="block text-xs font-semibold text-stone-700">Jenis Barang (Bisa Pilih Lebih dari 1)</label>
+            <span class="text-[10px] text-stone-400">Pilih rekomendasi di bawah atau ketik baru</span>
           </div>
 
-          <div class="relative">
-            <input
-              v-model="form.jenisBarang"
-              type="text"
-              required
-              list="jenisBarangDatalist"
-              placeholder="Ketik atau pilih jenis barang..."
-              class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
-            />
-            <datalist id="jenisBarangDatalist">
-              <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
-            </datalist>
+          <!-- Selected Tags Display -->
+          <div v-if="form.jenisBarangList.length > 0" class="flex flex-wrap gap-1.5 p-2 bg-stone-50 rounded-lg border border-stone-200 mb-2">
+            <span
+              v-for="j in form.jenisBarangList"
+              :key="j"
+              class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-peach-500 text-white text-xs font-semibold shadow-2xs"
+            >
+              <span>{{ j }}</span>
+              <button
+                type="button"
+                @click="removeJenisTag(j)"
+                class="hover:bg-peach-700 rounded-full w-4 h-4 flex items-center justify-center transition-colors text-[10px]"
+                title="Hapus kategori ini"
+              >
+                &times;
+              </button>
+            </span>
+          </div>
+
+          <!-- Input to Add Custom Tag -->
+          <div class="flex gap-2">
+            <div class="relative flex-1">
+              <input
+                v-model="customJenisInput"
+                type="text"
+                list="jenisBarangDatalist"
+                placeholder="Ketik jenis barang lalu tekan Enter / Tambah..."
+                @keydown.enter.prevent="addCustomJenisTag"
+                class="w-full px-3.5 py-2 rounded-lg border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600 text-sm font-medium"
+              />
+              <datalist id="jenisBarangDatalist">
+                <option v-for="j in allJenisBarangList" :key="j" :value="j">{{ j }}</option>
+              </datalist>
+            </div>
+            <button
+              type="button"
+              @click="addCustomJenisTag"
+              class="px-3 py-2 bg-stone-800 hover:bg-stone-900 text-white rounded-lg text-xs font-semibold transition-colors flex-shrink-0"
+            >
+              + Tambah
+            </button>
           </div>
 
           <!-- Quick Suggestion Badges -->
-          <div class="flex flex-wrap gap-1.5 mt-2 max-h-24 overflow-y-auto p-1.5 bg-stone-50 rounded-lg border border-stone-100">
-            <button
-              v-for="j in allJenisBarangList"
-              :key="j"
-              type="button"
-              @click="form.jenisBarang = j"
-              class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all border"
-              :class="form.jenisBarang === j ? 'bg-peach-500 text-white border-peach-500 shadow-xs' : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-100'"
-            >
-              {{ j }}
-            </button>
+          <div class="mt-2.5">
+            <span class="text-[10px] font-bold text-stone-400 block mb-1">Klik untuk tambah / hapus cepat:</span>
+            <div class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-1.5 bg-stone-50 rounded-lg border border-stone-100">
+              <button
+                v-for="j in allJenisBarangList"
+                :key="j"
+                type="button"
+                @click="toggleJenisTag(j)"
+                class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all border"
+                :class="form.jenisBarangList.includes(j) ? 'bg-peach-500 text-white border-peach-500 shadow-xs' : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-100'"
+              >
+                {{ form.jenisBarangList.includes(j) ? '✓ ' + j : '+ ' + j }}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -323,45 +362,6 @@
       </form>
     </Modal>
 
-    <!-- Cascade Rename Confirmation Modal -->
-    <Teleport to="body">
-      <Transition
-        enter-active-class="transition duration-150 ease-out"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-active-class="transition duration-100 ease-in"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
-      >
-        <div v-if="showCascadeRenameModal" class="fixed inset-0 z-50 bg-stone-950/50 flex items-center justify-center p-4">
-          <div class="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl border border-stone-200 transition-all transform duration-150">
-            <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center mx-auto mb-3">
-              <AlertTriangle class="w-6 h-6" />
-            </div>
-            <h3 class="text-base font-bold text-center text-stone-900 mb-2">Kamu yakin ubah jenis barang ini?</h3>
-            <p class="text-xs text-stone-600 text-center mb-4 leading-relaxed">
-              Anda mengubah jenis barang dari <strong>"{{ originalJenisBarang }}"</strong> menjadi <strong>"{{ form.jenisBarang }}"</strong>.
-              Jika diubah, semua toko dan stock barang lainnya yang menggunakan jenis barang ini akan otomatis diperbarui ke nama baru.
-            </p>
-            <div class="flex items-center justify-center gap-2.5">
-              <button
-                @click="cancelCascadeRename"
-                class="px-4 py-2 rounded-lg border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
-              >
-                Hanya Ubah Toko Ini
-              </button>
-              <button
-                @click="confirmCascadeRename"
-                class="px-5 py-2 rounded-lg bg-amber-600 text-white text-xs font-semibold hover:bg-amber-700 shadow-xs"
-              >
-                Ya, Ubah Semua Terkait
-              </button>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
-
     <!-- Delete Confirm Modal -->
     <ConfirmModal
       :isOpen="isDeleteModalOpen"
@@ -378,7 +378,7 @@ import { ref, computed, watch } from 'vue';
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { StoreSupplier } from '../types';
-import { formatDateIndo } from '../utils/formatters';
+import { formatDateIndo, normalizeJenisBarang } from '../utils/formatters';
 import { Plus, Search, Pencil, Trash2, ExternalLink, ChevronRight, Store, AlertTriangle, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
@@ -419,12 +419,12 @@ const filteredStores = computed(() => {
   if (searchQuery.value.trim()) {
     const q = searchQuery.value.toLowerCase();
     list = list.filter(
-      s => s.namaToko.toLowerCase().includes(q) || s.jenisBarang.toLowerCase().includes(q)
+      s => s.namaToko.toLowerCase().includes(q) || normalizeJenisBarang(s.jenisBarang).some(j => j.toLowerCase().includes(q))
     );
   }
 
   if (filterJenis.value) {
-    list = list.filter(s => s.jenisBarang === filterJenis.value);
+    list = list.filter(s => normalizeJenisBarang(s.jenisBarang).includes(filterJenis.value));
   }
 
   list.sort((a, b) => {
@@ -465,24 +465,49 @@ function getLinkedCampuran(storeId: string) {
 const isModalOpen = ref(false);
 const isEditing = ref(false);
 const editingId = ref<string | null>(null);
-const originalJenisBarang = ref<string>('');
-const showCascadeRenameModal = ref(false);
+const customJenisInput = ref('');
 
-const form = ref({
+const form = ref<{
+  namaToko: string;
+  jenisBarangList: string[];
+  linkToko: string;
+  gambar: string;
+  deskripsi: string;
+}>({
   namaToko: '',
-  jenisBarang: '',
+  jenisBarangList: [],
   linkToko: '',
   gambar: '',
   deskripsi: ''
 });
 
+function addCustomJenisTag() {
+  const val = customJenisInput.value.trim();
+  if (val && !form.value.jenisBarangList.includes(val)) {
+    form.value.jenisBarangList.push(val);
+  }
+  customJenisInput.value = '';
+}
+
+function removeJenisTag(tag: string) {
+  form.value.jenisBarangList = form.value.jenisBarangList.filter(t => t !== tag);
+}
+
+function toggleJenisTag(tag: string) {
+  if (form.value.jenisBarangList.includes(tag)) {
+    removeJenisTag(tag);
+  } else {
+    form.value.jenisBarangList.push(tag);
+  }
+}
+
 function openAddModal() {
   isEditing.value = false;
   editingId.value = null;
-  originalJenisBarang.value = '';
+  customJenisInput.value = '';
   form.value = {
     namaToko: '',
-    jenisBarang: '',
+    jenisBarangList: [],
     linkToko: '',
     gambar: '',
     deskripsi: ''
@@ -493,10 +518,10 @@ function openAddModal() {
 function openEditModal(s: StoreSupplier) {
   isEditing.value = true;
   editingId.value = s.id;
-  originalJenisBarang.value = s.jenisBarang;
+  customJenisInput.value = '';
   form.value = {
     namaToko: s.namaToko,
-    jenisBarang: s.jenisBarang,
+    jenisBarangList: normalizeJenisBarang(s.jenisBarang),
     linkToko: s.linkToko,
     gambar: s.gambar || '',
     deskripsi: s.deskripsi || ''
@@ -505,24 +530,17 @@ function openEditModal(s: StoreSupplier) {
 }
 
 function handleSubmitStore() {
-  if (!form.value.namaToko.trim() || !form.value.jenisBarang.trim()) return;
-
-  if (isEditing.value && originalJenisBarang.value && form.value.jenisBarang.trim() !== originalJenisBarang.value.trim()) {
-    showCascadeRenameModal.value = true;
+  if (!form.value.namaToko.trim()) {
+    store.showToast('Silakan masukkan nama toko', 'warning');
     return;
   }
-
-  executeSaveStore();
-}
-
-function confirmCascadeRename() {
-  store.renameJenisBarangCascade(originalJenisBarang.value, form.value.jenisBarang.trim());
-  showCascadeRenameModal.value = false;
-  executeSaveStore();
-}
-
-function cancelCascadeRename() {
-  showCascadeRenameModal.value = false;
+  if (customJenisInput.value.trim()) {
+    addCustomJenisTag();
+  }
+  if (form.value.jenisBarangList.length === 0) {
+    store.showToast('Pilih minimal 1 jenis barang untuk toko ini', 'warning');
+    return;
+  }
   executeSaveStore();
 }
 
@@ -530,7 +548,7 @@ function executeSaveStore() {
   if (isEditing.value && editingId.value) {
     store.updateStore(editingId.value, {
       namaToko: form.value.namaToko.trim(),
-      jenisBarang: form.value.jenisBarang.trim(),
+      jenisBarang: form.value.jenisBarangList,
       linkToko: form.value.linkToko.trim(),
       gambar: form.value.gambar?.trim() || undefined,
       deskripsi: form.value.deskripsi?.trim() || undefined
@@ -538,7 +556,7 @@ function executeSaveStore() {
   } else {
     store.addStore({
       namaToko: form.value.namaToko.trim(),
-      jenisBarang: form.value.jenisBarang.trim(),
+      jenisBarang: form.value.jenisBarangList,
       linkToko: form.value.linkToko.trim(),
       gambar: form.value.gambar?.trim() || undefined,
       deskripsi: form.value.deskripsi?.trim() || undefined

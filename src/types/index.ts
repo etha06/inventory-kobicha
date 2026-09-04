@@ -23,7 +23,7 @@ export type CurrentStockEnum = 'Banyak' | 'Dikit' | 'Habis';
 
 export interface StoreSupplier {
   id: string;
-  jenisBarang: string;
+  jenisBarang: string | string[];
   namaToko: string;
   linkToko: string;
   gambar?: string;

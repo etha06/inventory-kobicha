@@ -317,10 +317,10 @@
 
       <!-- Profit Margin Simulator / Calculator -->
       <div class="bg-stone-950/60 rounded-xl p-5 border border-stone-800 space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-5 gap-3.5">
-          <!-- 1. Pilih Produk untuk Disimulasikan (Dark Themed Dropdown) -->
-          <div class="sm:col-span-1">
-            <label class="block text-xs text-stone-300 mb-1">Pilih Produk</label>
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3.5">
+          <!-- 1. Pilih Produk untuk Disimulasikan (Dark Themed Dropdown - Lebih Panjang) -->
+          <div class="sm:col-span-4">
+            <label class="block text-xs text-stone-300 mb-1 font-medium">Pilih Produk</label>
             <CustomSelect
               v-model="simulatedProductId"
               :options="simulationProductOptions"
@@ -332,8 +332,8 @@
           </div>
 
           <!-- 2. Modal HPP / Unit -->
-          <div>
-            <label class="block text-xs text-stone-300 mb-1">Modal HPP / Unit</label>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-stone-300 mb-1 font-medium">Modal HPP / Unit</label>
             <div class="px-3.5 py-2 rounded-lg bg-stone-900 border border-stone-700 text-xs font-bold text-amber-300 truncate flex items-center h-[38px]">
               <span v-if="simulatedProductId">
                 {{ formatRupiah(simulatedProductHpp) }}
@@ -343,8 +343,8 @@
           </div>
 
           <!-- 3. Simulasi Harga Jual (Input yang Bisa Diedit, Default Sesuai Harga Jual Produk) -->
-          <div>
-            <label class="block text-xs text-stone-300 mb-1">Simulasi Harga Jual (Rp)</label>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-stone-300 mb-1 font-medium">Simulasi Harga Jual</label>
             <div class="relative">
               <input
                 v-model.number="simulatedSellingPrice"
@@ -360,9 +360,9 @@
             </div>
           </div>
 
-          <!-- 4. Profit Margin (%) (Bisa Diedit) -->
-          <div>
-            <label class="block text-xs text-stone-300 mb-1">Profit Margin (%)</label>
+          <!-- 4. Profit Margin (%) (Lebih Pendek) -->
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-stone-300 mb-1 font-medium">Profit Margin</label>
             <div class="relative">
               <input
                 v-model.number="simulatedMargin"
@@ -371,15 +371,15 @@
                 :disabled="!simulatedProductId || simulatedProductHpp <= 0"
                 placeholder="0"
                 @input="onMarginInput"
-                class="w-full px-3.5 py-2 rounded-lg bg-stone-900 border border-stone-700 text-xs font-semibold text-white pr-8 focus:ring-2 focus:ring-emerald-500/30 disabled:opacity-40 disabled:cursor-not-allowed"
+                class="w-full px-3 py-2 rounded-lg bg-stone-900 border border-stone-700 text-xs font-semibold text-white pr-7 focus:ring-2 focus:ring-emerald-500/30 disabled:opacity-40 disabled:cursor-not-allowed text-center font-mono"
               />
-              <span class="absolute right-3 top-2 text-stone-400 text-xs font-bold pointer-events-none">%</span>
+              <span class="absolute right-2.5 top-2 text-stone-400 text-xs font-bold pointer-events-none">%</span>
             </div>
           </div>
 
           <!-- 5. Estimasi Laba Bersih / Unit -->
-          <div>
-            <label class="block text-xs text-stone-300 mb-1">Estimasi Laba / Unit</label>
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-stone-300 mb-1 font-medium">Estimasi Laba</label>
             <div class="px-3.5 py-2 rounded-lg bg-emerald-950/80 border border-emerald-500/40 text-xs font-bold text-emerald-400 truncate flex items-center h-[38px]">
               <span v-if="simulatedProductId">
                 +{{ formatRupiah(simulatedProfitPerUnit) }}
@@ -953,7 +953,7 @@ const simulatedMargin = ref<number>(0);
 const simulationProductOptions = computed(() => {
   return readyToSellProducts.value.map(p => ({
     value: p.id,
-    label: `${p.nama} (${formatRupiah(p.hargaJual)})`
+    label: p.nama
   }));
 });
 

@@ -30,6 +30,7 @@ import {
   subscribeToCollections,
   CloudSyncStatus 
 } from '../firebase/firestoreService';
+import { normalizeJenisBarang } from '../utils/formatters';
 
 const STORAGE_KEY = 'kobicha_parfume_app_v1';
 
@@ -391,17 +392,23 @@ export const useKobichaStore = defineStore('kobicha', () => {
       if (c.jenis && c.jenis.trim()) set.add(c.jenis.trim());
     });
     stores.value.forEach(s => {
-      if (s.jenisBarang && s.jenisBarang.trim()) set.add(s.jenisBarang.trim());
+      const arr = normalizeJenisBarang(s.jenisBarang);
+      arr.forEach(j => {
+        if (j.trim()) set.add(j.trim());
+      });
     });
-    // If completely empty database, provide basic starter categories
-    if (set.size === 0) {
-      return [
-        'Pelarut / Solvent',
-        'Fixative / Pengikat',
-        'Botol & Packaging',
-        'Sprayer & Cap'
-      ];
-    }
+    // Add standard preset suggestions
+    const presets = [
+      'Fragrance Oil',
+      'Essential Oil',
+      'Bibit Parfum',
+      'Kimia Sintetis',
+      'Pelarut / Solvent',
+      'Fixative / Pengikat',
+      'Botol & Packaging',
+      'Sprayer & Cap'
+    ];
+    presets.forEach(p => set.add(p));
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   });
 
@@ -411,8 +418,10 @@ export const useKobichaStore = defineStore('kobicha', () => {
     let campCount = 0;
 
     stores.value.forEach(s => {
-      if (s.jenisBarang === oldName) {
-        s.jenisBarang = newName;
+      const arr = normalizeJenisBarang(s.jenisBarang);
+      if (arr.includes(oldName)) {
+        const updatedArr = arr.map(j => (j === oldName ? newName : j));
+        s.jenisBarang = updatedArr;
         s.updatedAt = new Date().toISOString();
         storeCount++;
       }

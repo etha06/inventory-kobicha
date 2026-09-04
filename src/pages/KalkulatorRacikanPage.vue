@@ -29,7 +29,7 @@
           <span>Reset Form</span>
         </button>
         <button
-          @click="saveRacikan"
+          @click="saveRacikan()"
           class="px-5 py-2.5 rounded-lg bg-peach-500 hover:bg-peach-600 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
         >
           <Save class="w-4 h-4" />
@@ -272,9 +272,7 @@
                     type="number"
                     min="1"
                     required
-                    :disabled="mode === 'by_resep'"
-                    class="w-20 px-2 py-1 text-xs border rounded-md text-left font-mono font-bold transition-colors"
-                    :class="mode === 'by_resep' ? 'bg-stone-100 text-stone-500 cursor-not-allowed border-stone-200' : 'bg-white border-stone-300'"
+                    class="w-20 px-2 py-1 text-xs border rounded-md text-left font-mono font-bold bg-white border-stone-300 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
                   />
                 </td>
 
@@ -367,7 +365,7 @@
 
         <div class="flex items-center gap-3">
           <button
-            @click="saveAndGoToHpp"
+            @click="onClickHitungHpp"
             class="px-5 py-2.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold border border-stone-700 transition-all flex items-center gap-1.5"
           >
             <DollarSign class="w-3.5 h-3.5" />
@@ -375,7 +373,7 @@
           </button>
 
           <button
-            @click="saveRacikan"
+            @click="saveRacikan()"
             class="px-6 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-lg shadow-amber-950/50 transition-all flex items-center gap-1.5"
           >
             <Save class="w-4 h-4" />
@@ -613,6 +611,44 @@
               <span>{{ selectedRacikanCatalogId === item.id ? 'Dimuat' : 'Pilih Resep' }}</span>
             </button>
           </div>
+        </div>
+      </div>
+    </Modal>
+
+    <!-- Modal Konfirmasi Pindah ke Kalkulator HPP -->
+    <Modal
+      :isOpen="isLeaveToHppModalOpen"
+      title="Pindah ke Kalkulator HPP?"
+      subtitle="Konfirmasi status penyimpanan racikan saat ini"
+      @close="isLeaveToHppModalOpen = false"
+    >
+      <div class="space-y-4">
+        <p class="text-xs text-stone-700 leading-relaxed">
+          Yakin ingin pindah ke Kalkulator HPP? Jika langsung pindah tanpa menyimpan, data racikan saat ini belum tersimpan ke katalog.
+        </p>
+
+        <div class="pt-3 border-t flex flex-wrap items-center justify-end gap-2">
+          <button
+            type="button"
+            @click="isLeaveToHppModalOpen = false"
+            class="px-4 py-2 rounded-lg border border-stone-200 text-stone-700 text-xs font-semibold hover:bg-stone-50"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            @click="forceGoToHpp"
+            class="px-4 py-2 rounded-lg bg-stone-800 text-white text-xs font-semibold hover:bg-stone-900 transition-colors"
+          >
+            Tetap Pindah (Tanpa Simpan)
+          </button>
+          <button
+            type="button"
+            @click="saveAndGoToHpp"
+            class="px-5 py-2 rounded-lg bg-amber-600 text-white text-xs font-bold hover:bg-amber-700 shadow-xs transition-colors"
+          >
+            Simpan & Lanjut ke HPP
+          </button>
         </div>
       </div>
     </Modal>
@@ -922,16 +958,27 @@ function resetForm() {
   rows.value = [];
 }
 
-function saveRacikan() {
+const isLeaveToHppModalOpen = ref(false);
+
+function onClickHitungHpp() {
+  isLeaveToHppModalOpen.value = true;
+}
+
+function forceGoToHpp() {
+  isLeaveToHppModalOpen.value = false;
+  store.navigateTo('kalkulator-hpp');
+}
+
+function saveRacikan(shouldNavigate = true) {
   if (!namaRacikan.value.trim()) {
     store.showToast('Silakan masukkan nama racikan terlebih dahulu', 'warning');
-    return;
+    return null;
   }
 
   const validRows = calculatedRows.value.filter(r => r.fragranceOilId);
   if (validRows.length === 0) {
     store.showToast('Pilih minimal 1 Fragrance Oil yang valid', 'warning');
-    return;
+    return null;
   }
 
   const base = formulaBases.value.find(b => b.id === selectedBaseId.value);
@@ -958,7 +1005,7 @@ function saveRacikan() {
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   const bulanTahun = `${months[now.getMonth()]} ${now.getFullYear()}`;
 
-  store.addRacikanFragrance({
+  const created = store.addRacikanFragrance({
     nama: namaRacikan.value,
     formulaBaseId: selectedBaseId.value || undefined,
     formulaBaseName: base?.nama || undefined,
@@ -970,14 +1017,20 @@ function saveRacikan() {
     isCommission: isCommission.value
   });
 
-  store.navigateTo('katalog-racikan');
+  if (shouldNavigate) {
+    store.navigateTo('katalog-racikan');
+  }
+
+  return created;
 }
 
 function saveAndGoToHpp() {
-  saveRacikan();
-  const latest = racikanCatalog.value[racikanCatalog.value.length - 1];
-  if (latest) {
-    store.openHppWithRacikan(latest.id, latest.formulaBaseId);
+  isLeaveToHppModalOpen.value = false;
+  const created = saveRacikan(false);
+  if (created) {
+    store.openHppWithRacikan(created.id, created.formulaBaseId);
+  } else {
+    store.navigateTo('kalkulator-hpp');
   }
 }
 

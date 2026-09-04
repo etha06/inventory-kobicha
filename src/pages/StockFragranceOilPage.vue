@@ -133,7 +133,7 @@
               <th class="py-3.5 px-4 text-left">Toko Supplier</th>
               <th class="py-3.5 px-4 text-left">Botol (ml)</th>
               <th class="py-3.5 px-4 text-left">Current Stock</th>
-              <th class="py-3.5 px-4 text-left">Jumlah Formula</th>
+              <th class="py-3.5 px-4 text-left">Jumlah Racikan</th>
               <th class="py-3.5 px-4 text-left">Notes</th>
               <th class="py-3.5 px-4 text-left">Pyramid</th>
               <th class="py-3.5 px-4 text-left">Updated At</th>
@@ -193,7 +193,7 @@
                   </span>
                 </td>
 
-                <!-- Jumlah Formula (Angka saja tanpa label) -->
+                <!-- Jumlah Racikan (Angka saja tanpa label) -->
                 <td class="py-3.5 px-4 text-left font-mono font-bold text-stone-800 text-xs">
                   {{ store.getFoUsageCount(item.id) }}
                 </td>
@@ -271,7 +271,7 @@
                         <div class="flex flex-wrap gap-4 text-xs text-stone-600 pt-1">
                           <span>Toko Supplier: <strong class="text-stone-800">{{ item.storeName }}</strong></span>
                           <span>Kemasan Utama: <strong class="text-stone-800">{{ item.botolMl }} ml</strong></span>
-                          <span>Rata-rata Harga/ml: <strong class="text-amber-800">{{ formatRupiah(store.getFoAveragePricePerMl(item.id)) }} / ml</strong></span>
+                          <span>Harga / ml: <strong class="text-amber-800">{{ formatRupiah(store.getFoAveragePricePerMl(item.id)) }} / ml</strong></span>
                         </div>
                       </div>
 
@@ -523,7 +523,7 @@ import {
   PYRAMID_BADGE_MAP,
   STOCK_STATUS_MAP
 } from '../utils/constants';
-import { formatRupiah, formatDateIndo } from '../utils/formatters';
+import { formatRupiah, formatDateIndo, normalizeJenisBarang } from '../utils/formatters';
 import { Plus, Search, Pencil, Trash2, ChevronRight, Droplet, Menu } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
@@ -564,15 +564,29 @@ const sortOptions = [
   { value: 'name_asc', label: 'Nama FO (A - Z)' },
   { value: 'name_desc', label: 'Nama FO (Z - A)' },
   { value: 'stock_status', label: 'Status Stock (Habis -> Banyak)' },
-  { value: 'usage_desc', label: 'Paling Sering Digunakan di Formula' },
+  { value: 'usage_desc', label: 'Paling Sering Digunakan di Racikan' },
   { value: 'bottle_desc', label: 'Ukuran Botol Terbesar' },
   { value: 'updated_at', label: 'Terakhir Diperbarui' }
 ];
 
-const storeOptions = computed(() => [
-  { value: '', label: '-- Pilih Toko Supplier --' },
-  ...stores.value.map(s => ({ value: s.id, label: s.namaToko }))
-]);
+const storeOptions = computed(() => {
+  const allowed = ['fragrance oil', 'essential oil', 'bibit parfum', 'kimia sintetis', 'bibit'];
+  let list = stores.value.filter(s => {
+    const items = normalizeJenisBarang(s.jenisBarang).map(x => x.toLowerCase());
+    return items.some(x => allowed.some(a => x.includes(a)));
+  });
+  if (list.length === 0) {
+    list = stores.value;
+  }
+  if (form.value.storeId && !list.some(s => s.id === form.value.storeId)) {
+    const curr = stores.value.find(s => s.id === form.value.storeId);
+    if (curr) list = [curr, ...list];
+  }
+  return [
+    { value: '', label: '-- Pilih Toko Supplier --' },
+    ...list.map(s => ({ value: s.id, label: s.namaToko }))
+  ];
+});
 
 const currentStockOptions = [
   { value: 'Banyak', label: 'Banyak', badge: 'Stock Aman' },
