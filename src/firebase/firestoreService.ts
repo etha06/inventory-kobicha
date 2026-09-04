@@ -25,15 +25,25 @@ export interface AppStateData {
 export async function saveStateToFirestore(state: AppStateData): Promise<void> {
   try {
     const docRef = doc(db, COLLECTION_NAME, 'app_state');
-    await setDoc(
-      docRef,
-      {
-        ...state,
+    
+    // Sanitize state to clean JSON without any `undefined` values which Firestore rejects
+    const cleanPayload = JSON.parse(
+      JSON.stringify({
+        stores: state.stores || [],
+        stockCampuran: state.stockCampuran || [],
+        stockFragranceOil: state.stockFragranceOil || [],
+        formulaBases: state.formulaBases || [],
+        racikanCatalog: state.racikanCatalog || [],
+        hppCatalog: state.hppCatalog || [],
+        readyToSellProducts: state.readyToSellProducts || [],
+        quickNotes: state.quickNotes || [],
+        deadlines: state.deadlines || [],
         updatedAt: new Date().toISOString(),
         version: '1.1'
-      },
-      { merge: true }
+      })
     );
+
+    await setDoc(docRef, cleanPayload, { merge: true });
   } catch (error) {
     console.error('Error saving state to Firestore:', error);
     throw error;

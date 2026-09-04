@@ -119,12 +119,12 @@ export const useKobichaStore = defineStore('kobicha', () => {
   }
 
   // Sync to Cloud Firestore with debounce
-  function syncToCloud() {
+  function syncToCloud(immediate = false) {
     if (isRemoteSync.value) return;
     cloudSyncStatus.value = 'syncing';
     if (saveDebounceTimer) clearTimeout(saveDebounceTimer);
 
-    saveDebounceTimer = setTimeout(async () => {
+    const doSave = async () => {
       try {
         await saveStateToFirestore({
           stores: stores.value,
@@ -149,7 +149,13 @@ export const useKobichaStore = defineStore('kobicha', () => {
           cloudSyncError.value = e?.message || 'Gagal tersambung ke Firestore';
         }
       }
-    }, 400);
+    };
+
+    if (immediate) {
+      doSave();
+    } else {
+      saveDebounceTimer = setTimeout(doSave, 150);
+    }
   }
 
   async function forceCloudSync() {
@@ -191,6 +197,33 @@ export const useKobichaStore = defineStore('kobicha', () => {
       unsubscribeFirestore = subscribeToFirestore(
         (remoteData) => {
           if (remoteData) {
+            const hasRemoteItems = 
+              (remoteData.stores && remoteData.stores.length > 0) ||
+              (remoteData.stockCampuran && remoteData.stockCampuran.length > 0) ||
+              (remoteData.stockFragranceOil && remoteData.stockFragranceOil.length > 0) ||
+              (remoteData.formulaBases && remoteData.formulaBases.length > 0) ||
+              (remoteData.racikanCatalog && remoteData.racikanCatalog.length > 0) ||
+              (remoteData.hppCatalog && remoteData.hppCatalog.length > 0) ||
+              (remoteData.readyToSellProducts && remoteData.readyToSellProducts.length > 0);
+
+            const hasLocalItems = 
+              stores.value.length > 0 ||
+              stockCampuran.value.length > 0 ||
+              stockFragranceOil.value.length > 0 ||
+              formulaBases.value.length > 0 ||
+              racikanCatalog.value.length > 0 ||
+              hppCatalog.value.length > 0 ||
+              readyToSellProducts.value.length > 0;
+
+            // If remote is completely empty but local device has existing items,
+            // DO NOT wipe local data! Instead, sync local data to remote Firestore.
+            if (!hasRemoteItems && hasLocalItems) {
+              cloudSyncStatus.value = 'connected';
+              cloudSyncError.value = null;
+              syncToCloud(true);
+              return;
+            }
+
             isRemoteSync.value = true;
             if (Array.isArray(remoteData.stores)) stores.value = remoteData.stores;
             if (Array.isArray(remoteData.stockCampuran)) stockCampuran.value = remoteData.stockCampuran;
@@ -213,7 +246,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
             // First time remote init -> push local data to Firestore
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
-            syncToCloud();
+            syncToCloud(true);
           }
         },
         (err: any) => {
