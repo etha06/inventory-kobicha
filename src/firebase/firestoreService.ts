@@ -1,77 +1,140 @@
 import { db } from './config';
-import { doc, setDoc, onSnapshot, Unsubscribe } from 'firebase/firestore';
+import { 
+  collection, 
+  doc, 
+  setDoc, 
+  deleteDoc, 
+  onSnapshot, 
+  writeBatch,
+  Unsubscribe 
+} from 'firebase/firestore';
 
 export type CloudSyncStatus = 'connected' | 'syncing' | 'offline' | 'error';
 
-const COLLECTION_NAME = 'kobicha_inventory';
+export const COLLECTIONS = {
+  STORES: 'stores',
+  STOCK_CAMPURAN: 'stock_campuran',
+  STOCK_FO: 'stock_fragrance_oil',
+  FORMULA_BASES: 'formula_bases',
+  RACIKAN_CATALOG: 'racikan_catalog',
+  HPP_CATALOG: 'hpp_catalog',
+  READY_TO_SELL: 'ready_to_sell',
+  QUICK_NOTES: 'quick_notes',
+  DEADLINES: 'deadlines'
+} as const;
 
-export interface AppStateData {
-  stores?: any[];
-  stockCampuran?: any[];
-  stockFragranceOil?: any[];
-  formulaBases?: any[];
-  racikanCatalog?: any[];
-  hppCatalog?: any[];
-  readyToSellProducts?: any[];
-  quickNotes?: any[];
-  deadlines?: any[];
-  updatedAt?: string;
-  version?: string;
+// Helper to sanitize payload from undefined fields
+export function sanitize<T>(data: T): T {
+  return JSON.parse(JSON.stringify(data));
 }
 
-/**
- * Save a specific sub-state or all data to Cloud Firestore
- */
-export async function saveStateToFirestore(state: AppStateData): Promise<void> {
+// Save single document to a collection
+export async function saveDocToFirestore(collectionName: string, id: string, data: any): Promise<void> {
   try {
-    const docRef = doc(db, COLLECTION_NAME, 'app_state');
-    
-    // Sanitize state to clean JSON without any `undefined` values which Firestore rejects
-    const cleanPayload = JSON.parse(
-      JSON.stringify({
-        stores: state.stores || [],
-        stockCampuran: state.stockCampuran || [],
-        stockFragranceOil: state.stockFragranceOil || [],
-        formulaBases: state.formulaBases || [],
-        racikanCatalog: state.racikanCatalog || [],
-        hppCatalog: state.hppCatalog || [],
-        readyToSellProducts: state.readyToSellProducts || [],
-        quickNotes: state.quickNotes || [],
-        deadlines: state.deadlines || [],
-        updatedAt: new Date().toISOString(),
-        version: '1.1'
-      })
-    );
-
-    await setDoc(docRef, cleanPayload, { merge: true });
+    const cleanData = sanitize({ ...data, updatedAt: new Date().toISOString() });
+    await setDoc(doc(db, collectionName, id), cleanData, { merge: true });
   } catch (error) {
-    console.error('Error saving state to Firestore:', error);
+    console.error(`Error saving doc to ${collectionName}:`, error);
     throw error;
   }
 }
 
-/**
- * Subscribe to real-time changes from Cloud Firestore
- */
-export function subscribeToFirestore(
-  onData: (data: AppStateData | null) => void,
+// Delete single document from a collection
+export async function deleteDocFromFirestore(collectionName: string, id: string): Promise<void> {
+  try {
+    await deleteDoc(doc(db, collectionName, id));
+  } catch (error) {
+    console.error(`Error deleting doc from ${collectionName}:`, error);
+    throw error;
+  }
+}
+
+// Bulk sync all collections (e.g. on initial upload, clear, or import)
+export async function bulkSyncAllCollections(state: {
+  stores: any[];
+  stockCampuran: any[];
+  stockFragranceOil: any[];
+  formulaBases: any[];
+  racikanCatalog: any[];
+  hppCatalog: any[];
+  readyToSellProducts: any[];
+  quickNotes: any[];
+  deadlines: any[];
+}): Promise<void> {
+  try {
+    const batch = writeBatch(db);
+    
+    const map: Record<string, any[]> = {
+      [COLLECTIONS.STORES]: state.stores || [],
+      [COLLECTIONS.STOCK_CAMPURAN]: state.stockCampuran || [],
+      [COLLECTIONS.STOCK_FO]: state.stockFragranceOil || [],
+      [COLLECTIONS.FORMULA_BASES]: state.formulaBases || [],
+      [COLLECTIONS.RACIKAN_CATALOG]: state.racikanCatalog || [],
+      [COLLECTIONS.HPP_CATALOG]: state.hppCatalog || [],
+      [COLLECTIONS.READY_TO_SELL]: state.readyToSellProducts || [],
+      [COLLECTIONS.QUICK_NOTES]: state.quickNotes || [],
+      [COLLECTIONS.DEADLINES]: state.deadlines || []
+    };
+
+    for (const [collName, items] of Object.entries(map)) {
+      for (const item of items) {
+        if (item && item.id) {
+          batch.set(doc(db, collName, item.id), sanitize(item), { merge: true });
+        }
+      }
+    }
+
+    await batch.commit();
+  } catch (error) {
+    console.error('Error bulk syncing to Firestore:', error);
+    throw error;
+  }
+}
+
+// Subscribe to all collections simultaneously in real-time
+export function subscribeToCollections(
+  callbacks: {
+    onStores?: (data: any[]) => void;
+    onStockCampuran?: (data: any[]) => void;
+    onStockFo?: (data: any[]) => void;
+    onFormulaBases?: (data: any[]) => void;
+    onRacikan?: (data: any[]) => void;
+    onHpp?: (data: any[]) => void;
+    onReadyToSell?: (data: any[]) => void;
+    onQuickNotes?: (data: any[]) => void;
+    onDeadlines?: (data: any[]) => void;
+  },
   onError?: (err: any) => void
 ): Unsubscribe {
-  const docRef = doc(db, COLLECTION_NAME, 'app_state');
-  
-  return onSnapshot(
-    docRef,
-    (snapshot) => {
-      if (snapshot.exists()) {
-        onData(snapshot.data() as AppStateData);
-      } else {
-        // Document does not exist in Firestore yet (First time initialization)
-        onData(null);
+  const unsubs: Unsubscribe[] = [];
+
+  const attach = (collName: string, cb?: (data: any[]) => void) => {
+    if (!cb) return;
+    const unsub = onSnapshot(
+      collection(db, collName),
+      (snapshot) => {
+        const items = snapshot.docs.map(d => ({ ...d.data(), id: d.id }));
+        cb(items);
+      },
+      (err) => {
+        console.error(`Subscription error on ${collName}:`, err);
+        if (onError) onError(err);
       }
-    },
-    (err) => {
-      console.error('Firestore subscription error:', err);
-      if (onError) onError(err);
-    }
-  );
+    );
+    unsubs.push(unsub);
+  };
+
+  attach(COLLECTIONS.STORES, callbacks.onStores);
+  attach(COLLECTIONS.STOCK_CAMPURAN, callbacks.onStockCampuran);
+  attach(COLLECTIONS.STOCK_FO, callbacks.onStockFo);
+  attach(COLLECTIONS.FORMULA_BASES, callbacks.onFormulaBases);
+  attach(COLLECTIONS.RACIKAN_CATALOG, callbacks.onRacikan);
+  attach(COLLECTIONS.HPP_CATALOG, callbacks.onHpp);
+  attach(COLLECTIONS.READY_TO_SELL, callbacks.onReadyToSell);
+  attach(COLLECTIONS.QUICK_NOTES, callbacks.onQuickNotes);
+  attach(COLLECTIONS.DEADLINES, callbacks.onDeadlines);
+
+  return () => {
+    unsubs.forEach(u => u());
+  };
 }

@@ -22,7 +22,14 @@ import {
   INITIAL_DEADLINES,
   INITIAL_READY_TO_SELL
 } from './sampleData';
-import { saveStateToFirestore, subscribeToFirestore, CloudSyncStatus } from '../firebase/firestoreService';
+import { 
+  COLLECTIONS,
+  saveDocToFirestore,
+  deleteDocFromFirestore,
+  bulkSyncAllCollections,
+  subscribeToCollections,
+  CloudSyncStatus 
+} from '../firebase/firestoreService';
 
 const STORAGE_KEY = 'kobicha_parfume_app_v1';
 
@@ -118,50 +125,11 @@ export const useKobichaStore = defineStore('kobicha', () => {
     }
   }
 
-  // Sync to Cloud Firestore with debounce
-  function syncToCloud(immediate = false) {
-    if (isRemoteSync.value) return;
-    cloudSyncStatus.value = 'syncing';
-    if (saveDebounceTimer) clearTimeout(saveDebounceTimer);
-
-    const doSave = async () => {
-      try {
-        await saveStateToFirestore({
-          stores: stores.value,
-          stockCampuran: stockCampuran.value,
-          stockFragranceOil: stockFragranceOil.value,
-          formulaBases: formulaBases.value,
-          racikanCatalog: racikanCatalog.value,
-          hppCatalog: hppCatalog.value,
-          readyToSellProducts: readyToSellProducts.value,
-          quickNotes: quickNotes.value,
-          deadlines: deadlines.value,
-        });
-        cloudSyncStatus.value = 'connected';
-        cloudSyncError.value = null;
-        lastSyncedAt.value = new Date().toISOString();
-      } catch (e: any) {
-        console.warn('Firestore sync failed, saved in local cache:', e);
-        cloudSyncStatus.value = 'offline';
-        if (e?.code === 'permission-denied') {
-          cloudSyncError.value = 'Firestore Permission Denied. Pastikan Rules di Firebase Console diatur ke test mode (allow read, write: if true;).';
-        } else {
-          cloudSyncError.value = e?.message || 'Gagal tersambung ke Firestore';
-        }
-      }
-    };
-
-    if (immediate) {
-      doSave();
-    } else {
-      saveDebounceTimer = setTimeout(doSave, 150);
-    }
-  }
-
+  // Sync all local data to Cloud Firestore collections
   async function forceCloudSync() {
     cloudSyncStatus.value = 'syncing';
     try {
-      await saveStateToFirestore({
+      await bulkSyncAllCollections({
         stores: stores.value,
         stockCampuran: stockCampuran.value,
         stockFragranceOil: stockFragranceOil.value,
@@ -188,65 +156,97 @@ export const useKobichaStore = defineStore('kobicha', () => {
     }
   }
 
-  // Initialize Real-time Firestore Sync
+  // Initialize Real-time Firestore Multi-Collection Sync
   function initFirebaseSync() {
     if (unsubscribeFirestore) return;
     cloudSyncStatus.value = 'syncing';
 
     try {
-      unsubscribeFirestore = subscribeToFirestore(
-        (remoteData) => {
-          if (remoteData) {
-            const hasRemoteItems = 
-              (remoteData.stores && remoteData.stores.length > 0) ||
-              (remoteData.stockCampuran && remoteData.stockCampuran.length > 0) ||
-              (remoteData.stockFragranceOil && remoteData.stockFragranceOil.length > 0) ||
-              (remoteData.formulaBases && remoteData.formulaBases.length > 0) ||
-              (remoteData.racikanCatalog && remoteData.racikanCatalog.length > 0) ||
-              (remoteData.hppCatalog && remoteData.hppCatalog.length > 0) ||
-              (remoteData.readyToSellProducts && remoteData.readyToSellProducts.length > 0);
-
-            const hasLocalItems = 
-              stores.value.length > 0 ||
-              stockCampuran.value.length > 0 ||
-              stockFragranceOil.value.length > 0 ||
-              formulaBases.value.length > 0 ||
-              racikanCatalog.value.length > 0 ||
-              hppCatalog.value.length > 0 ||
-              readyToSellProducts.value.length > 0;
-
-            // If remote is completely empty but local device has existing items,
-            // DO NOT wipe local data! Instead, sync local data to remote Firestore.
-            if (!hasRemoteItems && hasLocalItems) {
-              cloudSyncStatus.value = 'connected';
-              cloudSyncError.value = null;
-              syncToCloud(true);
-              return;
+      unsubscribeFirestore = subscribeToCollections(
+        {
+          onStores: (items) => {
+            if (isRemoteSync.value) return;
+            if (items.length > 0 || stores.value.length === 0) {
+              stores.value = items;
+              saveDatabaseLocal();
+            } else if (stores.value.length > 0 && items.length === 0) {
+              // Upload local stores to firestore
+              forceCloudSync();
             }
-
-            isRemoteSync.value = true;
-            if (Array.isArray(remoteData.stores)) stores.value = remoteData.stores;
-            if (Array.isArray(remoteData.stockCampuran)) stockCampuran.value = remoteData.stockCampuran;
-            if (Array.isArray(remoteData.stockFragranceOil)) stockFragranceOil.value = remoteData.stockFragranceOil;
-            if (Array.isArray(remoteData.formulaBases)) formulaBases.value = remoteData.formulaBases;
-            if (Array.isArray(remoteData.racikanCatalog)) racikanCatalog.value = remoteData.racikanCatalog;
-            if (Array.isArray(remoteData.hppCatalog)) hppCatalog.value = remoteData.hppCatalog;
-            if (Array.isArray(remoteData.readyToSellProducts)) readyToSellProducts.value = remoteData.readyToSellProducts;
-            if (Array.isArray(remoteData.quickNotes)) quickNotes.value = remoteData.quickNotes;
-            if (Array.isArray(remoteData.deadlines)) deadlines.value = remoteData.deadlines;
-            if (remoteData.updatedAt) lastSyncedAt.value = remoteData.updatedAt;
-
-            saveDatabaseLocal();
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
-            setTimeout(() => {
-              isRemoteSync.value = false;
-            }, 100);
-          } else {
-            // First time remote init -> push local data to Firestore
+          },
+          onStockCampuran: (items) => {
+            if (isRemoteSync.value) return;
+            if (items.length > 0 || stockCampuran.value.length === 0) {
+              stockCampuran.value = items;
+              saveDatabaseLocal();
+            }
             cloudSyncStatus.value = 'connected';
             cloudSyncError.value = null;
-            syncToCloud(true);
+          },
+          onStockFo: (items) => {
+            if (isRemoteSync.value) return;
+            if (items.length > 0 || stockFragranceOil.value.length === 0) {
+              stockFragranceOil.value = items;
+              saveDatabaseLocal();
+            }
+            cloudSyncStatus.value = 'connected';
+            cloudSyncError.value = null;
+          },
+          onFormulaBases: (items) => {
+            if (isRemoteSync.value) return;
+            if (items.length > 0 || formulaBases.value.length === 0) {
+              formulaBases.value = items;
+              saveDatabaseLocal();
+            }
+            cloudSyncStatus.value = 'connected';
+            cloudSyncError.value = null;
+          },
+          onRacikan: (items) => {
+            if (isRemoteSync.value) return;
+            if (items.length > 0 || racikanCatalog.value.length === 0) {
+              racikanCatalog.value = items;
+              saveDatabaseLocal();
+            }
+            cloudSyncStatus.value = 'connected';
+            cloudSyncError.value = null;
+          },
+          onHpp: (items) => {
+            if (isRemoteSync.value) return;
+            if (items.length > 0 || hppCatalog.value.length === 0) {
+              hppCatalog.value = items;
+              saveDatabaseLocal();
+            }
+            cloudSyncStatus.value = 'connected';
+            cloudSyncError.value = null;
+          },
+          onReadyToSell: (items) => {
+            if (isRemoteSync.value) return;
+            if (items.length > 0 || readyToSellProducts.value.length === 0) {
+              readyToSellProducts.value = items;
+              saveDatabaseLocal();
+            }
+            cloudSyncStatus.value = 'connected';
+            cloudSyncError.value = null;
+          },
+          onQuickNotes: (items) => {
+            if (isRemoteSync.value) return;
+            if (items.length > 0 || quickNotes.value.length === 0) {
+              quickNotes.value = items;
+              saveDatabaseLocal();
+            }
+            cloudSyncStatus.value = 'connected';
+            cloudSyncError.value = null;
+          },
+          onDeadlines: (items) => {
+            if (isRemoteSync.value) return;
+            if (items.length > 0 || deadlines.value.length === 0) {
+              deadlines.value = items;
+              saveDatabaseLocal();
+            }
+            cloudSyncStatus.value = 'connected';
+            cloudSyncError.value = null;
           }
         },
         (err: any) => {
@@ -296,7 +296,7 @@ export const useKobichaStore = defineStore('kobicha', () => {
 
   function saveDatabase() {
     saveDatabaseLocal();
-    syncToCloud();
+    forceCloudSync();
   }
 
   function clearAllData(notify = true) {
@@ -495,7 +495,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
       updatedAt: now
     };
     stores.value.push(newStore);
-    saveDatabase();
+    saveDatabaseLocal();
+    saveDocToFirestore(COLLECTIONS.STORES, newStore.id, newStore).catch(console.error);
     showToast(`Toko '${newStore.namaToko}' berhasil ditambahkan!`);
     return newStore;
   }
@@ -508,7 +509,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      saveDatabase();
+      saveDatabaseLocal();
+      saveDocToFirestore(COLLECTIONS.STORES, id, stores.value[idx]).catch(console.error);
       showToast(`Toko '${stores.value[idx].namaToko}' berhasil diperbarui!`);
     }
   }
@@ -517,7 +519,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
     const store = stores.value.find(s => s.id === id);
     const name = store ? store.namaToko : 'Toko';
     stores.value = stores.value.filter(s => s.id !== id);
-    saveDatabase();
+    saveDatabaseLocal();
+    deleteDocFromFirestore(COLLECTIONS.STORES, id).catch(console.error);
     showToast(`Toko '${name}' berhasil dihapus`, 'info');
   }
 
@@ -532,7 +535,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
       updatedAt: now
     };
     stockCampuran.value.push(newItem);
-    saveDatabase();
+    saveDatabaseLocal();
+    saveDocToFirestore(COLLECTIONS.STOCK_CAMPURAN, newItem.id, newItem).catch(console.error);
     showToast(`Barang '${newItem.namaBarang}' berhasil ditambahkan ke stock!`);
     return newItem;
   }
@@ -545,7 +549,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      saveDatabase();
+      saveDatabaseLocal();
+      saveDocToFirestore(COLLECTIONS.STOCK_CAMPURAN, id, stockCampuran.value[idx]).catch(console.error);
       showToast(`Barang '${stockCampuran.value[idx].namaBarang}' berhasil diperbarui!`);
     }
   }
@@ -554,7 +559,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
     const item = stockCampuran.value.find(c => c.id === id);
     const name = item ? item.namaBarang : 'Barang';
     stockCampuran.value = stockCampuran.value.filter(c => c.id !== id);
-    saveDatabase();
+    saveDatabaseLocal();
+    deleteDocFromFirestore(COLLECTIONS.STOCK_CAMPURAN, id).catch(console.error);
     showToast(`Barang '${name}' berhasil dihapus`, 'info');
   }
 
@@ -569,7 +575,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
       updatedAt: now
     };
     stockFragranceOil.value.push(newFo);
-    saveDatabase();
+    saveDatabaseLocal();
+    saveDocToFirestore(COLLECTIONS.STOCK_FO, newFo.id, newFo).catch(console.error);
     showToast(`Fragrance Oil '${newFo.nama}' berhasil ditambahkan ke stock!`);
     return newFo;
   }
@@ -582,7 +589,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      saveDatabase();
+      saveDatabaseLocal();
+      saveDocToFirestore(COLLECTIONS.STOCK_FO, id, stockFragranceOil.value[idx]).catch(console.error);
       showToast(`Fragrance Oil '${stockFragranceOil.value[idx].nama}' berhasil diperbarui!`);
     }
   }
@@ -591,7 +599,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
     const fo = stockFragranceOil.value.find(f => f.id === id);
     const name = fo ? fo.nama : 'Fragrance Oil';
     stockFragranceOil.value = stockFragranceOil.value.filter(f => f.id !== id);
-    saveDatabase();
+    saveDatabaseLocal();
+    deleteDocFromFirestore(COLLECTIONS.STOCK_FO, id).catch(console.error);
     showToast(`Fragrance Oil '${name}' berhasil dihapus`, 'info');
   }
 
@@ -606,7 +615,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
       updatedAt: now
     };
     formulaBases.value.push(newBase);
-    saveDatabase();
+    saveDatabaseLocal();
+    saveDocToFirestore(COLLECTIONS.FORMULA_BASES, newBase.id, newBase).catch(console.error);
     showToast(`Formula Base '${newBase.nama}' berhasil disimpan!`);
     return newBase;
   }
@@ -619,7 +629,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      saveDatabase();
+      saveDatabaseLocal();
+      saveDocToFirestore(COLLECTIONS.FORMULA_BASES, id, formulaBases.value[idx]).catch(console.error);
       showToast(`Formula Base '${formulaBases.value[idx].nama}' berhasil diperbarui!`);
     }
   }
@@ -628,7 +639,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
     const base = formulaBases.value.find(b => b.id === id);
     const name = base ? base.nama : 'Formula Base';
     formulaBases.value = formulaBases.value.filter(b => b.id !== id);
-    saveDatabase();
+    saveDatabaseLocal();
+    deleteDocFromFirestore(COLLECTIONS.FORMULA_BASES, id).catch(console.error);
     showToast(`Formula Base '${name}' berhasil dihapus`, 'info');
   }
 
@@ -643,7 +655,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
       updatedAt: now
     };
     racikanCatalog.value.unshift(newRacikan);
-    saveDatabase();
+    saveDatabaseLocal();
+    saveDocToFirestore(COLLECTIONS.RACIKAN_CATALOG, newRacikan.id, newRacikan).catch(console.error);
     showToast(`Racikan Parfum '${newRacikan.nama}' berhasil disimpan ke Katalog! 🧪`);
     return newRacikan;
   }
@@ -656,7 +669,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      saveDatabase();
+      saveDatabaseLocal();
+      saveDocToFirestore(COLLECTIONS.RACIKAN_CATALOG, id, racikanCatalog.value[idx]).catch(console.error);
       showToast(`Racikan '${racikanCatalog.value[idx].nama}' berhasil diperbarui!`);
     }
   }
@@ -665,7 +679,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
     const r = racikanCatalog.value.find(item => item.id === id);
     const name = r ? r.nama : 'Racikan';
     racikanCatalog.value = racikanCatalog.value.filter(item => item.id !== id);
-    saveDatabase();
+    saveDatabaseLocal();
+    deleteDocFromFirestore(COLLECTIONS.RACIKAN_CATALOG, id).catch(console.error);
     showToast(`Racikan '${name}' berhasil dihapus`, 'info');
   }
 
@@ -680,7 +695,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
       updatedAt: now
     };
     hppCatalog.value.unshift(newHpp);
-    saveDatabase();
+    saveDatabaseLocal();
+    saveDocToFirestore(COLLECTIONS.HPP_CATALOG, newHpp.id, newHpp).catch(console.error);
     showToast(`Perhitungan HPP '${newHpp.nama}' berhasil disimpan ke Katalog! 💰`);
     return newHpp;
   }
@@ -693,7 +709,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      saveDatabase();
+      saveDatabaseLocal();
+      saveDocToFirestore(COLLECTIONS.HPP_CATALOG, id, hppCatalog.value[idx]).catch(console.error);
       showToast(`HPP '${hppCatalog.value[idx].nama}' berhasil diperbarui!`);
     }
   }
@@ -702,7 +719,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
     const h = hppCatalog.value.find(item => item.id === id);
     const name = h ? h.nama : 'HPP';
     hppCatalog.value = hppCatalog.value.filter(item => item.id !== id);
-    saveDatabase();
+    saveDatabaseLocal();
+    deleteDocFromFirestore(COLLECTIONS.HPP_CATALOG, id).catch(console.error);
     showToast(`Perhitungan HPP '${name}' berhasil dihapus`, 'info');
   }
 
@@ -717,7 +735,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
       updatedAt: now
     };
     readyToSellProducts.value.unshift(newProduct);
-    saveDatabase();
+    saveDatabaseLocal();
+    saveDocToFirestore(COLLECTIONS.READY_TO_SELL, newProduct.id, newProduct).catch(console.error);
     showToast(`Produk '${newProduct.nama}' berhasil ditambahkan ke Ready to Sell! 🎉`, 'success');
     return newProduct;
   }
@@ -730,7 +749,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      saveDatabase();
+      saveDatabaseLocal();
+      saveDocToFirestore(COLLECTIONS.READY_TO_SELL, id, readyToSellProducts.value[idx]).catch(console.error);
       showToast(`Produk '${readyToSellProducts.value[idx].nama}' berhasil diperbarui!`, 'success');
       return true;
     }
@@ -741,7 +761,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
     const p = readyToSellProducts.value.find(item => item.id === id);
     const name = p ? p.nama : 'Produk';
     readyToSellProducts.value = readyToSellProducts.value.filter(item => item.id !== id);
-    saveDatabase();
+    saveDatabaseLocal();
+    deleteDocFromFirestore(COLLECTIONS.READY_TO_SELL, id).catch(console.error);
     showToast(`Produk '${name}' berhasil dihapus`, 'info');
   }
 
@@ -756,7 +777,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
       updatedAt: now
     };
     quickNotes.value.unshift(newNote);
-    saveDatabase();
+    saveDatabaseLocal();
+    saveDocToFirestore(COLLECTIONS.QUICK_NOTES, newNote.id, newNote).catch(console.error);
     showToast('Catatan baru berhasil ditambahkan! 📝');
     return newNote;
   }
@@ -769,14 +791,16 @@ export const useKobichaStore = defineStore('kobicha', () => {
         ...updates,
         updatedAt: new Date().toISOString()
       };
-      saveDatabase();
+      saveDatabaseLocal();
+      saveDocToFirestore(COLLECTIONS.QUICK_NOTES, id, quickNotes.value[idx]).catch(console.error);
       showToast('Catatan diperbarui');
     }
   }
 
   function deleteQuickNote(id: string) {
     quickNotes.value = quickNotes.value.filter(n => n.id !== id);
-    saveDatabase();
+    saveDatabaseLocal();
+    deleteDocFromFirestore(COLLECTIONS.QUICK_NOTES, id).catch(console.error);
     showToast('Catatan dihapus', 'info');
   }
 
@@ -789,7 +813,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
       createdAt: new Date().toISOString()
     };
     deadlines.value.push(newDeadline);
-    saveDatabase();
+    saveDatabaseLocal();
+    saveDocToFirestore(COLLECTIONS.DEADLINES, newDeadline.id, newDeadline).catch(console.error);
     showToast('Agenda / reminder berhasil ditambahkan ke kalender! 📅');
     return newDeadline;
   }
@@ -798,14 +823,16 @@ export const useKobichaStore = defineStore('kobicha', () => {
     const dl = deadlines.value.find(d => d.id === id);
     if (dl) {
       dl.isCompleted = !dl.isCompleted;
-      saveDatabase();
+      saveDatabaseLocal();
+      saveDocToFirestore(COLLECTIONS.DEADLINES, id, dl).catch(console.error);
       showToast(dl.isCompleted ? 'Deadline ditandai selesai! 🎉' : 'Deadline dibuka kembali');
     }
   }
 
   function deleteDeadline(id: string) {
     deadlines.value = deadlines.value.filter(d => d.id !== id);
-    saveDatabase();
+    saveDatabaseLocal();
+    deleteDocFromFirestore(COLLECTIONS.DEADLINES, id).catch(console.error);
     showToast('Deadline dihapus', 'info');
   }
 
