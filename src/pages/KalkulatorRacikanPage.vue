@@ -441,16 +441,13 @@
         </div>
 
         <!-- Total FO Masuk Formula Info Bar -->
-        <div class="flex items-center justify-between text-xs px-3 py-2 bg-stone-50 rounded-lg border border-stone-200/80">
+        <div class="flex items-center text-xs px-3 py-2 bg-stone-50 rounded-lg border border-stone-200/80">
           <div class="flex items-center gap-1.5 font-medium">
             <span class="text-stone-600">Masuk Formula:</span>
             <span class="font-bold text-amber-900 bg-amber-100/80 px-2 py-0.5 rounded-md border border-amber-300 font-mono text-xs">
               {{ currentFormulaFoCount }} fragrance oil
             </span>
           </div>
-          <span class="text-[11px] text-stone-400">
-            Total {{ filteredFoPickerList.length }} bahan tersedia
-          </span>
         </div>
 
         <!-- List of Fragrance Oils -->
