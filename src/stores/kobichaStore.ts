@@ -108,7 +108,11 @@ export const useKobichaStore = defineStore('kobicha', () => {
       }
     } catch (err: any) {
       console.error('Google Sign-In error:', err);
-      if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
+      if (err.code === 'auth/unauthorized-domain') {
+        const currentDomain = typeof window !== 'undefined' ? window.location.hostname : 'Vercel domain';
+        authError.value = `Domain web ini (${currentDomain}) belum didaftarkan di Firebase Console. Buka Firebase Console > Authentication > Settings > Authorized domains, lalu klik 'Add domain' dan masukkan '${currentDomain}'.`;
+        showToast('Domain belum diotorisasi di Firebase Console', 'error');
+      } else if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
         authError.value = err.message || 'Gagal login dengan Google';
         showToast(authError.value || 'Gagal login', 'error');
       }
