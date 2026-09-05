@@ -73,7 +73,7 @@
     <!-- Stores Table -->
     <div class="bg-white rounded-xl border border-sage-100 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-xs">
+        <table class="w-full text-left border-collapse text-xs min-w-[640px]">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-4 text-left">Nama Toko</th>

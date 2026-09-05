@@ -65,7 +65,7 @@
     <!-- Table Racikan -->
     <div class="bg-white rounded-xl border border-stone-200/80 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-xs">
+        <table class="w-full text-left border-collapse text-xs min-w-[720px]">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-3 w-10 text-left"></th>

@@ -3,25 +3,25 @@
     <!-- Mobile Backdrop -->
     <div
       v-if="isMobileOpen"
-      class="fixed inset-0 z-40 bg-stone-950/60 backdrop-blur-sm lg:hidden transition-opacity"
+      class="fixed inset-0 z-50 bg-stone-950/60 backdrop-blur-xs lg:hidden transition-opacity"
       @click="$emit('close-mobile')"
     />
 
     <!-- Sidebar Container (Gambar 2 Inspired Organic Curved Green Sidebar) -->
     <aside
-      class="fixed top-0 bottom-0 left-0 z-40 bg-[#608356] text-white flex flex-col transition-all duration-300 ease-in-out shadow-2xl lg:shadow-none lg:rounded-tr-[36px] lg:rounded-br-[36px] overflow-hidden"
+      class="fixed top-0 bottom-0 left-0 z-50 bg-[#608356] text-white flex flex-col transition-all duration-300 ease-in-out shadow-2xl lg:shadow-none lg:rounded-tr-[36px] lg:rounded-br-[36px] overflow-hidden max-w-[85vw]"
       :class="[
-        isMobileOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0',
+        isMobileOpen ? 'translate-x-0 w-72 sm:w-80' : '-translate-x-full lg:translate-x-0',
         isCollapsed ? 'lg:w-20' : 'lg:w-72'
       ]"
     >
       <!-- Brand Logo & Header (Image 2 style) -->
       <div
         class="h-20 flex items-center border-b border-white/10 bg-black/5 transition-all"
-        :class="isCollapsed ? 'justify-center px-2' : 'justify-between px-5'"
+        :class="isEffectivelyCollapsed ? 'justify-center px-2' : 'justify-between px-5'"
       >
         <div
-          v-if="!isCollapsed"
+          v-if="!isEffectivelyCollapsed"
           class="flex items-center gap-3 overflow-hidden cursor-pointer"
           @click="store.navigateTo('home')"
         >
@@ -59,11 +59,11 @@
       <div class="px-3 pt-3">
         <div
           class="flex items-center gap-2 text-xs font-medium text-white/90 bg-black/15 px-3 py-1.5 rounded-xl border border-white/10 backdrop-blur-sm transition-all"
-          :class="isCollapsed ? 'justify-center px-1.5' : 'justify-start'"
+          :class="isEffectivelyCollapsed ? 'justify-center px-1.5' : 'justify-start'"
           :title="todayFormatted"
         >
           <Calendar class="w-3.5 h-3.5 text-sage-200 flex-shrink-0" />
-          <span v-show="!isCollapsed" class="truncate font-sans text-[11px] text-sage-100 font-semibold">{{ todayFormatted }}</span>
+          <span v-show="!isEffectivelyCollapsed" class="truncate font-sans text-[11px] text-sage-100 font-semibold">{{ todayFormatted }}</span>
         </div>
       </div>
 
@@ -79,7 +79,7 @@
               : 'text-white/85 hover:bg-white/15 hover:text-white'"
           >
             <Home class="w-4 h-4 flex-shrink-0" />
-            <span v-show="!isCollapsed" class="flex-1 text-left">Home / Dashboard</span>
+            <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left">Home / Dashboard</span>
           </button>
         </div>
 
@@ -93,9 +93,9 @@
               : 'text-white/85 hover:bg-white/15 hover:text-white'"
           >
             <Store class="w-4 h-4 flex-shrink-0" />
-            <span v-show="!isCollapsed" class="flex-1 text-left">Where to Buy</span>
+            <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left">Where to Buy</span>
             <span
-              v-show="!isCollapsed && totalStoresCount > 0"
+              v-show="!isEffectivelyCollapsed && totalStoresCount > 0"
               class="text-xs px-2 py-0.5 rounded-full bg-black/20 text-white/90"
             >
               {{ totalStoresCount }}
@@ -105,7 +105,7 @@
 
         <!-- 3. Stock Barang Section -->
         <div class="space-y-1">
-          <div v-show="!isCollapsed" class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-sage-200/75">
+          <div v-show="!isEffectivelyCollapsed" class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-sage-200/75">
             Stock Barang
           </div>
           <div class="space-y-1">
@@ -117,9 +117,9 @@
                 : 'text-white/85 hover:bg-white/15 hover:text-white'"
             >
               <Boxes class="w-4 h-4 flex-shrink-0" />
-              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Barang Lainnya</span>
+              <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left truncate">Barang Lainnya</span>
               <span
-                v-show="!isCollapsed && totalCampuranCount > 0"
+                v-show="!isEffectivelyCollapsed && totalCampuranCount > 0"
                 class="text-xs px-2 py-0.5 rounded-full bg-black/20 text-white/90"
               >
                 {{ totalCampuranCount }}
@@ -134,16 +134,16 @@
                 : 'text-white/85 hover:bg-white/15 hover:text-white'"
             >
               <Droplet class="w-4 h-4 flex-shrink-0" />
-              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Fragrance Oil</span>
+              <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left truncate">Fragrance Oil</span>
               <span
-                v-show="!isCollapsed && lowStockFoCount > 0"
+                v-show="!isEffectivelyCollapsed && lowStockFoCount > 0"
                 class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-rose-400 text-white shadow-sm"
                 title="Stock menipis / habis"
               >
                 {{ lowStockFoCount }} alert
               </span>
               <span
-                v-show="!isCollapsed && lowStockFoCount === 0 && totalFoCount > 0"
+                v-show="!isEffectivelyCollapsed && lowStockFoCount === 0 && totalFoCount > 0"
                 class="text-xs px-2 py-0.5 rounded-full bg-black/20 text-white/90"
               >
                 {{ totalFoCount }}
@@ -158,14 +158,14 @@
                 : 'text-white/85 hover:bg-white/15 hover:text-white'"
             >
               <Tag class="w-4 h-4 flex-shrink-0" />
-              <span v-show="!isCollapsed" class="flex-1 text-left truncate">List Harga FO</span>
+              <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left truncate">List Harga FO</span>
             </button>
           </div>
         </div>
 
         <!-- 4. Formula Section -->
         <div class="space-y-1">
-          <div v-show="!isCollapsed" class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-sage-200/75">
+          <div v-show="!isEffectivelyCollapsed" class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-sage-200/75">
             Menu Formula
           </div>
           <div class="space-y-1">
@@ -177,7 +177,7 @@
                 : 'text-white/85 hover:bg-white/15 hover:text-white'"
             >
               <Layers class="w-4 h-4 flex-shrink-0" />
-              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Katalog Formula Base</span>
+              <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left truncate">Katalog Formula Base</span>
             </button>
 
             <button
@@ -188,9 +188,9 @@
                 : 'text-white/85 hover:bg-white/15 hover:text-white'"
             >
               <BookOpen class="w-4 h-4 flex-shrink-0" />
-              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Katalog Racikan</span>
+              <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left truncate">Katalog Racikan</span>
               <span
-                v-show="!isCollapsed && totalRacikanCount > 0"
+                v-show="!isEffectivelyCollapsed && totalRacikanCount > 0"
                 class="text-xs px-2 py-0.5 rounded-full bg-black/20 text-white/90"
               >
                 {{ totalRacikanCount }}
@@ -205,14 +205,14 @@
                 : 'text-white/85 hover:bg-white/15 hover:text-white'"
             >
               <FlaskConical class="w-4 h-4 flex-shrink-0" />
-              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Kalkulator Racikan</span>
+              <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left truncate">Kalkulator Racikan</span>
             </button>
           </div>
         </div>
 
         <!-- 5. Harga Modal / HPP Section -->
         <div class="space-y-1">
-          <div v-show="!isCollapsed" class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-sage-200/75">
+          <div v-show="!isEffectivelyCollapsed" class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-sage-200/75">
             Harga Modal / HPP
           </div>
           <div class="space-y-1">
@@ -224,9 +224,9 @@
                 : 'text-white/85 hover:bg-white/15 hover:text-white'"
             >
               <Receipt class="w-4 h-4 flex-shrink-0" />
-              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Katalog HPP</span>
+              <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left truncate">Katalog HPP</span>
               <span
-                v-show="!isCollapsed && totalHppCount > 0"
+                v-show="!isEffectivelyCollapsed && totalHppCount > 0"
                 class="text-xs px-2 py-0.5 rounded-full bg-black/20 text-white/90"
               >
                 {{ totalHppCount }}
@@ -241,14 +241,14 @@
                 : 'text-white/85 hover:bg-white/15 hover:text-white'"
             >
               <Calculator class="w-4 h-4 flex-shrink-0" />
-              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Kalkulator HPP</span>
+              <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left truncate">Kalkulator HPP</span>
             </button>
           </div>
         </div>
 
         <!-- 6. Produk & Penjualan Section -->
         <div class="space-y-1">
-          <div v-show="!isCollapsed" class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-sage-200/75">
+          <div v-show="!isEffectivelyCollapsed" class="px-3.5 text-[10px] font-bold uppercase tracking-widest text-sage-200/75">
             Produk & Penjualan
           </div>
           <div class="space-y-1">
@@ -260,9 +260,9 @@
                 : 'text-white/85 hover:bg-white/15 hover:text-white'"
             >
               <ShoppingBag class="w-4 h-4 flex-shrink-0" />
-              <span v-show="!isCollapsed" class="flex-1 text-left truncate">Ready to Sell</span>
+              <span v-show="!isEffectivelyCollapsed" class="flex-1 text-left truncate">Ready to Sell</span>
               <span
-                v-show="!isCollapsed && totalReadyToSellCount > 0"
+                v-show="!isEffectivelyCollapsed && totalReadyToSellCount > 0"
                 class="text-xs px-2 py-0.5 rounded-full bg-black/20 text-white/90"
               >
                 {{ totalReadyToSellCount }}
@@ -276,7 +276,7 @@
       <div class="p-3 border-t border-white/10 bg-black/10 space-y-2">
         <!-- User Profile Card & Logout -->
         <div v-if="currentUser">
-          <div v-if="!isCollapsed" class="bg-black/20 rounded-2xl p-2.5 border border-white/10 flex items-center justify-between gap-2 shadow-sm">
+          <div v-if="!isEffectivelyCollapsed" class="bg-black/20 rounded-2xl p-2.5 border border-white/10 flex items-center justify-between gap-2 shadow-sm">
             <div class="flex items-center gap-2.5 min-w-0">
               <div class="w-8 h-8 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 overflow-hidden text-white font-bold text-xs">
                 <img
@@ -335,7 +335,7 @@
 
         <!-- Cloud Firestore Sync Status Badge -->
         <div class="pt-1 border-t border-white/10">
-          <div v-if="!isCollapsed" class="bg-black/20 rounded-xl p-2.5 space-y-1.5 border border-white/10">
+          <div v-if="!isEffectivelyCollapsed" class="bg-black/20 rounded-xl p-2.5 space-y-1.5 border border-white/10">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="relative flex h-2 w-2">
@@ -391,7 +391,7 @@
           </div>
         </div>
 
-        <div v-show="!isCollapsed">
+        <div v-show="!isEffectivelyCollapsed">
           <button
             @click="isConfirmClearOpen = true"
             class="w-full px-2.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 hover:text-rose-100 text-[11px] font-medium flex items-center justify-center gap-1.5 transition-colors border border-rose-400/20"
@@ -403,7 +403,7 @@
         </div>
 
         <div class="flex items-center justify-between px-2 pt-1 text-[11px] text-sage-200">
-          <span v-show="!isCollapsed">v1.2 Kobicha</span>
+          <span v-show="!isEffectivelyCollapsed">v1.2 Kobicha</span>
           <span class="font-mono">Auth-Protected</span>
         </div>
       </div>
@@ -451,10 +451,12 @@ import {
   User as UserIcon
 } from 'lucide-vue-next';
 
-defineProps<{
+const props = defineProps<{
   isCollapsed: boolean;
   isMobileOpen: boolean;
 }>();
+
+const isEffectivelyCollapsed = computed(() => props.isCollapsed && !props.isMobileOpen);
 
 const emit = defineEmits<{
   (e: 'toggle-collapse'): void;

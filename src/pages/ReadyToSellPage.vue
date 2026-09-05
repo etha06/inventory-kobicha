@@ -3,7 +3,16 @@
     <!-- Page Header (Kobicha Green / Forest styling) -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-stone-200/80 shadow-xs">
       <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-700 shadow-xs">
+        <!-- Mobile Burger Button -->
+        <button
+          @click="store.openMobileNav()"
+          class="lg:hidden w-9 h-9 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-900 flex items-center justify-center transition-all border border-stone-200 shadow-sm flex-shrink-0 active:scale-95"
+          title="Buka Menu"
+        >
+          <Menu class="w-4 h-4" />
+        </button>
+
+        <div class="w-11 h-11 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-700 shadow-xs flex-shrink-0">
           <ShoppingBag class="w-5 h-5" />
         </div>
         <div>
@@ -130,7 +139,7 @@
     <!-- Products Table -->
     <div class="bg-white rounded-xl border border-stone-200/80 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-xs">
+        <table class="w-full text-left border-collapse text-xs min-w-[780px]">
           <thead>
             <tr class="bg-stone-100/70 border-b border-stone-200 text-stone-600 uppercase tracking-wider text-[10px] font-bold">
               <th class="py-3.5 px-4 text-left">Nama Produk</th>
@@ -912,7 +921,8 @@ import {
   Trash2,
   Upload,
   TrendingUp,
-  Info
+  Info,
+  Menu
 } from 'lucide-vue-next';
 
 const store = useKobichaStore();

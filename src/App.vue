@@ -40,7 +40,7 @@
     </div>
 
     <!-- Main Floating App Card Container -->
-    <div class="w-full max-w-[1560px] bg-white rounded-[24px] sm:rounded-[36px] shadow-floating border border-[#d2e0d0]/80 flex overflow-hidden min-h-[93vh] relative z-10">
+    <div class="w-full max-w-[1560px] bg-white rounded-2xl sm:rounded-[36px] shadow-floating border border-[#d2e0d0]/80 flex overflow-hidden min-h-[100dvh] sm:min-h-[93vh] relative z-10">
       <!-- Sidebar Navigation (Image 2 style with organic curve & peach active pill) -->
       <Sidebar
         :isCollapsed="isSidebarCollapsed"
@@ -55,7 +55,7 @@
         :class="[isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72']"
       >
         <!-- Page View Container -->
-        <main class="flex-1 p-4 sm:p-6 w-full">
+        <main class="flex-1 p-3.5 sm:p-5 lg:p-6 w-full min-w-0">
           <Transition
             mode="out-in"
             enter-active-class="transition duration-150 ease-out"
