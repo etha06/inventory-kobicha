@@ -25,9 +25,7 @@
           class="flex items-center gap-3 overflow-hidden cursor-pointer min-w-0"
           @click="store.navigateTo('home')"
         >
-          <div class="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center shadow-inner flex-shrink-0 p-1 border border-white/30">
-            <img :src="logoIconImg" alt="Kobicha Studio" class="w-full h-full object-contain drop-shadow-sm" />
-          </div>
+          <img :src="logoImg" alt="Kobicha Studio" class="w-12 h-12 object-contain drop-shadow-sm flex-shrink-0" />
           <div class="transition-opacity duration-200 min-w-0">
             <h1 class="font-extrabold text-base tracking-tight text-white font-rounded truncate leading-tight">
               Kobicha Studio
@@ -42,9 +40,7 @@
           @click="store.navigateTo('home')"
           title="Kobicha Studio"
         >
-          <div class="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center shadow-inner p-1 border border-white/30">
-            <img :src="logoIconImg" alt="Kobicha Studio" class="w-full h-full object-contain drop-shadow-sm" />
-          </div>
+          <img :src="logoImg" alt="Kobicha Studio" class="w-11 h-11 object-contain drop-shadow-sm" />
         </div>
 
         <!-- Desktop Collapse / Menu Button (Image 2 Hamburger toggle) -->
