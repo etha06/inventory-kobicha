@@ -72,6 +72,18 @@ export const useKobichaStore = defineStore('kobicha', () => {
   const prefilledHppRacikanId = ref<string | null>(null);
   const prefilledHppBaseId = ref<string | null>(null);
 
+  // Global Image Lightbox Preview State
+  const previewImage = ref<{ url: string; title?: string } | null>(null);
+
+  function openImagePreview(url: string, title?: string) {
+    if (!url) return;
+    previewImage.value = { url, title: title || 'Foto Produk / Barang' };
+  }
+
+  function closeImagePreview() {
+    previewImage.value = null;
+  }
+
   // Authentication & Whitelist States
   const currentUser = ref<User | null>(null);
   const authLoading = ref(true);
@@ -1206,6 +1218,11 @@ export const useKobichaStore = defineStore('kobicha', () => {
     addDeadline,
     toggleDeadline,
     deleteDeadline,
+
+    // Image Lightbox Preview
+    previewImage,
+    openImagePreview,
+    closeImagePreview,
 
     // Cloud Sync
     cloudSyncStatus,

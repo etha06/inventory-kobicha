@@ -159,9 +159,17 @@
                 <td class="py-3.5 px-4 text-left">
                   <div class="flex items-center gap-2">
                     <ChevronRight
-                      class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150"
+                      class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150 flex-shrink-0"
                       :class="expandedItemId === item.id ? 'rotate-90' : ''"
                     />
+                    <div
+                      v-if="item.gambar"
+                      @click.stop="store.openImagePreview(item.gambar, item.nama)"
+                      class="w-7 h-7 rounded-lg overflow-hidden border border-stone-200 bg-white flex-shrink-0 cursor-pointer hover:opacity-85 hover:scale-105 transition-all shadow-2xs"
+                      title="Klik untuk memperbesar gambar"
+                    >
+                      <img :src="item.gambar" :alt="item.nama" class="w-full h-full object-cover" />
+                    </div>
                     <span class="font-bold text-stone-900 text-xs">{{ item.nama }}</span>
                   </div>
                 </td>
@@ -275,8 +283,16 @@
                         </div>
                       </div>
 
-                      <div v-if="item.gambar" class="w-20 h-20 rounded-lg overflow-hidden border">
+                      <div
+                        v-if="item.gambar"
+                        @click.stop="store.openImagePreview(item.gambar, item.nama)"
+                        class="w-20 h-20 rounded-xl overflow-hidden border border-stone-200 bg-white flex-shrink-0 cursor-pointer hover:opacity-90 hover:scale-105 transition-all shadow-xs group relative"
+                        title="Klik untuk memperbesar gambar"
+                      >
                         <img :src="item.gambar" alt="Product" class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                          <Eye class="w-4 h-4" />
+                        </div>
                       </div>
                     </div>
 
@@ -533,7 +549,7 @@ import {
   STOCK_STATUS_MAP
 } from '../utils/constants';
 import { formatRupiah, formatDateIndo, normalizeJenisBarang } from '../utils/formatters';
-import { Plus, Search, Pencil, Trash2, ChevronRight, Droplet, Menu } from 'lucide-vue-next';
+import { Plus, Search, Pencil, Trash2, ChevronRight, Droplet, Menu, Eye } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 import CustomSelect from '../components/common/CustomSelect.vue';

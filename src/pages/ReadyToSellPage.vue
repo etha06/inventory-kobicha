@@ -167,7 +167,17 @@
             >
               <!-- Nama Produk -->
               <td class="py-3.5 px-4 text-left">
-                <span class="font-bold text-stone-900 text-xs">{{ item.nama }}</span>
+                <div class="flex items-center gap-2.5">
+                  <div
+                    v-if="item.gambar"
+                    @click.stop="store.openImagePreview(item.gambar, item.nama)"
+                    class="w-8 h-8 rounded-lg overflow-hidden border border-stone-200 bg-white flex-shrink-0 cursor-pointer hover:opacity-85 hover:scale-105 transition-all shadow-2xs group relative"
+                    title="Klik untuk memperbesar gambar"
+                  >
+                    <img :src="item.gambar" :alt="item.nama" class="w-full h-full object-cover" />
+                  </div>
+                  <span class="font-bold text-stone-900 text-xs">{{ item.nama }}</span>
+                </div>
               </td>
 
               <!-- Tipe Badge -->
@@ -721,7 +731,11 @@
 
           <!-- Image Preview Thumbnail if available -->
           <div v-if="form.gambar" class="sm:col-span-2 flex items-center gap-3 p-2 bg-stone-50 rounded-lg border">
-            <div class="w-12 h-12 rounded-md overflow-hidden border bg-white flex-shrink-0">
+            <div
+              @click.stop="store.openImagePreview(form.gambar, 'Preview Foto Produk')"
+              class="w-12 h-12 rounded-md overflow-hidden border bg-white flex-shrink-0 cursor-pointer hover:opacity-85 hover:scale-105 transition-all shadow-2xs"
+              title="Klik untuk memperbesar gambar"
+            >
               <img :src="form.gambar" alt="Preview" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1 min-w-0">
@@ -782,14 +796,23 @@
       <div v-if="detailItem" class="space-y-5">
         <!-- Image & Main Overview -->
         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-4 rounded-xl bg-stone-50 border border-stone-200">
-          <div class="w-24 h-24 rounded-lg overflow-hidden border border-stone-200 bg-white flex items-center justify-center flex-shrink-0 shadow-xs">
+          <div
+            v-if="detailItem.gambar"
+            @click.stop="store.openImagePreview(detailItem.gambar, detailItem.nama)"
+            class="w-24 h-24 rounded-xl overflow-hidden border border-stone-200 bg-white flex items-center justify-center flex-shrink-0 shadow-xs cursor-pointer hover:opacity-90 hover:scale-105 transition-all group relative"
+            title="Klik untuk memperbesar foto produk"
+          >
             <img
-              v-if="detailItem.gambar"
               :src="detailItem.gambar"
               :alt="detailItem.nama"
               class="w-full h-full object-cover"
             />
-            <Gift v-else-if="detailItem.isBundle" class="w-8 h-8 text-indigo-400" />
+            <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+              <Eye class="w-5 h-5" />
+            </div>
+          </div>
+          <div v-else class="w-24 h-24 rounded-xl overflow-hidden border border-stone-200 bg-white flex items-center justify-center flex-shrink-0 shadow-xs">
+            <Gift v-if="detailItem.isBundle" class="w-8 h-8 text-indigo-400" />
             <ShoppingBag v-else class="w-8 h-8 text-stone-400" />
           </div>
 

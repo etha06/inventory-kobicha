@@ -94,6 +94,9 @@
 
     <!-- Global Floating Toast Notifications -->
     <Toast />
+
+    <!-- Global Image Lightbox Modal -->
+    <ImageModal />
   </div>
 </template>
 
@@ -105,6 +108,7 @@ import logoImg from './assets/logo.png';
 
 import Sidebar from './components/layout/Sidebar.vue';
 import Toast from './components/common/Toast.vue';
+import ImageModal from './components/common/ImageModal.vue';
 
 import LoginPage from './pages/LoginPage.vue';
 import HomePage from './pages/HomePage.vue';

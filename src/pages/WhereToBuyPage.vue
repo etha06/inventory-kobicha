@@ -101,9 +101,17 @@
                 <td class="py-3.5 px-4 text-left">
                   <div class="flex items-center gap-2">
                     <ChevronRight
-                      class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150"
+                      class="w-3.5 h-3.5 text-amber-700 transition-transform duration-150 flex-shrink-0"
                       :class="expandedStoreId === store.id ? 'rotate-90' : ''"
                     />
+                    <div
+                      v-if="store.gambar"
+                      @click.stop="previewImg(store.gambar, store.namaToko)"
+                      class="w-7 h-7 rounded-lg overflow-hidden border border-stone-200 bg-white flex-shrink-0 cursor-pointer hover:opacity-85 hover:scale-105 transition-all shadow-2xs"
+                      title="Klik untuk memperbesar logo toko"
+                    >
+                      <img :src="store.gambar" :alt="store.namaToko" class="w-full h-full object-cover" />
+                    </div>
                     <span class="font-bold text-stone-900 text-xs">{{ store.namaToko }}</span>
                   </div>
                 </td>
@@ -178,8 +186,16 @@
                         </p>
                       </div>
 
-                      <div v-if="store.gambar" class="w-16 h-16 rounded-lg overflow-hidden border">
+                      <div
+                        v-if="store.gambar"
+                        @click.stop="previewImg(store.gambar, store.namaToko)"
+                        class="w-16 h-16 rounded-xl overflow-hidden border border-stone-200 bg-white flex-shrink-0 cursor-pointer hover:opacity-90 hover:scale-105 transition-all shadow-xs group relative"
+                        title="Klik untuk memperbesar logo toko"
+                      >
                         <img :src="store.gambar" alt="Store logo" class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                          <Eye class="w-4 h-4" />
+                        </div>
                       </div>
                     </div>
 
@@ -528,7 +544,7 @@ import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { StoreSupplier } from '../types';
 import { formatDateIndo, normalizeJenisBarang } from '../utils/formatters';
-import { Plus, Search, Pencil, Trash2, ExternalLink, ChevronRight, Store, AlertTriangle, Menu, Tag, Lock } from 'lucide-vue-next';
+import { Plus, Search, Pencil, Trash2, ExternalLink, ChevronRight, Store, AlertTriangle, Menu, Tag, Lock, Eye } from 'lucide-vue-next';
 import Modal from '../components/common/Modal.vue';
 import ConfirmModal from '../components/common/ConfirmModal.vue';
 import CustomSelect from '../components/common/CustomSelect.vue';
@@ -536,6 +552,10 @@ import Pagination from '../components/common/Pagination.vue';
 
 const store = useKobichaStore();
 const { stores, stockFragranceOil, stockCampuran, allJenisBarangList } = storeToRefs(store);
+
+function previewImg(url?: string, title?: string) {
+  if (url) store.openImagePreview(url, title);
+}
 
 const searchQuery = ref('');
 const filterJenis = ref('');
