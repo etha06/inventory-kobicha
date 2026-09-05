@@ -274,8 +274,67 @@
 
       <!-- Database Tools & Footer -->
       <div class="p-3 border-t border-white/10 bg-black/10 space-y-2">
+        <!-- User Profile Card & Logout -->
+        <div v-if="currentUser">
+          <div v-if="!isCollapsed" class="bg-black/20 rounded-2xl p-2.5 border border-white/10 flex items-center justify-between gap-2 shadow-sm">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 overflow-hidden text-white font-bold text-xs">
+                <img
+                  v-if="currentUser.photoURL"
+                  :src="currentUser.photoURL"
+                  :alt="currentUser.displayName || 'User'"
+                  class="w-full h-full object-cover"
+                  referrerpolicy="no-referrer"
+                />
+                <UserIcon v-else class="w-4 h-4 text-white" />
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="text-xs font-bold text-white truncate leading-tight flex items-center gap-1">
+                  <span>{{ currentUser.displayName || 'Tim Kobicha' }}</span>
+                </p>
+                <p class="text-[10px] text-sage-200 truncate leading-tight" :title="currentUser.email || ''">
+                  {{ currentUser.email }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Logout Button -->
+            <button
+              @click="store.logout()"
+              class="w-8 h-8 rounded-xl text-white/70 hover:text-white hover:bg-rose-500/30 hover:border-rose-400/40 border border-transparent flex items-center justify-center transition-all flex-shrink-0"
+              title="Keluar / Logout"
+            >
+              <LogOut class="w-4 h-4" />
+            </button>
+          </div>
+
+          <!-- Collapsed Profile / Logout -->
+          <div v-else class="flex flex-col items-center gap-2 py-1">
+            <div
+              class="w-8 h-8 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center overflow-hidden text-white font-bold text-xs"
+              :title="currentUser.email || 'Tim Kobicha'"
+            >
+              <img
+                v-if="currentUser.photoURL"
+                :src="currentUser.photoURL"
+                :alt="currentUser.displayName || 'User'"
+                class="w-full h-full object-cover"
+                referrerpolicy="no-referrer"
+              />
+              <UserIcon v-else class="w-4 h-4 text-white" />
+            </div>
+            <button
+              @click="store.logout()"
+              class="w-8 h-8 rounded-xl text-white/70 hover:text-white hover:bg-rose-500/30 hover:border-rose-400/40 border border-transparent flex items-center justify-center transition-all"
+              title="Keluar / Logout"
+            >
+              <LogOut class="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
         <!-- Cloud Firestore Sync Status Badge -->
-        <div class="pt-2 border-t border-white/15">
+        <div class="pt-1 border-t border-white/10">
           <div v-if="!isCollapsed" class="bg-black/20 rounded-xl p-2.5 space-y-1.5 border border-white/10">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
@@ -344,8 +403,8 @@
         </div>
 
         <div class="flex items-center justify-between px-2 pt-1 text-[11px] text-sage-200">
-          <span v-show="!isCollapsed">v1.1 Kobicha</span>
-          <span class="font-mono">Cloud-Ready</span>
+          <span v-show="!isCollapsed">v1.2 Kobicha</span>
+          <span class="font-mono">Auth-Protected</span>
         </div>
       </div>
     </aside>
@@ -387,7 +446,9 @@ import {
   Calendar,
   Trash2,
   Cloud,
-  RefreshCw
+  RefreshCw,
+  LogOut,
+  User as UserIcon
 } from 'lucide-vue-next';
 
 defineProps<{
@@ -401,7 +462,7 @@ const emit = defineEmits<{
 }>();
 
 const store = useKobichaStore();
-const { activeTab, stores, stockCampuran, stockFragranceOil, racikanCatalog, hppCatalog, totalReadyToSellCount, cloudSyncStatus, cloudSyncError } = storeToRefs(store);
+const { activeTab, stores, stockCampuran, stockFragranceOil, racikanCatalog, hppCatalog, totalReadyToSellCount, cloudSyncStatus, cloudSyncError, currentUser } = storeToRefs(store);
 
 const isConfirmClearOpen = ref(false);
 

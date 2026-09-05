@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 
 export const firebaseConfig = {
@@ -17,6 +18,9 @@ export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getA
 
 // Initialize Cloud Firestore Database
 export const db = getFirestore(app);
+
+// Initialize Firebase Authentication
+export const auth = getAuth(app);
 
 // Initialize Firebase App Check with reCAPTCHA Enterprise
 if (typeof window !== 'undefined') {

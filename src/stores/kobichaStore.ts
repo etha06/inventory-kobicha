@@ -30,7 +30,23 @@ import {
   subscribeToCollections,
   CloudSyncStatus 
 } from '../firebase/firestoreService';
+import { 
+  User, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  signOut, 
+  onAuthStateChanged 
+} from 'firebase/auth';
+import { auth } from '../firebase/config';
 import { normalizeJenisBarang } from '../utils/formatters';
+
+export const ALLOWED_EMAILS = [
+  'winhart06@gmail.com',
+  'retha.setiawan@gmail.com',
+  'kobichastudio@gmail.com',
+  'ichiren55@gmail.com',
+  'yuuichisaitou.kun@gmail.com'
+].map(e => e.toLowerCase().trim());
 
 const STORAGE_KEY = 'kobicha_parfume_app_v1';
 
@@ -55,6 +71,88 @@ export const useKobichaStore = defineStore('kobicha', () => {
   const prefilledFormulaBaseId = ref<string | null>(null);
   const prefilledHppRacikanId = ref<string | null>(null);
   const prefilledHppBaseId = ref<string | null>(null);
+
+  // Authentication & Whitelist States
+  const currentUser = ref<User | null>(null);
+  const authLoading = ref(true);
+  const authError = ref<string | null>(null);
+  const isLoggingIn = ref(false);
+
+  const isAuthenticated = computed(() => {
+    if (!currentUser.value || !currentUser.value.email) return false;
+    return ALLOWED_EMAILS.includes(currentUser.value.email.toLowerCase().trim());
+  });
+
+  async function loginWithGoogle() {
+    authError.value = null;
+    isLoggingIn.value = true;
+    try {
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const email = user.email?.toLowerCase().trim() || '';
+
+      if (ALLOWED_EMAILS.includes(email)) {
+        currentUser.value = user;
+        authError.value = null;
+        showToast(`Selamat datang, ${user.displayName || user.email}! 🌿`, 'success');
+        initFirebaseSync();
+        return true;
+      } else {
+        await signOut(auth);
+        currentUser.value = null;
+        authError.value = `Akses ditolak: Akun Google (${user.email}) tidak terdaftar dalam whitelist tim resmi Kobicha Parfumerie.`;
+        showToast(`Akses Ditolak: ${user.email} bukan tim resmi Kobicha`, 'error');
+        return false;
+      }
+    } catch (err: any) {
+      console.error('Google Sign-In error:', err);
+      if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
+        authError.value = err.message || 'Gagal login dengan Google';
+        showToast(authError.value || 'Gagal login', 'error');
+      }
+      return false;
+    } finally {
+      isLoggingIn.value = false;
+    }
+  }
+
+  async function logout() {
+    try {
+      if (unsubscribeFirestore) {
+        unsubscribeFirestore();
+        unsubscribeFirestore = null;
+      }
+      await signOut(auth);
+      currentUser.value = null;
+      authError.value = null;
+      cloudSyncStatus.value = 'offline';
+      showToast('Anda telah berhasil keluar (Logout)', 'info');
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+  }
+
+  function initAuth() {
+    onAuthStateChanged(auth, (user) => {
+      authLoading.value = false;
+      if (user && user.email) {
+        const email = user.email.toLowerCase().trim();
+        if (ALLOWED_EMAILS.includes(email)) {
+          currentUser.value = user;
+          authError.value = null;
+          initFirebaseSync();
+        } else {
+          signOut(auth);
+          currentUser.value = null;
+          authError.value = `Akses ditolak: Akun Google (${user.email}) tidak memiliki izin akses.`;
+        }
+      } else {
+        currentUser.value = null;
+      }
+    });
+  }
 
   // Cloud Sync States
   const cloudSyncStatus = ref<CloudSyncStatus>('offline');
@@ -303,8 +401,8 @@ export const useKobichaStore = defineStore('kobicha', () => {
       }
     }
 
-    // Connect real-time Firebase Firestore
-    initFirebaseSync();
+    // Initialize Authentication listener and auto-connect Firestore on login
+    initAuth();
   }
 
   function saveDatabase() {
@@ -1027,6 +1125,16 @@ export const useKobichaStore = defineStore('kobicha', () => {
     customCategories,
     deletedCategories,
     toasts,
+
+    // Auth States & Actions
+    currentUser,
+    authLoading,
+    authError,
+    isLoggingIn,
+    isAuthenticated,
+    loginWithGoogle,
+    logout,
+    ALLOWED_EMAILS,
 
     // Toast
     showToast,

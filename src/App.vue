@@ -1,5 +1,26 @@
 <template>
-  <div class="min-h-screen bg-canvas p-2 sm:p-5 lg:p-6 flex flex-col justify-center items-center relative overflow-x-hidden font-sans text-forest-800">
+  <!-- 1. Loading Splash Screen while Checking Auth Status -->
+  <div
+    v-if="authLoading"
+    class="min-h-screen bg-canvas flex flex-col items-center justify-center p-4 font-sans text-forest-800 space-y-4"
+  >
+    <div class="w-16 h-16 rounded-2xl bg-forest-900 flex items-center justify-center shadow-lg border border-forest-800/80 animate-pulse">
+      <Sparkles class="w-8 h-8 text-peach-400" />
+    </div>
+    <div class="text-center space-y-1">
+      <h2 class="text-lg font-serif font-black tracking-wide text-forest-900">KOBICHA</h2>
+      <p class="text-xs text-sage-600 font-medium flex items-center justify-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-peach-500 animate-ping"></span>
+        <span>Memverifikasi akun & keamanan...</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- 2. Login Page if not Authenticated or not in Whitelist -->
+  <LoginPage v-else-if="!isAuthenticated" />
+
+  <!-- 3. Main Authenticated Application Dashboard -->
+  <div v-else class="min-h-screen bg-canvas p-2 sm:p-5 lg:p-6 flex flex-col justify-center items-center relative overflow-x-hidden font-sans text-forest-800">
     <!-- Background Decorative Organic Shapes (Image 1 Accents) -->
     <div class="fixed top-2 left-4 pointer-events-none opacity-20 hidden md:block">
       <svg width="120" height="120" viewBox="0 0 100 100" fill="none" stroke="#608356" stroke-width="1.5">
@@ -80,10 +101,12 @@
 import { ref } from 'vue';
 import { useKobichaStore } from './stores/kobichaStore';
 import { storeToRefs } from 'pinia';
+import { Sparkles } from 'lucide-vue-next';
 
 import Sidebar from './components/layout/Sidebar.vue';
 import Toast from './components/common/Toast.vue';
 
+import LoginPage from './pages/LoginPage.vue';
 import HomePage from './pages/HomePage.vue';
 import WhereToBuyPage from './pages/WhereToBuyPage.vue';
 import StockCampuranPage from './pages/StockCampuranPage.vue';
@@ -97,7 +120,7 @@ import KalkulatorHppPage from './pages/KalkulatorHppPage.vue';
 import ReadyToSellPage from './pages/ReadyToSellPage.vue';
 
 const store = useKobichaStore();
-const { activeTab, isMobileNavOpen } = storeToRefs(store);
+const { activeTab, isMobileNavOpen, authLoading, isAuthenticated } = storeToRefs(store);
 
 const isSidebarCollapsed = ref(false);
 </script>
