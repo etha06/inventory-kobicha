@@ -15,11 +15,12 @@
         isCollapsed ? 'lg:w-20' : 'lg:w-72'
       ]"
     >
-      <!-- Brand Logo & Header (Image 2 style) -->
+      <!-- Brand Logo & Header -->
       <div
         class="h-20 flex items-center border-b border-white/10 bg-black/5 transition-all"
         :class="isEffectivelyCollapsed ? 'justify-center px-2' : 'justify-between px-5'"
       >
+        <!-- Expanded Brand Info (Logo + Title) -->
         <div
           v-if="!isEffectivelyCollapsed"
           class="flex items-center gap-3 overflow-hidden cursor-pointer min-w-0"
@@ -34,19 +35,10 @@
           </div>
         </div>
 
-        <div
-          v-else
-          class="cursor-pointer flex items-center justify-center"
-          @click="store.navigateTo('home')"
-          title="Kobicha Studio"
-        >
-          <img :src="logoImg" alt="Kobicha Studio" class="w-11 h-11 object-contain drop-shadow-sm" />
-        </div>
-
-        <!-- Desktop Collapse / Menu Button (Image 2 Hamburger toggle) -->
+        <!-- Desktop Collapse / Menu Toggle Button -->
         <button
           @click="$emit('toggle-collapse')"
-          class="hidden lg:flex w-10 h-10 rounded-xl text-white/80 hover:text-white hover:bg-white/15 items-center justify-center transition-colors"
+          class="hidden lg:flex w-10 h-10 rounded-xl text-white/80 hover:text-white hover:bg-white/15 items-center justify-center transition-colors flex-shrink-0"
           :title="isCollapsed ? 'Perluas Sidebar' : 'Ciutkan Sidebar'"
         >
           <Menu v-if="isCollapsed" class="w-5 h-5" />
@@ -56,7 +48,7 @@
         <!-- Mobile Close Button -->
         <button
           @click="$emit('close-mobile')"
-          class="lg:hidden w-8 h-8 rounded-xl text-white/80 hover:text-white hover:bg-white/15 flex items-center justify-center text-sm"
+          class="lg:hidden w-8 h-8 rounded-xl text-white/80 hover:text-white hover:bg-white/15 flex items-center justify-center text-sm flex-shrink-0"
         >
           <X class="w-5 h-5" />
         </button>
