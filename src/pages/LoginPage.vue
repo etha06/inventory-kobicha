@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="min-h-screen bg-canvas p-4 sm:p-6 flex flex-col justify-center items-center relative overflow-hidden font-sans text-forest-800 selection:bg-peach-200">
     <!-- Background Decorative Organic Shapes -->
     <div class="fixed top-2 left-4 pointer-events-none opacity-20 hidden md:block">
@@ -22,13 +22,13 @@
     <div class="w-full max-w-md bg-white rounded-[28px] sm:rounded-[36px] shadow-floating border border-[#d2e0d0]/80 p-8 sm:p-10 relative z-10 flex flex-col items-center text-center space-y-6">
       <!-- Logo & Brand Header -->
       <div class="flex flex-col items-center space-y-3">
-        <div class="w-16 h-16 rounded-2xl bg-forest-900 flex items-center justify-center shadow-md border border-forest-800/80">
-          <Sparkles class="w-8 h-8 text-peach-400" />
+        <div class="w-28 h-28 flex items-center justify-center">
+          <img :src="logoImg" alt="Kobicha Studio" class="w-full h-full object-contain drop-shadow-md" />
         </div>
         
         <div>
           <h1 class="text-2xl font-serif font-black tracking-wide text-forest-900">
-            KOBICHA
+            KOBICHA STUDIO
           </h1>
           <p class="text-[10px] uppercase font-bold tracking-[0.25em] text-peach-600 mt-0.5">
             Parfumerie Formularium
@@ -111,6 +111,7 @@
 import { useKobichaStore } from '../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import { Sparkles, AlertCircle, ShieldCheck } from 'lucide-vue-next';
+import logoImg from '../assets/logo.png';
 
 const store = useKobichaStore();
 const { isLoggingIn, authError } = storeToRefs(store);

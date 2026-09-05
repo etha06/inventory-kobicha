@@ -14,7 +14,7 @@
 
         <div>
           <h1 class="text-xl sm:text-3xl font-extrabold font-rounded text-forest-900 tracking-tight flex items-center gap-2">
-            <span>Selamat {{ greetingTime }}, Tim Kobicha</span>
+            <span>Selamat {{ greetingTime }}, Tim Kobicha Studio</span>
           </h1>
           <p class="text-xs sm:text-sm text-sage-600 mt-0.5 font-sans">
             Welcome to your perfume formulation & inventory management system

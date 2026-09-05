@@ -4,11 +4,11 @@
     v-if="authLoading"
     class="min-h-screen bg-canvas flex flex-col items-center justify-center p-4 font-sans text-forest-800 space-y-4"
   >
-    <div class="w-16 h-16 rounded-2xl bg-forest-900 flex items-center justify-center shadow-lg border border-forest-800/80 animate-pulse">
-      <Sparkles class="w-8 h-8 text-peach-400" />
+    <div class="w-20 h-20 flex items-center justify-center animate-pulse">
+      <img :src="logoImg" alt="Kobicha Studio" class="w-full h-full object-contain drop-shadow-md" />
     </div>
     <div class="text-center space-y-1">
-      <h2 class="text-lg font-serif font-black tracking-wide text-forest-900">KOBICHA</h2>
+      <h2 class="text-lg font-serif font-black tracking-wide text-forest-900">KOBICHA STUDIO</h2>
       <p class="text-xs text-sage-600 font-medium flex items-center justify-center gap-1.5">
         <span class="w-2 h-2 rounded-full bg-peach-500 animate-ping"></span>
         <span>Memverifikasi akun & keamanan...</span>
@@ -101,7 +101,7 @@
 import { ref } from 'vue';
 import { useKobichaStore } from './stores/kobichaStore';
 import { storeToRefs } from 'pinia';
-import { Sparkles } from 'lucide-vue-next';
+import logoImg from './assets/logo.png';
 
 import Sidebar from './components/layout/Sidebar.vue';
 import Toast from './components/common/Toast.vue';
