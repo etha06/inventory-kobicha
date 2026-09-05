@@ -393,8 +393,14 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1">Olfactory Notes (Bisa Multiple)</label>
-            <div class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-2 border border-stone-200 rounded-lg bg-stone-50/50">
+            <label class="block text-xs font-semibold text-stone-700 mb-1">
+              Olfactory Notes <span class="text-rose-500 font-bold">*</span>
+              <span class="text-[11px] font-normal text-stone-500">(Wajib dipilih minimal 1)</span>
+            </label>
+            <div
+              class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto p-2 border rounded-lg transition-colors"
+              :class="form.notes.length === 0 ? 'border-rose-300 bg-rose-50/20 ring-1 ring-rose-200' : 'border-stone-200 bg-stone-50/50'"
+            >
               <button
                 v-for="note in NOTES_OPTIONS"
                 :key="note"
@@ -406,6 +412,9 @@
                 {{ note }}
               </button>
             </div>
+            <p v-if="form.notes.length === 0" class="text-[10px] text-rose-600 mt-1 font-semibold flex items-center gap-1">
+              * Silakan pilih minimal 1 kategori aroma wangi di atas
+            </p>
           </div>
         </div>
 
@@ -660,22 +669,20 @@ const form = ref({
   nama: '',
   jenisLiquid: 'Fragrance Oil' as JenisLiquidEnum,
   storeId: '',
-  botolMl: 50,
+  botolMl: 10,
   currentStock: 'Banyak' as CurrentStockEnum,
   pyramid: 'Middle' as PyramidEnum,
-  notes: ['Floral'] as NotesEnum[],
+  notes: [] as NotesEnum[],
   gambar: '',
   deskripsi: '',
   priceTiers: [
-    { id: 'tier-' + Date.now(), ml: 50, harga: 120000, hargaPerMl: 2400 }
+    { id: 'tier-' + Date.now(), ml: 10, harga: 30000, hargaPerMl: 3000 }
   ] as PriceTier[]
 });
 
 function toggleNote(note: NotesEnum) {
   if (form.value.notes.includes(note)) {
-    if (form.value.notes.length > 1) {
-      form.value.notes = form.value.notes.filter(n => n !== note);
-    }
+    form.value.notes = form.value.notes.filter(n => n !== note);
   } else {
     form.value.notes.push(note);
   }
@@ -684,9 +691,9 @@ function toggleNote(note: NotesEnum) {
 function addPriceTier() {
   form.value.priceTiers.push({
     id: 'tier-' + Date.now(),
-    ml: 100,
-    harga: 200000,
-    hargaPerMl: 2000
+    ml: 10,
+    harga: 30000,
+    hargaPerMl: 3000
   });
 }
 
@@ -709,14 +716,14 @@ function openAddModal() {
     nama: '',
     jenisLiquid: 'Fragrance Oil',
     storeId: '',
-    botolMl: 50,
+    botolMl: 10,
     currentStock: 'Banyak',
     pyramid: 'Middle',
-    notes: ['Floral'],
+    notes: [],
     gambar: '',
     deskripsi: '',
     priceTiers: [
-      { id: 'tier-' + Date.now(), ml: 50, harga: 120000, hargaPerMl: 2400 }
+      { id: 'tier-' + Date.now(), ml: 10, harga: 30000, hargaPerMl: 3000 }
     ]
   };
   isModalOpen.value = true;
@@ -735,15 +742,23 @@ function openEditModal(f: StockFragranceOil) {
     notes: [...f.notes],
     gambar: f.gambar || '',
     deskripsi: f.deskripsi || '',
-    priceTiers: f.priceTiers ? JSON.parse(JSON.stringify(f.priceTiers)) : [
-      { id: 'tier-' + Date.now(), ml: f.botolMl, harga: 100000, hargaPerMl: Math.round(100000 / f.botolMl) }
+    priceTiers: f.priceTiers && f.priceTiers.length > 0 ? JSON.parse(JSON.stringify(f.priceTiers)) : [
+      { id: 'tier-' + Date.now(), ml: f.botolMl || 10, harga: 30000, hargaPerMl: Math.round(30000 / (f.botolMl || 10)) }
     ]
   };
   isModalOpen.value = true;
 }
 
 function saveItem() {
-  if (!form.value.nama.trim()) return;
+  if (!form.value.nama.trim()) {
+    store.showToast('Nama Fragrance Oil wajib diisi', 'error');
+    return;
+  }
+  if (form.value.notes.length === 0) {
+    store.showToast('Olfactory Notes wajib dipilih minimal 1 kategori aroma!', 'error');
+    return;
+  }
+
   const selectedStore = stores.value.find(s => s.id === form.value.storeId);
   const storeName = selectedStore?.namaToko || 'Toko Lainnya';
 

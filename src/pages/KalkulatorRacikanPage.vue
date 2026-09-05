@@ -234,7 +234,7 @@
                     <div class="flex-1 min-w-0">
                       <CustomSelect
                         v-model="row.fragranceOilId"
-                        :options="foOptions"
+                        :options="getFoOptionsForRow(row)"
                         placeholder="-- Pilih Fragrance Oil --"
                         :searchable="true"
                         :disabled="mode === 'by_resep'"
@@ -500,14 +500,64 @@
               </div>
             </div>
 
-            <button
-              type="button"
-              @click="selectFoFromPicker(fo)"
-              class="px-3.5 py-1.5 rounded-md bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1 flex-shrink-0"
-            >
-              <Plus class="w-3.5 h-3.5" />
-              <span>{{ targetRowForFoPicker ? 'Pilih FO Ini' : 'Tambah' }}</span>
-            </button>
+            <!-- Action Button in FO Picker -->
+            <template v-if="targetRowForFoPicker">
+              <!-- Currently selected by this target row -->
+              <button
+                v-if="targetRowForFoPicker.fragranceOilId === fo.id"
+                type="button"
+                disabled
+                class="px-3.5 py-1.5 rounded-md bg-emerald-600 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1 flex-shrink-0 cursor-default"
+              >
+                <Check class="w-3.5 h-3.5" />
+                <span>Sedang Dipilih</span>
+              </button>
+              <!-- Already used in another row -->
+              <button
+                v-else-if="rows.some(r => r.id !== targetRowForFoPicker?.id && r.fragranceOilId === fo.id)"
+                type="button"
+                disabled
+                class="px-3 py-1.5 rounded-md bg-stone-100 text-stone-400 text-xs font-semibold cursor-not-allowed border border-stone-200 flex items-center gap-1 flex-shrink-0"
+                title="Fragrance oil ini sudah masuk ke baris lain dalam formula"
+              >
+                <Check class="w-3.5 h-3.5 text-emerald-600" />
+                <span>Sudah Masuk</span>
+              </button>
+              <!-- Available to pick -->
+              <button
+                v-else
+                type="button"
+                @click="selectFoFromPicker(fo)"
+                class="px-3.5 py-1.5 rounded-md bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1 flex-shrink-0"
+              >
+                <Plus class="w-3.5 h-3.5" />
+                <span>Pilih FO Ini</span>
+              </button>
+            </template>
+
+            <template v-else>
+              <!-- Already in formula (cannot add duplicate) -->
+              <button
+                v-if="rows.some(r => r.fragranceOilId === fo.id)"
+                type="button"
+                disabled
+                class="px-3 py-1.5 rounded-md bg-stone-100 text-stone-400 text-xs font-semibold cursor-not-allowed border border-stone-200 flex items-center gap-1 flex-shrink-0"
+                title="Fragrance oil ini sudah ada di dalam formula racikan"
+              >
+                <Check class="w-3.5 h-3.5 text-emerald-600" />
+                <span>Sudah Masuk</span>
+              </button>
+              <!-- Add to formula -->
+              <button
+                v-else
+                type="button"
+                @click="selectFoFromPicker(fo)"
+                class="px-3.5 py-1.5 rounded-md bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1 flex-shrink-0"
+              >
+                <Plus class="w-3.5 h-3.5" />
+                <span>Tambah</span>
+              </button>
+            </template>
           </div>
         </div>
       </div>
@@ -798,7 +848,41 @@ function removeRow(idx: number) {
   rows.value.splice(idx, 1);
 }
 
+function getFoOptionsForRow(currentRow: FormFoRow) {
+  const otherSelectedIds = rows.value
+    .filter(r => r.id !== currentRow.id && r.fragranceOilId)
+    .map(r => r.fragranceOilId);
+
+  return [
+    { value: '', label: '-- Pilih Fragrance Oil --' },
+    ...stockFragranceOil.value
+      .filter(fo => !otherSelectedIds.includes(fo.id))
+      .map(fo => {
+        const info = getPyramidBadgeInfo(fo.pyramid);
+        return {
+          value: fo.id,
+          label: `${fo.nama} (${fo.storeName})`,
+          badge: info.badge,
+          badgeClass: info.badgeClass
+        };
+      })
+  ];
+}
+
 function onFoSelect(row: FormFoRow) {
+  if (!row.fragranceOilId) {
+    row.fragranceOilName = '';
+    row.pyramid = undefined;
+    return;
+  }
+  const isDuplicate = rows.value.some(r => r.id !== row.id && r.fragranceOilId === row.fragranceOilId);
+  if (isDuplicate) {
+    store.showToast('Fragrance Oil ini sudah masuk di formula racikan!', 'error');
+    row.fragranceOilId = '';
+    row.fragranceOilName = '';
+    row.pyramid = undefined;
+    return;
+  }
   const fo = stockFragranceOil.value.find(f => f.id === row.fragranceOilId);
   if (fo) {
     row.fragranceOilName = fo.nama;
@@ -838,6 +922,13 @@ function openFoPickerModal(row?: FormFoRow) {
 
 function selectFoFromPicker(fo: StockFragranceOil) {
   if (targetRowForFoPicker.value) {
+    const isAlreadyUsed = rows.value.some(
+      r => r.id !== targetRowForFoPicker.value!.id && r.fragranceOilId === fo.id
+    );
+    if (isAlreadyUsed) {
+      store.showToast(`"${fo.nama}" sudah ada di dalam racikan!`, 'error');
+      return;
+    }
     targetRowForFoPicker.value.fragranceOilId = fo.id;
     targetRowForFoPicker.value.fragranceOilName = fo.nama;
     targetRowForFoPicker.value.pyramid = fo.pyramid;
@@ -845,6 +936,11 @@ function selectFoFromPicker(fo: StockFragranceOil) {
     isFoPickerModalOpen.value = false;
     targetRowForFoPicker.value = null;
   } else {
+    const isAlreadyInRows = rows.value.some(r => r.fragranceOilId === fo.id);
+    if (isAlreadyInRows) {
+      store.showToast(`"${fo.nama}" sudah masuk di dalam formula racikan!`, 'info');
+      return;
+    }
     rows.value.push({
       id: 'row-' + Date.now() + '-' + Math.random().toString(36).substring(2, 5),
       fragranceOilId: fo.id,
@@ -853,7 +949,6 @@ function selectFoFromPicker(fo: StockFragranceOil) {
       tetes: 5
     });
     store.showToast(`"${fo.nama}" ditambahkan ke racikan!`, 'success');
-    // Modal remains open so user can easily add multiple fragrance oils
   }
 }
 

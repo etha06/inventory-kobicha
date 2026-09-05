@@ -74,6 +74,31 @@
           </div>
         </div>
 
+        <div>
+          <label class="block text-xs font-semibold text-stone-700 mb-1">
+            Olfactory Notes <span class="text-rose-500 font-bold">*</span>
+            <span class="text-[10px] font-normal text-stone-500">(Wajib minimal 1)</span>
+          </label>
+          <div
+            class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-2 border rounded-xl transition-colors"
+            :class="foForm.notes.length === 0 ? 'border-rose-300 bg-rose-50/20 ring-1 ring-rose-200' : 'border-stone-200 bg-stone-50/50'"
+          >
+            <button
+              v-for="note in NOTES_OPTIONS"
+              :key="note"
+              type="button"
+              @click="toggleFoQuickNote(note)"
+              class="px-2 py-0.5 rounded-lg text-xs font-medium transition-all"
+              :class="foForm.notes.includes(note) ? 'bg-amber-600 text-white shadow-xs' : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-100'"
+            >
+              {{ note }}
+            </button>
+          </div>
+          <p v-if="foForm.notes.length === 0" class="text-[10px] text-rose-600 mt-1 font-medium">
+            * Pilih minimal 1 karakter aroma wangi
+          </p>
+        </div>
+
         <div class="pt-3 border-t flex justify-end gap-2">
           <button
             type="button"
@@ -198,8 +223,8 @@
 import { ref, computed } from 'vue';
 import { useKobichaStore } from '../../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
-import { PyramidEnum, CurrentStockEnum } from '../../types';
-import { PYRAMID_OPTIONS } from '../../utils/constants';
+import { PyramidEnum, CurrentStockEnum, NotesEnum } from '../../types';
+import { PYRAMID_OPTIONS, NOTES_OPTIONS } from '../../utils/constants';
 import Modal from '../common/Modal.vue';
 import CustomSelect from '../common/CustomSelect.vue';
 
@@ -224,11 +249,20 @@ const currentStockOptions = [
 const foForm = ref({
   nama: '',
   storeId: '',
-  botolMl: 50,
-  hargaBeli: 120000,
+  botolMl: 10,
+  hargaBeli: 30000,
   pyramid: 'Middle' as PyramidEnum,
+  notes: [] as NotesEnum[],
   currentStock: 'Banyak' as CurrentStockEnum
 });
+
+function toggleFoQuickNote(note: NotesEnum) {
+  if (foForm.value.notes.includes(note)) {
+    foForm.value.notes = foForm.value.notes.filter(n => n !== note);
+  } else {
+    foForm.value.notes.push(note);
+  }
+}
 
 const campuranForm = ref({
   namaBarang: '',
@@ -239,7 +273,15 @@ const campuranForm = ref({
 });
 
 function saveFo() {
-  if (!foForm.value.nama.trim()) return;
+  if (!foForm.value.nama.trim()) {
+    store.showToast('Nama Fragrance Oil wajib diisi', 'error');
+    return;
+  }
+  if (foForm.value.notes.length === 0) {
+    store.showToast('Olfactory Notes wajib dipilih minimal 1!', 'error');
+    return;
+  }
+
   const selectedStore = stores.value.find(s => s.id === foForm.value.storeId);
   const storeName = selectedStore?.namaToko || 'Toko Lainnya';
 
@@ -251,7 +293,7 @@ function saveFo() {
     botolMl: foForm.value.botolMl,
     currentStock: foForm.value.currentStock,
     pyramid: foForm.value.pyramid,
-    notes: ['Floral'],
+    notes: foForm.value.notes,
     priceTiers: [
       {
         id: 'tier-' + Date.now(),
@@ -265,9 +307,10 @@ function saveFo() {
   foForm.value = {
     nama: '',
     storeId: '',
-    botolMl: 50,
-    hargaBeli: 120000,
+    botolMl: 10,
+    hargaBeli: 30000,
     pyramid: 'Middle',
+    notes: [],
     currentStock: 'Banyak'
   };
   isQuickAddFoOpen.value = false;
