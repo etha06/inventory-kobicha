@@ -26,7 +26,7 @@
           @click="store.navigateTo('home')"
         >
           <div class="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center shadow-inner flex-shrink-0 p-1 border border-white/30">
-            <img :src="logoImg" alt="Kobicha Studio" class="w-full h-full object-contain drop-shadow-sm" />
+            <img :src="logoIconImg" alt="Kobicha Studio" class="w-full h-full object-contain drop-shadow-sm" />
           </div>
           <div class="transition-opacity duration-200 min-w-0">
             <h1 class="font-extrabold text-base tracking-tight text-white font-rounded truncate leading-tight">
@@ -43,7 +43,7 @@
           title="Kobicha Studio"
         >
           <div class="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center shadow-inner p-1 border border-white/30">
-            <img :src="logoImg" alt="Kobicha Studio" class="w-full h-full object-contain drop-shadow-sm" />
+            <img :src="logoIconImg" alt="Kobicha Studio" class="w-full h-full object-contain drop-shadow-sm" />
           </div>
         </div>
 
@@ -439,6 +439,7 @@ import { useKobichaStore } from '../../stores/kobichaStore';
 import { storeToRefs } from 'pinia';
 import ConfirmModal from '../common/ConfirmModal.vue';
 import logoImg from '../../assets/logo.png';
+import logoIconImg from '../../assets/logo-icon.png';
 import {
   Home,
   Store,
